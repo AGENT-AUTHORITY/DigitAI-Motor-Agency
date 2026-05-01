@@ -1,95 +1,1233 @@
-<div class="max-w-6xl mx-auto flex items-center justify-between">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agencia de Presencia Digital en Buenos Aires | digitAI motor</title>
+  <meta name="description" content="Transformamos negocios en máquinas de venta digital. Páginas web, CRM Zoho, posicionamiento en Google Maps y automatización. Desde $350 USD. Resultados en 5 días." />
+  <meta name="keywords" content="páginas web baratas Argentina, CRM Zoho Buenos Aires, posicionamiento Google Maps, automatización ventas, agencia digital Cañuelas" />
+  <meta property="og:title" content="Tu Negocio Online en 5 Días | digitAI motor" />
+  <meta property="og:description" content="Presencia digital completa desde $350 USD. Páginas web, CRM, Google Maps y automatización para negocios en Argentina." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://digitaimotor.lat" />
+  <link rel="canonical" href="https://digitaimotor.lat" />
 
+  <!-- Google Fonts: Syne + Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            syne: ['Syne', 'sans-serif'],
+            outfit: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            neon: '#00ff88',
+            'neon-dim': '#00cc6a',
+            'dark-base': '#07070f',
+            'dark-card': '#0e0e1c',
+            'dark-border': '#1a1a2e',
+            'blue-accent': '#0a84ff',
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-neon': 'pulseNeon 2s ease-in-out infinite',
+            'slide-up': 'slideUp 0.6s ease forwards',
+          },
+        }
+      }
+    }
+  </script>
 
-  <!-- Logo -->
+  <style>
+    :root {
+      --neon: #00ff88;
+      --dark-base: #07070f;
+      --dark-card: #0e0e1c;
+      --dark-border: #1a1a2e;
+      --text-primary: #e8eaf0;
+      --text-muted: #8892a4;
+    }
 
-  <a href="index.html" class="flex items-center gap-2">
+    * { box-sizing: border-box; }
 
-    <div class="w-8 h-8 rounded-md flex items-center justify-center" style="background: var(--neon);">
+    html { scroll-behavior: smooth; }
 
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+    body {
+      background-color: var(--dark-base);
+      color: var(--text-primary);
+      font-family: 'Outfit', sans-serif;
+      overflow-x: hidden;
+    }
 
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#07070f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    /* ─── SCROLLBAR ─────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--dark-base); }
+    ::-webkit-scrollbar-thumb { background: var(--neon); border-radius: 3px; }
 
-      </svg>
+    /* ─── GRID PATTERN BACKGROUND ───────────────── */
+    .bg-grid {
+      background-image:
+        linear-gradient(rgba(0,255,136,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,136,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
 
+    /* ─── NEON GLOW EFFECTS ──────────────────────── */
+    .neon-text {
+      color: var(--neon);
+      text-shadow: 0 0 20px rgba(0,255,136,0.5), 0 0 40px rgba(0,255,136,0.2);
+    }
+
+    .neon-border {
+      border: 1px solid rgba(0,255,136,0.3);
+      box-shadow: 0 0 20px rgba(0,255,136,0.05), inset 0 0 20px rgba(0,255,136,0.02);
+    }
+
+    .neon-border:hover {
+      border-color: rgba(0,255,136,0.7);
+      box-shadow: 0 0 30px rgba(0,255,136,0.2), inset 0 0 20px rgba(0,255,136,0.05);
+      transition: all 0.3s ease;
+    }
+
+    /* ─── NAVBAR ─────────────────────────────────── */
+    #navbar {
+      transition: all 0.4s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(7, 7, 15, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,255,136,0.15);
+      box-shadow: 0 4px 30px rgba(0,255,136,0.05);
+    }
+
+    /* ─── HERO DIGITAL GRID ANIMATION ─────────────── */
+    .digital-grid {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    
+    .grid-dot {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: var(--neon);
+      border-radius: 50%;
+      opacity: 0;
+      animation: pulse-dot 3s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: 0.6; transform: scale(1.2); box-shadow: 0 0 10px rgba(0,255,136,0.8); }
+    }
+    
+    .grid-line {
+      position: absolute;
+      background: linear-gradient(90deg, transparent, var(--neon), transparent);
+      height: 1px;
+      opacity: 0;
+      animation: draw-line 4s ease-in-out infinite;
+    }
+    
+    @keyframes draw-line {
+      0% { width: 0; opacity: 0; }
+      40% { width: 150px; opacity: 0.3; }
+      100% { width: 0; opacity: 0; }
+    }
+
+    /* ─── HERO BLOBS (background ambiance) ─────────── */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.08;
+      pointer-events: none;
+    }
+    .blob-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, #00ff88, transparent);
+      top: -200px; right: -200px;
+      animation: float 8s ease-in-out infinite;
+    }
+    .blob-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, #0a84ff, transparent);
+      bottom: -100px; left: -100px;
+      animation: float 10s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(20px, -30px) scale(1.05); }
+      66% { transform: translate(-15px, 20px) scale(0.97); }
+    }
+
+    @keyframes pulseNeon {
+      0%, 100% { box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+      50% { box-shadow: 0 0 40px rgba(0,255,136,0.8), 0 0 60px rgba(0,255,136,0.3); }
+    }
+
+    /* ─── BUTTONS ────────────────────────────────── */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--neon);
+      color: #07070f;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+    }
+    .btn-primary:hover {
+      background: #1affa0;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,255,136,0.4);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--neon);
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      padding: 13px 28px;
+      border-radius: 6px;
+      border: 1px solid rgba(0,255,136,0.5);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+    .btn-secondary:hover {
+      background: rgba(0,255,136,0.08);
+      border-color: var(--neon);
+      transform: translateY(-2px);
+    }
+
+    /* ─── SERVICE CARDS ──────────────────────────── */
+    .service-card {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 12px;
+      padding: 32px;
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+    .service-card:hover {
+      border-color: rgba(0,255,136,0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,255,136,0.1);
+    }
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    /* ─── PROCESS STEPS ──────────────────────────── */
+    .step-line {
+      background: linear-gradient(180deg, var(--neon), transparent);
+      width: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ─── SCROLL REVEAL ──────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Stagger delays */
+    .delay-100 { transition-delay: 0.1s; }
+    .delay-200 { transition-delay: 0.2s; }
+    .delay-300 { transition-delay: 0.3s; }
+    .delay-400 { transition-delay: 0.4s; }
+
+    /* ─── HAMBURGER ──────────────────────────────── */
+    #mobile-menu {
+      display: none;
+    }
+    #mobile-menu.open {
+      display: flex;
+    }
+
+    /* ─── STAT NUMBER COUNTER ────────────────────── */
+    .counter { display: inline-block; }
+
+    /* ─── SECTION DIVIDER ────────────────────────── */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,255,136,0.2), transparent);
+      margin: 0;
+    }
+
+    /* ─── PAIN SECTION ───────────────────────────── */
+    .pain-item {
+      border-left: 3px solid rgba(255, 60, 60, 0.5);
+      background: rgba(255, 60, 60, 0.04);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      transition: all 0.3s ease;
+    }
+    .pain-item:hover {
+      border-left-color: rgba(255, 60, 60, 0.9);
+      background: rgba(255, 60, 60, 0.08);
+    }
+
+    .gain-item {
+      border-left: 3px solid rgba(0, 255, 136, 0.5);
+      background: rgba(0, 255, 136, 0.04);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      transition: all 0.3s ease;
+    }
+    .gain-item:hover {
+      border-left-color: var(--neon);
+      background: rgba(0, 255, 136, 0.08);
+    }
+
+    /* ─── WHY US CARD ────────────────────────────── */
+    .why-card {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 20px;
+      border-radius: 10px;
+      background: rgba(0,255,136,0.03);
+      border: 1px solid rgba(0,255,136,0.08);
+      transition: all 0.3s ease;
+    }
+    .why-card:hover {
+      background: rgba(0,255,136,0.06);
+      border-color: rgba(0,255,136,0.2);
+    }
+
+    /* ─── CTA BANNER ─────────────────────────────── */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0,255,136,0.1) 0%, rgba(10,132,255,0.1) 100%);
+      border: 1px solid rgba(0,255,136,0.2);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,255,136,0.05), transparent);
+      pointer-events: none;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────── */
+    footer a:hover { color: var(--neon); transition: color 0.2s ease; }
+
+    /* ─── MOBILE MENU ────────────────────────────── */
+    @media (max-width: 768px) {
+      #mobile-menu {
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+        background: rgba(7, 7, 15, 0.98);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(0,255,136,0.15);
+        padding: 24px;
+        gap: 20px;
+      }
+    }
+  </style>
+
+  <!-- Schema JSON-LD ProfessionalService -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "digitAI motor",
+    "url": "https://digitaimotor.lat",
+    "logo": "https://digitaimotor.lat/assets/logo.png",
+    "description": "Agencia de presencia digital especializada en diseño web, implementación CRM Zoho, posicionamiento en Google Maps y automatización de ventas para negocios en Argentina y Latinoamérica.",
+    "telephone": "+5493417400299",
+    "priceRange": "$$",
+    "areaServed": ["Argentina", "Latinoamérica"],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Cañuelas",
+      "addressRegion": "Buenos Aires",
+      "addressCountry": "AR"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Servicios de Presencia Digital",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Diseño de Páginas Web",
+            "description": "Páginas web profesionales para negocios, listas en 5 días"
+          },
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": "350",
+            "maxPrice": "700",
+            "priceCurrency": "USD"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Implementación CRM Zoho",
+            "description": "Implementación y configuración de Zoho CRM para equipos de ventas"
+          },
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": "500",
+            "maxPrice": "1200",
+            "priceCurrency": "USD"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Posicionamiento en Google Maps",
+            "description": "Optimización de perfil de Google Business y posicionamiento local"
+          },
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": "250",
+            "priceCurrency": "USD"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Automatización de Ventas",
+            "description": "Automatización de pipeline y procesos comerciales con IA"
+          }
+        }
+      ]
+    },
+    "sameAs": [
+      "https://www.facebook.com/digitaimotor"
+    ]
+  }
+  </script>
+</head>
+
+<body class="bg-grid">
+
+  <!-- ═══════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════ -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-4 px-6 md:px-10">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+
+      <!-- Logo -->
+      <a href="index.html" class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-md flex items-center justify-center" style="background: var(--neon);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#07070f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="font-syne font-800 text-lg tracking-tight" style="color: var(--text-primary);">
+          digitAI <span style="color: var(--neon);">motor</span>
+        </span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#servicios" class="text-sm font-outfit hover:text-neon transition-colors" style="color: var(--text-muted);">Servicios</a>
+        <a href="#proceso" class="text-sm font-outfit hover:text-neon transition-colors" style="color: var(--text-muted);">Cómo trabajamos</a>
+        <a href="#por-que" class="text-sm font-outfit hover:text-neon transition-colors" style="color: var(--text-muted);">Por qué digitAI motor</a>
+        <a href="#contacto" class="text-sm font-outfit hover:text-neon transition-colors" style="color: var(--text-muted);">Contacto</a>
+        <a href="https://wa.me/5493417400299?text=Hola%2C+quiero+info+sobre+los+servicios+de+digitAI motor+Group"
+           target="_blank" rel="noopener"
+           class="btn-primary text-sm py-2.5 px-5">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Hablar por WhatsApp
+        </a>
+      </div>
+
+      <!-- Mobile Hamburger -->
+      <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menú">
+        <span class="hamburger-line block w-6 h-0.5 transition-all duration-300" style="background: var(--text-primary);"></span>
+        <span class="hamburger-line block w-6 h-0.5 transition-all duration-300" style="background: var(--text-primary);"></span>
+        <span class="hamburger-line block w-4 h-0.5 transition-all duration-300" style="background: var(--neon);"></span>
+      </button>
     </div>
 
-    <span class="font-syne font-800 text-lg tracking-tight" style="color: var(--text-primary);">
-
-      Abraxas <span style="color: var(--neon);">Group</span>
-
-    </span>
-
-  </a>
-
-
-
-  <!-- Desktop Nav -->
-
-  <div class="hidden md:flex items-center gap-8">
-
-    <a href="#servicios" class="text-sm font-outfit hover:text-neon transition-colors" style="color: var(--text-muted);">Servicios</a>
-
-    <a href="#proceso" class="text-sm font-outfit hover:text-neon transition-colors" style="color: var(--text-muted);">Cómo trabajamos</a>
-
-    <a href="#por-que" class="text-sm font-outfit hover:text-neon transition-colors" style="color: var(--text-muted);">Por qué Abraxas</a>
-
-    <a href="#contacto" class="text-sm font-outfit hover:text-neon transition-colors" style="color: var(--text-muted);">Contacto</a>
-
-    <a href="https://wa.me/5493417400299?text=Hola%2C+quiero+info+sobre+los+servicios+de+Abraxas+Group"
-
-       target="_blank" rel="noopener"
-
-       class="btn-primary text-sm py-2.5 px-5">
-
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-
-      Hablar por WhatsApp
-
-    </a>
-
-  </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden">
+      <a href="#servicios" class="font-outfit text-sm py-2" style="color: var(--text-muted);">Servicios</a>
+      <a href="#proceso" class="font-outfit text-sm py-2" style="color: var(--text-muted);">Cómo trabajamos</a>
+      <a href="#por-que" class="font-outfit text-sm py-2" style="color: var(--text-muted);">Por qué digitAI motor</a>
+      <a href="#contacto" class="font-outfit text-sm py-2" style="color: var(--text-muted);">Contacto</a>
+      <a href="https://wa.me/5493417400299?text=Hola%2C+quiero+info+sobre+los+servicios+de+digitAI motor+Group"
+         target="_blank" rel="noopener"
+         class="btn-primary text-sm mt-2">
+        WhatsApp
+      </a>
+    </div>
+  </nav>
 
 
+  <!-- ═══════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════ -->
+  <section id="inicio" class="relative min-h-screen flex items-center pt-20 pb-16 px-6 overflow-hidden">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
 
-  <!-- Mobile Hamburger -->
+    <!-- Digital construction grid -->
+    <div class="digital-grid">
+      <!-- Dots generados por JS al cargar -->
+    </div>
 
-  <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menú">
+    <!-- Radial overlay -->
+    <div class="absolute inset-0 pointer-events-none"
+         style="background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(0,255,136,0.06) 0%, transparent 70%);">
+    </div>
 
-    <span class="hamburger-line block w-6 h-0.5 transition-all duration-300" style="background: var(--text-primary);"></span>
+    <div class="max-w-6xl mx-auto w-full relative z-10">
+      <div class="max-w-3xl">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full reveal"
+             style="background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.2);">
+          <span class="w-2 h-2 rounded-full animate-pulse" style="background: var(--neon);"></span>
+          <span class="font-outfit text-xs font-medium tracking-widest uppercase" style="color: var(--neon);">
+            El Motor de tu Crecimiento Digital
+          </span>
+        </div>
 
-    <span class="hamburger-line block w-6 h-0.5 transition-all duration-300" style="background: var(--text-primary);"></span>
+        <!-- H1 -->
+        <h1 class="font-syne text-5xl md:text-7xl font-800 leading-tight tracking-tight mb-6 reveal delay-100">
+          Tu Negocio<br />
+          Online en<br />
+          <span class="neon-text">5 Días.</span><br />
+          <span style="color: var(--text-muted); font-size: 0.75em;">Desde $350 USD.</span>
+        </h1>
 
-    <span class="hamburger-line block w-4 h-0.5 transition-all duration-300" style="background: var(--neon);"></span>
+        <p class="font-outfit text-lg md:text-xl mb-10 max-w-xl leading-relaxed reveal delay-200"
+           style="color: var(--text-muted);">
+          Construimos tu presencia digital completa: página web, CRM, Google Maps y automatización.
+          Sin agencias caras. Sin plazos eternos. Con resultados medibles.
+        </p>
 
-  </button>
+        <!-- CTAs -->
+        <div class="flex flex-col sm:flex-row gap-4 reveal delay-300">
+          <a href="https://wa.me/5493417400299?text=Hola%2C+quiero+arrancar+mi+presencia+digital.+%C2%BFQu%C3%A9+necesito%3F"
+             target="_blank" rel="noopener"
+             class="btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Quiero mi presencia digital
+          </a>
+          <a href="#servicios" class="btn-secondary">
+            Ver servicios y precios
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </a>
+        </div>
 
-</div>
+        <!-- Stats row -->
+        <div class="flex flex-wrap gap-8 mt-16 reveal delay-400">
+          <div>
+            <div class="font-syne text-3xl font-800 neon-text">
+              <span class="counter" data-target="5">0</span> días
+            </div>
+            <div class="font-outfit text-xs mt-1" style="color: var(--text-muted);">Entrega promedio</div>
+          </div>
+          <div class="w-px" style="background: var(--dark-border);"></div>
+          <div>
+            <div class="font-syne text-3xl font-800" style="color: var(--text-primary);">
+              $<span class="counter" data-target="350">0</span> USD
+            </div>
+            <div class="font-outfit text-xs mt-1" style="color: var(--text-muted);">Desde</div>
+          </div>
+          <div class="w-px" style="background: var(--dark-border);"></div>
+          <div>
+            <div class="font-syne text-3xl font-800" style="color: var(--text-primary);">
+              <span class="counter" data-target="8">0</span>+ años
+            </div>
+            <div class="font-outfit text-xs mt-1" style="color: var(--text-muted);">Experiencia comercial B2B</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 reveal"
+         style="color: var(--text-muted);">
+      <span class="font-outfit text-xs tracking-widest">SCROLL</span>
+      <div class="w-px h-12 overflow-hidden" style="background: var(--dark-border);">
+        <div class="w-px h-6 animate-bounce" style="background: var(--neon); margin-top: 2px;"></div>
+      </div>
+    </div>
+  </section>
 
 
+  <div class="section-divider"></div>
 
-<!-- Mobile Menu -->
 
-<div id="mobile-menu" class="md:hidden">
+  <!-- ═══════════════════════════════════════════
+       PROBLEMA / SOLUCIÓN
+  ═══════════════════════════════════════════ -->
+  <section class="py-20 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
 
-  <a href="#servicios" class="font-outfit text-sm py-2" style="color: var(--text-muted);">Servicios</a>
+        <!-- Problema -->
+        <div class="reveal-left">
+          <span class="font-outfit text-xs tracking-widest uppercase mb-4 block" style="color: #ff5f5f;">
+            ⚠ El problema
+          </span>
+          <h2 class="font-syne text-3xl md:text-4xl font-700 mb-8 leading-tight">
+            Sin presencia digital,<br />
+            <span style="color: #ff6b6b;">perdés clientes</span> todos los días
+          </h2>
+          <div class="flex flex-col gap-3">
+            <div class="pain-item">
+              <p class="font-outfit text-sm" style="color: var(--text-muted);">
+                🚫 Tu competencia aparece en Google. Vos no.
+              </p>
+            </div>
+            <div class="pain-item">
+              <p class="font-outfit text-sm" style="color: var(--text-muted);">
+                🚫 No tenés una forma profesional de mostrar lo que vendés.
+              </p>
+            </div>
+            <div class="pain-item">
+              <p class="font-outfit text-sm" style="color: var(--text-muted);">
+                🚫 Tus leads entran a un caos: WhatsApp, Excel, notas de papel.
+              </p>
+            </div>
+            <div class="pain-item">
+              <p class="font-outfit text-sm" style="color: var(--text-muted);">
+                🚫 Pagás agencias que tardan meses y entregan poco.
+              </p>
+            </div>
+          </div>
+        </div>
 
-  <a href="#proceso" class="font-outfit text-sm py-2" style="color: var(--text-muted);">Cómo trabajamos</a>
+        <!-- Solución -->
+        <div class="reveal">
+          <span class="font-outfit text-xs tracking-widest uppercase mb-4 block" style="color: var(--neon);">
+            ✅ La solución digitAI motor
+          </span>
+          <h2 class="font-syne text-3xl md:text-4xl font-700 mb-8 leading-tight">
+            Tu máquina de ventas<br />
+            <span class="neon-text">funcionando en 5 días</span>
+          </h2>
+          <div class="flex flex-col gap-3">
+            <div class="gain-item">
+              <p class="font-outfit text-sm" style="color: var(--text-muted);">
+                ✅ Página web profesional que convierte visitas en clientes.
+              </p>
+            </div>
+            <div class="gain-item">
+              <p class="font-outfit text-sm" style="color: var(--text-muted);">
+                ✅ CRM configurado para que tu equipo cierre más y mejor.
+              </p>
+            </div>
+            <div class="gain-item">
+              <p class="font-outfit text-sm" style="color: var(--text-muted);">
+                ✅ Aparecés primero cuando alguien busca tu negocio en Google Maps.
+              </p>
+            </div>
+            <div class="gain-item">
+              <p class="font-outfit text-sm" style="color: var(--text-muted);">
+                ✅ Automatizamos tu pipeline para que vendas mientras dormís.
+              </p>
+            </div>
+          </div>
+        </div>
 
-  <a href="#por-que" class="font-outfit text-sm py-2" style="color: var(--text-muted);">Por qué Abraxas</a>
+      </div>
+    </div>
+  </section>
 
-  <a href="#contacto" class="font-outfit text-sm py-2" style="color: var(--text-muted);">Contacto</a>
 
-  <a href="https://wa.me/5493417400299?text=Hola%2C+quiero+info+sobre+los+servicios+de+Abraxas+Group"
+  <div class="section-divider"></div>
 
-     target="_blank" rel="noopener"
 
-     class="btn-primary text-sm mt-2">
+  <!-- ═══════════════════════════════════════════
+       SERVICIOS
+  ═══════════════════════════════════════════ -->
+  <section id="servicios" class="py-20 px-6">
+    <div class="max-w-6xl mx-auto">
 
-    WhatsApp
+      <div class="text-center mb-16 reveal">
+        <span class="font-outfit text-xs tracking-widest uppercase mb-4 block" style="color: var(--neon);">
+          Nuestros servicios
+        </span>
+        <h2 class="font-syne text-4xl md:text-5xl font-800 mb-4">
+          Todo lo que tu negocio<br />
+          <span class="neon-text">necesita para crecer</span>
+        </h2>
+        <p class="font-outfit text-base max-w-xl mx-auto" style="color: var(--text-muted);">
+          No somos una agencia genérica. Cada servicio está diseñado para producir resultados medibles, no promesas.
+        </p>
+      </div>
 
-  </a>
+      <div class="grid md:grid-cols-2 gap-6">
 
-</div>
+        <!-- Card 1: Páginas Web -->
+        <a href="paginas-web.html" class="service-card block group reveal delay-100">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center"
+                 style="background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.2);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+              </svg>
+            </div>
+            <div class="flex items-center gap-1.5" style="color: var(--neon);">
+              <span class="font-outfit text-sm">Ver planes</span>
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="font-syne text-xl font-700 mb-2">Páginas Web Profesionales</h3>
+          <p class="font-outfit text-sm mb-6 leading-relaxed" style="color: var(--text-muted);">
+            Diseño + desarrollo en 5 días hábiles. Responsive, rápida, optimizada para conversión y Google. Lista para recibir clientes el día 1.
+          </p>
+          <div class="flex items-center justify-between pt-4" style="border-top: 1px solid var(--dark-border);">
+            <div>
+              <span class="font-outfit text-xs" style="color: var(--text-muted);">Desde</span>
+              <span class="font-syne text-2xl font-700 ml-2 neon-text">$350 USD</span>
+            </div>
+            <span class="font-outfit text-xs px-3 py-1 rounded-full"
+                  style="background: rgba(0,255,136,0.08); color: var(--neon); border: 1px solid rgba(0,255,136,0.2);">
+              Entrega en 5 días
+            </span>
+          </div>
+        </a>
+
+        <!-- Card 2: CRM Zoho -->
+        <a href="crm-zoho.html" class="service-card block group reveal delay-200">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center"
+                 style="background: rgba(10,132,255,0.1); border: 1px solid rgba(10,132,255,0.2);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+              </svg>
+            </div>
+            <div class="flex items-center gap-1.5" style="color: #0a84ff;">
+              <span class="font-outfit text-sm">Ver planes</span>
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="font-syne text-xl font-700 mb-2">Implementación CRM Zoho</h3>
+          <p class="font-outfit text-sm mb-6 leading-relaxed" style="color: var(--text-muted);">
+            Configuramos Zoho CRM para tu proceso de ventas específico. Tu equipo cierra más, pierde menos leads y mide todo en tiempo real.
+          </p>
+          <div class="flex items-center justify-between pt-4" style="border-top: 1px solid var(--dark-border);">
+            <div>
+              <span class="font-outfit text-xs" style="color: var(--text-muted);">Desde</span>
+              <span class="font-syne text-2xl font-700 ml-2" style="color: #0a84ff;">$500 USD</span>
+            </div>
+            <span class="font-outfit text-xs px-3 py-1 rounded-full"
+                  style="background: rgba(10,132,255,0.08); color: #0a84ff; border: 1px solid rgba(10,132,255,0.2);">
+              Pago único
+            </span>
+          </div>
+        </a>
+
+        <!-- Card 3: Google Maps -->
+        <a href="posicionamiento-geo.html" class="service-card block group reveal delay-300">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center"
+                 style="background: rgba(255,165,0,0.1); border: 1px solid rgba(255,165,0,0.2);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffa500" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div class="flex items-center gap-1.5" style="color: #ffa500;">
+              <span class="font-outfit text-sm">Ver planes</span>
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="font-syne text-xl font-700 mb-2">Posicionamiento en Google Maps</h3>
+          <p class="font-outfit text-sm mb-6 leading-relaxed" style="color: var(--text-muted);">
+            Optimizamos tu perfil de Google Business y te posicionamos entre los primeros resultados locales. Más llamadas, más visitas, más ventas.
+          </p>
+          <div class="flex items-center justify-between pt-4" style="border-top: 1px solid var(--dark-border);">
+            <div>
+              <span class="font-outfit text-xs" style="color: var(--text-muted);">Desde</span>
+              <span class="font-syne text-2xl font-700 ml-2" style="color: #ffa500;">$250 USD/mes</span>
+            </div>
+            <span class="font-outfit text-xs px-3 py-1 rounded-full"
+                  style="background: rgba(255,165,0,0.08); color: #ffa500; border: 1px solid rgba(255,165,0,0.2);">
+              Retainer mensual
+            </span>
+          </div>
+        </a>
+
+        <!-- Card 4: Automatización -->
+        <a href="automatizacion.html" class="service-card block group reveal delay-400">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center"
+                 style="background: rgba(180,0,255,0.1); border: 1px solid rgba(180,0,255,0.2);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b400ff" stroke-width="2">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+              </svg>
+            </div>
+            <div class="flex items-center gap-1.5" style="color: #b400ff;">
+              <span class="font-outfit text-sm">Ver planes</span>
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="font-syne text-xl font-700 mb-2">Automatización de Ventas</h3>
+          <p class="font-outfit text-sm mb-6 leading-relaxed" style="color: var(--text-muted);">
+            Automatizamos tu pipeline con IA: seguimiento de leads, recordatorios, reportes y más. Tu equipo se enfoca en cerrar, no en administrar.
+          </p>
+          <div class="flex items-center justify-between pt-4" style="border-top: 1px solid var(--dark-border);">
+            <div>
+              <span class="font-outfit text-xs" style="color: var(--text-muted);">Precio</span>
+              <span class="font-syne text-xl font-700 ml-2" style="color: #b400ff;">A consultar</span>
+            </div>
+            <span class="font-outfit text-xs px-3 py-1 rounded-full"
+                  style="background: rgba(180,0,255,0.08); color: #b400ff; border: 1px solid rgba(180,0,255,0.2);">
+              Por tipo de trabajo
+            </span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+  <div class="section-divider"></div>
+
+
+  <!-- ═══════════════════════════════════════════
+       PROCESO
+  ═══════════════════════════════════════════ -->
+  <section id="proceso" class="py-20 px-6">
+    <div class="max-w-6xl mx-auto">
+
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+
+        <div class="reveal-left">
+          <span class="font-outfit text-xs tracking-widest uppercase mb-4 block" style="color: var(--neon);">
+            Cómo trabajamos
+          </span>
+          <h2 class="font-syne text-4xl md:text-5xl font-800 mb-6 leading-tight">
+            Del "quiero una web"<br />
+            <span class="neon-text">al negocio online</span><br />
+            en 5 días
+          </h2>
+          <p class="font-outfit text-base leading-relaxed" style="color: var(--text-muted);">
+            Proceso sin vueltas. Sin reuniones innecesarias. Sin plazos que se extienden mes a mes. Trabajamos rápido porque tenemos el sistema aceitado.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-0 reveal">
+
+          <!-- Step 1 -->
+          <div class="flex gap-6">
+            <div class="flex flex-col items-center">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center font-syne font-700 text-sm flex-shrink-0"
+                   style="background: var(--neon); color: var(--dark-base);">1</div>
+              <div class="step-line flex-grow mt-2" style="min-height: 40px;"></div>
+            </div>
+            <div class="pb-10">
+              <h3 class="font-syne text-lg font-700 mb-2">Diagnóstico express (Día 1)</h3>
+              <p class="font-outfit text-sm leading-relaxed" style="color: var(--text-muted);">
+                Llamada o chat de 20 min. Entendemos tu negocio, tus clientes y qué necesitás exactamente. Sin rodeos.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="flex gap-6">
+            <div class="flex flex-col items-center">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center font-syne font-700 text-sm flex-shrink-0"
+                   style="background: rgba(0,255,136,0.15); color: var(--neon); border: 1px solid rgba(0,255,136,0.3);">2</div>
+              <div class="step-line flex-grow mt-2" style="min-height: 40px;"></div>
+            </div>
+            <div class="pb-10">
+              <h3 class="font-syne text-lg font-700 mb-2">Producción y configuración (Días 2-4)</h3>
+              <p class="font-outfit text-sm leading-relaxed" style="color: var(--text-muted);">
+                Nuestro equipo construye. Vos solo revisás los avances. Sin burocracia, sin tickets, sin esperas.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="flex gap-6">
+            <div class="flex flex-col items-center">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center font-syne font-700 text-sm flex-shrink-0"
+                   style="background: rgba(0,255,136,0.15); color: var(--neon); border: 1px solid rgba(0,255,136,0.3);">3</div>
+            </div>
+            <div>
+              <h3 class="font-syne text-lg font-700 mb-2">Entrega y capacitación (Día 5)</h3>
+              <p class="font-outfit text-sm leading-relaxed" style="color: var(--text-muted);">
+                Tu negocio online, funcionando. Te capacitamos para que puedas manejarlo solo. Soporte post-entrega incluido.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="section-divider"></div>
+
+
+  <!-- ═══════════════════════════════════════════
+       POR QUÉ ABRAXAS
+  ═══════════════════════════════════════════ -->
+  <section id="por-que" class="py-20 px-6">
+    <div class="max-w-6xl mx-auto">
+
+      <div class="text-center mb-16 reveal">
+        <span class="font-outfit text-xs tracking-widest uppercase mb-4 block" style="color: var(--neon);">
+          Diferenciadores
+        </span>
+        <h2 class="font-syne text-4xl md:text-5xl font-800 mb-4">
+          Por qué elegir <span class="neon-text">digitAI motor</span><br />
+          y no otra agencia
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <div class="why-card reveal delay-100">
+          <div class="text-2xl flex-shrink-0">⚡</div>
+          <div>
+            <h3 class="font-syne font-700 mb-1">Velocidad real</h3>
+            <p class="font-outfit text-sm leading-relaxed" style="color: var(--text-muted);">
+              Entregamos en 5 días. No en 5 semanas. Tenemos procesos que permiten esa velocidad sin sacrificar calidad.
+            </p>
+          </div>
+        </div>
+
+        <div class="why-card reveal delay-200">
+          <div class="text-2xl flex-shrink-0">💰</div>
+          <div>
+            <h3 class="font-syne font-700 mb-1">Precios transparentes</h3>
+            <p class="font-outfit text-sm leading-relaxed" style="color: var(--text-muted);">
+              Sin cotizaciones que cambian. Sin letras chicas. El precio que ves es el precio que pagás.
+            </p>
+          </div>
+        </div>
+
+        <div class="why-card reveal delay-300">
+          <div class="text-2xl flex-shrink-0">🎯</div>
+          <div>
+            <h3 class="font-syne font-700 mb-1">Orientados a resultados</h3>
+            <p class="font-outfit text-sm leading-relaxed" style="color: var(--text-muted);">
+              8+ años de experiencia comercial B2B. No hacemos webs bonitas. Hacemos máquinas de ventas.
+            </p>
+          </div>
+        </div>
+
+        <div class="why-card reveal delay-100">
+          <div class="text-2xl flex-shrink-0">🔧</div>
+          <div>
+            <h3 class="font-syne font-700 mb-1">Stack probado</h3>
+            <p class="font-outfit text-sm leading-relaxed" style="color: var(--text-muted);">
+              Zoho, Google Business, HTML, automatizaciones. Herramientas que realmente funcionan para negocios reales.
+            </p>
+          </div>
+        </div>
+
+        <div class="why-card reveal delay-200">
+          <div class="text-2xl flex-shrink-0">📞</div>
+          <div>
+            <h3 class="font-syne font-700 mb-1">Comunicación directa</h3>
+            <p class="font-outfit text-sm leading-relaxed" style="color: var(--text-muted);">
+              Hablás con quien hace el trabajo. Sin intermediarios, sin cuentas de cliente, sin demoras de comunicación.
+            </p>
+          </div>
+        </div>
+
+        <div class="why-card reveal delay-300">
+          <div class="text-2xl flex-shrink-0">🇦🇷</div>
+          <div>
+            <h3 class="font-syne font-700 mb-1">Conocemos el mercado</h3>
+            <p class="font-outfit text-sm leading-relaxed" style="color: var(--text-muted);">
+              Somos argentinos. Entendemos el contexto, los costos y cómo vende un negocio en Latam.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <div class="section-divider"></div>
+
+
+  <!-- ═══════════════════════════════════════════
+       CTA FINAL BANNER
+  ═══════════════════════════════════════════ -->
+  <section class="py-20 px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="cta-banner p-10 md:p-16 text-center reveal">
+        <span class="font-outfit text-xs tracking-widest uppercase mb-4 block" style="color: var(--neon);">
+          ¿Listo para arrancar?
+        </span>
+        <h2 class="font-syne text-4xl md:text-5xl font-800 mb-6 leading-tight">
+          Tu negocio online<br />
+          en <span class="neon-text">5 días hábiles</span>
+        </h2>
+        <p class="font-outfit text-base mb-10 max-w-lg mx-auto" style="color: var(--text-muted);">
+          Hablamos 20 minutos, definimos qué necesitás y arrancamos. Sin contratos eternos, sin adelantos absurdos.
+        </p>
+        <a href="https://wa.me/5493417400299?text=Hola+Oscar%2C+quiero+arrancar+con+digitAI motor+Group.+%C2%BFTen%C3%A9s+un+momento%3F"
+           target="_blank" rel="noopener"
+           class="btn-primary text-base py-4 px-10 inline-flex"
+           style="animation: pulseNeon 2.5s ease-in-out infinite;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Escribirle a Oscar ahora
+        </a>
+        <p class="font-outfit text-xs mt-4" style="color: var(--text-muted);">
+          Respuesta en menos de 2 horas hábiles · Sin compromiso
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer id="contacto" style="background: var(--dark-card); border-top: 1px solid var(--dark-border);">
+    <div class="max-w-6xl mx-auto px-6 pt-14 pb-8">
+
+      <div class="grid md:grid-cols-4 gap-10 mb-12">
+
+        <!-- Brand -->
+        <div class="md:col-span-2">
+          <a href="index.html" class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-md flex items-center justify-center" style="background: var(--neon);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#07070f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="font-syne font-700 text-lg">digitAI <span style="color: var(--neon);">motor</span></span>
+          </a>
+          <p class="font-outfit text-sm leading-relaxed mb-6 max-w-xs" style="color: var(--text-muted);">
+            Fábrica de presencia digital para negocios en Argentina y Latinoamérica. Resultados en 5 días, no en 5 meses.
+          </p>
+          <a href="https://wa.me/5493417400299"
+             target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 font-outfit text-sm"
+             style="color: var(--neon);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            +54 9 341 740-0299
+          </a>
+        </div>
+
+        <!-- Servicios links -->
+        <div>
+          <h4 class="font-syne font-600 text-sm mb-5 uppercase tracking-wide" style="color: var(--text-primary);">Servicios</h4>
+          <ul class="flex flex-col gap-3">
+            <li><a href="paginas-web.html" class="font-outfit text-sm" style="color: var(--text-muted);">Páginas Web</a></li>
+            <li><a href="crm-zoho.html" class="font-outfit text-sm" style="color: var(--text-muted);">CRM Zoho</a></li>
+            <li><a href="posicionamiento-geo.html" class="font-outfit text-sm" style="color: var(--text-muted);">Google Maps</a></li>
+            <li><a href="automatizacion.html" class="font-outfit text-sm" style="color: var(--text-muted);">Automatización</a></li>
+          </ul>
+        </div>
+
+        <!-- Contacto -->
+        <div>
+          <h4 class="font-syne font-600 text-sm mb-5 uppercase tracking-wide" style="color: var(--text-primary);">Contacto</h4>
+          <ul class="flex flex-col gap-3">
+            <li>
+              <a href="https://wa.me/5493417400299" target="_blank" rel="noopener"
+                 class="font-outfit text-sm" style="color: var(--text-muted);">
+                WhatsApp
+              </a>
+            </li>
+            <li>
+              <span class="font-outfit text-sm" style="color: var(--text-muted);">De Buenos Aires Argentina </span>
+            </li>
+            <li>
+              <span class="font-outfit text-sm" style="color: var(--text-muted);">Al mundo 🌎</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-8"
+           style="border-top: 1px solid var(--dark-border);">
+        <p class="font-outfit text-xs" style="color: var(--text-muted);">
+          © 2025 digitAI motor. Todos los derechos reservados.
+        </p>
+        <p class="font-outfit text-xs" style="color: var(--text-muted);">
+          Hecho con 🚀🧠 en Argentina
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════
+       JAVASCRIPT
+  ═══════════════════════════════════════════ -->
+  <script>
+    // ─── NAVBAR SCROLL ────────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    // ─── HAMBURGER MENU ───────────────────────
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+    });
+
+    // Close on nav link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    });
+
+    // ─── SCROLL REVEAL ────────────────────────
+    const revealEls = document.querySelectorAll('.reveal, .reveal-left');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    // ─── COUNTER ANIMATION ────────────────────
+    function animateCounter(el, target, duration = 1200) {
+      let start = 0;
+      const step = (timestamp) => {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / duration, 1);
+        // Ease out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.floor(eased * target);
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = target;
+      };
+      requestAnimationFrame(step);
+    }
+
+    const counters = document.querySelectorAll('.counter');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const target = parseInt(entry.target.dataset.target);
+          animateCounter(entry.target, target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    counters.forEach(c => counterObserver.observe(c));
+
+    // ─── PARALLAX BLOBS ───────────────────────
+    const blob1 = document.querySelector('.blob-1');
+    const blob2 = document.querySelector('.blob-2');
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        if (blob1) blob1.style.transform = `translateY(${y * 0.15}px)`;
+        if (blob2) blob2.style.transform = `translateY(${y * 0.1}px)`;
+      }, { passive: true });
+    }
+
+    // ─── DIGITAL GRID ANIMATION ──────────────
+    const digitalGrid = document.querySelector('.digital-grid');
+    if (digitalGrid && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Generate random animated dots
+      for (let i = 0; i < 25; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'grid-dot';
+        dot.style.left = Math.random() * 100 + '%';
+        dot.style.top = Math.random() * 80 + '%';
+        dot.style.animationDelay = Math.random() * 3 + 's';
+        digitalGrid.appendChild(dot);
+      }
+      
+      // Generate random lines
+      for (let i = 0; i < 8; i++) {
+        const line = document.createElement('div');
+        line.className = 'grid-line';
+        line.style.left = Math.random() * 90 + '%';
+        line.style.top = Math.random() * 70 + '%';
+        line.style.animationDelay = Math.random() * 4 + 's';
+        digitalGrid.appendChild(line);
+      }
+    }
+
+    // ─── SMOOTH MOBILE MENU CLOSE ON RESIZE ───
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        mobileMenu.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>
