@@ -1,0 +1,15 @@
+# robots.txt — digitaimotor.lat
+# Generado para digitAI motor | https://digitaimotor.lat
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://digitaimotor.lat/sitemap.xml
+
+# Crawl-delay sugerido para bots secundarios
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
