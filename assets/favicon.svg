@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="6" fill="#0d1b2e"/>
+  <!-- D arc outer -->
+  <path d="M10 6 L10 26 L18 26 Q27 26 27 16 Q27 6 18 6 Z"
+        fill="none" stroke="url(#g1)" stroke-width="2.2" stroke-linejoin="round"/>
+  <!-- circuit nodes left -->
+  <line x1="10" y1="10" x2="7" y2="10" stroke="url(#g1)" stroke-width="1.6"/>
+  <circle cx="6" cy="10" r="1.4" fill="url(#g1)"/>
+  <line x1="10" y1="14" x2="6" y2="14" stroke="url(#g1)" stroke-width="1.6"/>
+  <circle cx="5" cy="14" r="1.4" fill="url(#g1)"/>
+  <line x1="10" y1="18" x2="7" y2="18" stroke="url(#g1)" stroke-width="1.6"/>
+  <circle cx="6" cy="18" r="1.4" fill="url(#g1)"/>
+  <line x1="10" y1="22" x2="6" y2="22" stroke="url(#g1)" stroke-width="1.6"/>
+  <circle cx="5" cy="22" r="1.4" fill="url(#g1)"/>
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3dbfbf"/>
+      <stop offset="100%" stop-color="#1a4a8a"/>
+    </linearGradient>
+  </defs>
+</svg>
