@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 118" width="260" height="118">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38b8c4"/>
+      <stop offset="100%" stop-color="#1a4080"/>
+    </linearGradient>
+  </defs>
+
+  <!-- D icon: spine + 3 concentric arcs + 5 circuit traces -->
+
+  <!-- Spine (vertical left side of D) -->
+  <line x1="100" y1="8" x2="100" y2="82" stroke="url(#g)" stroke-width="4.5" stroke-linecap="round"/>
+
+  <!-- Outer arc -->
+  <path d="M100 8 Q100 8 118 8 Q160 8 162 45 Q164 82 118 82 Q100 82 100 82"
+        fill="none" stroke="url(#g)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Middle arc -->
+  <path d="M100 20 Q118 20 148 20 Q162 20 162 45 Q162 70 148 70 Q118 70 100 70"
+        fill="none" stroke="url(#g)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Circuit trace 1 (top) -->
+  <line x1="100" y1="20" x2="78" y2="20" stroke="url(#g)" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="75" cy="20" r="5" fill="url(#g)"/>
+
+  <!-- Circuit trace 2 -->
+  <line x1="100" y1="34" x2="74" y2="34" stroke="url(#g)" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="71" cy="34" r="5" fill="url(#g)"/>
+
+  <!-- Circuit trace 3 (middle, double node) -->
+  <line x1="100" y1="48" x2="70" y2="48" stroke="url(#g)" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="86" cy="48" r="5" fill="url(#g)"/>
+  <circle cx="67" cy="48" r="5" fill="url(#g)"/>
+
+  <!-- Circuit trace 4 -->
+  <line x1="100" y1="62" x2="74" y2="62" stroke="url(#g)" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="71" cy="62" r="5" fill="url(#g)"/>
+
+  <!-- Circuit trace 5 (bottom) -->
+  <line x1="100" y1="74" x2="78" y2="74" stroke="url(#g)" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="75" cy="74" r="5" fill="url(#g)"/>
+
+  <!-- Text: DIGITAI -->
+  <text x="115" y="103"
+        font-family="'Syne', 'Segoe UI', Arial, sans-serif"
+        font-weight="800"
+        font-size="26"
+        letter-spacing="5"
+        fill="white"
+        text-anchor="middle">DIGITAI</text>
+
+  <!-- Text: MOTOR -->
+  <text x="115" y="117"
+        font-family="'Syne', 'Segoe UI', Arial, sans-serif"
+        font-weight="400"
+        font-size="11"
+        letter-spacing="8"
+        fill="#8892a4"
+        text-anchor="middle">MOTOR</text>
+</svg>

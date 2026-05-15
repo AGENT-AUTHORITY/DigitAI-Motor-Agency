@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<title>Generador de Assets — digitAI motor</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  body { background: #07070f; color: #e8eaf0; font-family: 'Syne', sans-serif; padding: 40px; }
+  h1 { color: #00ff88; margin-bottom: 8px; }
+  p { color: #8892a4; margin-bottom: 32px; }
+  .previews { display: flex; flex-direction: column; gap: 32px; }
+  .preview-wrap { background: #0e0e1c; border: 1px solid #1a1a2e; border-radius: 12px; padding: 24px; }
+  .preview-wrap h3 { color: #00ff88; margin: 0 0 12px; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .preview-wrap canvas { display: block; max-width: 100%; border-radius: 8px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; background: #00ff88; color: #07070f; font-family: 'Syne', sans-serif; font-weight: 700; padding: 12px 24px; border-radius: 6px; border: none; cursor: pointer; font-size: 14px; margin-top: 12px; text-decoration: none; }
+  .btn:hover { background: #1affa0; }
+  #status { color: #00ff88; font-size: 14px; margin-top: 16px; min-height: 24px; }
+</style>
+</head>
+<body>
+
+<h1>Generador de Assets — digitAI motor</h1>
+<p>Esperando que carguen las fuentes... los archivos se van a descargar automáticamente.</p>
+
+<div class="previews">
+  <div class="preview-wrap">
+    <h3>Logo (para nav/footer) — logo.png</h3>
+    <canvas id="cvLogo" width="320" height="130"></canvas>
+    <a id="dlLogo" class="btn" download="logo.png">Descargar logo.png</a>
+  </div>
+  <div class="preview-wrap">
+    <h3>Apple Touch Icon (iPhone) — apple-touch-icon.png</h3>
+    <canvas id="cvIcon" width="180" height="180"></canvas>
+    <a id="dlIcon" class="btn" download="apple-touch-icon.png">Descargar apple-touch-icon.png</a>
+  </div>
+  <div class="preview-wrap">
+    <h3>OG Image (WhatsApp / redes) — og-image.png · 1200×630</h3>
+    <canvas id="cvOg" width="1200" height="630" style="max-width:700px;"></canvas>
+    <a id="dlOg" class="btn" download="og-image.png">Descargar og-image.png</a>
+  </div>
+</div>
+
+<div id="status"></div>
+
+<script>
+const TEAL  = '#38b8c4';
+const NAVY  = '#1a4080';
+const DARK  = '#07070f';
+const CARD  = '#0e0e1c';
+const NEON  = '#00ff88';
+const WHITE = '#e8eaf0';
+const MUTED = '#8892a4';
+
+/* ── Gradient helper ── */
+function makeGrad(ctx, x1,y1,x2,y2) {
+  const g = ctx.createLinearGradient(x1,y1,x2,y2);
+  g.addColorStop(0, TEAL);
+  g.addColorStop(1, NAVY);
+  return g;
+}
+
+/* ── Draw the D-circuit icon ──
+   ox,oy = top-left corner of icon bounding box
+   scale = multiplier                              */
+function drawIcon(ctx, ox, oy, scale) {
+  const s = scale;
+  const sx = ox;  // spine x
+  const sy = oy;
+  const grad = makeGrad(ctx, sx, sy, sx, sy + 74*s);
+
+  ctx.strokeStyle = grad;
+  ctx.fillStyle   = grad;
+  ctx.lineCap     = 'round';
+  ctx.lineJoin    = 'round';
+
+  /* spine */
+  ctx.lineWidth = 4.5*s;
+  ctx.beginPath();
+  ctx.moveTo(sx, sy + 8*s);
+  ctx.lineTo(sx, sy + 82*s);
+  ctx.stroke();
+
+  /* outer arc (large D) */
+  ctx.lineWidth = 4.5*s;
+  ctx.beginPath();
+  ctx.moveTo(sx, sy + 8*s);
+  ctx.bezierCurveTo(sx + 40*s, sy + 8*s,  sx + 65*s, sy + 20*s,  sx + 65*s, sy + 45*s);
+  ctx.bezierCurveTo(sx + 65*s, sy + 70*s, sx + 40*s, sy + 82*s,  sx,        sy + 82*s);
+  ctx.stroke();
+
+  /* middle arc */
+  ctx.lineWidth = 4.5*s;
+  ctx.beginPath();
+  ctx.moveTo(sx, sy + 20*s);
+  ctx.bezierCurveTo(sx + 28*s, sy + 20*s, sx + 52*s, sy + 28*s, sx + 52*s, sy + 45*s);
+  ctx.bezierCurveTo(sx + 52*s, sy + 62*s, sx + 28*s, sy + 70*s, sx,        sy + 70*s);
+  ctx.stroke();
+
+  /* traces + nodes */
+  const traces = [
+    { y: 20, len: 22, extraNode: false },
+    { y: 34, len: 26, extraNode: false },
+    { y: 48, len: 30, extraNode: true  },
+    { y: 62, len: 26, extraNode: false },
+    { y: 74, len: 22, extraNode: false },
+  ];
+
+  ctx.lineWidth = 4*s;
+  traces.forEach(t => {
+    const ty = sy + t.y*s;
+    ctx.beginPath();
+    ctx.moveTo(sx, ty);
+    ctx.lineTo(sx - t.len*s, ty);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(sx - t.len*s - 3*s, ty, 5*s, 0, Math.PI*2);
+    ctx.fill();
+
+    if (t.extraNode) {
+      ctx.beginPath();
+      ctx.arc(sx - t.len*s * 0.5, ty, 5*s, 0, Math.PI*2);
+      ctx.fill();
+    }
+  });
+}
+
+/* ── Draw text (DIGITAI + MOTOR) ── */
+function drawText(ctx, cx, y1, y2, scale, color1, color2) {
+  ctx.textAlign  = 'center';
+  ctx.textBaseline = 'alphabetic';
+
+  ctx.font      = `800 ${26*scale}px 'Syne', sans-serif`;
+  ctx.letterSpacing = `${5*scale}px`;
+  ctx.fillStyle = color1;
+  ctx.fillText('DIGITAI', cx, y1);
+
+  ctx.font      = `400 ${11*scale}px 'Syne', sans-serif`;
+  ctx.letterSpacing = `${8*scale}px`;
+  ctx.fillStyle = color2;
+  ctx.fillText('MOTOR', cx, y2);
+}
+
+/* ══════════════════════════════════════════════
+   CANVAS 1: Logo transparent 320×130
+══════════════════════════════════════════════ */
+function drawLogo(cv) {
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, cv.width, cv.height);
+
+  const scale = 1;
+  const iconX = 62;   // left edge of icon (spine X = iconX + 38)
+  const spineX = iconX + 38;
+  const iconY = 4;
+
+  drawIcon(ctx, spineX, iconY, scale);
+  drawText(ctx, 155, 107, 122, scale, WHITE, MUTED);
+}
+
+/* ══════════════════════════════════════════════
+   CANVAS 2: Apple touch icon 180×180
+══════════════════════════════════════════════ */
+function drawAppleIcon(cv) {
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = DARK;
+  ctx.fillRect(0, 0, cv.width, cv.height);
+
+  const scale = 1.7;
+  const spineX = 100;
+  const iconY  = 12;
+  drawIcon(ctx, spineX, iconY, scale);
+}
+
+/* ══════════════════════════════════════════════
+   CANVAS 3: OG Image 1200×630
+══════════════════════════════════════════════ */
+function drawOG(cv) {
+  const ctx = cv.getContext('2d');
+
+  /* background */
+  ctx.fillStyle = DARK;
+  ctx.fillRect(0, 0, cv.width, cv.height);
+
+  /* subtle grid */
+  ctx.strokeStyle = 'rgba(0,255,136,0.04)';
+  ctx.lineWidth = 1;
+  for (let x=0; x<cv.width; x+=60) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,cv.height); ctx.stroke(); }
+  for (let y=0; y<cv.height; y+=60) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(cv.width,y); ctx.stroke(); }
+
+  /* glow blob top-right */
+  const blob1 = ctx.createRadialGradient(1000, 100, 0, 1000, 100, 400);
+  blob1.addColorStop(0, 'rgba(0,255,136,0.07)');
+  blob1.addColorStop(1, 'transparent');
+  ctx.fillStyle = blob1;
+  ctx.fillRect(0, 0, cv.width, cv.height);
+
+  /* glow blob bottom-left */
+  const blob2 = ctx.createRadialGradient(200, 500, 0, 200, 500, 350);
+  blob2.addColorStop(0, 'rgba(10,132,255,0.07)');
+  blob2.addColorStop(1, 'transparent');
+  ctx.fillStyle = blob2;
+  ctx.fillRect(0, 0, cv.width, cv.height);
+
+  /* left divider line */
+  const divGrad = ctx.createLinearGradient(0, 0, 0, cv.height);
+  divGrad.addColorStop(0, 'transparent');
+  divGrad.addColorStop(0.5, 'rgba(0,255,136,0.3)');
+  divGrad.addColorStop(1, 'transparent');
+  ctx.strokeStyle = divGrad;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(420, 0);
+  ctx.lineTo(420, cv.height);
+  ctx.stroke();
+
+  /* icon (left panel) */
+  const iconScale = 2.2;
+  const spineX = 155;
+  const iconY  = 210;
+  drawIcon(ctx, spineX, iconY, iconScale);
+
+  /* DIGITAI text (left panel) */
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.font         = `800 42px 'Syne', sans-serif`;
+  ctx.letterSpacing = '8px';
+  ctx.fillStyle    = WHITE;
+  ctx.fillText('DIGITAI', 210, 520);
+
+  ctx.font          = `400 16px 'Syne', sans-serif`;
+  ctx.letterSpacing = '12px';
+  ctx.fillStyle     = MUTED;
+  ctx.fillText('MOTOR', 218, 548);
+
+  /* right panel: headline */
+  ctx.textAlign    = 'left';
+  ctx.letterSpacing = '0px';
+
+  /* small tag */
+  ctx.font      = `600 14px 'Syne', sans-serif`;
+  ctx.fillStyle = NEON;
+  ctx.fillText('AUTOMATIZACIÓN CON IA', 480, 195);
+
+  /* main headline */
+  ctx.font      = `800 68px 'Syne', sans-serif`;
+  ctx.fillStyle = WHITE;
+  ctx.fillText('La IA trabaja.', 480, 290);
+
+  const greenGrad = ctx.createLinearGradient(480, 290, 1150, 290);
+  greenGrad.addColorStop(0, NEON);
+  greenGrad.addColorStop(1, '#0a84ff');
+  ctx.fillStyle = greenGrad;
+  ctx.fillText('Vos cerrás ventas.', 480, 380);
+
+  /* sub-headline */
+  ctx.font      = `400 22px 'Syne', sans-serif`;
+  ctx.fillStyle = MUTED;
+
+  const sub1 = 'Automatizamos lo repetitivo para que recuperés';
+  const sub2 = '10-15 horas por semana y te enfoques en crecer.';
+  ctx.fillText(sub1, 480, 440);
+  ctx.fillText(sub2, 480, 474);
+
+  /* URL tag */
+  ctx.font      = `600 18px 'Syne', sans-serif`;
+  ctx.fillStyle = 'rgba(0,255,136,0.6)';
+  ctx.fillText('digitaimotor.lat', 480, 555);
+
+  /* neon bottom line */
+  const lineGrad = ctx.createLinearGradient(0, 628, cv.width, 628);
+  lineGrad.addColorStop(0, 'transparent');
+  lineGrad.addColorStop(0.5, NEON);
+  lineGrad.addColorStop(1, 'transparent');
+  ctx.strokeStyle = lineGrad;
+  ctx.lineWidth   = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, 628);
+  ctx.lineTo(cv.width, 628);
+  ctx.stroke();
+}
+
+/* ── Wire up download buttons ── */
+function wireDownload(canvasId, btnId) {
+  const cv  = document.getElementById(canvasId);
+  const btn = document.getElementById(btnId);
+  btn.href = cv.toDataURL('image/png');
+}
+
+/* ── Main: wait for fonts, then draw ── */
+const status = document.getElementById('status');
+document.fonts.ready.then(() => {
+  status.textContent = 'Fuentes listas. Generando imágenes...';
+
+  const cvLogo = document.getElementById('cvLogo');
+  const cvIcon = document.getElementById('cvIcon');
+  const cvOg   = document.getElementById('cvOg');
+
+  drawLogo(cvLogo);
+  drawAppleIcon(cvIcon);
+  drawOG(cvOg);
+
+  wireDownload('cvLogo', 'dlLogo');
+  wireDownload('cvIcon', 'dlIcon');
+  wireDownload('cvOg',   'dlOg');
+
+  status.textContent = '✓ Todo listo — hacé clic en cada botón para descargar';
+
+  /* auto-download after 1.5s */
+  setTimeout(() => {
+    document.getElementById('dlLogo').click();
+    setTimeout(() => document.getElementById('dlIcon').click(), 600);
+    setTimeout(() => document.getElementById('dlOg').click(),   1200);
+  }, 1500);
+});
+</script>
+</body>
+</html>
