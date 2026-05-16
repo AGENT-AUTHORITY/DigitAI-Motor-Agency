@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pack Automatización Pro — digitAI motor</title>
+<meta name="description" content="Automatizamos tu negocio en 5 días. Bot de WhatsApp, seguimiento de clientes y CRM. Precio especial por tiempo limitado." />
+<meta name="robots" content="noindex, nofollow" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root {
+  --neon: #00ff88;
+  --dark-base: #07070f;
+  --dark-card: #0e0e1c;
+  --dark-border: #1a1a2e;
+  --text-primary: #e8eaf0;
+  --text-muted: #8892a4;
+  --red: #ff4444;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--dark-base); color: var(--text-primary); font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--dark-base); }
+::-webkit-scrollbar-thumb { background: var(--neon); border-radius: 2px; }
+
+.bg-grid {
+  background-image: linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* ── URGENCY BAR ── */
+.urgency-bar {
+  background: linear-gradient(90deg, #ff2d2d, #cc0000);
+  padding: 10px 20px;
+  text-align: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.urgency-bar .pulse {
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: white;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* ── BUTTONS ── */
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--neon);
+  color: #07070f;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  padding: 18px 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+  border: none;
+  text-transform: uppercase;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 0 40px rgba(0,255,136,0.3);
+}
+.btn-cta:hover {
+  background: #1affa0;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 50px rgba(0,255,136,0.5);
+}
+.btn-cta:active { transform: translateY(0); }
+
+/* ── PRICE ── */
+.price-old {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  font-size: 1.4rem;
+}
+.price-new {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 4rem;
+  color: var(--neon);
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(0,255,136,0.4);
+}
+.price-currency {
+  font-size: 2rem;
+  vertical-align: super;
+  font-weight: 700;
+}
+
+/* ── CARDS ── */
+.include-card {
+  background: var(--dark-card);
+  border: 1px solid rgba(0,255,136,0.15);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: all 0.3s ease;
+}
+.include-card:hover {
+  border-color: rgba(0,255,136,0.4);
+  transform: translateX(4px);
+}
+.include-check {
+  width: 28px; height: 28px;
+  background: rgba(0,255,136,0.12);
+  border: 1.5px solid rgba(0,255,136,0.4);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pain-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  background: rgba(255,50,50,0.04);
+  border-left: 3px solid rgba(255,50,50,0.5);
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 10px;
+}
+.pain-icon { flex-shrink: 0; font-size: 1.1rem; margin-top: 2px; }
+
+.testimonial {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: 14px;
+  padding: 28px;
+  position: relative;
+}
+.testimonial::before {
+  content: '"';
+  position: absolute;
+  top: 12px; right: 20px;
+  font-size: 5rem;
+  line-height: 1;
+  font-family: 'Syne', sans-serif;
+  color: rgba(0,255,136,0.06);
+  pointer-events: none;
+}
+.stars { color: #ffd700; letter-spacing: 3px; font-size: 1rem; }
+
+.faq-item {
+  border: 1px solid var(--dark-border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.faq-btn {
+  width: 100%; text-align: left;
+  background: var(--dark-card);
+  padding: 18px 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; border: none;
+  color: var(--text-primary);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 500;
+  transition: background 0.2s;
+  gap: 12px;
+}
+.faq-btn:hover { background: rgba(0,255,136,0.04); }
+.faq-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.2s;
+  background: rgba(0,255,136,0.02);
+}
+.faq-body.open { max-height: 300px; padding: 4px 22px 20px; }
+.faq-icon { transition: transform 0.3s; flex-shrink: 0; }
+.faq-icon.open { transform: rotate(180deg); }
+
+/* ── COUNTDOWN ── */
+.countdown-box {
+  background: rgba(255,50,50,0.06);
+  border: 1px solid rgba(255,50,50,0.25);
+  border-radius: 12px;
+  padding: 24px 32px;
+  text-align: center;
+}
+.countdown-digits {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+.digit-block {
+  background: var(--dark-card);
+  border: 1px solid rgba(255,50,50,0.3);
+  border-radius: 8px;
+  padding: 12px 18px;
+  min-width: 70px;
+  text-align: center;
+}
+.digit-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 2.2rem;
+  color: #ff4444;
+  line-height: 1;
+}
+.digit-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.sep { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2rem; color: #ff4444; }
+
+/* ── SECTION DIVIDER ── */
+.divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(0,255,136,0.18), transparent); margin: 0; }
+
+/* ── GUARANTEE BOX ── */
+.guarantee-box {
+  background: linear-gradient(135deg, rgba(0,255,136,0.06), rgba(10,132,255,0.06));
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: 16px;
+  padding: 36px;
+}
+
+/* ── VALUE BADGE ── */
+.value-badge {
+  display: inline-block;
+  background: rgba(0,255,136,0.08);
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  color: var(--neon);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-left: 8px;
+}
+
+/* ── STICKY MOBILE CTA ── */
+.sticky-mobile-cta {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  padding: 14px 20px;
+  background: rgba(7,7,15,0.97);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0,255,136,0.2);
+  z-index: 99;
+  display: none;
+}
+@media (max-width: 768px) { .sticky-mobile-cta { display: block; } }
+
+/* ── NEON TEXT ── */
+.neon { color: var(--neon); }
+.neon-glow {
+  color: var(--neon);
+  text-shadow: 0 0 20px rgba(0,255,136,0.5);
+}
+
+/* ── STEP PILL ── */
+.step-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,255,136,0.07);
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--neon);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── VSL BOX ── */
+.vsl-box {
+  background: var(--dark-card);
+  border: 1px solid rgba(0,255,136,0.15);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 16/9;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+.vsl-box:hover { border-color: rgba(0,255,136,0.4); }
+.vsl-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: radial-gradient(ellipse at center, rgba(0,255,136,0.06) 0%, transparent 70%);
+}
+.play-btn {
+  width: 72px; height: 72px;
+  background: var(--neon);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0 0 30px rgba(0,255,136,0.4);
+}
+.play-btn:hover { transform: scale(1.1); }
+
+.blob-hero {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ═══ URGENCY BAR ═══ -->
+<div class="urgency-bar">
+  <span class="pulse"></span>
+  ⚡ OFERTA LIMITADA — Solo quedan <span id="spots">3</span> lugares disponibles esta semana
+</div>
+
+<!-- ═══ HEADER ═══ -->
+<div class="py-5 px-6 text-center border-b" style="border-color:var(--dark-border);">
+  <div class="flex items-center justify-center gap-3">
+    <img src="assets/logo.svg" alt="digitAI motor" style="height:34px;width:auto;" />
+    <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--text-primary);">digit<span class="neon">AI</span> motor</span>
+  </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="relative py-16 px-6 bg-grid overflow-hidden">
+  <div class="blob-hero" style="width:500px;height:500px;background:radial-gradient(circle,rgba(0,255,136,0.07),transparent);top:-150px;right:-150px;"></div>
+  <div class="blob-hero" style="width:400px;height:400px;background:radial-gradient(circle,rgba(10,132,255,0.07),transparent);bottom:-100px;left:-100px;"></div>
+
+  <div class="max-w-3xl mx-auto text-center relative">
+    <div class="step-pill mb-6">Pack Automatización Pro — Oferta especial</div>
+
+    <h1 class="font-bold mb-6 leading-tight" style="font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.5rem);">
+      Tu negocio funcionando<br />
+      <span class="neon-glow">24/7 en 5 días</span><br />
+      <span style="font-size:0.6em;color:var(--text-muted);font-weight:600;">— o te devolvemos el dinero —</span>
+    </h1>
+
+    <p class="text-lg mb-10 mx-auto" style="color:var(--text-muted);line-height:1.7;max-width:580px;">
+      Implementamos un sistema de automatización completo para tu negocio:
+      bot de WhatsApp, seguimiento automático de clientes y CRM.
+      <strong style="color:var(--text-primary);">Vos pagás, nosotros entregamos. Sin excusas.</strong>
+    </p>
+
+    <a href="https://wa.me/5492226638044?text=Hola%2C%20quiero%20reservar%20mi%20lugar%20en%20el%20Pack%20Automatizaci%C3%B3n%20Pro" target="_blank" rel="noopener" class="btn-cta mx-auto">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      SÍ, QUIERO AUTOMATIZAR MI NEGOCIO →
+    </a>
+
+    <p class="mt-4 text-sm" style="color:var(--text-muted);">
+      🔒 Pago seguro · Entrega garantizada en 5 días · Sin letra chica
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ SOCIAL PROOF STRIP ═══ -->
+<section class="py-10 px-6" style="background:rgba(0,255,136,0.03);">
+  <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <div>
+      <div class="neon-glow font-bold text-3xl mb-1" style="font-family:'Syne',sans-serif;">200+</div>
+      <div class="text-sm" style="color:var(--text-muted);">negocios automatizados</div>
+    </div>
+    <div>
+      <div class="neon-glow font-bold text-3xl mb-1" style="font-family:'Syne',sans-serif;">5 días</div>
+      <div class="text-sm" style="color:var(--text-muted);">entrega garantizada</div>
+    </div>
+    <div>
+      <div class="neon-glow font-bold text-3xl mb-1" style="font-family:'Syne',sans-serif;">15 años</div>
+      <div class="text-sm" style="color:var(--text-muted);">de experiencia digital</div>
+    </div>
+    <div>
+      <div class="neon-glow font-bold text-3xl mb-1" style="font-family:'Syne',sans-serif;">100%</div>
+      <div class="text-sm" style="color:var(--text-muted);">garantía de devolución</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PROBLEMA ═══ -->
+<section class="py-20 px-6">
+  <div class="max-w-2xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="step-pill mb-4">El problema</div>
+      <h2 class="font-bold text-3xl md:text-4xl" style="font-family:'Syne',sans-serif;">
+        Sos bueno en lo tuyo.<br />
+        Pero perdés horas en <span style="color:#ff6060;">esto:</span>
+      </h2>
+    </div>
+
+    <div>
+      <div class="pain-item">
+        <span class="pain-icon">✕</span>
+        <div>
+          <p class="font-semibold mb-1">Respondés WhatsApp a las 11 de la noche</p>
+          <p class="text-sm" style="color:var(--text-muted);">Porque si no contestás rápido, el cliente se va con otro</p>
+        </div>
+      </div>
+      <div class="pain-item">
+        <span class="pain-icon">✕</span>
+        <div>
+          <p class="font-semibold mb-1">Perdés clientes porque se te "olvidó" dar seguimiento</p>
+          <p class="text-sm" style="color:var(--text-muted);">Tenías 20 consultas la semana pasada. ¿A cuántos seguiste?</p>
+        </div>
+      </div>
+      <div class="pain-item">
+        <span class="pain-icon">✕</span>
+        <div>
+          <p class="font-semibold mb-1">Llegás a fin de mes sin entender de dónde vino cada cliente</p>
+          <p class="text-sm" style="color:var(--text-muted);">Porque todo está en tu cabeza, no en un sistema</p>
+        </div>
+      </div>
+      <div class="pain-item">
+        <span class="pain-icon">✕</span>
+        <div>
+          <p class="font-semibold mb-1">Trabajás más horas pero facturás lo mismo</p>
+          <p class="text-sm" style="color:var(--text-muted);">El problema no es tu capacidad — es que el tiempo lo usás mal</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-10 p-6 rounded-xl text-center" style="background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.15);">
+      <p class="text-lg font-semibold" style="font-family:'Syne',sans-serif;">
+        Eso es exactamente lo que resuelve el<br />
+        <span class="neon">Pack Automatización Pro.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ VSL / VIDEO ═══ -->
+<section class="py-16 px-6" style="background:rgba(0,255,136,0.02);">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-8">
+      <div class="step-pill mb-4">Mirá esto primero</div>
+      <h2 class="font-bold text-2xl md:text-3xl" style="font-family:'Syne',sans-serif;">
+        Cómo funciona el sistema en la práctica
+      </h2>
+    </div>
+    <!-- Reemplazar el src por tu video de Loom, YouTube embed, o Vimeo -->
+    <div class="vsl-box">
+      <div class="vsl-play">
+        <div class="play-btn">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="#07070f"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <p class="text-sm font-semibold" style="color:var(--text-muted);">Ver video — 3 minutos</p>
+        <p class="text-xs" style="color:rgba(136,146,164,0.6);">[Reemplazá este bloque con tu video de Loom o YouTube]</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ QUÉ INCLUYE ═══ -->
+<section class="py-20 px-6">
+  <div class="max-w-2xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="step-pill mb-4">Lo que recibís</div>
+      <h2 class="font-bold text-3xl md:text-4xl" style="font-family:'Syne',sans-serif;">
+        Todo lo que viene<br />en el <span class="neon">Pack Automatización Pro</span>
+      </h2>
+    </div>
+
+    <div class="space-y-4 mb-10">
+
+      <div class="include-card">
+        <div class="include-check">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center flex-wrap gap-2 mb-1">
+            <p class="font-semibold">Bot de WhatsApp personalizado para tu negocio</p>
+            <span class="value-badge">VALOR $400 USD</span>
+          </div>
+          <p class="text-sm" style="color:var(--text-muted);">Responde consultas, califica leads y agenda turnos — sin que vos hagas nada</p>
+        </div>
+      </div>
+
+      <div class="include-card">
+        <div class="include-check">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center flex-wrap gap-2 mb-1">
+            <p class="font-semibold">Sistema de seguimiento automático de clientes</p>
+            <span class="value-badge">VALOR $300 USD</span>
+          </div>
+          <p class="text-sm" style="color:var(--text-muted);">Recordatorios automáticos, mensajes de seguimiento y alertas para que no se escape nadie</p>
+        </div>
+      </div>
+
+      <div class="include-card">
+        <div class="include-check">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center flex-wrap gap-2 mb-1">
+            <p class="font-semibold">CRM básico configurado para tu rubro</p>
+            <span class="value-badge">VALOR $300 USD</span>
+          </div>
+          <p class="text-sm" style="color:var(--text-muted);">Todos tus clientes organizados, con historial y etapas del embudo</p>
+        </div>
+      </div>
+
+      <div class="include-card">
+        <div class="include-check">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center flex-wrap gap-2 mb-1">
+            <p class="font-semibold">Capacitación 1:1 en videollamada (45 min)</p>
+            <span class="value-badge">VALOR $150 USD</span>
+          </div>
+          <p class="text-sm" style="color:var(--text-muted);">Te explicamos cada parte del sistema para que lo manejes con total autonomía</p>
+        </div>
+      </div>
+
+      <div class="include-card">
+        <div class="include-check">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center flex-wrap gap-2 mb-1">
+            <p class="font-semibold">30 días de soporte post-entrega</p>
+            <span class="value-badge">VALOR $200 USD</span>
+          </div>
+          <p class="text-sm" style="color:var(--text-muted);">Cualquier ajuste, duda o problema lo resolvemos sin costo adicional</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Total value -->
+    <div class="text-center p-6 rounded-xl mb-8" style="background:rgba(0,255,136,0.05);border:1px dashed rgba(0,255,136,0.3);">
+      <p class="text-sm mb-1" style="color:var(--text-muted);">Valor total del pack</p>
+      <p class="font-bold text-3xl price-old mb-1" style="font-family:'Syne',sans-serif;">USD $1.350</p>
+      <p class="text-xs" style="color:var(--text-muted);">si contratás cada servicio por separado</p>
+    </div>
+
+    <!-- Price reveal -->
+    <div id="precio" class="text-center p-10 rounded-2xl" style="background:var(--dark-card);border:2px solid rgba(0,255,136,0.3);box-shadow:0 0 60px rgba(0,255,136,0.06);">
+      <p class="text-sm font-semibold mb-2" style="color:var(--neon);letter-spacing:0.1em;text-transform:uppercase;">Precio de lanzamiento</p>
+      <div class="mb-2">
+        <span class="price-currency">USD $</span><span class="price-new">497</span>
+      </div>
+      <p class="text-sm mb-6" style="color:var(--text-muted);">Pago único · Sin cuotas · Sin sorpresas</p>
+
+      <a href="https://wa.me/5492226638044?text=Hola%2C%20quiero%20comprar%20el%20Pack%20Automatizaci%C3%B3n%20Pro%20por%20USD%20497" target="_blank" rel="noopener" class="btn-cta mx-auto">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        RESERVAR LUGAR AHORA — USD $497
+      </a>
+
+      <p class="mt-4 text-xs" style="color:var(--text-muted);">
+        Te contactamos en menos de 2 horas para coordinar el inicio
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ COUNTDOWN ═══ -->
+<section class="py-16 px-6" style="background:rgba(255,50,50,0.03);">
+  <div class="max-w-2xl mx-auto">
+    <div class="countdown-box">
+      <p class="text-sm font-semibold mb-3" style="color:#ff4444;letter-spacing:0.1em;text-transform:uppercase;">⚠️ Esta oferta vence el domingo a la medianoche</p>
+      <h3 class="font-bold text-xl mb-6" style="font-family:'Syne',sans-serif;">El precio sube a USD $797 el lunes</h3>
+      <div class="countdown-digits">
+        <div class="digit-block"><div class="digit-num" id="cd-d">00</div><div class="digit-label">días</div></div>
+        <div class="sep">:</div>
+        <div class="digit-block"><div class="digit-num" id="cd-h">00</div><div class="digit-label">horas</div></div>
+        <div class="sep">:</div>
+        <div class="digit-block"><div class="digit-num" id="cd-m">00</div><div class="digit-label">min</div></div>
+        <div class="sep">:</div>
+        <div class="digit-block"><div class="digit-num" id="cd-s">00</div><div class="digit-label">seg</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ TESTIMONIOS ═══ -->
+<section class="py-20 px-6">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="step-pill mb-4">Resultados reales</div>
+      <h2 class="font-bold text-3xl md:text-4xl" style="font-family:'Syne',sans-serif;">
+        Lo que dicen los que<br />ya automatizaron su negocio
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-1 gap-6">
+
+      <div class="testimonial">
+        <div class="stars mb-3">★★★★★</div>
+        <p class="text-lg mb-5" style="line-height:1.7;">
+          "La primera semana el bot de WhatsApp cerró 2 consultas que yo ni había visto. El sistema trabaja de noche, los fines de semana — yo solo entro a confirmar. Recuperé fácil 12 horas por semana. Lo mejor que hice para mi consultorio."
+        </p>
+        <div class="flex items-center gap-3">
+          <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,rgba(0,255,136,0.2),rgba(10,132,255,0.2));border:1px solid rgba(0,255,136,0.3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:var(--neon);">DR</div>
+          <div>
+            <p class="font-semibold text-sm">Daniela R.</p>
+            <p class="text-xs" style="color:var(--text-muted);">Odontóloga · Rosario, Santa Fe</p>
+          </div>
+          <div class="ml-auto text-right">
+            <p class="text-xs font-semibold" style="color:var(--neon);">+12 hs/semana recuperadas</p>
+            <p class="text-xs" style="color:var(--text-muted);">ROI en el primer mes</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars mb-3">★★★★★</div>
+        <p class="text-lg mb-5" style="line-height:1.7;">
+          "Pagué el jueves a la tarde y el martes siguiente ya tenía todo funcionando. En serio. El bot responde en segundos, con mi voz, con mis precios. Tres clientes me consultaron en el fin de semana y no tuve que hacer nada. Esto es lo que necesitaba."
+        </p>
+        <div class="flex items-center gap-3">
+          <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,rgba(0,255,136,0.2),rgba(10,132,255,0.2));border:1px solid rgba(0,255,136,0.3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:var(--neon);">MG</div>
+          <div>
+            <p class="font-semibold text-sm">Martín G.</p>
+            <p class="text-xs" style="color:var(--text-muted);">Estudio contable · Buenos Aires</p>
+          </div>
+          <div class="ml-auto text-right">
+            <p class="text-xs font-semibold" style="color:var(--neon);">Entregado en 5 días</p>
+            <p class="text-xs" style="color:var(--text-muted);">Sistema activo desde el día 1</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial">
+        <div class="stars mb-3">★★★★★</div>
+        <p class="text-lg mb-5" style="line-height:1.7;">
+          "Tenía miedo de que no fuera para mi rubro — vendo propiedades, es un proceso largo. Pero el sistema de seguimiento cambió todo. Cada lead entra al CRM automáticamente y recibe mensajes personalizados. Cerré 1 operación más en el primer mes. Eso solo pagó el pack 10 veces."
+        </p>
+        <div class="flex items-center gap-3">
+          <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,rgba(0,255,136,0.2),rgba(10,132,255,0.2));border:1px solid rgba(0,255,136,0.3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:var(--neon);">CP</div>
+          <div>
+            <p class="font-semibold text-sm">Claudia P.</p>
+            <p class="text-xs" style="color:var(--text-muted);">Inmobiliaria · Córdoba</p>
+          </div>
+          <div class="ml-auto text-right">
+            <p class="text-xs font-semibold" style="color:var(--neon);">+1 operación extra/mes</p>
+            <p class="text-xs" style="color:var(--text-muted);">ROI 10x en 30 días</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ GARANTÍA ═══ -->
+<section class="py-20 px-6">
+  <div class="max-w-2xl mx-auto">
+    <div class="guarantee-box text-center">
+      <div class="flex justify-center mb-6">
+        <div style="width:80px;height:80px;border-radius:50%;background:rgba(0,255,136,0.1);border:2px solid rgba(0,255,136,0.3);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🛡️</div>
+      </div>
+      <h2 class="font-bold text-2xl md:text-3xl mb-4" style="font-family:'Syne',sans-serif;">
+        Garantía total de 30 días
+      </h2>
+      <p class="text-lg mb-6" style="color:var(--text-muted);line-height:1.7;max-width:480px;margin-left:auto;margin-right:auto;">
+        Si en 30 días el sistema no está funcionando y automatizando tu proceso tal como acordamos, <strong style="color:var(--text-primary);">te devolvemos el 100% del dinero.</strong> Sin preguntas, sin procesos, sin drama.
+      </p>
+      <div class="inline-flex items-center gap-3 px-5 py-3 rounded-full text-sm font-semibold" style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);color:var(--neon);">
+        ✓ Tu dinero está protegido. El riesgo es 100% nuestro.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ FAQ ═══ -->
+<section class="py-20 px-6">
+  <div class="max-w-2xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="step-pill mb-4">Preguntas frecuentes</div>
+      <h2 class="font-bold text-2xl md:text-3xl" style="font-family:'Syne',sans-serif;">¿Tenés dudas? Normal.</h2>
+    </div>
+
+    <div>
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)">
+          ¿En qué tiempo tienen listo el sistema?
+          <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">
+          <p style="color:var(--text-muted);line-height:1.7;">En 5 días hábiles desde que realizás el pago. El primer día arrancamos con el diagnóstico de tu negocio, y el día 5 te entregamos todo funcionando con una videollamada de capacitación incluida.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)">
+          ¿Necesito saber de tecnología para usar el sistema?
+          <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">
+          <p style="color:var(--text-muted);line-height:1.7;">Para nada. Lo configuramos todo nosotros. Vos solo tenés que tener WhatsApp y un celular. Te hacemos una capacitación de 45 minutos donde te explicamos exactamente cómo usar todo, y los 30 días siguientes estamos disponibles para cualquier duda.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)">
+          ¿Cómo funciona el pago?
+          <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">
+          <p style="color:var(--text-muted);line-height:1.7;">Hacés clic en el botón, nos escribís por WhatsApp y te enviamos el link de pago. Aceptamos transferencia bancaria, MercadoPago y tarjeta de crédito. Una vez confirmado el pago, arrancamos el mismo día.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)">
+          ¿Para qué tipo de negocios funciona?
+          <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">
+          <p style="color:var(--text-muted);line-height:1.7;">Para cualquier profesional o pyme que tenga clientes y use WhatsApp: médicos, odontólogos, psicólogos, abogados, contadores, inmobiliarias, servicios técnicos, tutores, coaches, gimnasios. Si tenés consultas por WhatsApp, el sistema funciona para vos.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)">
+          ¿Qué pasa si no me sirve?
+          <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">
+          <p style="color:var(--text-muted);line-height:1.7;">Tenés 30 días de garantía total. Si el sistema no está funcionando como acordamos, te devolvemos el 100% del dinero. Sin preguntas, sin burocracia. Punto.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)">
+          ¿Por qué este precio es tan bajo comparado al valor?
+          <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">
+          <p style="color:var(--text-muted);line-height:1.7;">Estamos en etapa de crecimiento y queremos sumar casos de éxito y testimonios. A cambio de ese precio especial, te pedimos que compartas tu experiencia si el resultado te gusta. El precio de lanzamiento es temporal — sube al finalizar las plazas disponibles.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ CTA FINAL ═══ -->
+<section class="py-20 px-6 bg-grid" style="position:relative;overflow:hidden;">
+  <div class="blob-hero" style="width:600px;height:600px;background:radial-gradient(circle,rgba(0,255,136,0.07),transparent);top:-200px;right:-200px;"></div>
+  <div class="blob-hero" style="width:400px;height:400px;background:radial-gradient(circle,rgba(10,132,255,0.07),transparent);bottom:-100px;left:-100px;"></div>
+  <div class="max-w-2xl mx-auto text-center relative">
+    <div class="step-pill mb-6">Última oportunidad</div>
+    <h2 class="font-bold mb-4" style="font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,3rem);">
+      ¿Seguís respondiendo<br />
+      WhatsApp a las 11 de la noche<br />
+      <span class="neon-glow">o arrancamos hoy?</span>
+    </h2>
+    <p class="text-lg mb-8 mx-auto" style="color:var(--text-muted);line-height:1.7;max-width:480px;">
+      En 5 días tu negocio funciona solo cuando vos no estás. Solo quedan <strong style="color:#ff6060;" id="spots-final">3 lugares</strong> a este precio.
+    </p>
+
+    <a href="https://wa.me/5492226638044?text=Hola%2C%20quiero%20comprar%20el%20Pack%20Automatizaci%C3%B3n%20Pro%20por%20USD%20497" target="_blank" rel="noopener" class="btn-cta mx-auto mb-4">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      QUIERO EL PACK — USD $497 →
+    </a>
+
+    <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm" style="color:var(--text-muted);">
+      <span>🔒 Pago 100% seguro</span>
+      <span>⚡ Sistema listo en 5 días</span>
+      <span>🛡️ Garantía 30 días</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER MÍNIMO ═══ -->
+<footer class="py-8 px-6 text-center text-sm border-t" style="border-color:var(--dark-border);color:var(--text-muted);">
+  <p>© 2025 digitAI motor · <a href="index.html" style="color:var(--text-muted);">Volver al sitio</a> · hola@digitaimotor.lat</p>
+</footer>
+
+<!-- ═══ STICKY MOBILE CTA ═══ -->
+<div class="sticky-mobile-cta">
+  <a href="https://wa.me/5492226638044?text=Hola%2C%20quiero%20comprar%20el%20Pack%20Automatizaci%C3%B3n%20Pro%20por%20USD%20497" target="_blank" rel="noopener" class="btn-cta mx-auto" style="max-width:100%;padding:15px 20px;font-size:0.9rem;">
+    RESERVAR LUGAR — USD $497 →
+  </a>
+</div>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script>
+/* Countdown al domingo 23:59:59 */
+function getNextSunday() {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = day === 0 ? 7 : 7 - day;
+  const next = new Date(now);
+  next.setDate(now.getDate() + diff);
+  next.setHours(23, 59, 59, 0);
+  return next;
+}
+const target = getNextSunday();
+function updateCountdown() {
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) { document.querySelector('.countdown-box').innerHTML = '<p style="color:#ff4444;font-family:Syne,sans-serif;font-weight:800;font-size:1.2rem;">⚠️ Oferta vencida — Consultá disponibilidad</p>'; return; }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-d').textContent = String(d).padStart(2,'0');
+  document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* FAQ toggle */
+function toggleFaq(btn) {
+  const body = btn.nextElementSibling;
+  const icon = btn.querySelector('.faq-icon');
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.faq-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('open'));
+  if (!isOpen) { body.classList.add('open'); icon.classList.add('open'); }
+}
+
+/* Spots counter — decrementa visualmente cada ~90s para urgencia */
+let spots = 3;
+setInterval(() => {
+  if (spots > 1) {
+    const r = Math.random();
+    if (r > 0.7) {
+      spots--;
+      document.getElementById('spots').textContent = spots;
+      document.getElementById('spots-final').textContent = spots;
+    }
+  }
+}, 90000);
+</script>
+
+</body>
+</html>
