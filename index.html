@@ -287,16 +287,16 @@ body { background-color: var(--deep-navy); color: var(--text-primary); font-fami
 /* HERO VIDEO — opacity controlled by GSAP; fallback shows it after 4s */
 #hero-video { opacity: 0; transition: opacity 1.6s ease; }
 
-/* TACHOMETER VIDEO — blend sobre fondo oscuro, sin controles, sin sticker */
+/* TACHOMETER VIDEO — blend sobre fondo oscuro, tamaño contenido */
 #tacho-video {
   display: block;
   width: 100%;
-  max-width: 440px;
+  max-width: 260px;
   height: auto;
   background: transparent;
   mix-blend-mode: screen;
-  opacity: 0.85;
-  filter: drop-shadow(0 0 20px rgba(0,170,255,0.5));
+  opacity: 0.82;
+  filter: drop-shadow(0 0 14px rgba(0,170,255,0.45));
   pointer-events: none;
 }
 
@@ -573,7 +573,7 @@ body { background-color: var(--deep-navy); color: var(--text-primary); font-fami
   </div>
 
   <!-- Tachometer video: reemplaza tachometer.png — GSAP aplica scale+glow al scroll -->
-  <div id="tachometer-wrap" class="flex justify-center mt-14" style="position:relative;max-width:440px;margin-left:auto;margin-right:auto;">
+  <div id="tachometer-wrap" class="flex justify-center mt-10" style="position:relative;max-width:260px;margin-left:auto;margin-right:auto;">
 
     <!-- Video principal -->
     <video id="tacho-video" autoplay muted loop playsinline>
