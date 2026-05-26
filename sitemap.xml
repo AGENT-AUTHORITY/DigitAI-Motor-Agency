@@ -4,9 +4,11 @@
 
   <url>
     <loc>https://digitaimotor.lat/</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es-ar" href="https://digitaimotor.lat/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://digitaimotor.lat/" />
   </url>
 
   <url>

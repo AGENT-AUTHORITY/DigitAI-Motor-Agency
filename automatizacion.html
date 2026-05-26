@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-AR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,61 +7,58 @@
   <meta name="description" content="Automatizamos tu proceso de ventas con IA. Seguimiento de leads, respuestas automáticas por WhatsApp, recordatorios. Recuperá horas por semana. Buenos Aires, Argentina." />
   <meta name="keywords" content="automatización ventas IA Argentina, bot WhatsApp para negocios, automatizar seguimiento clientes, sistemas automáticos profesionales Buenos Aires" />
   <link rel="canonical" href="https://digitaimotor.lat/automatizacion.html" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{fontFamily:{syne:['Syne','sans-serif'],outfit:['Outfit','sans-serif']},colors:{neon:'#00ff88',accent:'#b400ff','dark-base':'#07070f','dark-card':'#0e0e1c','dark-border':'#1a1a2e'}}}}</script>
+  <script>tailwind.config={theme:{extend:{fontFamily:{syne:['Syne','sans-serif'],outfit:['Outfit','sans-serif']}}}}</script>
   <style>
-    :root{--neon:#00ff88;--accent:#b400ff;--dark-base:#07070f;--dark-card:#0e0e1c;--dark-border:#1a1a2e;--text-primary:#e8eaf0;--text-muted:#8892a4;}
+    :root{--electric:#0088ff;--deep-navy:#030711;--navy-card:#06101f;--navy-border:#0e1e36;--text-primary:#e8eaf0;--text-muted:#8892a4;}
     *{box-sizing:border-box;}html{scroll-behavior:smooth;}
-    body{background:var(--dark-base);color:var(--text-primary);font-family:'Outfit',sans-serif;overflow-x:hidden;}
-    ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--dark-base);}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px;}
-    .bg-grid{background-image:linear-gradient(rgba(180,0,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(180,0,255,0.04) 1px,transparent 1px);background-size:60px 60px;}
-    .accent-text{color:var(--accent);text-shadow:0 0 20px rgba(180,0,255,0.5);}
-    .neon-text{color:var(--neon);}
+    body{background:var(--deep-navy);color:var(--text-primary);font-family:'Outfit',sans-serif;overflow-x:hidden;}
+    ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--deep-navy);}::-webkit-scrollbar-thumb{background:var(--electric);border-radius:3px;}
+    .circuit-bg{background-image:radial-gradient(rgba(0,136,255,0.03) 1px,transparent 1px),linear-gradient(rgba(0,136,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,136,255,0.02) 1px,transparent 1px);background-size:120px 120px,60px 60px,60px 60px;}
+    .electric-text{color:var(--electric);}
     #navbar{transition:all 0.4s ease;}
-    #navbar.scrolled{background:rgba(7,7,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(180,0,255,0.15);}
-    .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--neon);color:#07070f;font-family:'Syne',sans-serif;font-weight:700;padding:14px 28px;border-radius:6px;cursor:pointer;transition:all 0.25s ease;text-decoration:none;font-size:0.95rem;letter-spacing:0.02em;border:none;}
-    .btn-primary:hover{background:#1affa0;transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,255,136,0.4);}
-    .btn-accent{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-family:'Syne',sans-serif;font-weight:700;padding:14px 28px;border-radius:6px;cursor:pointer;transition:all 0.25s ease;text-decoration:none;font-size:0.95rem;border:none;}
-    .btn-accent:hover{background:#c933ff;transform:translateY(-2px);box-shadow:0 8px 30px rgba(180,0,255,0.4);}
-    .btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--neon);font-family:'Syne',sans-serif;font-weight:600;padding:13px 28px;border-radius:6px;border:1px solid rgba(0,255,136,0.5);cursor:pointer;transition:all 0.25s ease;text-decoration:none;font-size:0.95rem;}
-    .btn-secondary:hover{background:rgba(0,255,136,0.08);border-color:var(--neon);transform:translateY(-2px);}
-    .section-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(180,0,255,0.2),transparent);}
+    #navbar.scrolled{background:rgba(3,7,17,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,136,255,0.15);}
+    .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--electric);color:#fff;font-family:'Syne',sans-serif;font-weight:700;padding:14px 28px;border-radius:6px;cursor:pointer;transition:all 0.25s ease;text-decoration:none;font-size:0.95rem;letter-spacing:0.02em;border:none;}
+    .btn-primary:hover{background:#1a9fff;transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,136,255,0.4);}
+    .btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--electric);font-family:'Syne',sans-serif;font-weight:600;padding:13px 28px;border-radius:6px;border:1px solid rgba(0,136,255,0.5);cursor:pointer;transition:all 0.25s ease;text-decoration:none;font-size:0.95rem;}
+    .btn-secondary:hover{background:rgba(0,136,255,0.08);border-color:var(--electric);transform:translateY(-2px);}
+    .section-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,136,255,0.2),transparent);}
     .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease;}
     .reveal.visible{opacity:1;transform:translateY(0);}
     .delay-100{transition-delay:0.1s;}.delay-200{transition-delay:0.2s;}.delay-300{transition-delay:0.3s;}.delay-400{transition-delay:0.4s;}
-    .use-case-card{background:var(--dark-card);border:1px solid var(--dark-border);border-radius:12px;padding:28px;transition:all 0.35s ease;}
-    .use-case-card:hover{border-color:rgba(180,0,255,0.4);transform:translateY(-4px);box-shadow:0 10px 40px rgba(180,0,255,0.1);}
-    .automation-item{background:rgba(180,0,255,0.04);border:1px solid rgba(180,0,255,0.1);border-radius:10px;padding:20px;transition:all 0.3s ease;}
-    .automation-item:hover{border-color:rgba(180,0,255,0.3);background:rgba(180,0,255,0.08);}
-    .faq-item{border:1px solid var(--dark-border);border-radius:10px;overflow:hidden;margin-bottom:8px;}
-    .faq-btn{width:100%;text-align:left;background:var(--dark-card);padding:18px 20px;display:flex;align-items:center;justify-between;cursor:pointer;border:none;color:var(--text-primary);font-family:'Outfit',sans-serif;font-size:0.95rem;transition:background 0.2s ease;}
-    .faq-btn:hover{background:rgba(180,0,255,0.05);}
+    .use-case-card{background:var(--navy-card);border:1px solid var(--navy-border);border-radius:12px;padding:28px;transition:all 0.35s ease;}
+    .use-case-card:hover{border-color:rgba(0,136,255,0.4);transform:translateY(-4px);box-shadow:0 10px 40px rgba(0,136,255,0.1);}
+    .automation-item{background:rgba(0,136,255,0.04);border:1px solid rgba(0,136,255,0.1);border-radius:10px;padding:20px;transition:all 0.3s ease;}
+    .automation-item:hover{border-color:rgba(0,136,255,0.3);background:rgba(0,136,255,0.08);}
+    .faq-item{border:1px solid var(--navy-border);border-radius:10px;overflow:hidden;margin-bottom:8px;}
+    .faq-btn{width:100%;text-align:left;background:var(--navy-card);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border:none;color:var(--text-primary);font-family:'Outfit',sans-serif;font-size:0.95rem;transition:background 0.2s ease;}
+    .faq-btn:hover{background:rgba(0,136,255,0.05);}
     .faq-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
     .faq-body.open{max-height:300px;padding:0 20px 18px;}
     .faq-icon{transition:transform 0.3s ease;flex-shrink:0;}
     .faq-icon.open{transform:rotate(180deg);}
-    .pricing-box{background:linear-gradient(135deg,rgba(180,0,255,0.08),rgba(10,132,255,0.08));border:1px solid rgba(180,0,255,0.2);border-radius:16px;padding:40px;position:relative;overflow:hidden;}
-    .pricing-box::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(180,0,255,0.05),transparent);pointer-events:none;}
+    .pricing-box{background:linear-gradient(135deg,rgba(0,136,255,0.07),rgba(0,60,160,0.07));border:1px solid rgba(0,136,255,0.18);border-radius:16px;padding:40px;position:relative;overflow:hidden;}
+    .pricing-box::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,136,255,0.04),transparent);pointer-events:none;}
     #mobile-menu{display:none;}
-    #mobile-menu.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(7,7,15,0.98);backdrop-filter:blur(20px);border-bottom:1px solid rgba(180,0,255,0.15);padding:24px;gap:20px;}
-    footer a:hover{color:var(--neon);transition:color 0.2s ease;}
+    #mobile-menu.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(3,7,17,0.98);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,136,255,0.15);padding:24px;gap:20px;}
+    footer a:hover{color:var(--electric);transition:color 0.2s ease;}
   </style>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"ProfessionalService","name":"digitAI motor","url":"https://digitaimotor.lat","telephone":"+5492226638044","description":"Automatización de pipelines de ventas y procesos comerciales para empresas en Argentina.","areaServed":["Argentina","Latinoamérica"],"address":{"@type":"PostalAddress","addressLocality":"Cañuelas","addressRegion":"Buenos Aires","addressCountry":"AR"}}
   </script>
 </head>
-<body class="bg-grid">
+<body class="circuit-bg">
 
 <!-- NAVBAR -->
 <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-4 px-6 md:px-10">
   <div class="max-w-6xl mx-auto flex items-center justify-between">
     <a href="index.html" class="flex items-center gap-2">
-      <div style="display:none;" class="w-8 h-8 rounded-md flex items-center justify-center" style="background:var(--neon);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#07070f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <img src="assets/logo.svg" alt="digitAI motor" style="height:36px;width:auto;" />
-      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-0.02em;color:var(--text-primary);">digit<span style="color:var(--neon);">AI</span> motor</span>
+      <img src="assets/logo.svg" alt="digitAI motor" style="height:36px;width:auto;" onerror="this.style.display='none';" />
+      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-0.02em;color:var(--text-primary);">digit<span style="color:var(--electric);">AI</span> motor</span>
     </a>
     <div class="hidden md:flex items-center gap-8">
       <a href="index.html" class="text-sm font-outfit" style="color:var(--text-muted);">← Inicio</a>
@@ -70,7 +67,7 @@
         WhatsApp
       </a>
     </div>
-    <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2"><span class="block w-6 h-0.5" style="background:var(--text-primary);"></span><span class="block w-6 h-0.5" style="background:var(--text-primary);"></span><span class="block w-4 h-0.5" style="background:var(--neon);"></span></button>
+    <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menú"><span class="block w-6 h-0.5" style="background:var(--text-primary);"></span><span class="block w-6 h-0.5" style="background:var(--text-primary);"></span><span class="block w-4 h-0.5" style="background:var(--electric);"></span></button>
   </div>
   <div id="mobile-menu" class="md:hidden">
     <a href="index.html" class="font-outfit text-sm py-2" style="color:var(--text-muted);">← Inicio</a>
@@ -80,20 +77,20 @@
 
 <!-- HERO -->
 <section class="relative pt-32 pb-20 px-6 overflow-hidden">
-  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(180,0,255,0.08) 0%,transparent 70%);"></div>
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(0,136,255,0.07) 0%,transparent 70%);"></div>
   <div class="max-w-4xl mx-auto text-center">
-    <div class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full reveal" style="background:rgba(180,0,255,0.08);border:1px solid rgba(180,0,255,0.2);">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b400ff" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-      <span class="font-outfit text-xs font-medium tracking-widest uppercase" style="color:var(--accent);">Automatización de Ventas</span>
+    <div class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full reveal" style="background:rgba(0,136,255,0.08);border:1px solid rgba(0,136,255,0.2);">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0088ff" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      <span class="font-outfit text-xs font-medium tracking-widest uppercase" style="color:var(--electric);">Automatización de Ventas</span>
     </div>
-    <h1 class="font-syne text-5xl md:text-6xl font-800 leading-tight tracking-tight mb-6 reveal delay-100">
-      Automatizá tu Pipeline.<br /><span class="accent-text">Cerrá sin Esfuerzo Manual.</span>
+    <h1 class="font-syne text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6 reveal delay-100">
+      Automatizá tu Pipeline.<br /><span class="electric-text">Cerrá sin Esfuerzo Manual.</span>
     </h1>
     <p class="font-outfit text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed reveal delay-200" style="color:var(--text-muted);">
       Automatizamos seguimiento de leads, recordatorios, reportes y todo lo que te saca tiempo de vender. Tu equipo se enfoca en cerrar, la IA se encarga del resto.
     </p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center reveal delay-300">
-      <a href="#casos" class="btn-accent">Ver casos de uso</a>
+      <a href="#casos" class="btn-primary">Ver casos de uso</a>
       <a href="https://wa.me/5492226638044?text=Hola%2C+quiero+automatizar+mi+proceso+de+ventas.+%C2%BFQu%C3%A9+necesito+para+arrancar%3F" target="_blank" rel="noopener" class="btn-secondary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Consultar proyecto
@@ -108,16 +105,16 @@
 <section class="py-20 px-6">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-14 reveal">
-      <h2 class="font-syne text-4xl font-800 mb-4">¿Qué podemos <span class="accent-text">automatizar</span>?</h2>
+      <h2 class="font-syne text-4xl font-extrabold mb-4">¿Qué podemos <span class="electric-text">automatizar</span>?</h2>
       <p class="font-outfit text-base" style="color:var(--text-muted);">Si lo hacés más de 3 veces por semana, probablemente se pueda automatizar.</p>
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div class="automation-item reveal delay-100"><div class="text-2xl mb-3">📥</div><h3 class="font-syne font-700 mb-2">Captura de leads</h3><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Formularios web, WhatsApp, emails → directo al CRM, sin copiar y pegar.</p></div>
-      <div class="automation-item reveal delay-200"><div class="text-2xl mb-3">🔔</div><h3 class="font-syne font-700 mb-2">Recordatorios automáticos</h3><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Si un lead lleva 3 días sin responder, el sistema avisa al vendedor. Cero olvidos.</p></div>
-      <div class="automation-item reveal delay-300"><div class="text-2xl mb-3">📊</div><h3 class="font-syne font-700 mb-2">Reportes diarios/semanales</h3><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Pipeline actualizado en tu WhatsApp o email cada mañana. Sin abrir el CRM.</p></div>
-      <div class="automation-item reveal delay-100"><div class="text-2xl mb-3">✉️</div><h3 class="font-syne font-700 mb-2">Emails de seguimiento</h3><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Secuencias automáticas según la etapa del lead. Parece humano, pero es IA.</p></div>
-      <div class="automation-item reveal delay-200"><div class="text-2xl mb-3">🔄</div><h3 class="font-syne font-700 mb-2">Distribución de leads</h3><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Leads nuevos se asignan automáticamente según zona, capacidad o tipo de producto.</p></div>
-      <div class="automation-item reveal delay-300"><div class="text-2xl mb-3">🎯</div><h3 class="font-syne font-700 mb-2">Tagging y scoring</h3><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">La IA puntúa leads según probabilidad de cierre. Tu equipo prioriza los que valen.</p></div>
+      <div class="automation-item reveal delay-100"><div class="text-2xl mb-3">📥</div><h3 class="font-syne font-bold mb-2">Captura de leads</h3><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Formularios web, WhatsApp, emails → directo al CRM, sin copiar y pegar.</p></div>
+      <div class="automation-item reveal delay-200"><div class="text-2xl mb-3">🔔</div><h3 class="font-syne font-bold mb-2">Recordatorios automáticos</h3><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Si un lead lleva 3 días sin responder, el sistema avisa al vendedor. Cero olvidos.</p></div>
+      <div class="automation-item reveal delay-300"><div class="text-2xl mb-3">📊</div><h3 class="font-syne font-bold mb-2">Reportes diarios/semanales</h3><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Pipeline actualizado en tu WhatsApp o email cada mañana. Sin abrir el CRM.</p></div>
+      <div class="automation-item reveal delay-100"><div class="text-2xl mb-3">✉️</div><h3 class="font-syne font-bold mb-2">Emails de seguimiento</h3><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Secuencias automáticas según la etapa del lead. Parece humano, pero es IA.</p></div>
+      <div class="automation-item reveal delay-200"><div class="text-2xl mb-3">🔄</div><h3 class="font-syne font-bold mb-2">Distribución de leads</h3><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Leads nuevos se asignan automáticamente según zona, capacidad o tipo de producto.</p></div>
+      <div class="automation-item reveal delay-300"><div class="text-2xl mb-3">🎯</div><h3 class="font-syne font-bold mb-2">Tagging y scoring</h3><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">La IA puntúa leads según probabilidad de cierre. Tu equipo prioriza los que valen.</p></div>
     </div>
   </div>
 </section>
@@ -128,18 +125,18 @@
 <section id="casos" class="py-20 px-6">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-14 reveal">
-      <h2 class="font-syne text-4xl font-800 mb-4">Casos de uso <span class="accent-text">reales</span></h2>
+      <h2 class="font-syne text-4xl font-extrabold mb-4">Casos de uso <span class="electric-text">reales</span></h2>
       <p class="font-outfit text-base" style="color:var(--text-muted);">Así usamos automatización en negocios como el tuyo.</p>
     </div>
     <div class="grid md:grid-cols-2 gap-6">
       <div class="use-case-card reveal delay-100">
         <div class="flex items-start gap-4 mb-4">
-          <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(180,0,255,0.15);border:1px solid rgba(180,0,255,0.3);">
+          <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(0,136,255,0.1);border:1px solid rgba(0,136,255,0.25);">
             <span class="text-2xl">🏢</span>
           </div>
           <div>
-            <h3 class="font-syne text-xl font-700 mb-1">Inmobiliaria con 15 vendedores</h3>
-            <p class="font-outfit text-xs" style="color:var(--accent);">B2C · Pipeline complejo</p>
+            <h3 class="font-syne text-xl font-bold mb-1">Inmobiliaria con 15 vendedores</h3>
+            <p class="font-outfit text-xs electric-text">B2C · Pipeline complejo</p>
           </div>
         </div>
         <p class="font-outfit text-sm leading-relaxed mb-4" style="color:var(--text-muted);">
@@ -152,12 +149,12 @@
 
       <div class="use-case-card reveal delay-200">
         <div class="flex items-start gap-4 mb-4">
-          <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(180,0,255,0.15);border:1px solid rgba(180,0,255,0.3);">
+          <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(0,136,255,0.1);border:1px solid rgba(0,136,255,0.25);">
             <span class="text-2xl">🏭</span>
           </div>
           <div>
-            <h3 class="font-syne text-xl font-700 mb-1">Distribuidor industrial</h3>
-            <p class="font-outfit text-xs" style="color:var(--accent);">B2B · Ciclo de venta largo</p>
+            <h3 class="font-syne text-xl font-bold mb-1">Distribuidor industrial</h3>
+            <p class="font-outfit text-xs electric-text">B2B · Ciclo de venta largo</p>
           </div>
         </div>
         <p class="font-outfit text-sm leading-relaxed mb-4" style="color:var(--text-muted);">
@@ -170,12 +167,12 @@
 
       <div class="use-case-card reveal delay-100">
         <div class="flex items-start gap-4 mb-4">
-          <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(180,0,255,0.15);border:1px solid rgba(180,0,255,0.3);">
+          <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(0,136,255,0.1);border:1px solid rgba(0,136,255,0.25);">
             <span class="text-2xl">💼</span>
           </div>
           <div>
-            <h3 class="font-syne text-xl font-700 mb-1">Consultora de servicios profesionales</h3>
-            <p class="font-outfit text-xs" style="color:var(--accent);">B2B · Alto ticket</p>
+            <h3 class="font-syne text-xl font-bold mb-1">Consultora de servicios profesionales</h3>
+            <p class="font-outfit text-xs electric-text">B2B · Alto ticket</p>
           </div>
         </div>
         <p class="font-outfit text-sm leading-relaxed mb-4" style="color:var(--text-muted);">
@@ -188,12 +185,12 @@
 
       <div class="use-case-card reveal delay-200">
         <div class="flex items-start gap-4 mb-4">
-          <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(180,0,255,0.15);border:1px solid rgba(180,0,255,0.3);">
+          <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(0,136,255,0.1);border:1px solid rgba(0,136,255,0.25);">
             <span class="text-2xl">🎓</span>
           </div>
           <div>
-            <h3 class="font-syne text-xl font-700 mb-1">Academia de capacitación online</h3>
-            <p class="font-outfit text-xs" style="color:var(--accent);">B2C · Producto digital</p>
+            <h3 class="font-syne text-xl font-bold mb-1">Academia de capacitación online</h3>
+            <p class="font-outfit text-xs electric-text">B2C · Producto digital</p>
           </div>
         </div>
         <p class="font-outfit text-sm leading-relaxed mb-4" style="color:var(--text-muted);">
@@ -213,41 +210,41 @@
 <section id="cotizacion" class="py-20 px-6">
   <div class="max-w-4xl mx-auto">
     <div class="text-center mb-12 reveal">
-      <h2 class="font-syne text-4xl font-800 mb-4">¿Cómo <span class="accent-text">cotizamos</span>?</h2>
+      <h2 class="font-syne text-4xl font-extrabold mb-4">¿Cómo <span class="electric-text">cotizamos</span>?</h2>
       <p class="font-outfit text-base" style="color:var(--text-muted);">No hay dos negocios iguales. El precio depende de qué querés automatizar.</p>
     </div>
     <div class="pricing-box reveal">
       <div class="relative z-10">
-        <h3 class="font-syne text-2xl font-700 mb-6 text-center">El precio se arma según 3 factores</h3>
+        <h3 class="font-syne text-2xl font-bold mb-6 text-center">El precio se arma según 3 factores</h3>
         <div class="space-y-4 mb-8">
           <div class="flex items-start gap-4">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--accent);color:#fff;">
-              <span class="font-syne font-700 text-sm">1</span>
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--electric);color:#fff;">
+              <span class="font-syne font-bold text-sm">1</span>
             </div>
             <div>
-              <h4 class="font-syne font-700 mb-1">Complejidad del flujo</h4>
+              <h4 class="font-syne font-bold mb-1">Complejidad del flujo</h4>
               <p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">
                 ¿Es un flujo simple (formulario → CRM) o complejo (múltiples etapas, condiciones, integraciones con 4 herramientas)?
               </p>
             </div>
           </div>
           <div class="flex items-start gap-4">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--accent);color:#fff;">
-              <span class="font-syne font-700 text-sm">2</span>
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--electric);color:#fff;">
+              <span class="font-syne font-bold text-sm">2</span>
             </div>
             <div>
-              <h4 class="font-syne font-700 mb-1">Cantidad de automatizaciones</h4>
+              <h4 class="font-syne font-bold mb-1">Cantidad de automatizaciones</h4>
               <p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">
                 Una automatización vs. un sistema completo de 10 flujos conectados.
               </p>
             </div>
           </div>
           <div class="flex items-start gap-4">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--accent);color:#fff;">
-              <span class="font-syne font-700 text-sm">3</span>
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--electric);color:#fff;">
+              <span class="font-syne font-bold text-sm">3</span>
             </div>
             <div>
-              <h4 class="font-syne font-700 mb-1">¿Querés soporte mensual?</h4>
+              <h4 class="font-syne font-bold mb-1">¿Querés soporte mensual?</h4>
               <p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">
                 Implementación única (pago one-time) o retainer mensual para ajustes y nuevas automatizaciones.
               </p>
@@ -273,10 +270,10 @@
 <!-- FAQ -->
 <section class="py-20 px-6">
   <div class="max-w-3xl mx-auto">
-    <div class="text-center mb-12 reveal"><h2 class="font-syne text-3xl md:text-4xl font-800 mb-4">Preguntas <span class="accent-text">frecuentes</span></h2></div>
+    <div class="text-center mb-12 reveal"><h2 class="font-syne text-3xl md:text-4xl font-extrabold mb-4">Preguntas <span class="electric-text">frecuentes</span></h2></div>
     <div class="reveal">
-      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Qué herramientas usamos para automatizar?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Dependiendo del caso: Zapier, Make (Integromat), n8n, APIs nativas de Zoho, webhooks personalizados. Elegimos lo que mejor se adapte a tu stack tecnológico actual.</p></div></div>
-      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Necesito tener CRM antes de automatizar?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">No necesariamente. Si no tenés CRM, podemos implementar Zoho y automatizarlo en el mismo proyecto. Si ya tenés otro CRM (HubSpot, Pipedrive, Salesforce), trabajamos sobre eso.</p></div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Qué herramientas usamos para automatizar?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Dependiendo del caso: Zapier, Make (Integromat), n8n, APIs nativas de CRM, webhooks personalizados. Elegimos lo que mejor se adapte a tu stack tecnológico actual.</p></div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Necesito tener CRM antes de automatizar?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">No necesariamente. Si no tenés CRM, podemos implementar uno a medida y automatizarlo en el mismo proyecto. Si ya tenés CRM (HubSpot, Pipedrive, Salesforce), trabajamos sobre eso.</p></div></div>
       <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Cuánto tarda la implementación?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Automatizaciones simples: 1-2 semanas. Proyectos complejos con múltiples flujos: 3-6 semanas. Te damos cronograma exacto después de la consulta inicial.</p></div></div>
       <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Qué pasa si algo se rompe después?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Todos los proyectos incluyen 30 días de garantía post-implementación. Si algo falla, lo arreglamos sin costo. Después de eso, podés contratar soporte mensual o pagar por incidencia.</p></div></div>
     </div>
@@ -286,8 +283,8 @@
 <!-- CTA FINAL -->
 <section class="py-16 px-6">
   <div class="max-w-3xl mx-auto text-center reveal">
-    <div style="background:rgba(180,0,255,0.05);border:1px solid rgba(180,0,255,0.2);border-radius:16px;padding:48px 32px;">
-      <h2 class="font-syne text-3xl md:text-4xl font-800 mb-4">¿Listo para que tu pipeline<br /><span class="accent-text">trabaje por vos</span>?</h2>
+    <div style="background:rgba(0,136,255,0.05);border:1px solid rgba(0,136,255,0.18);border-radius:16px;padding:48px 32px;">
+      <h2 class="font-syne text-3xl md:text-4xl font-extrabold mb-4">¿Listo para que tu pipeline<br /><span class="electric-text">trabaje por vos</span>?</h2>
       <p class="font-outfit text-base mb-8" style="color:var(--text-muted);">Contanos qué estás haciendo manualmente hoy. En 30 minutos te decimos cómo automatizarlo.</p>
       <a href="https://wa.me/5492226638044?text=Hola%2C+quiero+automatizar+mi+proceso+de+ventas.+Mi+caso+es%3A" target="_blank" rel="noopener" class="btn-primary text-base py-4 px-10">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -298,17 +295,20 @@
 </section>
 
 <!-- FOOTER -->
-<footer style="background:var(--dark-card);border-top:1px solid var(--dark-border);">
+<footer style="background:var(--navy-card);border-top:1px solid var(--navy-border);">
   <div class="max-w-6xl mx-auto px-6 py-10">
     <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-      <a href="index.html" class="flex items-center gap-2"><div class="w-7 h-7 rounded-md flex items-center justify-center" style="background:var(--neon);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#07070f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="font-syne font-700">digit<span style="color:var(--neon);">AI</span> motor</span></a>
+      <a href="index.html" class="flex items-center gap-2">
+        <img src="assets/logo.svg" alt="digitAI motor" style="height:28px;width:auto;" onerror="this.style.display='none';" />
+        <span class="font-syne font-bold">digit<span style="color:var(--electric);">AI</span> motor</span>
+      </a>
       <div class="flex flex-wrap gap-6">
         <a href="index.html" class="font-outfit text-sm" style="color:var(--text-muted);">Inicio</a>
         <a href="paginas-web.html" class="font-outfit text-sm" style="color:var(--text-muted);">Páginas Web</a>
-        <a href="crm-zoho.html" class="font-outfit text-sm" style="color:var(--text-muted);">CRM Zoho</a>
+        <a href="crm-zoho.html" class="font-outfit text-sm" style="color:var(--text-muted);">CRM</a>
         <a href="posicionamiento-geo.html" class="font-outfit text-sm" style="color:var(--text-muted);">Google Maps</a>
       </div>
-      <p class="font-outfit text-xs" style="color:var(--text-muted);">© 2025 digitAI motor</p>
+      <p class="font-outfit text-xs" style="color:var(--text-muted);">© 2026 digitAI motor</p>
     </div>
   </div>
 </footer>
@@ -322,5 +322,3 @@
 </script>
 </body>
 </html>
-HTMLEOF
-

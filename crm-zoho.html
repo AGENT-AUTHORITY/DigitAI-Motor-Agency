@@ -1,81 +1,78 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-AR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CRM Zoho para Profesionales y Negocios en Argentina | digitAI motor</title>
-  <meta name="description" content="Implementamos y configuramos Zoho CRM para médicos, abogados, inmobiliarias y pymes. Todos tus clientes organizados, sin planillas. Desde $500 USD. Buenos Aires, Argentina." />
-  <meta name="keywords" content="CRM Zoho Argentina, implementación Zoho Buenos Aires, CRM para médicos abogados inmobiliarias, organizar clientes con CRM" />
+  <title>CRM a Medida para Profesionales y Negocios en Argentina | digitAI motor</title>
+  <meta name="description" content="Implementamos CRM personalizado para médicos, abogados, inmobiliarias y pymes. Todos tus clientes organizados, seguimiento automático, sin planillas. Buenos Aires, Argentina." />
+  <meta name="keywords" content="CRM a medida Argentina, CRM personalizado Buenos Aires, CRM para médicos abogados inmobiliarias, organizar clientes con CRM, sistema de ventas Argentina" />
   <link rel="canonical" href="https://digitaimotor.lat/crm-zoho.html" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{fontFamily:{syne:['Syne','sans-serif'],outfit:['Outfit','sans-serif']},colors:{neon:'#00ff88','dark-base':'#07070f','dark-card':'#0e0e1c','dark-border':'#1a1a2e'}}}}</script>
+  <script>tailwind.config={theme:{extend:{fontFamily:{syne:['Syne','sans-serif'],outfit:['Outfit','sans-serif']}}}}</script>
   <style>
-    :root{--neon:#00ff88;--accent:#0a84ff;--dark-base:#07070f;--dark-card:#0e0e1c;--dark-border:#1a1a2e;--text-primary:#e8eaf0;--text-muted:#8892a4;}
+    :root{--electric:#0088ff;--accent-crm:#00b4ff;--deep-navy:#030711;--navy-card:#06101f;--navy-border:#0e1e36;--text-primary:#e8eaf0;--text-muted:#8892a4;}
     *{box-sizing:border-box;}html{scroll-behavior:smooth;}
-    body{background:var(--dark-base);color:var(--text-primary);font-family:'Outfit',sans-serif;overflow-x:hidden;}
-    ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--dark-base);}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px;}
-    .bg-grid{background-image:linear-gradient(rgba(10,132,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(10,132,255,0.04) 1px,transparent 1px);background-size:60px 60px;}
-    .accent-text{color:var(--accent);text-shadow:0 0 20px rgba(10,132,255,0.5);}
-    .neon-text{color:var(--neon);}
+    body{background:var(--deep-navy);color:var(--text-primary);font-family:'Outfit',sans-serif;overflow-x:hidden;}
+    ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--deep-navy);}::-webkit-scrollbar-thumb{background:var(--accent-crm);border-radius:3px;}
+    .circuit-bg{background-image:radial-gradient(rgba(0,180,255,0.03) 1px,transparent 1px),linear-gradient(rgba(0,180,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,180,255,0.02) 1px,transparent 1px);background-size:120px 120px,60px 60px,60px 60px;}
+    .crm-text{color:var(--accent-crm);}
     #navbar{transition:all 0.4s ease;}
-    #navbar.scrolled{background:rgba(7,7,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(10,132,255,0.15);}
-    .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--neon);color:#07070f;font-family:'Syne',sans-serif;font-weight:700;padding:14px 28px;border-radius:6px;cursor:pointer;transition:all 0.25s ease;text-decoration:none;font-size:0.95rem;letter-spacing:0.02em;border:none;}
-    .btn-primary:hover{background:#1affa0;transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,255,136,0.4);}
-    .btn-accent{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-family:'Syne',sans-serif;font-weight:700;padding:14px 28px;border-radius:6px;cursor:pointer;transition:all 0.25s ease;text-decoration:none;font-size:0.95rem;border:none;}
-    .btn-accent:hover{background:#2b96ff;transform:translateY(-2px);box-shadow:0 8px 30px rgba(10,132,255,0.4);}
-    .btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--neon);font-family:'Syne',sans-serif;font-weight:600;padding:13px 28px;border-radius:6px;border:1px solid rgba(0,255,136,0.5);cursor:pointer;transition:all 0.25s ease;text-decoration:none;font-size:0.95rem;}
-    .btn-secondary:hover{background:rgba(0,255,136,0.08);border-color:var(--neon);transform:translateY(-2px);}
-    .section-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(10,132,255,0.2),transparent);}
+    #navbar.scrolled{background:rgba(3,7,17,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,180,255,0.15);}
+    .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--accent-crm);color:#fff;font-family:'Syne',sans-serif;font-weight:700;padding:14px 28px;border-radius:6px;cursor:pointer;transition:all 0.25s ease;text-decoration:none;font-size:0.95rem;letter-spacing:0.02em;border:none;}
+    .btn-primary:hover{background:#1ac4ff;transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,180,255,0.4);}
+    .btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--accent-crm);font-family:'Syne',sans-serif;font-weight:600;padding:13px 28px;border-radius:6px;border:1px solid rgba(0,180,255,0.5);cursor:pointer;transition:all 0.25s ease;text-decoration:none;font-size:0.95rem;}
+    .btn-secondary:hover{background:rgba(0,180,255,0.08);border-color:var(--accent-crm);transform:translateY(-2px);}
+    .section-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,180,255,0.2),transparent);}
     .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease;}
     .reveal.visible{opacity:1;transform:translateY(0);}
     .delay-100{transition-delay:0.1s;}.delay-200{transition-delay:0.2s;}.delay-300{transition-delay:0.3s;}.delay-400{transition-delay:0.4s;}
-    .plan-card{background:var(--dark-card);border:1px solid var(--dark-border);border-radius:16px;padding:36px;transition:all 0.35s ease;position:relative;overflow:hidden;}
-    .plan-card.featured{border-color:rgba(10,132,255,0.5);box-shadow:0 0 40px rgba(10,132,255,0.1);}
-    .plan-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
+    .plan-card{background:var(--navy-card);border:1px solid var(--navy-border);border-radius:16px;padding:36px;transition:all 0.35s ease;position:relative;overflow:hidden;}
+    .plan-card.featured{border-color:rgba(0,180,255,0.45);box-shadow:0 0 40px rgba(0,180,255,0.09);}
+    .plan-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent-crm),transparent);}
     .plan-card:hover{transform:translateY(-6px);}
     .feature-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
     .feature-row:last-child{border-bottom:none;}
     .check{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .check.yes{background:rgba(10,132,255,0.15);color:var(--accent);}
+    .check.yes{background:rgba(0,180,255,0.15);color:var(--accent-crm);}
     .check.no{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.2);}
-    .pain-card{background:rgba(10,132,255,0.04);border:1px solid rgba(10,132,255,0.1);border-radius:10px;padding:20px;transition:all 0.3s ease;}
-    .pain-card:hover{border-color:rgba(10,132,255,0.3);background:rgba(10,132,255,0.08);}
-    .faq-item{border:1px solid var(--dark-border);border-radius:10px;overflow:hidden;margin-bottom:8px;}
-    .faq-btn{width:100%;text-align:left;background:var(--dark-card);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border:none;color:var(--text-primary);font-family:'Outfit',sans-serif;font-size:0.95rem;transition:background 0.2s ease;}
-    .faq-btn:hover{background:rgba(10,132,255,0.05);}
+    .pain-card{background:rgba(0,180,255,0.04);border:1px solid rgba(0,180,255,0.1);border-radius:10px;padding:20px;transition:all 0.3s ease;}
+    .pain-card:hover{border-color:rgba(0,180,255,0.3);background:rgba(0,180,255,0.08);}
+    .faq-item{border:1px solid var(--navy-border);border-radius:10px;overflow:hidden;margin-bottom:8px;}
+    .faq-btn{width:100%;text-align:left;background:var(--navy-card);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border:none;color:var(--text-primary);font-family:'Outfit',sans-serif;font-size:0.95rem;transition:background 0.2s ease;}
+    .faq-btn:hover{background:rgba(0,180,255,0.05);}
     .faq-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
     .faq-body.open{max-height:300px;padding:0 20px 18px;}
     .faq-icon{transition:transform 0.3s ease;flex-shrink:0;}
     .faq-icon.open{transform:rotate(180deg);}
     #mobile-menu{display:none;}
-    #mobile-menu.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(7,7,15,0.98);backdrop-filter:blur(20px);border-bottom:1px solid rgba(10,132,255,0.15);padding:24px;gap:20px;}
-    footer a:hover{color:var(--neon);transition:color 0.2s ease;}
+    #mobile-menu.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(3,7,17,0.98);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,180,255,0.15);padding:24px;gap:20px;}
+    footer a:hover{color:var(--accent-crm);transition:color 0.2s ease;}
   </style>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"ProfessionalService","name":"digitAI motor","url":"https://digitaimotor.lat","telephone":"+5492226638044","description":"Implementación y configuración de Zoho CRM para equipos de ventas en Argentina.","areaServed":["Argentina","Latinoamérica"],"address":{"@type":"PostalAddress","addressLocality":"Cañuelas","addressRegion":"Buenos Aires","addressCountry":"AR"},"hasOfferCatalog":{"@type":"OfferCatalog","name":"Planes CRM Zoho","itemListElement":[{"@type":"Offer","name":"Plan Esencial","price":"500","priceCurrency":"USD"},{"@type":"Offer","name":"Plan Escala","price":"1200","priceCurrency":"USD"}]}}
+  {"@context":"https://schema.org","@type":"ProfessionalService","name":"digitAI motor","url":"https://digitaimotor.lat","telephone":"+5492226638044","description":"Implementación de CRM personalizado para equipos de ventas en Argentina.","areaServed":["Argentina","Latinoamérica"],"address":{"@type":"PostalAddress","addressLocality":"Cañuelas","addressRegion":"Buenos Aires","addressCountry":"AR"}}
   </script>
 </head>
-<body class="bg-grid">
+<body class="circuit-bg">
 
 <!-- NAVBAR -->
 <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-4 px-6 md:px-10">
   <div class="max-w-6xl mx-auto flex items-center justify-between">
     <a href="index.html" class="flex items-center gap-2">
-      <div style="display:none;" class="w-8 h-8 rounded-md flex items-center justify-center" style="background:var(--neon);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#07070f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <img src="assets/logo.svg" alt="digitAI motor" style="height:36px;width:auto;" />
-      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-0.02em;color:var(--text-primary);">digit<span style="color:var(--neon);">AI</span> motor</span>
+      <img src="assets/logo.svg" alt="digitAI motor" style="height:36px;width:auto;" onerror="this.style.display='none';" />
+      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-0.02em;color:var(--text-primary);">digit<span style="color:var(--accent-crm);">AI</span> motor</span>
     </a>
     <div class="hidden md:flex items-center gap-8">
       <a href="index.html" class="text-sm font-outfit" style="color:var(--text-muted);">← Inicio</a>
-      <a href="https://wa.me/5492226638044?text=Hola%2C+quiero+info+sobre+CRM+Zoho" target="_blank" rel="noopener" class="btn-primary text-sm py-2.5 px-5">
+      <a href="https://wa.me/5492226638044?text=Hola%2C+quiero+info+sobre+CRM+a+medida" target="_blank" rel="noopener" class="btn-primary text-sm py-2.5 px-5">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         WhatsApp
       </a>
     </div>
-    <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2"><span class="block w-6 h-0.5" style="background:var(--text-primary);"></span><span class="block w-6 h-0.5" style="background:var(--text-primary);"></span><span class="block w-4 h-0.5" style="background:var(--neon);"></span></button>
+    <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menú"><span class="block w-6 h-0.5" style="background:var(--text-primary);"></span><span class="block w-6 h-0.5" style="background:var(--text-primary);"></span><span class="block w-4 h-0.5" style="background:var(--accent-crm);"></span></button>
   </div>
   <div id="mobile-menu" class="md:hidden">
     <a href="index.html" class="font-outfit text-sm py-2" style="color:var(--text-muted);">← Inicio</a>
@@ -85,21 +82,21 @@
 
 <!-- HERO -->
 <section class="relative pt-32 pb-20 px-6 overflow-hidden">
-  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(10,132,255,0.08) 0%,transparent 70%);"></div>
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(0,180,255,0.07) 0%,transparent 70%);"></div>
   <div class="max-w-4xl mx-auto text-center">
-    <div class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full reveal" style="background:rgba(10,132,255,0.08);border:1px solid rgba(10,132,255,0.2);">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-      <span class="font-outfit text-xs font-medium tracking-widest uppercase" style="color:var(--accent);">CRM Zoho</span>
+    <div class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full reveal" style="background:rgba(0,180,255,0.08);border:1px solid rgba(0,180,255,0.2);">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00b4ff" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      <span class="font-outfit text-xs font-medium tracking-widest uppercase crm-text">CRM a Medida</span>
     </div>
-    <h1 class="font-syne text-5xl md:text-6xl font-800 leading-tight tracking-tight mb-6 reveal delay-100">
-      Implementamos tu CRM Zoho.<br /><span class="accent-text">Tu Equipo Vende Más.</span>
+    <h1 class="font-syne text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6 reveal delay-100">
+      Tu CRM, a la medida<br /><span class="crm-text">de tu negocio.</span>
     </h1>
     <p class="font-outfit text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed reveal delay-200" style="color:var(--text-muted);">
-      Configuramos Zoho CRM a medida de tu proceso de ventas. Leads organizados, seguimiento automático y reportes que te dicen qué funciona y qué no.
+      Implementamos y configuramos sistemas CRM adaptados a tu proceso de ventas. Leads organizados, seguimiento automático y reportes que te dicen qué funciona.
     </p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center reveal delay-300">
-      <a href="#precios" class="btn-accent">Ver planes y precios</a>
-      <a href="https://wa.me/5492226638044?text=Hola%2C+quiero+implementar+Zoho+CRM+en+mi+empresa.+%C2%BFC%C3%B3mo+funciona%3F" target="_blank" rel="noopener" class="btn-secondary">
+      <a href="#precios" class="btn-primary">Ver planes y precios</a>
+      <a href="https://wa.me/5492226638044?text=Hola%2C+quiero+implementar+un+CRM+en+mi+empresa.+%C2%BFC%C3%B3mo+funciona%3F" target="_blank" rel="noopener" class="btn-secondary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Consultar gratis
       </a>
@@ -113,7 +110,7 @@
 <section class="py-20 px-6">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-14 reveal">
-      <h2 class="font-syne text-4xl font-800 mb-4">¿Tu equipo vende con <span class="accent-text">Excel y WhatsApp</span>?</h2>
+      <h2 class="font-syne text-4xl font-extrabold mb-4">¿Tu equipo vende con <span class="crm-text">Excel y WhatsApp</span>?</h2>
       <p class="font-outfit text-base max-w-xl mx-auto" style="color:var(--text-muted);">Eso tiene un costo invisible que se ve cuando revisás cuántos leads se perdieron este mes.</p>
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -133,16 +130,16 @@
 <section id="precios" class="py-20 px-6">
   <div class="max-w-5xl mx-auto">
     <div class="text-center mb-14 reveal">
-      <span class="font-outfit text-xs tracking-widest uppercase mb-4 block" style="color:var(--accent);">Planes</span>
-      <h2 class="font-syne text-4xl md:text-5xl font-800 mb-4">Invertís una vez,<br /><span class="accent-text">vendés para siempre</span></h2>
-      <p class="font-outfit text-base" style="color:var(--text-muted);">Pago único. Sin licencias de implementación recurrentes. La licencia de Zoho la pagás directo a ellos.</p>
+      <span class="font-outfit text-xs tracking-widest uppercase mb-4 block crm-text">Planes</span>
+      <h2 class="font-syne text-4xl md:text-5xl font-extrabold mb-4">Invertís una vez,<br /><span class="crm-text">vendés para siempre</span></h2>
+      <p class="font-outfit text-base" style="color:var(--text-muted);">Pago único. Sin licencias de implementación recurrentes. Sin surpresas.</p>
     </div>
     <div class="grid md:grid-cols-2 gap-8">
       <!-- Esencial -->
       <div class="plan-card reveal delay-100">
         <div class="mb-6">
           <span class="font-outfit text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-4 inline-block" style="background:rgba(255,255,255,0.06);color:var(--text-muted);">Esencial</span>
-          <div class="flex items-end gap-2 mt-3"><span class="font-syne text-5xl font-800">$500</span><span class="font-outfit text-base mb-2" style="color:var(--text-muted);">USD · pago único</span></div>
+          <div class="flex items-end gap-2 mt-3"><span class="font-syne text-5xl font-extrabold">$500</span><span class="font-outfit text-base mb-2" style="color:var(--text-muted);">USD · pago único</span></div>
           <p class="font-outfit text-sm mt-3" style="color:var(--text-muted);">Para equipos de hasta 5 vendedores. CRM configurado y listo para usar.</p>
         </div>
         <div class="mb-8">
@@ -156,14 +153,14 @@
           <div class="feature-row"><div class="check no"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M18 6L6 18M6 6l12 12"/></svg></div><span class="font-outfit text-sm" style="color:rgba(136,146,164,0.5);">Integración con web y WhatsApp</span></div>
           <div class="feature-row"><div class="check no"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M18 6L6 18M6 6l12 12"/></svg></div><span class="font-outfit text-sm" style="color:rgba(136,146,164,0.5);">Reportes avanzados personalizados</span></div>
         </div>
-        <a href="https://wa.me/5492226638044?text=Hola%2C+quiero+contratar+el+Plan+Esencial+de+CRM+Zoho+(%24500+USD).+%C2%BFC%C3%B3mo+arrancamos%3F" target="_blank" rel="noopener" class="btn-secondary w-full justify-center">Contratar Plan Esencial — WhatsApp</a>
+        <a href="https://wa.me/5492226638044?text=Hola%2C+quiero+contratar+el+Plan+Esencial+de+CRM+(%24500+USD).+%C2%BFC%C3%B3mo+arrancamos%3F" target="_blank" rel="noopener" class="btn-secondary w-full justify-center">Contratar Plan Esencial — WhatsApp</a>
       </div>
       <!-- Escala -->
       <div class="plan-card featured reveal delay-200">
-        <div class="absolute top-4 right-4"><span class="font-outfit text-xs font-600 px-3 py-1 rounded-full" style="background:var(--accent);color:#fff;">Recomendado</span></div>
+        <div class="absolute top-4 right-4"><span class="font-outfit text-xs font-semibold px-3 py-1 rounded-full" style="background:var(--accent-crm);color:#fff;">Recomendado</span></div>
         <div class="mb-6">
-          <span class="font-outfit text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-4 inline-block" style="background:rgba(10,132,255,0.1);color:var(--accent);">Escala</span>
-          <div class="flex items-end gap-2 mt-3"><span class="font-syne text-5xl font-800 accent-text">$1.200</span><span class="font-outfit text-base mb-2" style="color:var(--text-muted);">USD · pago único</span></div>
+          <span class="font-outfit text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-4 inline-block" style="background:rgba(0,180,255,0.1);color:var(--accent-crm);">Escala</span>
+          <div class="flex items-end gap-2 mt-3"><span class="font-syne text-5xl font-extrabold crm-text">$1.200</span><span class="font-outfit text-base mb-2" style="color:var(--text-muted);">USD · pago único</span></div>
           <p class="font-outfit text-sm mt-3" style="color:var(--text-muted);">Para equipos que quieren automatizar su pipeline de punta a punta.</p>
         </div>
         <div class="mb-8">
@@ -177,13 +174,13 @@
           <div class="feature-row"><div class="check yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span class="font-outfit text-sm" style="color:var(--text-muted);">30 días de soporte post-implementación</span></div>
           <div class="feature-row"><div class="check yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span class="font-outfit text-sm" style="color:var(--text-muted);">Auditoría de pipeline al mes 1</span></div>
         </div>
-        <a href="https://wa.me/5492226638044?text=Hola%2C+quiero+contratar+el+Plan+Escala+de+CRM+Zoho+(%241.200+USD).+%C2%BFC%C3%B3mo+arrancamos%3F" target="_blank" rel="noopener" class="btn-accent w-full justify-center">
+        <a href="https://wa.me/5492226638044?text=Hola%2C+quiero+contratar+el+Plan+Escala+de+CRM+(%241.200+USD).+%C2%BFC%C3%B3mo+arrancamos%3F" target="_blank" rel="noopener" class="btn-primary w-full justify-center">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Contratar Plan Escala — WhatsApp
         </a>
       </div>
     </div>
-    <p class="text-center font-outfit text-sm mt-8 reveal" style="color:var(--text-muted);">¿Tenés más de 20 usuarios o procesos complejos? <a href="https://wa.me/5492226638044?text=Hola%2C+necesito+un+CRM+Zoho+a+medida+para+un+equipo+grande.+%C2%BFMe+pod%C3%A9s+cotizar%3F" target="_blank" rel="noopener" style="color:var(--accent);">Pedinos una cotización a medida →</a></p>
+    <p class="text-center font-outfit text-sm mt-8 reveal" style="color:var(--text-muted);">¿Tenés más de 20 usuarios o procesos complejos? <a href="https://wa.me/5492226638044?text=Hola%2C+necesito+un+CRM+a+medida+para+un+equipo+grande.+%C2%BFMe+pod%C3%A9s+cotizar%3F" target="_blank" rel="noopener" class="crm-text">Pedinos una cotización a medida →</a></p>
   </div>
 </section>
 
@@ -192,12 +189,12 @@
 <!-- FAQ -->
 <section class="py-20 px-6">
   <div class="max-w-3xl mx-auto">
-    <div class="text-center mb-12 reveal"><h2 class="font-syne text-3xl md:text-4xl font-800 mb-4">Preguntas <span class="accent-text">frecuentes</span></h2></div>
+    <div class="text-center mb-12 reveal"><h2 class="font-syne text-3xl md:text-4xl font-extrabold mb-4">Preguntas <span class="crm-text">frecuentes</span></h2></div>
     <div class="reveal">
-      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Necesito pagar la licencia de Zoho aparte?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Sí, la licencia de Zoho CRM la pagás directo a Zoho (tienen planes desde ~$14 USD/usuario/mes). Nosotros cobramos solo la implementación y configuración. Te ayudamos a elegir el plan de Zoho que más te conviene.</p></div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Qué plataforma de CRM usan?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Dependiendo del caso y el presupuesto, trabajamos con CRM de plataformas líderes o desarrollamos uno propio a medida. Durante la consulta inicial evaluamos cuál opción se adapta mejor a tu proceso y equipo.</p></div></div>
       <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Cuánto tarda la implementación?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">El Plan Esencial se implementa en 5-7 días hábiles. El Plan Escala, considerando integraciones y automatizaciones, lleva 10-14 días hábiles. Te damos fecha exacta al confirmar.</p></div></div>
-      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Mis vendedores necesitan saber de tecnología?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Para nada. Configuramos Zoho para que sea simple de usar. La capacitación está incluida y la diseñamos para que el equipo de ventas adopte el sistema desde el día 1 sin resistencia.</p></div></div>
-      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Puedo migrar mis datos de Excel?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Sí. La carga de contactos y leads existentes está incluida en ambos planes. Solo necesitás pasarnos el Excel y nos encargamos de la migración limpia al CRM.</p></div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Mis vendedores necesitan saber de tecnología?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Para nada. Configuramos el CRM para que sea simple de usar. La capacitación está incluida y la diseñamos para que el equipo de ventas adopte el sistema desde el día 1 sin resistencia.</p></div></div>
+      <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)"><span>¿Puedo migrar mis datos de Excel?</span><svg class="faq-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button><div class="faq-body"><p class="font-outfit text-sm leading-relaxed" style="color:var(--text-muted);">Sí. La carga de contactos y leads existentes está incluida en ambos planes. Solo necesitás pasarnos el Excel y nos encargamos de la migración limpia al nuevo sistema.</p></div></div>
     </div>
   </div>
 </section>
@@ -205,29 +202,32 @@
 <!-- CTA FINAL -->
 <section class="py-16 px-6">
   <div class="max-w-3xl mx-auto text-center reveal">
-    <div style="background:rgba(10,132,255,0.05);border:1px solid rgba(10,132,255,0.2);border-radius:16px;padding:48px 32px;">
-      <h2 class="font-syne text-3xl md:text-4xl font-800 mb-4">Tu equipo puede vender<br /><span class="accent-text">el doble con las mismas horas</span></h2>
-      <p class="font-outfit text-base mb-8" style="color:var(--text-muted);">Hablemos 20 minutos. Te mostramos cómo quedaría tu pipeline en Zoho.</p>
-      <a href="https://wa.me/5492226638044?text=Hola%2C+quiero+implementar+Zoho+CRM+en+mi+empresa.+%C2%BFTen%C3%A9s+un+momento+para+hablar%3F" target="_blank" rel="noopener" class="btn-primary text-base py-4 px-10">
+    <div style="background:rgba(0,180,255,0.05);border:1px solid rgba(0,180,255,0.18);border-radius:16px;padding:48px 32px;">
+      <h2 class="font-syne text-3xl md:text-4xl font-extrabold mb-4">Tu equipo puede vender<br /><span class="crm-text">el doble con las mismas horas</span></h2>
+      <p class="font-outfit text-base mb-8" style="color:var(--text-muted);">Hablemos 20 minutos. Te mostramos cómo quedaría tu pipeline en el CRM.</p>
+      <a href="https://wa.me/5492226638044?text=Hola%2C+quiero+implementar+un+CRM+en+mi+empresa.+%C2%BFTen%C3%A9s+un+momento+para+hablar%3F" target="_blank" rel="noopener" class="btn-primary text-base py-4 px-10">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Quiero implementar Zoho CRM — WhatsApp
+        Quiero implementar mi CRM — WhatsApp
       </a>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer style="background:var(--dark-card);border-top:1px solid var(--dark-border);">
+<footer style="background:var(--navy-card);border-top:1px solid var(--navy-border);">
   <div class="max-w-6xl mx-auto px-6 py-10">
     <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-      <a href="index.html" class="flex items-center gap-2"><div class="w-7 h-7 rounded-md flex items-center justify-center" style="background:var(--neon);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#07070f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="font-syne font-700">digit<span style="color:var(--neon);">AI</span> motor</span></a>
+      <a href="index.html" class="flex items-center gap-2">
+        <img src="assets/logo.svg" alt="digitAI motor" style="height:28px;width:auto;" onerror="this.style.display='none';" />
+        <span class="font-syne font-bold">digit<span style="color:var(--accent-crm);">AI</span> motor</span>
+      </a>
       <div class="flex flex-wrap gap-6">
         <a href="index.html" class="font-outfit text-sm" style="color:var(--text-muted);">Inicio</a>
         <a href="paginas-web.html" class="font-outfit text-sm" style="color:var(--text-muted);">Páginas Web</a>
         <a href="posicionamiento-geo.html" class="font-outfit text-sm" style="color:var(--text-muted);">Google Maps</a>
         <a href="automatizacion.html" class="font-outfit text-sm" style="color:var(--text-muted);">Automatización</a>
       </div>
-      <p class="font-outfit text-xs" style="color:var(--text-muted);">© 2025 digitAI motor</p>
+      <p class="font-outfit text-xs" style="color:var(--text-muted);">© 2026 digitAI motor</p>
     </div>
   </div>
 </footer>

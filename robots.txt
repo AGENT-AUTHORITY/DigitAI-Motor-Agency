@@ -1,15 +1,19 @@
 # robots.txt — digitaimotor.lat
-# Generado para digitAI motor | https://digitaimotor.lat
+# digitAI motor | Automatización con IA | Buenos Aires, Argentina
 
 User-agent: *
 Allow: /
+Disallow: /assets/generate-assets.html
 
-# Sitemap
+# Sitemaps
 Sitemap: https://digitaimotor.lat/sitemap.xml
 
-# Crawl-delay sugerido para bots secundarios
+# Crawl-delay para bots de auditoría SEO
 User-agent: AhrefsBot
 Crawl-delay: 10
 
 User-agent: SemrushBot
 Crawl-delay: 10
+
+User-agent: MJ12bot
+Crawl-delay: 20
