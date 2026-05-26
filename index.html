@@ -287,6 +287,19 @@ body { background-color: var(--deep-navy); color: var(--text-primary); font-fami
 /* HERO VIDEO — opacity controlled by GSAP; fallback shows it after 4s */
 #hero-video { opacity: 0; transition: opacity 1.6s ease; }
 
+/* TACHOMETER VIDEO — blend sobre fondo oscuro, sin controles, sin sticker */
+#tacho-video {
+  display: block;
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  background: transparent;
+  mix-blend-mode: screen;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 20px rgba(0,170,255,0.5));
+  pointer-events: none;
+}
+
 /* ENGINE GLOW */
 .engine-glow { position: absolute; border-radius: 50%; filter: blur(120px); pointer-events: none; }
 
@@ -559,15 +572,19 @@ body { background-color: var(--deep-navy); color: var(--text-primary); font-fami
     </div>
   </div>
 
-  <!-- Tachometer: GSAP animates the needle on scroll -->
-  <div id="tachometer-wrap" class="flex justify-center mt-14">
-    <svg width="200" height="120" viewBox="0 0 200 120" aria-hidden="true" style="overflow:visible;">
-      <!-- Arc track -->
-      <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(0,136,255,0.15)" stroke-width="8" stroke-linecap="round"/>
-      <!-- Arc fill (static indicator) -->
-      <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(0,136,255,0.04)" stroke-width="8"/>
-      <!-- Tick marks -->
-      <g stroke="rgba(0,136,255,0.35)" stroke-width="1.2">
+  <!-- Tachometer video: reemplaza tachometer.png — GSAP aplica scale+glow al scroll -->
+  <div id="tachometer-wrap" class="flex justify-center mt-14" style="position:relative;max-width:440px;margin-left:auto;margin-right:auto;">
+
+    <!-- Video principal -->
+    <video id="tacho-video" autoplay muted loop playsinline>
+      <source src="/assets/tacometro-hero.mp4" type="video/mp4" />
+    </video>
+
+    <!-- Aguja SVG superpuesta: GSAP la rota al scroll (−130° → 50°) -->
+    <svg id="tacho-svg" width="200" height="120" viewBox="0 0 200 120" aria-hidden="true"
+      style="overflow:visible;position:absolute;bottom:0;left:50%;transform:translateX(-50%);pointer-events:none;">
+      <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(0,136,255,0.2)" stroke-width="6" stroke-linecap="round"/>
+      <g stroke="rgba(0,136,255,0.4)" stroke-width="1.2">
         <line x1="20" y1="100" x2="28" y2="100" transform="rotate(-130 100 100)"/>
         <line x1="20" y1="100" x2="28" y2="100" transform="rotate(-104 100 100)"/>
         <line x1="20" y1="100" x2="28" y2="100" transform="rotate(-78 100 100)"/>
@@ -577,17 +594,15 @@ body { background-color: var(--deep-navy); color: var(--text-primary); font-fami
         <line x1="20" y1="100" x2="28" y2="100" transform="rotate(26 100 100)"/>
         <line x1="20" y1="100" x2="28" y2="100" transform="rotate(50 100 100)"/>
       </g>
-      <!-- Needle: rotates from -130° to 50° via GSAP -->
       <line id="tacho-needle" x1="100" y1="100" x2="100" y2="28"
         stroke="#0088ff" stroke-width="2.5" stroke-linecap="round"
         transform="rotate(-130, 100, 100)"
-        style="filter:drop-shadow(0 0 5px rgba(0,136,255,0.7));"/>
-      <!-- Center hub -->
-      <circle cx="100" cy="100" r="5" fill="#0088ff" style="filter:drop-shadow(0 0 6px rgba(0,136,255,0.9));"/>
-      <!-- Labels -->
+        style="filter:drop-shadow(0 0 5px rgba(0,136,255,0.8));"/>
+      <circle cx="100" cy="100" r="5" fill="#0088ff" style="filter:drop-shadow(0 0 6px rgba(0,136,255,1));"/>
       <text x="24" y="116" fill="rgba(100,160,255,0.5)" font-size="8" font-family="Syne,sans-serif">0</text>
       <text x="170" y="116" fill="rgba(100,160,255,0.5)" font-size="8" font-family="Syne,sans-serif">MAX</text>
     </svg>
+
   </div>
 </section>
 

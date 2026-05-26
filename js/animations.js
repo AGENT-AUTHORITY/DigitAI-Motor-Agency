@@ -304,13 +304,16 @@
   }
 
   // =========================================================================
-  // 9. TACÓMETRO — aguja SVG + overlay tachometer.png
+  // 9. TACÓMETRO — video tacometro-hero.mp4 + aguja SVG superpuesta
+  //    • tachometer.png reemplazado por <video id="tacho-video"> en el HTML
+  //    • Animación anterior (rotación img) → scale + glow pulse en el video
   // =========================================================================
   function initTachometer() {
-    const wrap = document.getElementById('tachometer-wrap');
+    const wrap  = document.getElementById('tachometer-wrap');
+    const video = document.getElementById('tacho-video');
     if (!wrap) return;
 
-    // Aguja SVG
+    // A. Aguja SVG: rota de -130° a 50° según progreso de scroll (sin cambios)
     const needle = document.getElementById('tacho-needle');
     if (needle) {
       ScrollTrigger.create({
@@ -325,18 +328,48 @@
       });
     }
 
-    // tachometer.png: fondo decorativo con rotación sutil
-    wrap.style.position = 'relative';
-    const tachoImg = document.createElement('img');
-    tachoImg.src = '/assets/tachometer.png';
-    tachoImg.setAttribute('aria-hidden', 'true');
-    tachoImg.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-60deg);width:220px;height:auto;opacity:0.07;pointer-events:none;z-index:0;';
-    wrap.insertBefore(tachoImg, wrap.firstChild);
+    // B. Video: scale sutil + intensidad del glow al entrar en viewport
+    //    (reemplaza la rotación que antes se aplicaba a tachometer.png)
+    if (video) {
+      gsap.fromTo(
+        video,
+        { scale: 0.9, opacity: 0.5 },
+        {
+          scale: 1,
+          opacity: 0.85,
+          ease: OUT,
+          scrollTrigger: {
+            trigger: wrap,
+            start: 'top 85%',
+            end:   'top 30%',
+            scrub: 0.8,
+          },
+        }
+      );
 
-    gsap.to(tachoImg, {
-      rotation: 0,
-      scrollTrigger: { trigger: wrap, start: 'top 80%', end: 'top 20%', scrub: true },
-    });
+      // Pulse de glow al llegar al centro del viewport (una sola vez)
+      ScrollTrigger.create({
+        trigger: wrap,
+        start: 'top 55%',
+        once:  true,
+        onEnter() {
+          gsap.fromTo(
+            video,
+            { filter: 'drop-shadow(0 0 20px rgba(0,170,255,0.5))' },
+            {
+              filter: 'drop-shadow(0 0 45px rgba(0,200,255,0.95))',
+              duration: 0.6,
+              ease: 'power2.out',
+              yoyo: true,
+              repeat: 1,
+              onComplete() {
+                gsap.set(video, { filter: 'drop-shadow(0 0 20px rgba(0,170,255,0.5))' });
+              },
+            }
+          );
+        },
+      });
+    }
   }
 
   // =========================================================================
