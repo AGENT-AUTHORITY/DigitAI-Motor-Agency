@@ -284,6 +284,9 @@ body { background-color: var(--deep-navy); color: var(--text-primary); font-fami
   50% { box-shadow: 0 0 0 6px rgba(0,136,255,0); }
 }
 
+/* HERO VIDEO — opacity controlled by GSAP; fallback shows it after 4s */
+#hero-video { opacity: 0; transition: opacity 1.6s ease; }
+
 /* ENGINE GLOW */
 .engine-glow { position: absolute; border-radius: 50%; filter: blur(120px); pointer-events: none; }
 
@@ -446,8 +449,8 @@ body { background-color: var(--deep-navy); color: var(--text-primary); font-fami
 
   <!-- Hero video background -->
   <video id="hero-video" autoplay muted playsinline loop
-    style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;z-index:0;opacity:0;">
-    <source src="assets/hero-engine-transformation.mp4" type="video/mp4" />
+    style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;z-index:0;">
+    <source src="/assets/hero-engine-transformation.mp4" type="video/mp4" />
   </video>
 
   <!-- Hero parallax bg (hero-bg.png moves at 60% scroll speed via GSAP) -->

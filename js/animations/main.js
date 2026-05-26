@@ -34,18 +34,23 @@
     const video = document.getElementById('hero-video');
     if (!video) return;
 
-    // Start invisible, fade in once data is ready
-    gsap.set(video, { opacity: 0 });
+    // CSS sets initial opacity via #hero-video rule — GSAP animates to target.
+    // Fallback: if canplay never fires (mobile restriction / 404) show video at 0.38 after 4s.
+    const revealTo = (opacity) => gsap.to(video, { opacity, duration: 1.6, ease: EASE_IN_OUT });
 
-    const reveal = () => gsap.to(video, { opacity: 0.4, duration: 1.6, ease: EASE_IN_OUT });
+    const onReady = () => revealTo(0.4);
 
-    if (video.readyState >= 2) reveal();
-    else video.addEventListener('canplay', reveal, { once: true });
+    if (video.readyState >= 2) {
+      onReady();
+    } else {
+      video.addEventListener('canplay', onReady, { once: true });
+      // Safety net: show video even if canplay never fires
+      setTimeout(() => {
+        if (parseFloat(getComputedStyle(video).opacity) < 0.1) revealTo(0.38);
+      }, 4000);
+    }
 
-    // On video end: dim slightly, let the static bg take over
-    video.addEventListener('ended', () => {
-      gsap.to(video, { opacity: 0.18, duration: 2, ease: EASE_IN_OUT });
-    });
+    video.addEventListener('ended', () => revealTo(0.18));
   }
 
   // ── 2. HERO PARALLAX (hero-bg.png moves at 60% scroll speed) ─────────────
@@ -165,16 +170,17 @@
 
   // ── 5. SCROLL REVEAL ANIMATIONS ──────────────────────────────────────────
   function initScrollAnimations() {
-    // Override the CSS-only reveal: GSAP handles them now
-    gsap.set('.reveal', { opacity: 0, y: 32, clearProps: false });
+    // CSS (.reveal) owns the initial opacity:0 / translateY state.
+    // GSAP animates to visible. IntersectionObserver (.visible class) is a fallback —
+    // no conflict because we don't write inline opacity:0 here.
+    document.querySelectorAll('.reveal').forEach((el) => {
+      // Skip .service-card — handled separately below with x-slide
+      if (el.classList.contains('service-card')) return;
 
-    document.querySelectorAll('.reveal').forEach((el, i) => {
-      const delay = parseFloat(
-        getComputedStyle(el).transitionDelay ||
-        el.classList.contains('delay-100') ? 0.1 :
+      const delay =
+        el.classList.contains('delay-300') ? 0.3 :
         el.classList.contains('delay-200') ? 0.2 :
-        el.classList.contains('delay-300') ? 0.3 : 0
-      );
+        el.classList.contains('delay-100') ? 0.1 : 0;
 
       gsap.to(el, {
         opacity: 1,
@@ -184,7 +190,7 @@
         ease: EASE_OUT,
         scrollTrigger: {
           trigger: el,
-          start: 'top 90%',
+          start: 'top 92%',
           once: true,
         },
       });
