@@ -1,18 +1,13 @@
 /**
- * digitAI motor — GSAP Animation Suite v2
- * Requiere: GSAP 3.x + ScrollTrigger (CDN, cargados antes de este archivo)
+ * digitAI motor — GSAP Animation Suite v3
+ * Requiere: GSAP 3.x + ScrollTrigger (CDN cargados antes)
  *
- * Estructura:
- *  1. Speed lines (speed-lines.png overlay en hero)
- *  2. Contadores odómetro (data-count / data-target)
- *  3. Reveal de secciones con slide alternado + scrub
- *  4. Parallax del hero
- *  5. Hover glow en tarjetas
- *  6. Tacómetro (aguja SVG + overlay tachometer.png)
- *  7. Nodos de circuito como partículas IMG
- *  8. Patrón de circuito animado (background-position)
- *  9. Video del hero
- * 10. Speed strip hover pause
+ * FIX v3:
+ * - Section reveals: SOLO slide X (sin opacity) para evitar efecto multiplicativo
+ *   que dejaba las service-cards invisibles
+ * - Service cards: excluidas del loop .reveal, animadas UNA sola vez con fromTo
+ * - engine-turbine.png: agregada en #proceso
+ * - circuit-canvas: removido del HTML, no se usa aquí
  */
 
 (function () {
@@ -20,12 +15,11 @@
 
   // ── Guards ────────────────────────────────────────────────────────────────
   if (typeof gsap === 'undefined') {
-    // Fallback: mostrar todo si GSAP no carga
     document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
     return;
   }
 
-  const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const REDUCED  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const IS_MOBILE = window.innerWidth < 768;
 
   if (REDUCED) {
@@ -35,52 +29,177 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // ── Easings compartidos ───────────────────────────────────────────────────
-  const OUT  = 'power2.out';
+  const OUT   = 'power2.out';
   const INOUT = 'power2.inOut';
 
   // =========================================================================
-  // 1. SPEED LINES (speed-lines.png overlay)
+  // 1. VIDEO DEL HERO
+  // =========================================================================
+  function initHeroVideo() {
+    const video = document.getElementById('hero-video');
+    if (!video) return;
+
+    const fadeTo = (o) => gsap.to(video, { opacity: o, duration: 1.6, ease: INOUT });
+
+    if (video.readyState >= 2) {
+      fadeTo(0.4);
+    } else {
+      video.addEventListener('canplay', () => fadeTo(0.4), { once: true });
+      // Fallback si canplay no llega
+      setTimeout(() => {
+        if (parseFloat(getComputedStyle(video).opacity) < 0.1) fadeTo(0.38);
+      }, 4000);
+    }
+    video.addEventListener('ended', () => fadeTo(0.18));
+  }
+
+  // =========================================================================
+  // 2. SPEED LINES (speed-lines.png overlay en el hero)
   // =========================================================================
   function initSpeedLines() {
     const hero = document.getElementById('inicio');
     if (!hero) return;
 
-    // Crear el overlay con la imagen
     const img = document.createElement('img');
     img.src = '/assets/speed-lines.png';
-    img.id = 'speed-lines-img';
+    img.id  = 'speed-lines-img';
     img.setAttribute('aria-hidden', 'true');
-    img.style.cssText = [
-      'position:absolute',
-      'inset:0',
-      'width:100%',
-      'height:100%',
-      'object-fit:cover',
-      'pointer-events:none',
-      'z-index:2',
-      'opacity:0',
-      'transform-origin:center center',
-    ].join(';');
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;z-index:2;opacity:0;transform-origin:center center;';
     hero.appendChild(img);
 
-    const playLines = () => {
+    const play = () => {
       gsap.timeline()
         .to(img, { opacity: 0.6, scaleX: 1.2, duration: 0.8, ease: OUT })
         .to(img, { opacity: 0,   scaleX: 1,   duration: 0.5, ease: INOUT }, '+=1.5');
     };
 
-    // Disparar al cargar y cada vez que el video termina
-    window.addEventListener('load', () => setTimeout(playLines, 800), { once: true });
+    window.addEventListener('load', () => setTimeout(play, 800), { once: true });
     const video = document.getElementById('hero-video');
-    if (video) video.addEventListener('ended', playLines);
+    if (video) video.addEventListener('ended', play);
   }
 
   // =========================================================================
-  // 2. CONTADORES ODÓMETRO
+  // 3. NODOS DE CIRCUITO (circuit-node.png como partículas en el hero)
+  // =========================================================================
+  function initCircuitNodes() {
+    const hero = document.getElementById('inicio');
+    if (!hero) return;
+
+    const positions = [
+      { top: '18%', left: '8%'  },
+      { top: '72%', left: '12%' },
+      { top: '25%', left: '88%' },
+      { top: '68%', left: '82%' },
+      { top: '12%', left: '52%' },
+      { top: '82%', left: '48%' },
+    ];
+    const count = IS_MOBILE ? 3 : 6;
+
+    const container = document.createElement('div');
+    container.id = 'circuit-nodes-layer';
+    container.setAttribute('aria-hidden', 'true');
+    container.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;';
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    svg.style.cssText = 'position:absolute;inset:0;pointer-events:none;';
+    container.appendChild(svg);
+
+    const nodeEls = [];
+
+    positions.slice(0, count).forEach(pos => {
+      const img = document.createElement('img');
+      img.src = '/assets/circuit-node.png';
+      img.className = 'circuit-node-img';
+      img.setAttribute('aria-hidden', 'true');
+      img.style.cssText = `position:absolute;top:${pos.top};left:${pos.left};width:20px;height:20px;opacity:0.4;pointer-events:none;will-change:transform,opacity;`;
+      container.appendChild(img);
+      nodeEls.push(img);
+
+      gsap.to(img, {
+        x: (Math.random() - 0.5) * 60,
+        y: (Math.random() - 0.5) * 60,
+        opacity: gsap.utils.random(0.2, 0.8),
+        duration: 3 + Math.random() * 2,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        delay: Math.random() * 2,
+      });
+    });
+
+    // Líneas SVG entre pares de nodos
+    for (let i = 0; i + 1 < nodeEls.length; i += 2) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('stroke', 'rgba(0,136,255,0.35)');
+      line.setAttribute('stroke-width', '1');
+      svg.appendChild(line);
+
+      const a = nodeEls[i], b = nodeEls[i + 1];
+      const tick = () => {
+        const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+        const p  = container.getBoundingClientRect();
+        line.setAttribute('x1', ra.left - p.left + ra.width  / 2);
+        line.setAttribute('y1', ra.top  - p.top  + ra.height / 2);
+        line.setAttribute('x2', rb.left - p.left + rb.width  / 2);
+        line.setAttribute('y2', rb.top  - p.top  + rb.height / 2);
+      };
+      gsap.ticker.add(tick);
+
+      gsap.to(line, {
+        opacity: 0.1,
+        duration: 3.5 + Math.random() * 1.5,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        delay: Math.random() * 2,
+      });
+    }
+
+    hero.insertBefore(container, hero.firstChild);
+  }
+
+  // =========================================================================
+  // 4. PATRÓN DE CIRCUITO (circuit-pattern.png, desplazamiento background)
+  // =========================================================================
+  function initCircuitPattern() {
+    document.querySelectorAll('.circuit-bg').forEach(el => {
+      const overlay = document.createElement('div');
+      overlay.setAttribute('aria-hidden', 'true');
+      overlay.style.cssText = 'position:absolute;inset:0;background-image:url(/assets/circuit-pattern.png);background-repeat:repeat;background-size:300px 300px;background-position:0% 0%;opacity:0.035;pointer-events:none;z-index:0;';
+      if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+      el.insertBefore(overlay, el.firstChild);
+
+      gsap.to(overlay, {
+        backgroundPosition: '300px 0%',
+        duration: 20,
+        ease: 'none',
+        repeat: -1,
+      });
+    });
+  }
+
+  // =========================================================================
+  // 5. PARALLAX DEL HERO (hero-bg.png a 50% velocidad)
+  // =========================================================================
+  function initHeroParallax() {
+    if (IS_MOBILE) return;
+    const bg   = document.getElementById('hero-parallax-bg');
+    const hero = document.getElementById('inicio');
+    if (!bg || !hero) return;
+
+    gsap.to(bg, {
+      y: '+=100',
+      ease: 'none',
+      scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true },
+    });
+  }
+
+  // =========================================================================
+  // 6. CONTADORES ODÓMETRO
   // =========================================================================
   function initOdometerCounters() {
-    // Soporte para data-count (existente) y data-target (spec)
     document.querySelectorAll('[data-count], [data-target]').forEach(el => {
       const target = parseInt(el.dataset.count || el.dataset.target, 10);
       if (!target || isNaN(target)) return;
@@ -92,7 +211,6 @@
         start: 'top 88%',
         once: true,
         onEnter() {
-          // Pulso de brillo al arrancar (efecto encendido de motor)
           gsap.fromTo(el,
             { filter: 'brightness(1)' },
             { filter: 'brightness(1.7)', duration: 0.25, yoyo: true, repeat: 1, ease: INOUT }
@@ -101,12 +219,8 @@
             val: target,
             duration: 2,
             ease: OUT,
-            onUpdate() {
-              el.textContent = Math.round(obj.val) + suffix;
-            },
-            onComplete() {
-              el.textContent = target + suffix;
-            },
+            onUpdate()  { el.textContent = Math.round(obj.val) + suffix; },
+            onComplete() { el.textContent = target + suffix; },
           });
         },
       });
@@ -114,30 +228,30 @@
   }
 
   // =========================================================================
-  // 3. REVEAL DE SECCIONES CON SLIDE ALTERNADO + SCRUB
+  // 7. REVEALS — FIX PRINCIPAL
+  //
+  // SEPARACIÓN CLARA:
+  //   A) Secciones: solo slide-X con scrub (SIN opacity → evita multiplicación)
+  //   B) .reveal (excluye .service-card): fade-up individual
+  //   C) .service-card: fromTo propio (UNA SOLA vez, sin conflicto)
   // =========================================================================
   function initSectionReveals() {
-    // Secciones con slide lateral (excluye hero y speed-strip)
+
+    // A. Secciones: solo X, sin opacity (secciones siempre visibles)
     if (!IS_MOBILE) {
       document.querySelectorAll('section:not(#inicio)').forEach((section, i) => {
-        const fromX = i % 2 === 0 ? -80 : 80;
-
         gsap.from(section, {
-          x: fromX,
-          opacity: 0,
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 80%',
-            end:   'top 40%',
-            scrub: 0.5,
-          },
+          x: i % 2 === 0 ? -60 : 60,
+          // opacity omitida intencionalmente — evita que hijos aparezcan al %
+          scrollTrigger: { trigger: section, start: 'top 80%', end: 'top 45%', scrub: 0.5 },
         });
       });
     }
 
-    // Elementos .reveal internos: fade-up individual
+    // B. Elementos .reveal (excluye hero, excluye .service-card que tiene su propio bloque)
     document.querySelectorAll('.reveal').forEach(el => {
-      if (el.closest('#inicio')) return; // el hero se maneja aparte
+      if (el.closest('#inicio'))               return; // hero: manejado aparte
+      if (el.classList.contains('service-card')) return; // evitar doble animación
 
       const delay =
         el.classList.contains('delay-300') ? 0.3 :
@@ -150,91 +264,53 @@
         duration: 0.75,
         delay,
         ease: OUT,
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 92%',
-          once: true,
-        },
+        scrollTrigger: { trigger: el, start: 'top 92%', once: true },
       });
     });
 
-    // Tarjetas de servicio: slide desde lados opuestos
+    // C. Service cards: fromTo explícito (una sola animación, sin conflicto)
     document.querySelectorAll('.service-card').forEach((card, i) => {
-      if (IS_MOBILE) return;
-      gsap.from(card, {
-        opacity: 0,
-        x: i % 2 === 0 ? -60 : 60,
-        y: 20,
-        duration: 0.9,
-        ease: OUT,
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 87%',
-          once: true,
-        },
-      });
+      const fromX = IS_MOBILE ? 0 : (i % 2 === 0 ? -50 : 50);
+      gsap.fromTo(
+        card,
+        { opacity: 0, x: fromX, y: IS_MOBILE ? 20 : 16 },
+        {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          duration: 0.85,
+          ease: OUT,
+          scrollTrigger: { trigger: card, start: 'top 90%', once: true },
+        }
+      );
     });
   }
 
   // =========================================================================
-  // 4. PARALLAX DEL HERO (hero-bg.png)
-  // =========================================================================
-  function initHeroParallax() {
-    if (IS_MOBILE) return;
-
-    const bg = document.getElementById('hero-parallax-bg');
-    const hero = document.getElementById('inicio');
-    if (!bg || !hero) return;
-
-    gsap.to(bg, {
-      y: '+=100',
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end:   'bottom top',
-        scrub: true,
-      },
-    });
-  }
-
-  // =========================================================================
-  // 5. HOVER GLOW EN TARJETAS
+  // 8. HOVER GLOW EN TARJETAS
   // =========================================================================
   function initCardHoverGlow() {
-    const selectors = '.service-card, .stat-card, .testimonial-card, .card';
-    document.querySelectorAll(selectors).forEach(card => {
+    document.querySelectorAll('.service-card, .stat-card, .testimonial-card').forEach(card => {
       const origShadow = getComputedStyle(card).boxShadow;
       const origBorder = getComputedStyle(card).borderColor;
 
       card.addEventListener('mouseenter', () => {
-        gsap.to(card, {
-          boxShadow:   '0 0 25px rgba(0,170,255,0.7)',
-          borderColor: '#00aaff',
-          duration: 0.3,
-          ease: OUT,
-        });
+        gsap.to(card, { boxShadow: '0 0 25px rgba(0,170,255,0.7)', borderColor: '#00aaff', duration: 0.3, ease: OUT });
       });
-
       card.addEventListener('mouseleave', () => {
-        gsap.to(card, {
-          boxShadow:   origShadow === 'none' ? '0 0 0 transparent' : origShadow,
-          borderColor: origBorder,
-          duration: 0.3,
-          ease: OUT,
-        });
+        gsap.to(card, { boxShadow: origShadow === 'none' ? '0 0 0 transparent' : origShadow, borderColor: origBorder, duration: 0.3, ease: OUT });
       });
     });
   }
 
   // =========================================================================
-  // 6. TACÓMETRO — aguja SVG + overlay tachometer.png
+  // 9. TACÓMETRO — aguja SVG + overlay tachometer.png
   // =========================================================================
   function initTachometer() {
     const wrap = document.getElementById('tachometer-wrap');
     if (!wrap) return;
 
-    // 6a. Aguja SVG (método fino, más preciso que girar la imagen)
+    // Aguja SVG
     const needle = document.getElementById('tacho-needle');
     if (needle) {
       ScrollTrigger.create({
@@ -249,201 +325,59 @@
       });
     }
 
-    // 6b. tachometer.png: rotación sutil de la imagen completa como fondo decorativo
+    // tachometer.png: fondo decorativo con rotación sutil
     wrap.style.position = 'relative';
     const tachoImg = document.createElement('img');
     tachoImg.src = '/assets/tachometer.png';
     tachoImg.setAttribute('aria-hidden', 'true');
-    tachoImg.style.cssText = [
-      'position:absolute',
-      'left:50%',
-      'top:50%',
-      'transform:translate(-50%,-50%) rotate(-60deg)',
-      'width:220px',
-      'height:auto',
-      'opacity:0.08',
-      'pointer-events:none',
-      'z-index:0',
-    ].join(';');
+    tachoImg.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-60deg);width:220px;height:auto;opacity:0.07;pointer-events:none;z-index:0;';
     wrap.insertBefore(tachoImg, wrap.firstChild);
 
     gsap.to(tachoImg, {
       rotation: 0,
-      scrollTrigger: {
-        trigger: wrap,
-        start: 'top 80%',
-        end:   'top 20%',
-        scrub: true,
-      },
+      scrollTrigger: { trigger: wrap, start: 'top 80%', end: 'top 20%', scrub: true },
     });
   }
 
   // =========================================================================
-  // 7. NODOS DE CIRCUITO COMO PARTÍCULAS IMG
+  // 10. ENGINE TURBINE en sección Proceso
+  //     engine-turbine.png como decoración flotante (asset no usado hasta ahora)
   // =========================================================================
-  function initCircuitNodes() {
-    const hero = document.getElementById('inicio');
-    if (!hero) return;
+  function initEngineTurbine() {
+    const proceso = document.getElementById('proceso');
+    if (!proceso || IS_MOBILE) return;
 
-    // Posiciones iniciales (porcentaje sobre el hero)
-    const positions = [
-      { top: '18%', left: '8%'  },
-      { top: '72%', left: '12%' },
-      { top: '25%', left: '88%' },
-      { top: '68%', left: '82%' },
-      { top: '12%', left: '52%' },
-      { top: '82%', left: '48%' },
-    ];
+    const img = document.createElement('img');
+    img.src = '/assets/engine-turbine.png';
+    img.setAttribute('aria-hidden', 'true');
+    img.style.cssText = [
+      'position:absolute',
+      'right:-60px',
+      'top:50%',
+      'transform:translateY(-50%)',
+      'width:260px',
+      'height:auto',
+      'opacity:0.06',
+      'pointer-events:none',
+      'z-index:0',
+      'filter:blur(1px) saturate(0.5) hue-rotate(200deg)',
+    ].join(';');
 
-    const count = IS_MOBILE ? 3 : 6;
+    if (getComputedStyle(proceso).position === 'static') proceso.style.position = 'relative';
+    proceso.appendChild(img);
 
-    // Contenedor de nodos
-    const container = document.createElement('div');
-    container.id = 'circuit-nodes-layer';
-    container.setAttribute('aria-hidden', 'true');
-    container.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;';
+    // Rotación lenta infinita (efecto turbina)
+    gsap.to(img, { rotation: 360, duration: 20, ease: 'none', repeat: -1 });
 
-    // SVG para líneas entre nodos
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width',  '100%');
-    svg.setAttribute('height', '100%');
-    svg.style.cssText = 'position:absolute;inset:0;pointer-events:none;';
-    container.appendChild(svg);
-
-    const nodeEls = [];
-
-    positions.slice(0, count).forEach((pos) => {
-      const img = document.createElement('img');
-      img.src = '/assets/circuit-node.png';
-      img.className = 'circuit-node-img';
-      img.setAttribute('aria-hidden', 'true');
-      img.style.cssText = [
-        'position:absolute',
-        `top:${pos.top}`,
-        `left:${pos.left}`,
-        'width:20px',
-        'height:20px',
-        'opacity:0.4',
-        'pointer-events:none',
-        'will-change:transform,opacity',
-      ].join(';');
-      container.appendChild(img);
-      nodeEls.push(img);
-
-      // Movimiento flotante infinito con yoyo
-      const dur = 3 + Math.random() * 2;
-      gsap.to(img, {
-        x: (Math.random() - 0.5) * 60,
-        y: (Math.random() - 0.5) * 60,
-        opacity: gsap.utils.random(0.2, 0.8),
-        duration: dur,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        delay: Math.random() * 2,
-      });
-    });
-
-    // Líneas SVG entre pares de nodos (0-1, 2-3, 4-5)
-    for (let i = 0; i + 1 < nodeEls.length; i += 2) {
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('stroke',       'rgba(0,136,255,0.35)');
-      line.setAttribute('stroke-width', '1');
-      line.style.opacity = '0.4';
-      svg.appendChild(line);
-
-      // Actualizar coordenadas en cada frame (los nodos se mueven)
-      const a = nodeEls[i];
-      const b = nodeEls[i + 1];
-      const tick = () => {
-        const ra = a.getBoundingClientRect();
-        const rb = b.getBoundingClientRect();
-        const parent = container.getBoundingClientRect();
-        line.setAttribute('x1', ra.left - parent.left + ra.width  / 2);
-        line.setAttribute('y1', ra.top  - parent.top  + ra.height / 2);
-        line.setAttribute('x2', rb.left - parent.left + rb.width  / 2);
-        line.setAttribute('y2', rb.top  - parent.top  + rb.height / 2);
-      };
-      gsap.ticker.add(tick);
-
-      // Opacidad sincronizada con los nodos
-      gsap.to(line, {
-        opacity: 0.1,
-        duration: 3.5 + Math.random() * 1.5,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        delay: Math.random() * 2,
-      });
-    }
-
-    // Insertar antes del primer hijo del hero
-    hero.insertBefore(container, hero.firstChild);
-  }
-
-  // =========================================================================
-  // 8. PATRÓN DE CIRCUITO CON MOVIMIENTO DE FONDO
-  // =========================================================================
-  function initCircuitPattern() {
-    document.querySelectorAll('.circuit-bg').forEach(el => {
-      // Agregar circuit-pattern.png como overlay animado
-      const overlay = document.createElement('div');
-      overlay.setAttribute('aria-hidden', 'true');
-      overlay.style.cssText = [
-        'position:absolute',
-        'inset:0',
-        'background-image:url(/assets/circuit-pattern.png)',
-        'background-repeat:repeat',
-        'background-size:300px 300px',
-        'background-position:0% 0%',
-        'opacity:0.035',
-        'pointer-events:none',
-        'z-index:0',
-      ].join(';');
-
-      // Asegurar que el padre tenga posicionamiento
-      if (getComputedStyle(el).position === 'static') {
-        el.style.position = 'relative';
-      }
-      el.insertBefore(overlay, el.firstChild);
-
-      // Desplazamiento infinito horizontal
-      gsap.to(overlay, {
-        backgroundPosition: '300px 0%',
-        duration: 20,
-        ease: 'none',
-        repeat: -1,
-      });
+    // Opacidad con parallax leve al scroll
+    gsap.to(img, {
+      opacity: 0.12,
+      scrollTrigger: { trigger: proceso, start: 'top 80%', end: 'center center', scrub: true },
     });
   }
 
   // =========================================================================
-  // 9. VIDEO DEL HERO
-  // =========================================================================
-  function initHeroVideo() {
-    const video = document.getElementById('hero-video');
-    if (!video) return;
-
-    const fadeTo = (opacity) =>
-      gsap.to(video, { opacity, duration: 1.6, ease: INOUT });
-
-    const onReady = () => fadeTo(0.4);
-
-    if (video.readyState >= 2) {
-      onReady();
-    } else {
-      video.addEventListener('canplay', onReady, { once: true });
-      // Fallback: si canplay no llega en 4s, mostrar igual
-      setTimeout(() => {
-        if (parseFloat(getComputedStyle(video).opacity) < 0.1) fadeTo(0.38);
-      }, 4000);
-    }
-
-    video.addEventListener('ended', () => fadeTo(0.18));
-  }
-
-  // =========================================================================
-  // 10. SPEED STRIP — pausar en hover
+  // 11. SPEED STRIP — pausar en hover
   // =========================================================================
   function initSpeedStripHover() {
     const track = document.querySelector('.speed-strip-track');
@@ -465,9 +399,9 @@
     initSectionReveals();
     initCardHoverGlow();
     initTachometer();
+    initEngineTurbine();
     initSpeedStripHover();
 
-    // Refrescar después de que todo el DOM esté pintado
     requestAnimationFrame(() => ScrollTrigger.refresh());
   }
 
@@ -477,7 +411,6 @@
     init();
   }
 
-  // Limpiar ScrollTriggers al navegar
   window.addEventListener('beforeunload', () => {
     ScrollTrigger.getAll().forEach(st => st.kill());
   });

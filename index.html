@@ -410,13 +410,33 @@ body { background-color: var(--deep-navy); color: var(--text-primary); font-fami
     padding: 24px; gap: 20px;
   }
 }
+
+/* ── MOBILE (375px) ─────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  /* Hero: ajustar tamaño de fuente */
+  h1 { font-size: 2.4rem !important; line-height: 1.15 !important; }
+  .badge span { font-size: 0.72rem !important; }
+
+  /* Stats: 2 cols en móvil (Tailwind grid-cols-2 ya lo hace) */
+  .stat-card { padding: 16px; }
+
+  /* Service cards: single column, no x-slide */
+  .service-card { padding: 22px; }
+
+  /* Tachometer: ocultar en móvil (muy pequeño para aportar valor) */
+  #tachometer-wrap { display: none; }
+
+  /* Proceso: pasos más compactos */
+  .step-connector { height: 36px; }
+
+  /* Evitar scroll horizontal por animaciones que sobresalgan */
+  section { overflow-x: hidden; }
+}
 </style>
 </head>
 
 <body>
 
-<!-- Circuit canvas: fixed, full-page, z-0, rendered by GSAP initCircuitCanvas() -->
-<canvas id="circuit-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.35;"></canvas>
 
 <!-- NAV -->
 <header id="navbar" class="fixed top-0 left-0 right-0 z-50 px-6 py-4">
@@ -678,20 +698,20 @@ body { background-color: var(--deep-navy); color: var(--text-primary); font-fami
       <div class="service-card reveal delay-200">
         <div class="flex items-center gap-3 mb-5">
           <div class="icon-badge" style="background:rgba(110,70,255,0.1);border:1px solid rgba(110,70,255,0.22);">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6e46ff" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--electric)" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
           </div>
           <div>
             <h3 class="font-syne font-bold text-lg">Presencia web profesional</h3>
-            <p class="text-xs" style="color:#6e46ff;">Tu vitrina digital, disponible 24/7</p>
+            <p class="text-xs" style="color:var(--electric);">Tu vitrina digital, disponible 24/7</p>
           </div>
         </div>
         <p class="mb-5" style="color:var(--text-muted);line-height:1.7;">Diseñamos y publicamos tu web en 5 días — optimizada para convertir visitas en consultas, desde $350 USD, con dominio y hosting el primer año incluido.</p>
         <ul class="space-y-2 mb-6">
-          <li class="flex items-center gap-2 text-sm"><span style="color:#6e46ff;font-weight:700;">✓</span> Entrega garantizada en 5 días</li>
-          <li class="flex items-center gap-2 text-sm"><span style="color:#6e46ff;font-weight:700;">✓</span> Diseño adaptado a tu rubro</li>
-          <li class="flex items-center gap-2 text-sm"><span style="color:#6e46ff;font-weight:700;">✓</span> SEO básico incluido</li>
+          <li class="flex items-center gap-2 text-sm"><span style="color:var(--electric);font-weight:700;">✓</span> Entrega garantizada en 5 días</li>
+          <li class="flex items-center gap-2 text-sm"><span style="color:var(--electric);font-weight:700;">✓</span> Diseño adaptado a tu rubro</li>
+          <li class="flex items-center gap-2 text-sm"><span style="color:var(--electric);font-weight:700;">✓</span> SEO básico incluido</li>
         </ul>
-        <a href="https://wa.me/5492226638044?text=Quiero%20una%20web%20profesional" target="_blank" rel="noopener" class="text-sm font-semibold" style="color:#6e46ff;">Quiero esto para mi negocio →</a>
+        <a href="https://wa.me/5492226638044?text=Quiero%20una%20web%20profesional" target="_blank" rel="noopener" class="text-sm font-semibold" style="color:var(--electric);">Quiero esto para mi negocio →</a>
       </div>
 
       <!-- Google Maps -->
