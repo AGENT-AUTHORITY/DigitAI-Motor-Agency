@@ -449,6 +449,7 @@ body { background-color: var(--deep-navy); color: var(--text-primary); font-fami
 
   <!-- Hero video background -->
   <video id="hero-video" autoplay muted playsinline loop
+    poster="/assets/hero-bg.png"
     style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;z-index:0;">
     <source src="/assets/hero-engine-transformation.mp4" type="video/mp4" />
   </video>
@@ -521,11 +522,11 @@ body { background-color: var(--deep-navy); color: var(--text-primary); font-fami
 <section class="py-20 px-6">
   <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-5">
     <div class="stat-card reveal">
-      <div class="font-syne font-extrabold text-3xl mb-1 electric-text" data-count="200" data-suffix="+">200+</div>
+      <div class="font-syne font-extrabold text-3xl mb-1 electric-text" data-count="200" data-target="200" data-suffix="+">200+</div>
       <div class="text-sm" style="color:var(--text-muted);">negocios transformados</div>
     </div>
     <div class="stat-card reveal delay-100">
-      <div class="font-syne font-extrabold text-3xl mb-1 electric-text" data-count="15" data-suffix=" años">15 años</div>
+      <div class="font-syne font-extrabold text-3xl mb-1 electric-text" data-count="15" data-target="15" data-suffix=" años">15 años</div>
       <div class="text-sm" style="color:var(--text-muted);">de experiencia digital</div>
     </div>
     <div class="stat-card reveal delay-200">
@@ -533,7 +534,7 @@ body { background-color: var(--deep-navy); color: var(--text-primary); font-fami
       <div class="text-sm" style="color:var(--text-muted);">recuperadas por semana</div>
     </div>
     <div class="stat-card reveal delay-300">
-      <div class="font-syne font-extrabold text-3xl mb-1 electric-text" data-count="5" data-suffix=" días">5 días</div>
+      <div class="font-syne font-extrabold text-3xl mb-1 electric-text" data-count="5" data-target="5" data-suffix=" días">5 días</div>
       <div class="text-sm" style="color:var(--text-muted);">para ver resultados</div>
     </div>
   </div>
@@ -886,33 +887,12 @@ const revealObserver = new IntersectionObserver(
 );
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-// Counter animation for stat cards
-function animateCount(el) {
-  const target = parseInt(el.dataset.count);
-  const suffix = el.dataset.suffix || '';
-  let current = 0;
-  const step = target / (1600 / 16);
-  const timer = setInterval(() => {
-    current = Math.min(current + step, target);
-    el.textContent = Math.floor(current) + suffix;
-    if (current >= target) clearInterval(timer);
-  }, 16);
-}
-const counterObserver = new IntersectionObserver(
-  entries => entries.forEach(e => {
-    if (e.isIntersecting && e.target.dataset.count) {
-      animateCount(e.target);
-      counterObserver.unobserve(e.target);
-    }
-  }),
-  { threshold: 0.5 }
-);
-document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+// Counters are handled by GSAP in animations.js
 </script>
 
-<!-- GSAP + ScrollTrigger (must load before main.js) -->
+<!-- GSAP + ScrollTrigger -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="js/animations/main.js"></script>
+<script src="js/animations.js"></script>
 </body>
 </html>
