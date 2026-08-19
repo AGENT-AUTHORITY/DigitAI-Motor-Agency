@@ -1,164 +1,287 @@
-# COPY — digitAI Motor V2
+# COPY — digitAI Motor
 
-## Posicionamiento verbal
+Idioma: **español**. Se permiten eyebrows, micro-labels y frases conceptuales
+en inglés cuando son parte natural del lenguaje Performance. H1 y copy
+principal siempre en español. No producir una página Spanglish ilegible.
 
-**Eyebrow:** `PERFORMANCE · CONVERSION · GROWTH`
+---
 
-**H1:** Convertimos adquisición digital en crecimiento medible.
+## HERO
 
-**Sub:** Google Ads, Meta Ads, CRO, analytics y sistemas comerciales conectados
-desde el clic hasta la venta.
+**Eyebrow:** `GROWTH PARTNER · PERFORMANCE · CREATIVE`
 
-**Supporting:** Detectamos dónde se pierde rendimiento y trabajamos sobre el
-punto que realmente está frenando el crecimiento.
+**H1** (dos líneas cuando el viewport lo permite):
 
-**Línea de capacidades (bajo el hero):**
-`Paid Media · CRO · Analytics · CRM · Automation · Growth Engineering`
+> Encontramos qué está frenando tu crecimiento.
+> Después lo arreglamos.
 
-## CTAs
+**Sub:** Paid Media, Performance Creative, CRO, tracking y sistemas comerciales
+conectados desde el tráfico hasta la venta.
 
-| Rol | Label |
+**Supporting:** `Ads are only one part of growth.`
+
+| CTA | Label | Destino |
+|---|---|---|
+| Primario | `Solicitar diagnóstico de crecimiento` | `#growth-audit` |
+| Secundario | `Tengo un problema puntual` | `#quick-fix` |
+
+No ir directo a WhatsApp. El hero debe leerse claro incluso sin visual.
+
+---
+
+## 2 · WHERE GROWTH BREAKS
+
+**Eyebrow:** `WHERE GROWTH BREAKS`
+
+**H2:** Tu problema de crecimiento no siempre es un problema de Ads.
+
+**Body:** El rendimiento puede perderse en el tráfico, el mensaje, la landing,
+el seguimiento comercial o la medición.
+
+```
+TRAFFIC -> CREATIVE -> LANDING -> LEAD -> SALES -> REVENUE -> DATA
+```
+
+| Nodo | Pérdida típica |
 |---|---|
-| Primario | `Analizar mi adquisición` |
-| Secundario | `Tengo un problema puntual` |
-| Quick Fix | `Contame qué está fallando` |
-| Auditoría | `Solicitar auditoría` |
+| Traffic | Tráfico que no debería llegar |
+| Creative | Mensaje que no conecta |
+| Landing | La intención se pierde en la página |
+| Lead | Contactos que no califican |
+| Sales | Seguimiento lento o inexistente |
+| Revenue | No se sabe qué terminó vendiendo |
+| Data | Atribución rota |
 
-Prohibidos como CTA principal: `Contactanos`, `Hablemos`, `Saber más`,
-`Empezar`, `Descubrir`.
+**Cierre:** Primero encontramos dónde se rompe. Después decidimos qué tocar.
 
-Un CTA describe **intención**, no cortesía.
+---
 
-## Problem section
+## 3 · OUR GROWTH SYSTEM
 
-**Headline:** Conseguir tráfico no significa estar creciendo.
+**Eyebrow:** `HOW WE WORK`
 
-**Sub:** El dinero puede perderse antes del clic, durante la conversión o
-después de que entra el lead.
+**H2:** No empezamos optimizando. Empezamos entendiendo.
 
-| # | Columna | Copy | Ejemplos |
-|---|---|---|---|
-| 01 | ACQUISITION | Pagás por tráfico que no debería llegar. | términos incorrectos, segmentación, campañas ineficientes, CPC, creatives, intent |
-| 02 | CONVERSION | El tráfico llega pero la experiencia pierde intención. | landing, oferta, velocidad, formulario, CTA, WhatsApp |
-| 03 | REVENUE | Generás leads pero el sistema comercial no sabe qué terminó vendiendo. | CRM, attribution, follow-up, lead quality, sales process |
+| # | Paso | Contenido |
+|---|---|---|
+| 01 | RESEARCH | Negocio, mercado, oferta, cliente, competencia, ads, creative, landing, funnel, sales process |
+| 02 | DIAGNOSE | Encontrar el cuello de botella |
+| 03 | PRIORITIZE | Separar impacto potencial de trabajo cosmético |
+| 04 | TEST | Convertir hipótesis en experimentos |
+| 05 | LEARN | Leer datos y señales |
+| 06 | IMPROVE | Iterar sobre aprendizajes |
+| 07 | SCALE | Escalar únicamente lo que demostró valor |
 
-**Cierre:** digitAI Motor puede trabajar sobre los tres.
+Flow compacto. No una sección interminable.
 
-## Cuatro pilares
+---
 
-### 01 Performance Marketing
-> No compramos tráfico por comprar tráfico. Buscamos intención y medimos qué ocurre después.
+## 4 · PERFORMANCE CREATIVE
 
-Google Ads, Meta Ads, Paid Acquisition, Search, Display, Remarketing,
-Campaign Audit, Budget Allocation, Creative Testing.
-CTA: `Ver Performance`
+Sección visualmente diferencial.
 
-### 02 Conversion
+**Eyebrow:** `PERFORMANCE CREATIVE`
+
+**Kicker:** `Creative isn't decoration. It's performance.`
+
+**H2:** Tu próximo ganador puede estar escondido en los datos que ya tenés.
+
+**Body:** Investigamos clientes, mensajes, conceptos, hooks y resultados para
+convertir creatividad en hipótesis medibles.
+
+```
+RESEARCH -> INSIGHT -> CONCEPT -> HOOK -> CREATIVE -> TEST
+   NO SIGNAL -> LEARN
+   SIGNAL    -> ITERATE -> SCALE
+```
+
+Variables: Hooks, Angles, Concepts, Formats, Offer, Message.
+Lenguaje de medición: CTR, CPC, CVR, CPA, Lead Quality.
+
+**Sin métricas inventadas.** Las siglas son vocabulario analítico, no cifras.
+
+**CTA:** `Explorar Performance Creative`. La página aún no existe, así que
+apunta a un ancla interna. Ver ROUTES.md.
+
+---
+
+## 5 · CAPABILITIES
+
+Compacto. Performance Creative no lleva card acá: ya tuvo sección propia.
+
+### PAID MEDIA
+Google Ads, Meta Ads, Paid Acquisition, Search, Remarketing, Campaign Audits.
+> Compramos intención, no tráfico por comprar tráfico.
+
+### CRO & CONVERSION
+Landing Pages, Offers, Forms, WhatsApp, Mobile UX, Lead Flow.
 > Más tráfico no arregla una experiencia que no convierte.
 
-CRO, Landing Pages, Forms, WhatsApp, Lead Quality, Funnel Optimization, A/B Testing.
-CTA: `Mejorar conversión`
+### REVENUE SYSTEMS
+Tracking, Analytics, CRM, Attribution, Follow-up, Automation.
+> Un lead no es revenue.
 
-### 03 Revenue Systems
-> Un lead no es revenue. Conectamos adquisición con lo que ocurre después.
+### GROWTH ENGINEERING
+Dashboards, Internal Tools, APIs, CRMs, Automation, AI Workflows.
+> Cuando el problema está fuera de Ads Manager, construimos lo que falta.
 
-CRM, Analytics, Tracking, Attribution, Automation, Follow-up, Conversions API.
-CTA: `Conectar mis datos`
+---
 
-### 04 Growth Engineering
-> Cuando el problema no se arregla dentro del Ads Manager, construimos lo que falta.
+## 6 · EVIDENCE
 
-Web Development, Internal Tools, Dashboards, APIs, Integrations,
-AI Workflows, Automation, Custom CRM.
-CTA: `Ver Growth Engineering`
+**Eyebrow:** `EVIDENCE, NOT CLAIMS`
 
-## Proof bar (máximo 4 métricas en home)
+**H2:** Un análisis vale más cuando termina en una decisión.
+
+**Caso:** `Performance Audit · Energy B2C/B2B`
+**Contexto:** Auditoría de adquisición digital. Periodo 16 al 22 de julio 2026.
+
+> AVISO: nunca nombrar a Extragas públicamente. No implicar relación de agencia.
 
 | Valor | Label |
 |---|---|
-| 46.4K+ | Impresiones analizadas |
-| 59 | Conversiones en account data auditada |
-| 23% | Spend improductivo identificado |
-| 44K+ | Impresiones orgánicas generadas |
+| 46.4K+ | Impressions analyzed |
+| 1,272 | Clicks / interactions |
+| 59 | Conversions registered in analyzed account data |
+| ARS 198K | Spend analyzed |
 
-**Microcopy obligatorio:** `Datos provenientes de análisis y proyectos documentados.`
+**Narrativa:** 129 términos de búsqueda acumulaban inversión sin registrar
+conversiones. ARS 45.918 semanales, aproximadamente 23% del presupuesto
+semanal analizado.
 
-Nunca escribir "generamos 59 conversiones". Esos datos pertenecen a una
-**cuenta auditada**, no a resultados producidos por digitAI Motor.
+**Campaña Display adicional:** 34.433 impressions, 179 clicks, 0 conversions.
 
-Métricas disponibles pero no usadas en home (para no diluir): 1.272 clics,
-ARS 198.622 inversión analizada, 1.749 followers, +281% vs. 365 días previos,
-21.544 impresiones anuales, 71% reach fuera de la red existente.
+**Copy:** El objetivo no era celebrar volumen. Era encontrar dónde el
+presupuesto dejaba de generar señal útil.
 
-## Performance case — Extragas
+**Recomendado:** negative keyword review, budget allocation, campaign
+structure review, Display evaluation, landing / conversion review.
 
-**Título:** `SELECTED PERFORMANCE ANALYSIS`
-**Sub:** Auditoría de adquisición para empresa energética B2C/B2B.
-**Periodo:** 16 al 22 de julio 2026
-
-| Métrica | Total | Search | Display |
-|---|---|---|---|
-| Impresiones | 46.441 | 8.534 | 37.907 |
-| Clics / interacciones | 1.272 | 576 | 696 |
-| CTR | 2,74% | 6,75% | 1,84% |
-| Conversiones | 58,97 | 45,99 | 12,98 |
-| Conversion rate | — | 7,99% | 1,86% |
-| CPA | ARS 3.368 | ARS 3.098 | ARS 4.322 |
-| Spend | ARS 198.622 | — | — |
-
-**Hallazgo clave:** 129 search terms, ARS 45.918 de spend, **0 conversiones**.
-Aproximadamente 23% del presupuesto semanal.
-
-**Caso secundario (Hogares - Emplazamientos):** 34.433 impresiones, 179 clics,
-0,52% CTR, ARS 13.975, 0 conversiones.
-
-**Propuesta conceptual de attribution (NO implementada):**
-Meta Ads, WhatsApp Cloud API, CRM, venta confirmada, Conversions API, Meta.
+**Cierre:** Performance también consiste en saber qué dejar de pagar.
 
 ### Lenguaje obligatorio
 
 | Nunca | Siempre |
 |---|---|
-| mejoramos el CPA | identificamos un CPA de X en Display vs Y en Search |
-| ahorramos 23% | detectamos 23% del presupuesto semanal en términos sin conversión |
-| aumentamos conversiones | analizamos 58,97 conversiones registradas |
-| implementamos CAPI | propusimos una arquitectura de attribution vía CAPI |
+| generated, saved, increased, improved | analyzed, identified, detected, recommended |
 
-## Quick Fix
+---
 
-**Headline:** No todo necesita un proyecto de tres meses.
+## 7 · QUICK FIX
 
-**Sub:** Si hay algo puntual frenando tus campañas, tracking o funnel, entramos,
-diagnosticamos y lo resolvemos.
+`id="quick-fix"`. Modalidad de entrada, no un séptimo pilar.
 
-**Cards:** Google Ads, Meta Ads, Meta Business, GA4, GTM, Pixel,
+**Eyebrow:** `QUICK FIX`
+
+**H2:** No todo necesita un proyecto de tres meses.
+
+**Body:** Si existe un problema puntual frenando campañas, tracking, conversión
+o sistemas comerciales, podemos entrar directamente ahí.
+
+**Chips:** Google Ads, Meta Ads, Meta Business, GA4, GTM, Pixel,
 Conversion Tracking, Landing, Forms, WhatsApp, CRM, Search Console,
-SEO technical, Automation, APIs, Dashboards.
+Technical SEO, Automation, API, Dashboard.
 
-**CTA:** `Contame qué está fallando`. Formulario primero, WhatsApp secundario.
+**CTA:** `Contame qué está fallando`, al área de diagnóstico interna.
 
-**Tono:** puntual no es barato. Es acceso rápido a criterio senior, no tarifa baja.
+**Subcopy:** También trabajamos sobre problemas puntuales y proyectos acotados.
 
-## Growth Engineering
+Sin precios. Sin modal complejo. Sin hacer que la marca parezca barata.
 
-**Headline:** Cuando el problema no se arregla dentro de Ads Manager,
-construimos lo que falta.
+---
 
-Categorías (sin nombres de clientes no autorizados): CRMs, quote systems,
-prospecting tools, dashboards, lead routing, automations, internal apps,
-APIs, sales tools.
+## 8 · BUSINESS PERSPECTIVE
 
-## About
+**Eyebrow:** `BUSINESS PERSPECTIVE`
 
-**Headline:** Marketing con criterio comercial. Tecnología con objetivo de negocio.
+**H2:** Performance con criterio comercial.
 
-digitAI Motor fue creada por Oscar Chinchilla. Background: más de 10 años en
-ventas B2B, negociación, pipeline, gestión comercial, dirección, crecimiento,
-marketing y tecnología.
+> digitAI Motor fue creada por Oscar Chinchilla, con más de una década de
+> experiencia en ventas B2B, negociación, pipeline y gestión comercial.
+>
+> Ese background define cómo analizamos Growth: una campaña no termina cuando
+> entra un lead. Queremos entender qué ocurrió después.
 
-> Una campaña no se juzga solamente por CTR o CPL. Queremos saber qué ocurrió después.
+**Evidencia secundaria**, label `Organic B2B Distribution`:
 
-**Regla:** la marca por delante del founder. La home no es un CV.
+| Valor | Label |
+|---|---|
+| 1.749 | Followers |
+| +281% | Follower growth vs. previous 365 days |
+| 71% | Reach outside existing network |
+
+AVISO: no usar +8.807%. No usar 44K como KPI principal de homepage, Paid y
+Growth tienen prioridad. Esta sección no puede ser más grande que Evidence.
+
+**CTA:** `Ver perfil en LinkedIn`, a https://www.linkedin.com/in/oechinbott/
+con target blank y rel noopener noreferrer.
+
+---
+
+## 9 · FAQ
+
+Máximo 5. Visibles en HTML, con schema FAQPage exactamente consistente.
+
+1. **¿Trabajan solamente con empresas grandes?** No. Se puede abordar un
+   problema puntual, una auditoría, una implementación o una relación continua.
+2. **¿Pueden revisar campañas que ya están activas?** Sí. Primero diagnóstico,
+   después cambios.
+3. **¿Trabajan solamente con Google Ads y Meta Ads?** No. Paid Media es solo
+   una parte del sistema.
+4. **¿También desarrollan landing pages, CRM o automatizaciones?** Sí, cuando
+   el cuello de botella lo requiere.
+5. **¿Trabajan fuera de Argentina?** Sí. Trabajo remoto con LATAM y
+   posibilidad de proyectos internacionales.
+
+Sin mencionar precios en ninguna respuesta.
+
+---
+
+## 10 · FINAL CTA
+
+`id="growth-audit"`
+
+**H2:** Antes de gastar más, encontremos qué está frenando el crecimiento.
+
+**Body:** Contanos qué estás intentando mejorar. Si el cuello de botella está
+en adquisición, creative, conversión, medición o proceso comercial, empezamos
+por ahí.
+
+| CTA | Label |
+|---|---|
+| Primario | `Solicitar diagnóstico de crecimiento` |
+| Secundario | `Tengo un problema puntual` |
+
+WhatsApp queda como fallback secundario.
+
+### Formulario
+
+Campos: Nombre, Empresa, Email o WhatsApp, Web, ¿Qué querés mejorar?
+
+Selector: Growth Audit, Performance Creative, Paid Media, Conversion / CRO,
+CRM / Automation, Growth Engineering, Quick Fix, No estoy seguro.
+
+No pedir presupuesto. Captura conceptual de utm_source, utm_medium,
+utm_campaign, utm_content, utm_term, referrer, landing_page.
+
+> **FORM DELIVERY PENDING.** Sin backend. Prohibido mostrar un estado de
+> "enviado" que no corresponda a un envío real.
+
+---
+
+## Ritmo de la home
+
+```
+text -> system -> methodology -> creative -> capabilities
+-> evidence -> quick fix -> founder -> FAQ -> CTA
+```
+
+10 bloques. Cada uno agrega información nueva. No repetir el funnel cinco
+veces ni Growth Engineering en tres lugares.
+
+## CTAs prohibidos como principal
+
+`Contactanos`, `Hablemos`, `Buy now`, `Hire us`, `Empezar`, `Saber más`.
 
 ## Terminología
 
@@ -169,21 +292,16 @@ marketing y tecnología.
 | rendimiento / performance | resultados |
 | sistema comercial | proceso de ventas |
 | diagnóstico | consultoría |
-| trabajo puntual | servicio express |
+| cuello de botella | problema |
 
-## Prohibidos
-
-`revolucionamos`, `potenciamos`, `transformación digital`, `soluciones 360`,
-`innovación disruptiva`, `llevamos tu negocio al siguiente nivel`,
-`somos apasionados`, `te acompañamos en tu viaje`.
-
-## Eliminado de la V1 (no reutilizar)
+## Eliminado de la V1 — no reutilizar
 
 | Claim | Motivo |
 |---|---|
-| `Recuperá 10 a 15 horas semanales` | Sin respaldo. Estaba en title, description, H2, FAQ y JSON-LD. |
-| `Listo en 5 días` | Sin respaldo. En 5 de 6 páginas. |
-| `4.9 estrellas / 47 reseñas` | Inventado. JSON-LD AggregateRating. |
-| Testimonios Marcos R., Sandra L., Fernando P. | Inventados. HTML + JSON-LD. |
-| `Más potencia para tu negocio. Vos siempre al volante.` | Metáfora de motor descartada. |
-| `Pack Automatización Pro USD 497` | Oferta discontinuada (funnel.html). |
+| `Recuperá 10 a 15 horas semanales` | Sin respaldo |
+| `Listo en 5 días` | Sin respaldo |
+| `4.9 estrellas / 47 reseñas` | Inventado (JSON-LD AggregateRating) |
+| Testimonios Marcos R., Sandra L., Fernando P. | Inventados |
+| `Más potencia para tu negocio. Vos siempre al volante.` | Metáfora descartada |
+| `Pack Automatización Pro USD 497` | Oferta discontinuada |
+| `desde USD 350` | Regla absoluta: sin precios |

@@ -1,111 +1,110 @@
-# SEO — digitAI Motor V2
+# SEO — digitAI Motor
 
 ## Host canónico — corrección crítica heredada
 
 | | V1 (roto) | V2 |
 |---|---|---|
-| CNAME | `www.digitaimotor.lat` | `www.digitaimotor.lat` |
-| Comportamiento real | `digitaimotor.lat` → **301** → `www.digitaimotor.lat` | igual |
-| Canonical declarado | `https://digitaimotor.lat/` ❌ | `https://www.digitaimotor.lat/` ✅ |
-| Sitemap | URLs no-www ❌ | URLs www ✅ |
-| robots.txt Sitemap | no-www ❌ | www ✅ |
-| hreflang | no-www ❌ | www ✅ |
-| og:url | no-www ❌ | www ✅ |
+| CNAME | `www.digitaimotor.lat` | igual |
+| Comportamiento real | `digitaimotor.lat` hace **301** a `www.digitaimotor.lat` | igual |
+| Canonical declarado | `https://digitaimotor.lat/` INCORRECTO | `https://www.digitaimotor.lat/` |
+| Sitemap | URLs no-www | URLs www |
+| robots.txt | Sitemap no-www | Sitemap www |
+| hreflang | no-www | pendiente hasta que exista `/en/` |
+| og:url | no-www | www |
 
-La V1 declaraba en **cada página** un canonical que apuntaba a una URL que
-redirige 301. Y el sitemap contenía **100% URLs que redirigen**. Google lo
-resuelve, pero es señal diluida y presupuesto de rastreo desperdiciado.
+La V1 declaraba en **cada página** un canonical que apunta a una URL que
+redirige, y su sitemap contenía 100% URLs que redirigen. Google lo resuelve,
+pero es señal diluida y presupuesto de rastreo desperdiciado.
 
-**Regla V2:** todo canonical, hreflang, `og:url` y entrada de sitemap usa
-`https://www.digitaimotor.lat` + trailing slash. Se genera desde `site` en
-`astro.config.mjs` — nunca hardcodeado.
+**Regla:** todo canonical, `og:url` y entrada de sitemap se deriva de `site`
+en `astro.config.mjs`. Nunca hardcodeado.
 
-## Metadata por página
+## Homepage
 
-### `/`
-- **Title:** `Performance & Growth Marketing | Google Ads, Meta Ads & CRO | digitAI Motor`
-- **Description:** `Performance marketing, Google Ads, Meta Ads, CRO, landing pages, analytics, CRM y automatización. Encontramos dónde se pierde rendimiento desde el clic hasta la venta.`
-- **H1:** `Convertimos adquisición digital en crecimiento medible.`
-- **Canonical:** `https://www.digitaimotor.lat/`
+- **Title:** `Growth Partner | Performance, Creative & CRO | digitAI Motor`
+  (63 caracteres — dentro del límite práctico de ~60-65 antes del truncado).
+- **Meta description:** `Growth Marketing, Paid Media, Performance Creative, CRO, tracking y automatización conectados desde el tráfico hasta la venta. Primero encontramos qué frena el crecimiento.`
+- **H1:** `Encontramos qué está frenando tu crecimiento. Después lo arreglamos.`
+- **Canonical final:** `https://www.digitaimotor.lat/`
+- **Estado actual:** `noindex, nofollow` durante el checkpoint. Se quita al aprobar.
 
-### `/google-ads/`
-- **Title:** `Gestión y Auditoría Google Ads | Performance Marketing | digitAI Motor`
-- **H1:** `Google Ads optimizado para negocio, no para métricas bonitas.`
-- **Intent:** gestión Google Ads · especialista Google Ads · agencia Google Ads · auditoría Google Ads · Google Ads Argentina
-- **Cobertura mínima:** Search · Display · negative keywords · intent · conversion tracking · landing experience · optimization · audit · budget · lead quality
+Persona primero, buscador después. Sin keyword stuffing.
 
-### `/meta-ads/`
-- **Title:** `Gestión de Meta Ads y Facebook Ads | digitAI Motor`
-- **H1:** `Meta Ads conectado con oportunidades reales.`
-- **Cobertura:** lead generation · WhatsApp · creatives · targeting · remarketing · conversion events · attribution · Pixel · CAPI · lead quality
+## Intención de búsqueda por página (futuras)
 
-### `/landing-pages/`
-- **Title:** `Landing Pages y CRO para Convertir Más | digitAI Motor`
-- **H1:** `Más tráfico no arregla una landing que no convierte.`
-- **Cobertura:** CRO · speed · copy · CTA · forms · mobile · tracking · experiments · lead quality
+| Ruta | Intent principal |
+|---|---|
+| `/growth-audit/` | auditoría de marketing digital, auditoría Google Ads, por qué no convierten mis campañas |
+| `/performance-creative/` | creative testing, performance creative, hooks para ads, ad creative strategy |
+| `/paid-media/` | agencia performance marketing, paid media Argentina |
+| `/google-ads/` | gestión Google Ads, especialista Google Ads, auditoría Google Ads |
+| `/meta-ads/` | gestión Meta Ads, Facebook Ads, campañas a WhatsApp |
+| `/cro-landing-pages/` | CRO, optimización de conversión, landing que convierte |
+| `/tracking-analytics/` | GA4, GTM, conversion tracking, atribución |
+| `/crm-automation/` | CRM, automatización comercial, seguimiento de leads |
+| `/growth-engineering/` | dashboards a medida, integraciones, herramientas internas |
+| `/quick-fix/` | pixel roto, Meta Business bloqueado, conversiones mal configuradas |
 
-### `/crm-automation/`
-- **Title:** `CRM y Automatización Comercial | digitAI Motor`
-- **H1:** `Convertí leads en procesos comerciales medibles.`
-- **Cobertura:** CRM · WhatsApp · follow-up · pipeline · automation · attribution · routing · reminders · integration
-- **Nota:** Zoho aparece como herramienta mencionada, **no** como eje de posicionamiento.
-
-### `/performance-marketing/`
-- **H1:** `Performance Marketing conectado con revenue.`
-- **Rol:** service hub. Enlaza a Google Ads, Meta Ads, Landing Pages, CRM, Auditoría.
-
-### `/growth-engineering/`
-- **H1:** `Construimos la infraestructura que Growth necesita para escalar.`
-- **Cobertura:** development · automation · CRM · dashboards · internal tools · APIs · AI · tracking · integrations
-
-### `/auditoria-performance/`
-- **H1:** `Encontrá dónde se está perdiendo tu presupuesto antes de invertir más.`
-- **Objetivo:** lead generation. Qué auditamos: campaigns · tracking · landing · funnel · CRM · attribution.
-- **CTA:** `Solicitar auditoría`
+Zoho puede mencionarse como herramienta. **No** se construye posicionamiento
+alrededor de Zoho.
 
 ## Reglas duras
 
-- **Una sola `<h1>` por página.** Jerarquía H1 → H2 → H3 sin saltos.
-- **Sin `<meta name="keywords">`.** La V1 tenía un keyword stuffing de 10 términos. Eliminado — Google lo ignora desde 2009 y es señal de sitio de baja calidad.
-- **Sin títulos ni descriptions duplicados** entre páginas.
-- **Sin money pages huérfanas** (mínimo 2 enlaces internos entrantes).
-- Todo `alt` descriptivo. Imágenes decorativas → `alt=""` + `aria-hidden`.
-- Todo enlace externo → `rel="noopener noreferrer"`.
+- **Una sola `<h1>` por página.** Jerarquía H1, H2, H3 sin saltos.
+- **Sin `<meta name="keywords">`.** La V1 tenía stuffing de 10 términos.
+- Sin títulos ni descriptions duplicados.
+- Sin money pages huérfanas (mínimo 2 enlaces internos entrantes).
+- Todo `alt` descriptivo. Decorativas con `alt=""` y `aria-hidden`.
+- Todo enlace externo con `rel="noopener noreferrer"`.
+- **Ningún CTA puede apuntar a un 404.** Ver `ROUTES.md`.
 
 ## Structured data
 
 | Página | Schemas |
 |---|---|
-| `/` | `Organization` + `ProfessionalService` |
+| `/` | `Organization` + `ProfessionalService` + `FAQPage` |
 | Service pages | `Service` + `BreadcrumbList` |
-| Páginas con FAQ | `FAQPage` **solo** si las preguntas son visibles en HTML |
 | Todas menos `/` | `BreadcrumbList` |
+
+`FAQPage` solo si las preguntas están visibles en HTML. Las 5 FAQ de la home
+cumplen: el schema se genera del mismo array que renderiza el markup, así que
+no puede desincronizarse.
 
 ### Eliminado de la V1 — no reintroducir
 
 ```
-❌ AggregateRating  ratingValue 4.9 / reviewCount 47   → sin respaldo
-❌ Review × 3       Marcos R. / Sandra L. / Fernando P. → sin respaldo
+AggregateRating  ratingValue 4.9 / reviewCount 47    sin respaldo
+Review x3        Marcos R. / Sandra L. / Fernando P. sin respaldo
 ```
 
-Estaban en el JSON-LD de `index.html` **y** renderizados en la sección
-`#testimonios`. Ambas instancias se eliminan.
+Estaban en el JSON-LD de `index.html` **y** renderizados en `#testimonios`.
 
-**No se reintroduce `AggregateRating` hasta tener reviews reales verificables**
-(Google Business Profile o plataforma equivalente con URL pública).
-
-Riesgo evitado: structured data marcado como spam → penalización manual por
-`Marcado estructurado engañoso` en Search Console.
+No se reintroduce `AggregateRating` hasta tener reviews reales verificables
+con URL pública. Riesgo evitado: penalización manual por *marcado estructurado
+engañoso*.
 
 Validar todo JSON-LD en https://validator.schema.org/ antes de deploy.
 
+## Open Graph
+
+**Bug crítico de la V1:** `og:image` apuntaba a `/assets/og-image.png`, que
+**devuelve 404 en producción** (verificado). Todo share en LinkedIn, WhatsApp
+o X salía sin imagen de preview.
+
+**Estado V2:** `BaseLayout` emite `og:image` **solo si recibe una imagen
+real**. Sin ella degrada a `twitter:card summary`. Repetir el tag apuntando a
+un archivo inexistente sería el mismo bug.
+
+**Pendiente:** `/assets/og-default.webp` a 1200×630. Se diseña aparte, no se
+autogenera una pieza mediocre.
+
 ## Sitemap
 
-Generado por `@astrojs/sitemap`. Solo URLs indexables. Excluye redirects legacy
-y `/404`. `lastmod` real del build — no fechas inventadas.
+Generado por `@astrojs/sitemap`. Solo URLs indexables. Excluye redirects
+legacy, `/404` y cualquier página `noindex`. `lastmod` real del build.
 
-**V1 tenía `lastmod: 2025-05-06` en 4 páginas y `2026-05-26` en la home** —
-fechas manuales desactualizadas que restan credibilidad al sitemap.
+La V1 tenía `lastmod: 2025-05-06` fijo en 4 páginas — fechas manuales
+desactualizadas que restan credibilidad.
 
 ## robots.txt
 
@@ -116,18 +115,19 @@ Allow: /
 Sitemap: https://www.digitaimotor.lat/sitemap-index.xml
 ```
 
-Cambios frente a V1:
-- Sitemap apunta a **www** (V1: no-www).
-- Se elimina `Disallow: /assets/generate-assets.html` — el archivo se borra, no se oculta.
-- Se eliminan los `Crawl-delay` para AhrefsBot / SemrushBot / MJ12bot: Google los ignora, no aportan y solo entorpecen auditorías propias.
-- **No bloquear CSS, JS ni imágenes** — Google necesita renderizar.
+Cambios frente a V1: sitemap apunta a www; se elimina
+`Disallow: /assets/generate-assets.html` (el archivo se borra, no se oculta);
+se eliminan los `Crawl-delay` de AhrefsBot / SemrushBot / MJ12bot (Google los
+ignora y solo entorpecen auditorías propias). No bloquear CSS, JS ni imágenes.
 
-## Open Graph
+## Internacionalización
 
-**Bug crítico de la V1:** `og:image` apuntaba a `/assets/og-image.png`, que
-**devuelve 404 en producción** (verificado). Todo share en LinkedIn, WhatsApp o
-X salía sin imagen de preview. Para alguien haciendo outbound en LinkedIn con
-44K impresiones, eso costaba clics directamente.
+`hreflang` **no se declara todavía**: apuntaría a URLs inexistentes. Se agrega
+cuando exista `/en/`. Ver `ROUTES.md` para las decisiones estructurales ya
+tomadas.
 
-V2: `og-image` real 1200×630, verificado en build. Mismo chequeo para
-`apple-touch-icon.png` (también 404 en V1).
+## Geo
+
+`Cañuelas · Buenos Aires · Argentina` + `Remote across LATAM` en el footer y
+en `ProfessionalService`. **No** crear páginas geo spam por ciudad, que es lo
+que hacía `posicionamiento-geo.html`.

@@ -22,10 +22,12 @@
   /* --- Color: texto ------------------------------------------------------ */
   --text-primary: #F5F7FA;    /* 18.6:1 sobre bg-primary */
   --text-secondary: #9CA9BA;  /*  8.4:1 sobre bg-primary */
-  --text-muted: #657386;      /*  4.2:1 — NO apto para texto chico. Ver abajo. */
-  /* Variante AA de --text-muted para texto <24px sobre surface.
-     Mismo rol visual, 4.8:1 sobre --surface. */
-  --text-muted-aa: #74839A;
+  /* Promovido de #657386 a #74839A: el valor original medía 4.23:1 sobre
+     bg-primary y no llegaba al 4.5:1 que pide AA para texto chico, que es
+     justamente donde se usa (microcopy, notas de origen, labels). */
+  --text-muted: #74839A;      /*  5.2:1 sobre bg-primary · 4.8:1 sobre surface */
+  /* Alias retenido: los componentes de FASE 2 ya lo referencian. */
+  --text-muted-aa: var(--text-muted);
 
   /* --- Color: acento ----------------------------------------------------- */
   --accent: #2388FF;          /* 5.8:1 sobre bg-primary */
@@ -65,8 +67,13 @@
   /* Medido a 375px: con 2.625rem de minimo el H1 ocupaba casi todo el
      viewport y empujaba subtitulo y CTA bajo el fold. 2.25rem deja hero
      completo arriba del fold en mobile. */
-  --text-display: clamp(2.25rem, 1.45rem + 3.4vw, 4.5rem); /* 36-72 hero */
-  --text-metric: clamp(2rem, 1.5rem + 2.4vw, 3.25rem);    /* 32-52 metricas */
+  /* Medido a 1440: con 4.5rem el H1 ocupaba 5 lineas y empujaba el CTA
+     secundario fuera del fold. 3.5rem lo deja en 3 lineas con el hero
+     completo visible. */
+  --text-display: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem); /* 36-56 hero */
+  /* Medido a 1440: con 3.25rem el valor "ARS 198K" partia en dos lineas
+     dentro de su columna. 2.75rem entra en una sola. */
+  --text-metric: clamp(1.875rem, 1.5rem + 1.6vw, 2.75rem); /* 30-44 metricas */
 
   --leading-tight: 1.06;
   --leading-snug: 1.22;

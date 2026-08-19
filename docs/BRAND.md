@@ -1,69 +1,172 @@
-# BRAND — digitAI Motor V2
+# BRAND — digitAI Motor
+
+## Nombre
+
+La marca pública es **digitAI motor**. En documentos estratégicos puede
+escribirse "digitAI Motor". No se renombra el dominio, el repositorio ni el
+proyecto.
 
 ## Categoría
 
-**Performance & Growth Partner.**
+# GROWTH PARTNER
 
-No somos: agencia de automatización con IA, implementadores de CRM, estudio de
-diseño web, agencia de marketing 360.
+Descriptor: **Performance · Creative · Conversion · Growth Systems**
+
+### Lo que NO somos
+
+Agencia digital genérica · agencia de IA · agencia de Ads · desarrolladora de
+páginas · agencia 360 · proveedor de automatizaciones sueltas.
 
 ## Idea central
 
-> Encontramos dónde se pierde dinero entre el anuncio y la venta — y lo corregimos.
+> Encontramos qué está frenando tu crecimiento. Después lo arreglamos.
 
-## El sistema que comunicamos
+El pensamiento que debe quedarle al visitante:
+
+> "Ellos no empiezan vendiéndome anuncios. Primero encuentran qué está
+> frenando mi crecimiento."
+
+## Filosofía
 
 ```
-ANUNCIO → CLIC → LANDING → LEAD → WHATSAPP / CRM → SEGUIMIENTO → VENTA
+Diagnose → Test → Learn → Improve → Scale
 ```
 
-digitAI Motor puede intervenir en **cualquier** punto de esa cadena. Esa es la
-diferencia frente a una agencia que solo mira el Ads Manager.
+La pregunta que ordena todo el trabajo no es *"¿cómo mejoramos Meta Ads?"*
+sino **"¿qué está frenando el crecimiento?"**.
 
-## Modelo pulpo
+## El sistema
 
-- **Cabeza:** Growth / Revenue. Todo se comunica desde ahí.
-- **Tentáculos:** Google Ads · Meta Ads · Paid Acquisition · CRO · Landing Pages ·
-  Analytics · Tracking · CRM · Automation · AI · Development · Internal Tools ·
-  Dashboards · APIs · Integrations.
+```
+Traffic → Creative → Landing → Lead → Sales Process → Revenue → Data → Iteration → Scale
+```
 
-Regla: **ningún tentáculo se comunica solo.** Siempre conectado a revenue.
-Nunca decir "hacemos de todo".
+digitAI Motor puede intervenir en cualquier nodo. Ese es el diferencial frente
+a una agencia que solo mira el Ads Manager.
 
-## Promesa
+| Si el problema está en | Trabajamos |
+|---|---|
+| Ads | optimización de campañas |
+| Creative | research, ángulos, conceptos, hooks |
+| Offer | análisis de oferta |
+| Landing | CRO y landing pages |
+| Tracking | corrección de medición |
+| Funnel | rediseño de flujo |
+| WhatsApp | análisis de conversión |
+| CRM | configuración, integración, desarrollo |
+| Automation | automatización |
+| Sales Process | identificación de pérdidas |
+| Data | mejora de medición |
+| Technology | construimos lo que falta |
 
-No prometemos resultados. Prometemos **diagnóstico y trabajo sobre el punto que
-realmente frena el crecimiento**.
+Combinación diferencial: **Marketing + Sales + Creative + Data + Technology + Execution**.
 
-## Tono
+## SHOW, DON'T CLAIM
 
-Claro · directo · comercial · técnico cuando aporta · orientado a negocio.
+Regla estructural, no estilística. Si un claim no se puede *mostrar*, no se
+publica.
 
-Estructura preferida del copy: **problema → dato → diagnóstico → acción → impacto.**
+| No decir | Mostrar |
+|---|---|
+| "Somos expertos" | criterio aplicado a un problema concreto |
+| "Somos data-driven" | el análisis y qué decisión salió de él |
+| "Tenemos metodología" | el proceso, paso por paso |
+| "Entendemos Growth" | la cadena Ads → Landing → Lead → Sale → Data |
+| "Construimos herramientas" | proyectos reales, cuando estén autorizados |
+
+## Performance Creative
+
+Pilar principal, **no** un sub-bullet de Paid Media.
+
+> Creative isn't decoration. It's performance.
+
+> No creamos anuncios porque sí. Creamos hipótesis, las probamos y dejamos que
+> los datos indiquen qué merece iteración.
+
+No usarlo todavía como claim propietario absoluto.
+
+### Creative Performance System
+
+Nombre **provisional interno**. No se vende como metodología secreta ni marca
+registrada. Se muestra el proceso:
+
+```
+Research → Customer Insight → Message → Concept → Hook → Creative
+→ Test → Data → Winner/Loser → Iteration → Scale
+```
+
+Siempre conectado a `Ad → Landing → Lead → Sale`.
+
+Vocabulario analítico permitido (como lenguaje, nunca como cifra inventada):
+Hook performance · CTR · CPC · CPM · Landing Page Views · CVR · Leads · CPL ·
+Lead Quality · CPA · CAC · Revenue · ROAS.
+
+### Testing
+
+No se presenta como "fondo rojo vs fondo azul". Se prioriza:
+
+Concept A vs B · Hook A vs B · Problem vs Benefit · Founder vs UGC ·
+Demonstration vs Testimonial · Education vs Direct Response · Static vs Reel ·
+Offer A vs B.
+
+Principio: **primero buscamos señales, después iteramos sobre los ganadores.**
+
+### Cross-format iteration
+
+Con un insight ganador no se reinicia desde cero:
+
+```
+Reel → Static → Carousel → UGC → Testimonial → Graphic → New Hook → New Version
+```
+
+## Voz
+
+Segura · directa · sofisticada · simple · comercial · orientada a performance ·
+técnica cuando aporta · comprensible para un empresario.
 
 ### Prohibido
 
-`revolucionamos` · `potenciamos` · `transformación digital` · `soluciones 360` ·
-`innovación disruptiva` · `llevamos tu negocio al siguiente nivel` ·
-`somos apasionados` · `te acompañamos en tu viaje` · `partner estratégico` ·
-`sinergia` · `ecosistema digital`
+`potenciamos tu negocio` · `llevamos tu negocio al siguiente nivel` ·
+`soluciones 360` · `somos apasionados` · `resultados extraordinarios` ·
+`innovación disruptiva` · `transformación digital` · `revolucionamos` ·
+`ecosistema` como palabra vacía · humo de gurú · promesas mágicas.
 
-### Verbos permitidos para hallazgos
+### Verbos para hallazgos
 
-`identificamos` · `detectamos` · `analizamos` · `recomendamos` · `propusimos` ·
-`auditamos`
+`analizamos` · `identificamos` · `detectamos` · `recomendamos` · `propusimos`
 
 ### Verbos PROHIBIDOS sobre datos auditados
 
-`mejoramos` · `aumentamos` · `ahorramos` · `generamos` · `logramos` · `escalamos`
+`generamos` · `ahorramos` · `aumentamos` · `mejoramos` · `escalamos`
 
-Motivo: los datos de Extragas provienen de una **cuenta auditada**, no de
-resultados producidos por digitAI Motor. Ver [`SEO.md`](SEO.md) y la sección
-Veracidad más abajo.
+Los datos del caso energético provienen de una **cuenta auditada**, no de
+resultados producidos por digitAI Motor.
+
+## Credibilidad
+
+**Nunca inventar:** ROAS · revenue · clientes · logos · reviews · testimonios ·
+casos · conversiones generadas · porcentajes · employees · team · partners ·
+certificaciones · budgets managed · años de experiencia en Paid Media.
+
+**Sí podemos mostrar:** auditorías · proyectos reales · aplicaciones ·
+dashboards · herramientas · CRM · automatizaciones · procesos · metodología ·
+experiencia comercial · análisis.
+
+## Precios
+
+**Regla absoluta: la web no publica pricing.** Ni tarifas, ni USD, ni "desde",
+ni paquetes, ni retainers, ni hourly rate, ni rangos, ni precios orientativos.
+No se reutilizan los USD 350 de la V1.
+
+> Primero diagnosticamos. Después cotizamos.
+
+La escalera comercial (Diagnostic → Creative Performance Sprint →
+Implementation → Paid Media Management → Growth Partner) es **interna**. No
+necesita aparecer en la web.
 
 ## Color
 
-Ver tokens completos en `src/styles/tokens.css`.
+Tokens en `src/styles/tokens.css`.
 
 | Rol | Token | Valor |
 |---|---|---|
@@ -73,66 +176,55 @@ Ver tokens completos en `src/styles/tokens.css`.
 | Superficie hover | `--surface-hover` | `#151D29` |
 | Borde | `--border` | `#1C2735` |
 | Borde activo | `--border-active` | `#2C4057` |
+| Borde de control | `--border-input` | `#4E6078` |
 | Texto primario | `--text-primary` | `#F5F7FA` |
 | Texto secundario | `--text-secondary` | `#9CA9BA` |
-| Texto muted | `--text-muted` | `#657386` |
+| Texto muted | `--text-muted` | `#74839A` |
 | Acento | `--accent` | `#2388FF` |
-| Acento hover | `--accent-hover` | `#459BFF` |
-| Acento soft | `--accent-soft` | `rgba(35,136,255,.12)` |
 | Positivo | `--positive` | `#36D399` |
 | Warning | `--warning` | `#F6C85F` |
 | Danger | `--danger` | `#EF6461` |
 
-**Regla del verde:** `--positive` se usa SOLO para resultados positivos,
-indicadores, checks y mejoras. Nunca como color decorativo dominante.
+`--text-muted` se promovió de `#657386` a `#74839A`: el original medía 4.23:1
+y no alcanzaba AA para texto chico. `--border-input` existe porque `--border`
+(1.33:1) y `--border-active` (1.90:1) no llegan al 3:1 que pide WCAG 1.4.11
+para límites de controles.
 
-**Contraste:** toda combinación texto/fondo debe cumplir WCAG 2.1 AA
-(4.5:1 texto normal, 3:1 texto grande ≥24px o ≥19px bold).
+**Regla del verde:** `--positive` solo para resultados positivos, indicadores,
+checks y mejoras. Nunca decorativo.
 
 ## Tipografía
 
-- **Headings:** Manrope (600 / 700 / 800)
-- **Body:** Inter (400 / 500 / 600)
-- Self-hosted, subset latin + latin-ext, `font-display: swap`.
-- Máximo 2 familias. Preload solo del peso crítico del H1.
+Manrope (headings, 400–800) + Inter (body, 400–600). Variables, self-hosted,
+subset latin + latin-ext, `font-display: swap`. 73 KB en critical path.
 
 ## Estética
 
-**Referencia conceptual:** Linear · Vercel · Stripe · Ramp · Mercury · Raycast.
+Referencia conceptual: Linear · Vercel · Stripe · Ramp · Mercury · Raycast.
+Interpretar precisión, data, performance, tecnología, negocio.
 
-No copiar. Interpretar: precisión, data, SaaS, velocidad, claridad,
-tecnología premium.
+Debe sentirse: **precision · data · performance · technology · business**.
 
-### Conservamos del ADN V1
-- Dark UI
-- Azul digitAI
-- Sensación tecnológica
+Evitar: template SaaS genérico · template de agencia · crypto · neón ·
+cyberpunk · AI gimmicks · robots · Matrix · stock photos · dashboards falsos ·
+15 cards idénticas.
 
-### Eliminamos de la V1
-- Cyberpunk / neón exagerado
-- Circuitos decorativos (`circuit-bg`, `circuit-pattern.png`, `circuit-node.png`)
-- Speed lines / metáfora de motor y tacómetro
-- Chrome gradient text
-- Glow blobs de 750px
-- Text-shadow neón sobre texto
+Usar: negative space · diagramas · flows · líneas · data labels · jerarquía
+editorial · microinteracciones.
+
+Performance Creative debe tener lenguaje visual propio **dentro** del mismo
+design system.
 
 ## Logo
 
-Se conserva `assets/logo.svg` sin rediseño. Naming visual consistente:
-**digitAI motor** (d minúscula, AI mayúscula, motor minúscula).
+Se conserva `assets/logo.svg` sin rediseño: glifo casi cuadrado (90×84) más
+wordmark textual "digitAI motor" al lado. Pendiente: su gradiente
+teal→navy (`#38b8c4`→`#1b4285`) no conversa con el accent `#2388FF`.
 
-Pendiente de revisión: contraste sobre `--bg-primary`, versión responsive,
-favicon en formato adicional a SVG.
+## Geo
 
-## Veracidad — regla dura
+Visible: `Cañuelas · Buenos Aires · Argentina` + `Remote across LATAM`.
 
-Prohibido publicar: clientes, logos, testimonios, ratings, reviews, ROAS,
-revenue, leads generados, conversiones generadas, ahorros, tiempos, casos,
-certificaciones, awards, partnerships, años de experiencia en Paid Media,
-equipo ficticio, oficinas, estadísticas.
-
-Todo claim debe ser **verificable, contextualizado y defendible**.
-Si no hay evidencia, no se publica.
-
-En lugar de social proof: **EVIDENCE** — casos, métricas, análisis, screenshots,
-herramientas, sistemas construidos.
+El copy institucional **no** se limita a Argentina. Mercados futuros: LATAM,
+México, Chile, Colombia, España, US Hispanic, agencias internacionales.
+No crear páginas geo spam.
