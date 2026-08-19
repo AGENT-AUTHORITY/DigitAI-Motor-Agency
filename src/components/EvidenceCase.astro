@@ -15,7 +15,14 @@ export interface Props {
   title: string;
   context: string;
   period: string;
-  metrics: { value: string; label: string; status?: 'neutral' | 'positive' | 'warning' | 'attention' }[];
+  metrics: {
+    value: string;
+    label: string;
+    /** Aclaracion bajo el label. Obligatoria cuando el numero podria leerse
+     *  como un resultado producido por digitAI Motor. */
+    context?: string;
+    status?: 'neutral' | 'positive' | 'warning' | 'attention';
+  }[];
   findingLead: string;
   findingDetail: string;
   secondary: { label: string; value: string }[];
@@ -52,7 +59,11 @@ const {
   </div>
 
   <div class="evidence__metrics">
-    {metrics.map((m) => <MetricCard value={m.value} label={m.label} status={m.status} />)}
+    {
+      metrics.map((m) => (
+        <MetricCard value={m.value} label={m.label} context={m.context} status={m.status} />
+      ))
+    }
   </div>
 
   <p class="source-note evidence__source">{sourceNote}</p>

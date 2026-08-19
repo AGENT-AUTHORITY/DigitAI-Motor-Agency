@@ -233,8 +233,11 @@ const serviceSchema = {
       <CreativeFlow />
 
       <div class="creative-section__cta">
+        {/* Mientras /performance-creative/ no exista, el CTA describe la
+            accion real (pedir un analisis) y no una navegacion que no ocurre.
+            Vuelve a "Explorar Performance Creative" en FASE 4/5. Ver ROUTES.md */}
         <Button
-          label="Explorar Performance Creative"
+          label="Solicitar análisis creativo"
           href={ANCHORS.growthAudit}
           variant="secondary"
           arrow
@@ -276,10 +279,14 @@ const serviceSchema = {
         metrics={[
           { value: '46.4K+', label: 'Impressions analyzed' },
           { value: '1.272', label: 'Clicks / interactions' },
-          { value: '59', label: 'Conversions registered in analyzed account data' },
+          {
+            value: '59',
+            label: 'Conversiones registradas',
+            context: 'en la cuenta auditada',
+          },
           { value: 'ARS 198K', label: 'Spend analyzed' },
         ]}
-        sourceNote="Datos provenientes de una cuenta auditada. No son resultados producidos por digitAI Motor."
+        sourceNote="Datos provenientes de una cuenta auditada. Valor exacto registrado en el período: 58,97 conversiones. No son resultados producidos por digitAI Motor."
         findingLead="129 términos de búsqueda acumulaban inversión sin registrar conversiones."
         findingDetail="ARS 45.918 semanales — aproximadamente 23% del presupuesto semanal analizado."
         narrative="El objetivo no era celebrar volumen. Era encontrar dónde el presupuesto dejaba de generar señal útil."

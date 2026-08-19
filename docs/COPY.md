@@ -100,8 +100,11 @@ Lenguaje de medición: CTR, CPC, CVR, CPA, Lead Quality.
 
 **Sin métricas inventadas.** Las siglas son vocabulario analítico, no cifras.
 
-**CTA:** `Explorar Performance Creative`. La página aún no existe, así que
-apunta a un ancla interna. Ver ROUTES.md.
+**CTA provisional:** `Solicitar análisis creativo` hacia `#growth-audit`.
+
+`Explorar Performance Creative` queda reservado para cuando exista
+`/performance-creative/` (FASE 4/5): un CTA que dice "explorar" tiene que
+navegar a algún lado. Ver ROUTES.md.
 
 ---
 
@@ -142,8 +145,12 @@ Dashboards, Internal Tools, APIs, CRMs, Automation, AI Workflows.
 |---|---|
 | 46.4K+ | Impressions analyzed |
 | 1,272 | Clicks / interactions |
-| 59 | Conversions registered in analyzed account data |
+| 59 | Conversiones registradas / en la cuenta auditada |
 | ARS 198K | Spend analyzed |
+
+⚠️ El 59 es redondeo. El valor exacto (58,97) se conserva en la nota de
+origen del caso. La redacción nunca puede sugerir que digitAI Motor produjo
+esas conversiones.
 
 **Narrativa:** 129 términos de búsqueda acumulaban inversión sin registrar
 conversiones. ARS 45.918 semanales, aproximadamente 23% del presupuesto

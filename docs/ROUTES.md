@@ -54,8 +54,16 @@ La home ya existe pero las service pages no. **Ningún CTA puede apuntar a un
 | Solicitar diagnóstico de crecimiento | `#growth-audit` | `/growth-audit/` |
 | Tengo un problema puntual | `#quick-fix` | `/quick-fix/` |
 | Contame qué está fallando | `#growth-audit` | `/quick-fix/` |
-| Explorar Performance Creative | `#performance-creative` | `/performance-creative/` |
+| Solicitar análisis creativo | `#growth-audit` | ver nota abajo |
 | Ver perfil en LinkedIn | URL externa real | igual |
+
+**Nota sobre el CTA de Performance Creative.** El label provisional es
+`Solicitar análisis creativo` y no `Explorar Performance Creative`: "explorar"
+promete una navegación a una página dedicada que todavía no existe, y llevar ese
+label a un ancla del formulario es inconsistente. Cuando
+`/performance-creative/` se publique en FASE 4/5, el CTA vuelve a
+`Explorar Performance Creative` apuntando a esa ruta, y el pedido de análisis
+pasa a ser el CTA secundario de esa página.
 
 Los enlaces del Header y el Footer que apuntan a rutas todavía inexistentes
 están marcados en `src/data/navigation.ts` con `pending: true` y se renderizan
