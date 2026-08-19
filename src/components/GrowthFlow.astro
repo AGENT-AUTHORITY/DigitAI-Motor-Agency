@@ -1,0 +1,144 @@
+---
+/**
+ * GrowthFlow — "Where growth breaks".
+ *
+ * Cadena horizontal en desktop, vertical en mobile. Cada nodo lleva su
+ * perdida tipica en TEXTO, no dentro de un SVG: la informacion no puede
+ * existir solo como grafico (WCAG 1.1.1).
+ *
+ * Orientacion distinta a la del visual del hero a proposito: alli es un riel
+ * vertical con el ciclo, aca es la cadena con el detalle de cada fuga. Mismo
+ * modelo mental, distinta densidad de informacion.
+ */
+export interface FlowNode {
+  label: string;
+  loss: string;
+}
+
+export interface Props {
+  nodes: FlowNode[];
+}
+
+const { nodes } = Astro.props;
+---
+
+<ol class="flow" role="list">
+  {
+    nodes.map((node, i) => (
+      <li class="flow__node" data-reveal data-reveal-delay={String((i % 3) + 1)}>
+        <div class="flow__marker" aria-hidden="true">
+          <span class="flow__dot" />
+          {i < nodes.length - 1 && <span class="flow__line" />}
+        </div>
+        <p class="flow__label">{node.label}</p>
+        <p class="flow__loss">{node.loss}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .flow {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: node;
+  }
+
+  .flow__node {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    grid-template-areas:
+      'marker label'
+      '.      loss';
+    column-gap: var(--space-sm);
+    padding-block: var(--space-xs) var(--space-md);
+  }
+
+  .flow__marker {
+    grid-area: marker;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding-top: 0.3125rem;
+  }
+
+  .flow__dot {
+    inline-size: 9px;
+    block-size: 9px;
+    border-radius: var(--radius-full);
+    background: var(--bg-primary);
+    border: 2px solid var(--accent);
+    z-index: 1;
+  }
+
+  .flow__line {
+    position: absolute;
+    inset-block-start: 1rem;
+    inline-size: 1px;
+    block-size: calc(100% + var(--space-md));
+    background: linear-gradient(var(--border-active), var(--border));
+  }
+
+  .flow__label {
+    grid-area: label;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-primary);
+  }
+
+  .flow__loss {
+    grid-area: loss;
+    margin-top: var(--space-3xs);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-muted);
+  }
+
+  /* En desktop la cadena se acuesta: 7 columnas, riel horizontal.
+     Los nodos son 7, asi que a partir de 64rem entran comodos. */
+  @media (min-width: 64rem) {
+    .flow {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      column-gap: var(--space-sm);
+    }
+
+    .flow__node {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'marker'
+        'label'
+        'loss';
+      padding-block: 0 0;
+    }
+
+    .flow__marker {
+      justify-content: flex-start;
+      padding-top: 0;
+      padding-bottom: var(--space-sm);
+    }
+
+    .flow__line {
+      inset-block-start: 4px;
+      inset-inline-start: 0.75rem;
+      inline-size: calc(100% + var(--space-sm));
+      block-size: 1px;
+      background: linear-gradient(90deg, var(--border-active), var(--border));
+    }
+
+    .flow__label {
+      font-size: var(--text-xs);
+    }
+
+    .flow__loss {
+      margin-top: var(--space-2xs);
+      font-size: var(--text-xs);
+      line-height: var(--leading-normal);
+    }
+  }
+</style>

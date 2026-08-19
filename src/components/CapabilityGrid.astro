@@ -1,0 +1,123 @@
+---
+/**
+ * CapabilityGrid — capacidades compactas.
+ *
+ * Performance Creative no aparece aca: ya tuvo seccion propia. Repetirlo
+ * seria exactamente lo que docs/COPY.md prohibe.
+ */
+export interface Capability {
+  title: string;
+  quote: string;
+  items: string[];
+}
+
+export interface Props {
+  capabilities: Capability[];
+}
+
+const { capabilities } = Astro.props;
+---
+
+<div class="caps">
+  {
+    capabilities.map((cap, i) => (
+      <article class="cap" data-reveal data-reveal-delay={String((i % 3) + 1)}>
+        <h3 class="cap__title">{cap.title}</h3>
+        <p class="cap__quote">{cap.quote}</p>
+        <ul class="cap__items" role="list">
+          {cap.items.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .caps {
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .cap {
+    display: grid;
+    gap: var(--space-2xs);
+    padding: var(--space-md) 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .cap__title {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* La frase es lo que se lee primero: escala mayor que la lista de items.
+     Las capacidades son el respaldo, no el titular. */
+  .cap__quote {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+    max-width: 30ch;
+  }
+
+  .cap__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs) var(--space-2xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  .cap__items li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  .cap__items li:not(:last-child)::after {
+    content: '·';
+    opacity: 0.6;
+  }
+
+  @media (min-width: 48rem) {
+    .caps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--space-xl);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .cap {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      align-items: start;
+      column-gap: var(--space-lg);
+      padding-block: var(--space-lg);
+    }
+
+    .caps {
+      grid-template-columns: 1fr;
+      column-gap: 0;
+    }
+
+    .cap__title {
+      grid-row: span 2;
+      padding-top: 0.35rem;
+    }
+
+    .cap__quote {
+      font-size: var(--text-xl);
+      max-width: 38ch;
+    }
+  }
+</style>

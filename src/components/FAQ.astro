@@ -1,0 +1,123 @@
+---
+/**
+ * FAQ — preguntas visibles + FAQPage schema.
+ *
+ * El JSON-LD se genera del MISMO array que renderiza el markup, asi que no
+ * puede desincronizarse del contenido visible. Google penaliza como marcado
+ * enganoso el schema que declara contenido que el usuario no ve.
+ *
+ * <details>/<summary> nativo: accesible por teclado sin una linea de JS.
+ */
+export interface QA {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  items: QA[];
+}
+
+const { items } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+---
+
+<div class="faq">
+  {
+    items.map((item) => (
+      <details class="faq__item">
+        <summary class="faq__question">
+          <span>{item.question}</span>
+          <svg
+            class="faq__icon"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M8 3v10M3 8h10"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+            />
+          </svg>
+        </summary>
+        <p class="faq__answer">{item.answer}</p>
+      </details>
+    ))
+  }
+</div>
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+<style>
+  .faq {
+    display: grid;
+    border-top: 1px solid var(--border);
+  }
+
+  .faq__item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding-block: var(--space-md);
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+    cursor: pointer;
+    list-style: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__question:hover {
+    color: var(--accent);
+  }
+
+  .faq__question:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+    border-radius: var(--radius-xs);
+  }
+
+  .faq__icon {
+    flex: none;
+    color: var(--text-muted);
+    transition: transform var(--duration-normal) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .faq__item[open] .faq__icon {
+    transform: rotate(45deg);
+    color: var(--accent);
+  }
+
+  .faq__answer {
+    padding-bottom: var(--space-md);
+    max-width: 60ch;
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+</style>

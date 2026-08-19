@@ -1,135 +1,541 @@
 ---
-/**
- * FASE 2 — checkpoint del design system.
- *
- * NO es la homepage comercial: eso es FASE 3. Esta pagina existe solo para
- * revisar cada componente aislado en el navegador. Va noindex y se reemplaza
- * por completo en la proxima fase.
- */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import ProofBar from '../components/ProofBar.astro';
-import ServiceCard from '../components/ServiceCard.astro';
-import CTASection from '../components/CTASection.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
+import HeroSystem from '../components/HeroSystem.astro';
+import GrowthFlow from '../components/GrowthFlow.astro';
+import ProcessFlow from '../components/ProcessFlow.astro';
+import CreativeFlow from '../components/CreativeFlow.astro';
+import CapabilityGrid from '../components/CapabilityGrid.astro';
+import EvidenceCase from '../components/EvidenceCase.astro';
+import QuickFixMatrix from '../components/QuickFixMatrix.astro';
+import FAQ from '../components/FAQ.astro';
+import ContactIntent from '../components/ContactIntent.astro';
 import Button from '../components/Button.astro';
+import { ANCHORS, LINKEDIN_URL, SITE } from '../data/navigation';
 
-// Datos reales de docs/COPY.md, no lorem ipsum: si el sistema no aguanta el
-// copy definitivo, mejor descubrirlo ahora y no en FASE 3.
-const metrics = [
-  { value: '46.4K+', label: 'Impresiones analizadas' },
-  { value: '59', label: 'Conversiones en account data auditada' },
-  { value: '23%', label: 'Spend improductivo identificado', status: 'attention' as const },
-  { value: '44K+', label: 'Impresiones orgánicas generadas', status: 'positive' as const },
+// Todo el copy sale de docs/COPY.md. Ninguna cifra fuera de docs/COPY.md.
+const site = Astro.site ?? new URL('https://www.digitaimotor.lat');
+
+const growthNodes = [
+  { label: 'TRAFFIC', loss: 'Tráfico que no debería llegar' },
+  { label: 'CREATIVE', loss: 'Mensaje que no conecta' },
+  { label: 'LANDING', loss: 'La intención se pierde en la página' },
+  { label: 'LEAD', loss: 'Contactos que no califican' },
+  { label: 'SALES', loss: 'Seguimiento lento o inexistente' },
+  { label: 'REVENUE', loss: 'No se sabe qué terminó vendiendo' },
+  { label: 'DATA', loss: 'Atribución rota' },
 ];
 
-const services = [
+const processSteps = [
   {
     number: '01',
-    title: 'Performance Marketing',
+    title: 'Research',
     description:
-      'No compramos tráfico por comprar tráfico. Buscamos intención y medimos qué ocurre después.',
-    items: ['Google Ads', 'Meta Ads', 'Campaign Audit', 'Budget Allocation'],
-    href: '/performance-marketing/',
-    cta: 'Ver Performance',
+      'Antes de tocar una campaña miramos el negocio completo y cómo se conecta con lo que se está comprando.',
+    detail: [
+      'Negocio', 'Mercado', 'Oferta', 'Cliente', 'Competencia',
+      'Ads', 'Creative', 'Landing', 'Funnel', 'Sales process',
+    ],
+  },
+  { number: '02', title: 'Diagnose', description: 'Encontrar el cuello de botella real, no el más visible.' },
+  { number: '03', title: 'Prioritize', description: 'Separar impacto potencial de trabajo cosmético.' },
+  { number: '04', title: 'Test', description: 'Convertir hipótesis en experimentos que se puedan leer.' },
+  { number: '05', title: 'Learn', description: 'Leer datos y señales, incluso cuando el resultado es negativo.' },
+  { number: '06', title: 'Improve', description: 'Iterar sobre aprendizajes, no sobre intuiciones.' },
+  { number: '07', title: 'Scale', description: 'Escalar únicamente aquello que ya demostró valor.' },
+];
+
+const capabilities = [
+  {
+    title: 'Paid Media',
+    quote: 'Compramos intención, no tráfico por comprar tráfico.',
+    items: ['Google Ads', 'Meta Ads', 'Paid Acquisition', 'Search', 'Remarketing', 'Campaign Audits'],
   },
   {
-    number: '02',
-    title: 'Conversion',
-    description: 'Más tráfico no arregla una experiencia que no convierte.',
-    items: ['CRO', 'Landing Pages', 'Forms', 'A/B Testing'],
-    href: '/landing-pages/',
-    cta: 'Mejorar conversión',
+    title: 'CRO & Conversion',
+    quote: 'Más tráfico no arregla una experiencia que no convierte.',
+    items: ['Landing Pages', 'Offers', 'Forms', 'WhatsApp', 'Mobile UX', 'Lead Flow'],
   },
   {
-    number: '03',
     title: 'Revenue Systems',
-    description:
-      'Un lead no es revenue. Conectamos adquisición con lo que ocurre después.',
-    items: ['CRM', 'Tracking', 'Attribution', 'Automation'],
-    href: '/crm-automation/',
-    cta: 'Conectar mis datos',
+    quote: 'Un lead no es revenue.',
+    items: ['Tracking', 'Analytics', 'CRM', 'Attribution', 'Follow-up', 'Automation'],
   },
   {
-    number: '04',
     title: 'Growth Engineering',
-    description:
-      'Cuando el problema no se arregla dentro del Ads Manager, construimos lo que falta.',
-    items: ['Internal Tools', 'Dashboards', 'APIs', 'Integrations'],
-    href: '/growth-engineering/',
-    cta: 'Ver Growth Engineering',
+    quote: 'Cuando el problema está fuera de Ads Manager, construimos lo que falta.',
+    items: ['Dashboards', 'Internal Tools', 'APIs', 'CRMs', 'Automation', 'AI Workflows'],
   },
 ];
+
+const quickFixItems = [
+  'Google Ads', 'Meta Ads', 'Meta Business', 'GA4', 'GTM', 'Pixel',
+  'Conversion Tracking', 'Landing', 'Forms', 'WhatsApp', 'CRM',
+  'Search Console', 'Technical SEO', 'Automation', 'API', 'Dashboard',
+];
+
+const faqs = [
+  {
+    question: '¿Trabajan solamente con empresas grandes?',
+    answer:
+      'No. Se puede empezar por un problema puntual, una auditoría, una implementación acotada o una relación continua como Growth Partner. El alcance lo define el cuello de botella, no el tamaño de la empresa.',
+  },
+  {
+    question: '¿Pueden revisar campañas que ya están activas?',
+    answer:
+      'Sí. Primero diagnóstico, después cambios. Tocar una cuenta activa sin entender qué está midiendo suele empeorar el resultado antes de mejorarlo.',
+  },
+  {
+    question: '¿Trabajan solamente con Google Ads y Meta Ads?',
+    answer:
+      'No. Paid Media es solo una parte del sistema. El rendimiento también se pierde en el mensaje, la landing, el seguimiento comercial y la medición.',
+  },
+  {
+    question: '¿También desarrollan landing pages, CRM o automatizaciones?',
+    answer:
+      'Sí, cuando el cuello de botella lo requiere. El desarrollo existe al servicio del crecimiento: no construimos software por construir software.',
+  },
+  {
+    question: '¿Trabajan fuera de Argentina?',
+    answer:
+      'Sí. El trabajo es remoto con toda LATAM y hay posibilidad de proyectos internacionales.',
+  },
+];
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'digitAI Motor',
+  alternateName: 'digitAI motor',
+  url: site.href,
+  logo: new URL('/assets/logo.svg', site).href,
+  description:
+    'Growth Partner. Paid Media, Performance Creative, CRO, tracking y sistemas comerciales conectados desde el tráfico hasta la venta.',
+  founder: { '@type': 'Person', name: 'Oscar Chinchilla', sameAs: LINKEDIN_URL },
+  sameAs: [LINKEDIN_URL],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: SITE.locality,
+    addressRegion: SITE.region,
+    addressCountry: 'AR',
+  },
+};
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'digitAI Motor',
+  url: site.href,
+  description:
+    'Diagnóstico y ejecución de crecimiento: Paid Media, Performance Creative, CRO, tracking, CRM y automatización.',
+  areaServed: [
+    { '@type': 'Country', name: 'Argentina' },
+    { '@type': 'Place', name: 'LATAM' },
+  ],
+  knowsAbout: [
+    'Performance Marketing', 'Google Ads', 'Meta Ads', 'Performance Creative',
+    'Conversion Rate Optimization', 'Web Analytics', 'Marketing Attribution',
+    'CRM', 'Marketing Automation',
+  ],
+};
 ---
 
 <BaseLayout
-  title="Design system — FASE 2 | digitAI Motor"
-  description="Checkpoint interno del design system. No es la homepage."
+  title="Growth Partner | Performance, Creative & CRO | digitAI Motor"
+  description="Paid Media, Performance Creative, CRO, tracking y automatización conectados desde el tráfico hasta la venta. Primero encontramos qué frena el crecimiento."
   noindex
+  schema={[organizationSchema, serviceSchema]}
 >
+  <!-- 01 · HERO -->
   <Hero
-    eyebrow="Performance · Conversion · Growth"
-    title="Convertimos adquisición digital en crecimiento medible."
-    subtitle="Google Ads, Meta Ads, CRO, analytics y sistemas comerciales conectados desde el clic hasta la venta."
-    supporting="Detectamos dónde se pierde rendimiento y trabajamos sobre el punto que realmente está frenando el crecimiento."
-    primaryCta={{ label: 'Analizar mi adquisición', href: '/contacto/' }}
-    secondaryCta={{ label: 'Tengo un problema puntual', href: '/quick-fix/' }}
+    eyebrow="Growth Partner · Performance · Creative"
+    title={[
+      'Encontramos qué está frenando tu crecimiento.',
+      'Después lo arreglamos.',
+    ]}
+    subtitle="Paid Media, Performance Creative, CRO, tracking y sistemas comerciales conectados desde el tráfico hasta la venta."
+    supporting="Ads are only one part of growth."
+    primaryCta={{
+      label: 'Solicitar diagnóstico de crecimiento',
+      href: ANCHORS.growthAudit,
+      trackingEvent: 'growth_audit_click',
+    }}
+    secondaryCta={{
+      label: 'Tengo un problema puntual',
+      href: ANCHORS.quickFix,
+      trackingEvent: 'quick_fix_click',
+    }}
     capabilities={[
       'Paid Media',
+      'Performance Creative',
       'CRO',
-      'Analytics',
+      'Tracking',
       'CRM',
-      'Automation',
       'Growth Engineering',
     ]}
-  />
+  >
+    <HeroSystem slot="media" />
+  </Hero>
 
-  <ProofBar
-    metrics={metrics}
-    eyebrow="Evidence"
-    note="Datos provenientes de análisis y proyectos documentados."
-  />
-
-  <section class="section">
+  <!-- 02 · WHERE GROWTH BREAKS -->
+  <section class="section section--alt" aria-labelledby="breaks-title">
     <div class="container">
       <div class="section-head">
-        <p class="eyebrow eyebrow--dot">Capabilities</p>
-        <h2>Cuatro frentes, un solo objetivo.</h2>
+        <p class="eyebrow eyebrow--dot">Where growth breaks</p>
+        <h2 id="breaks-title">Tu problema de crecimiento no siempre es un problema de Ads.</h2>
         <p class="section-head__lead">
-          El dinero puede perderse antes del clic, durante la conversión o
-          después de que entra el lead.
+          El rendimiento puede perderse en el tráfico, el mensaje, la landing,
+          el seguimiento comercial o la medición.
         </p>
       </div>
 
-      <div class="grid grid--2">
-        {services.map((service) => <ServiceCard {...service} />)}
-      </div>
-    </div>
-  </section>
+      <GrowthFlow nodes={growthNodes} />
 
-  <hr class="section-rule" />
-
-  <section class="section--sm">
-    <div class="container">
-      <p class="eyebrow eyebrow--muted" style="margin-bottom: var(--space-sm)">
-        Controles
+      <p class="closing-line">
+        Primero encontramos dónde se rompe. Después decidimos qué tocar.
       </p>
-      <Breadcrumbs items={[{ label: 'Servicios', href: '/performance-marketing/' }, { label: 'Google Ads' }]} />
-      <div style="display:flex;flex-wrap:wrap;gap:var(--space-xs);margin-top:var(--space-md)">
-        <Button label="Primario" href="/contacto/" arrow />
-        <Button label="Secundario" href="/quick-fix/" variant="secondary" />
-        <Button label="Ghost" href="/nosotros/" variant="ghost" />
-        <Button label="Pequeño" href="/contacto/" size="sm" />
-        <Button label="Grande" href="/contacto/" size="lg" arrow />
+    </div>
+  </section>
+
+  <!-- 03 · OUR GROWTH SYSTEM -->
+  <section class="section" aria-labelledby="system-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow eyebrow--dot">How we work</p>
+        <h2 id="system-title">
+          No empezamos optimizando.<br />Empezamos entendiendo.
+        </h2>
+      </div>
+
+      <ProcessFlow steps={processSteps} />
+    </div>
+  </section>
+
+  <!-- 04 · PERFORMANCE CREATIVE -->
+  <section
+    class="section creative-section"
+    id="performance-creative"
+    aria-labelledby="creative-title"
+  >
+    <div class="container">
+      <div class="section-head creative-section__head">
+        <p class="eyebrow eyebrow--dot">Performance Creative</p>
+        <p class="creative-section__kicker">Creative isn't decoration. It's performance.</p>
+        <h2 id="creative-title">
+          Tu próximo ganador puede estar escondido en los datos que ya tenés.
+        </h2>
+        <p class="section-head__lead">
+          Investigamos clientes, mensajes, conceptos, hooks y resultados para
+          convertir creatividad en hipótesis medibles.
+        </p>
+      </div>
+
+      <CreativeFlow />
+
+      <div class="creative-section__cta">
+        <Button
+          label="Explorar Performance Creative"
+          href={ANCHORS.growthAudit}
+          variant="secondary"
+          arrow
+          trackingEvent="performance_creative_view"
+          trackingContext="creative_section"
+        />
       </div>
     </div>
   </section>
 
-  <CTASection
-    eyebrow="Próximo paso"
-    title="Encontrá dónde se está perdiendo tu presupuesto antes de invertir más."
-    description="Revisamos campañas, tracking, landing, funnel, CRM y attribution."
-    primaryCta={{ label: 'Solicitar auditoría', href: '/auditoria-performance/' }}
-    secondaryCta={{ label: 'Contame qué está fallando', href: '/quick-fix/' }}
-  />
+  <!-- 05 · CAPABILITIES -->
+  <section class="section section--alt" id="capabilities" aria-labelledby="caps-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow eyebrow--dot">Capabilities</p>
+        <h2 id="caps-title">Dónde podemos intervenir.</h2>
+        <p class="section-head__lead">
+          No hace falta contratar todo. Hace falta saber cuál de estos frentes
+          está frenando el resultado.
+        </p>
+      </div>
+
+      <CapabilityGrid capabilities={capabilities} />
+    </div>
+  </section>
+
+  <!-- 06 · EVIDENCE -->
+  <section class="section" id="evidence" aria-labelledby="evidence-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow eyebrow--dot">Evidence, not claims</p>
+        <h2 id="evidence-title">Un análisis vale más cuando termina en una decisión.</h2>
+      </div>
+
+      <EvidenceCase
+        title="Performance Audit · Energy B2C/B2B"
+        context="Auditoría de adquisición digital sobre una cuenta activa."
+        period="16–22 julio 2026"
+        metrics={[
+          { value: '46.4K+', label: 'Impressions analyzed' },
+          { value: '1.272', label: 'Clicks / interactions' },
+          { value: '59', label: 'Conversions registered in analyzed account data' },
+          { value: 'ARS 198K', label: 'Spend analyzed' },
+        ]}
+        sourceNote="Datos provenientes de una cuenta auditada. No son resultados producidos por digitAI Motor."
+        findingLead="129 términos de búsqueda acumulaban inversión sin registrar conversiones."
+        findingDetail="ARS 45.918 semanales — aproximadamente 23% del presupuesto semanal analizado."
+        narrative="El objetivo no era celebrar volumen. Era encontrar dónde el presupuesto dejaba de generar señal útil."
+        secondaryTitle="Campaña Display adicional"
+        secondary={[
+          { label: 'Impressions', value: '34.433' },
+          { label: 'Clicks', value: '179' },
+          { label: 'CTR', value: '0,52%' },
+          { label: 'Spend', value: 'ARS 13.975' },
+          { label: 'Conversions', value: '0' },
+        ]}
+        recommended={[
+          'Negative keyword review',
+          'Budget allocation',
+          'Campaign structure review',
+          'Display evaluation',
+          'Landing / conversion review',
+        ]}
+        closing="Performance también consiste en saber qué dejar de pagar."
+      />
+    </div>
+  </section>
+
+  <!-- 07 · QUICK FIX -->
+  <section class="section section--alt" id="quick-fix" aria-labelledby="qf-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow eyebrow--dot">Quick Fix</p>
+        <h2 id="qf-title">No todo necesita un proyecto de tres meses.</h2>
+        <p class="section-head__lead">
+          Si existe un problema puntual frenando campañas, tracking, conversión
+          o sistemas comerciales, podemos entrar directamente ahí.
+        </p>
+      </div>
+
+      <QuickFixMatrix items={quickFixItems} />
+
+      <div class="qf-footer">
+        <Button
+          label="Contame qué está fallando"
+          href={ANCHORS.growthAudit}
+          arrow
+          trackingEvent="quick_fix_click"
+          trackingContext="quick_fix_section"
+        />
+        <p class="source-note">
+          También trabajamos sobre problemas puntuales y proyectos acotados.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 · BUSINESS PERSPECTIVE -->
+  <section class="section" aria-labelledby="founder-title">
+    <div class="container founder">
+      <div class="founder__text">
+        <p class="eyebrow eyebrow--dot">Business perspective</p>
+        <h2 id="founder-title" class="founder__title">Performance con criterio comercial.</h2>
+        <p class="founder__copy">
+          digitAI Motor fue creada por Oscar Chinchilla, con más de una década
+          de experiencia en ventas B2B, negociación, pipeline y gestión
+          comercial.
+        </p>
+        <p class="founder__copy">
+          Ese background define cómo analizamos Growth: una campaña no termina
+          cuando entra un lead. Queremos entender qué ocurrió después.
+        </p>
+        <div class="founder__cta">
+          <Button
+            label="Ver perfil en LinkedIn"
+            href={LINKEDIN_URL}
+            variant="ghost"
+            size="sm"
+            trackingEvent="linkedin_click"
+            trackingContext="founder"
+          />
+        </div>
+      </div>
+
+      <div class="founder__evidence">
+        <p class="founder__evidence-title">Organic B2B Distribution</p>
+        <dl class="founder__stats">
+          <div class="founder__stat">
+            <dt>Followers</dt>
+            <dd data-numeric>1.749</dd>
+          </div>
+          <div class="founder__stat">
+            <dt>Follower growth vs. previous 365 days</dt>
+            <dd data-numeric>+281%</dd>
+          </div>
+          <div class="founder__stat">
+            <dt>Reach outside existing network</dt>
+            <dd data-numeric>71%</dd>
+          </div>
+        </dl>
+        <p class="source-note">Datos de perfil personal de LinkedIn.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 · FAQ -->
+  <section class="section section--alt" aria-labelledby="faq-title">
+    <div class="container container--narrow">
+      <div class="section-head">
+        <p class="eyebrow eyebrow--dot">FAQ</p>
+        <h2 id="faq-title">Preguntas antes de empezar.</h2>
+      </div>
+
+      <FAQ items={faqs} />
+    </div>
+  </section>
+
+  <!-- 10 · FINAL CTA -->
+  <ContactIntent />
 </BaseLayout>
+
+<style>
+  /* Cierre de seccion: frase que resume, en escala de heading pero sin ser
+     un heading. No entra en la jerarquia de encabezados. */
+  .closing-line {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+    max-width: 34ch;
+  }
+
+  /* Performance Creative tiene lenguaje visual propio dentro del mismo
+     design system: fondo con halo lateral y un kicker en ingles que no
+     aparece en ninguna otra seccion. */
+  .creative-section {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .creative-section::before {
+    content: '';
+    position: absolute;
+    inset-block-start: -10%;
+    inset-inline-start: -12%;
+    inline-size: 38rem;
+    block-size: 38rem;
+    z-index: -1;
+    background: radial-gradient(circle, rgba(35, 136, 255, 0.1), transparent 62%);
+    pointer-events: none;
+  }
+
+  .creative-section__head {
+    max-width: 52rem;
+  }
+
+  .creative-section__kicker {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--accent);
+  }
+
+  .creative-section__cta {
+    margin-top: var(--space-lg);
+  }
+
+  .qf-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+  }
+
+  .founder {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .founder__title {
+    margin-block: var(--space-sm) var(--space-md);
+    font-size: var(--text-3xl);
+    max-width: 18ch;
+  }
+
+  .founder__copy {
+    max-width: 52ch;
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .founder__copy + .founder__copy {
+    margin-top: var(--space-sm);
+  }
+
+  .founder__cta {
+    margin-top: var(--space-md);
+    margin-inline-start: -0.75rem;
+  }
+
+  .founder__evidence {
+    padding: var(--space-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--highlight-top);
+  }
+
+  .founder__evidence-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .founder__stats {
+    display: grid;
+    gap: 0;
+    margin: var(--space-sm) 0;
+  }
+
+  .founder__stat {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding-block: var(--space-2xs);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .founder__stat dt {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    max-width: 22ch;
+  }
+
+  .founder__stat dd {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 64rem) {
+    .founder {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      column-gap: var(--space-2xl);
+    }
+  }
+</style>

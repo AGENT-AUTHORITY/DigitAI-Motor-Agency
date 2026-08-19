@@ -1,0 +1,212 @@
+---
+/**
+ * HeroSystem — visual del hero.
+ *
+ * Concepto: el sistema de crecimiento como infraestructura, no como embudo de
+ * PowerPoint. Riel vertical con los nodos, dos puntos de fuga marcados y un
+ * arco de retorno que cierra el ciclo.
+ *
+ * aria-hidden a proposito: toda la informacion que transmite esta escrita en
+ * texto en la seccion "Where growth breaks". El SVG no es la unica fuente.
+ *
+ * Cero imagenes, cero video, cero dependencias. Se oculta bajo 64rem: en
+ * mobile el hero tiene que dejar visibles H1, subheadline y CTA primario.
+ */
+const NODES = [
+  { label: 'TRAFFIC', leak: null },
+  { label: 'CREATIVE', leak: 'Mensaje que no conecta' },
+  { label: 'LANDING', leak: null },
+  { label: 'LEAD', leak: null },
+  { label: 'SALES', leak: 'Seguimiento lento' },
+  { label: 'REVENUE', leak: null },
+  { label: 'DATA', leak: null },
+];
+---
+
+<div class="hero-system" aria-hidden="true">
+  <div class="hero-system__panel">
+    <div class="hero-system__head">
+      <span class="hero-system__label">GROWTH SYSTEM</span>
+      <span class="hero-system__pulse"></span>
+    </div>
+
+    <ol class="hero-system__rail">
+      {
+        NODES.map((node, i) => (
+          <li class:list={['hero-node', node.leak && 'hero-node--leak']}>
+            <span class="hero-node__dot" />
+            <span class="hero-node__label">{node.label}</span>
+            {node.leak && <span class="hero-node__leak">{node.leak}</span>}
+            {i < NODES.length - 1 && <span class="hero-node__link" />}
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="hero-system__loop">
+      <svg width="100%" height="34" viewBox="0 0 200 34" fill="none" focusable="false">
+        <path
+          d="M188 2 v18 a10 10 0 0 1 -10 10 H22 a10 10 0 0 1 -10 -10 V12"
+          stroke="var(--accent-line)"
+          stroke-width="1.25"
+          stroke-dasharray="3 4"
+        />
+        <path
+          d="M8 17 l4 -6 l4 6"
+          stroke="var(--accent)"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span class="hero-system__loop-label">ITERATE</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hero-system {
+    display: none;
+  }
+
+  .hero-system__panel {
+    position: relative;
+    padding: var(--space-md) var(--space-md) var(--space-sm);
+    background: linear-gradient(
+      160deg,
+      var(--surface) 0%,
+      var(--bg-secondary) 100%
+    );
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--highlight-top), var(--shadow-lg);
+  }
+
+  .hero-system__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-system__label {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--text-muted);
+  }
+
+  /* Punto vivo. Unica animacion del hero, y se apaga con reduced-motion. */
+  .hero-system__pulse {
+    inline-size: 6px;
+    block-size: 6px;
+    border-radius: var(--radius-full);
+    background: var(--positive);
+    box-shadow: 0 0 0 0 rgba(54, 211, 153, 0.5);
+    animation: heroPulse 2.6s var(--ease-out) infinite;
+  }
+
+  @keyframes heroPulse {
+    0% { box-shadow: 0 0 0 0 rgba(54, 211, 153, 0.45); }
+    70% { box-shadow: 0 0 0 7px rgba(54, 211, 153, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(54, 211, 153, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-system__pulse { animation: none; }
+  }
+
+  .hero-system__rail {
+    list-style: none;
+    margin: 0;
+    padding: var(--space-sm) 0 0;
+  }
+
+  .hero-node {
+    position: relative;
+    display: grid;
+    grid-template-columns: 14px 1fr;
+    align-items: center;
+    column-gap: var(--space-2xs);
+    padding-block: 0.4375rem;
+  }
+
+  .hero-node__dot {
+    inline-size: 7px;
+    block-size: 7px;
+    margin-inline-start: 3px;
+    border-radius: var(--radius-full);
+    background: var(--border-active);
+    box-shadow: 0 0 0 3px var(--bg-secondary);
+    z-index: 1;
+  }
+
+  .hero-node--leak .hero-node__dot {
+    background: var(--warning);
+  }
+
+  /* Segmento de riel entre nodo y nodo */
+  .hero-node__link {
+    position: absolute;
+    inset-block-start: 60%;
+    inset-inline-start: 6px;
+    inline-size: 1px;
+    block-size: 100%;
+    background: var(--border);
+  }
+
+  .hero-node--leak .hero-node__link {
+    background: linear-gradient(var(--warning), var(--border));
+    opacity: 0.5;
+  }
+
+  .hero-node__label {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-secondary);
+  }
+
+  .hero-node--leak .hero-node__label {
+    color: var(--text-primary);
+  }
+
+  .hero-node__leak {
+    grid-column: 2;
+    font-size: var(--text-2xs);
+    letter-spacing: 0;
+    color: var(--warning);
+    opacity: 0.85;
+  }
+
+  .hero-system__loop {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding-top: var(--space-2xs);
+  }
+
+  .hero-system__loop svg {
+    flex: 1;
+  }
+
+  .hero-system__loop-label {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--accent);
+  }
+
+  @media (min-width: 64rem) {
+    .hero-system {
+      display: block;
+      inline-size: 100%;
+      max-inline-size: 20rem;
+      justify-self: end;
+    }
+  }
+</style>
