@@ -141,12 +141,21 @@ Dashboards, Internal Tools, APIs, CRMs, Automation, AI Workflows.
 
 > AVISO: nunca nombrar a Extragas públicamente. No implicar relación de agencia.
 
-| Valor | Label |
-|---|---|
-| 46.4K+ | Impressions analyzed |
-| 1,272 | Clicks / interactions |
-| 59 | Conversiones registradas / en la cuenta auditada |
-| ARS 198K | Spend analyzed |
+| Valor | Label | Contexto |
+|---|---|---|
+| 46,4K+ | Impresiones analizadas | — |
+| 1.272 | Clics / interacciones | — |
+| 59 | Conversiones registradas | en la cuenta auditada |
+| ARS 198,6K | Inversión analizada | ARS 198.622 exactos |
+
+Labels en español: la fila mezclaba tres labels en inglés con uno en español
+y se leía como un error. Los eyebrows y micro-labels siguen pudiendo ir en
+inglés, pero estos son contenido, no decoración.
+
+**Disclaimer obligatorio bajo la fila** (texto aprobado, no modificar):
+
+> Datos provenientes de una cuenta auditada. Valor exacto registrado en el
+> período: 58,97 conversiones. No son resultados producidos por digitAI Motor.
 
 ⚠️ El 59 es redondeo. El valor exacto (58,97) se conserva en la nota de
 origen del caso. La redacción nunca puede sugerir que digitAI Motor produjo

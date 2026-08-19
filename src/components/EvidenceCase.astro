@@ -274,8 +274,16 @@ const {
 
   @media (min-width: 40rem) {
     .evidence__metrics {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: var(--space-md);
+    }
+  }
+
+  /* 4 columnas a 64rem. Bajo ese ancho quedan 2, que a 40rem daba cards de
+     ~130px. El ajuste de tamano para valores largos lo maneja MetricCard con
+     un container query sobre el ancho real de la card. */
+  @media (min-width: 64rem) {
+    .evidence__metrics {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 

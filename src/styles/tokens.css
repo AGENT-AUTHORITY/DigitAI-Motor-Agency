@@ -71,9 +71,10 @@
      secundario fuera del fold. 3.5rem lo deja en 3 lineas con el hero
      completo visible. */
   --text-display: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem); /* 36-56 hero */
-  /* Medido a 1440: con 3.25rem el valor "ARS 198K" partia en dos lineas
-     dentro de su columna. 2.75rem entra en una sola. */
-  --text-metric: clamp(1.875rem, 1.5rem + 1.6vw, 2.75rem); /* 30-44 metricas */
+  /* Medido a 1440 sobre columnas de 267px: con 3.25rem partia "ARS 198K" y
+     con 2.75rem partia "ARS 198,6K". 2.375rem deja las cuatro metricas en
+     una sola linea sin perder jerarquia (2.7x sobre el label). */
+  --text-metric: clamp(1.75rem, 1.4rem + 1.5vw, 2.375rem); /* 28-38 metricas */
 
   --leading-tight: 1.06;
   --leading-snug: 1.22;

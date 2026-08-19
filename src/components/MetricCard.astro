@@ -16,6 +16,10 @@ export interface Props {
   index?: string;
 }
 
+// Un valor de 9+ caracteres ("ARS 198,6K") no entra en una columna angosta a
+// tamano completo. Se achica en vez de partirse en dos lineas.
+const isLong = (v: string) => v.length >= 9;
+
 const {
   value,
   label,
@@ -26,7 +30,7 @@ const {
 } = Astro.props;
 ---
 
-<div class:list={['metric', `metric--${status}`]} data-reveal>
+<div class:list={['metric', `metric--${status}`, isLong(value) && 'metric--long']} data-reveal>
   {index && <span class="metric__index" aria-hidden="true">{index}</span>}
   <p class="metric__value" data-numeric>{value}</p>
   <p class="metric__label">{label}</p>
@@ -36,6 +40,7 @@ const {
 
 <style>
   .metric {
+    container-type: inline-size;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -76,6 +81,30 @@ const {
     line-height: 1;
     letter-spacing: var(--tracking-display);
     color: var(--text-primary);
+  }
+
+  /* Solo bajo 40rem: arriba de ese ancho la columna alcanza y achicar
+     romperia la consistencia de la fila. */
+  /* En columnas angostas el padding lateral de 24px por lado se comia el 30%
+     de la card. La regla de acento arranca en el borde igual, asi que sacarlo
+     no descoloca nada. */
+  @media (max-width: 47.999rem) {
+    .metric {
+      padding-inline: 0;
+    }
+  }
+
+  /* Un valor largo ("ARS 198,6K") no entra a tamano completo bajo ~14rem de
+     card. Pasaba a 375 con 2 columnas y tambien a 1024 con 4 columnas: el
+     viewport no es el dato relevante, el ancho de la card si.
+
+     El umbral se mide contra el CONTENT box del contenedor, no el border box:
+     a 1440 la card mide 267px pero su content box es 219px. Por eso 13rem
+     (208px) y no 14rem, que disparaba de mas en desktop. */
+  @container (max-width: 13rem) {
+    .metric--long .metric__value {
+      font-size: calc(var(--text-metric) * 0.72);
+    }
   }
 
   /* El verde solo aparece cuando el dato es un resultado positivo.
