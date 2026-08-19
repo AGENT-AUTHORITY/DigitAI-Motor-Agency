@@ -1,0 +1,161 @@
+---
+/**
+ * ServiceCard — pilar de servicio.
+ *
+ * La card entera es clickeable via ::after sobre el <a> del titulo (link
+ * overlay). Asi hay un solo destino en el orden de tabulacion en vez de tres
+ * enlaces al mismo lugar, y el area de click sigue siendo toda la tarjeta.
+ */
+export interface Props {
+  number: string;
+  title: string;
+  description: string;
+  items: string[];
+  href: string;
+  cta: string;
+  trackingEvent?: string;
+}
+
+const { number, title, description, items, href, cta, trackingEvent } =
+  Astro.props;
+---
+
+<article class="service surface surface--interactive" data-reveal>
+  <span class="service__number" aria-hidden="true">{number}</span>
+
+  <h3 class="service__title">
+    <a
+      class="service__link"
+      href={href}
+      data-track={trackingEvent}
+      data-track-context={`service_${number}`}
+    >
+      {title}
+    </a>
+  </h3>
+
+  <p class="service__description">{description}</p>
+
+  <ul class="service__items" role="list">
+    {items.map((item) => <li>{item}</li>)}
+  </ul>
+
+  <p class="service__cta" aria-hidden="true">
+    {cta}
+    <svg
+      class="service__arrow"
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      focusable="false"
+    >
+      <path
+        d="M3 8h10M9 4l4 4-4 4"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </p>
+</article>
+
+<style>
+  .service {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding: var(--space-lg) var(--space-md) var(--space-md);
+    overflow: hidden;
+  }
+
+  /* Numeral fantasma en la esquina. Rompe la uniformidad de la grilla y da
+     jerarquia sin agregar peso visual. */
+  .service__number {
+    position: absolute;
+    inset-block-start: var(--space-sm);
+    inset-inline-end: var(--space-md);
+    font-family: var(--font-heading);
+    font-size: 3.25rem;
+    font-weight: var(--weight-extrabold);
+    line-height: 1;
+    letter-spacing: var(--tracking-display);
+    color: var(--text-primary);
+    opacity: 0.055;
+    pointer-events: none;
+    user-select: none;
+    transition: opacity var(--duration-normal) var(--ease-out),
+      color var(--duration-normal) var(--ease-out);
+  }
+
+  .service:hover .service__number {
+    opacity: 0.12;
+    color: var(--accent);
+  }
+
+  .service__title {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-snug);
+  }
+
+  .service__link {
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  /* Link overlay: expande el area clickeable a toda la card sin duplicar
+     enlaces. El z-index lo deja por encima del numeral. */
+  .service__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .service__description {
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .service__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs) var(--space-2xs);
+    list-style: none;
+    margin: var(--space-2xs) 0 0;
+    padding: 0;
+  }
+
+  .service__items li {
+    padding: 0.25rem 0.5rem;
+    font-size: var(--text-xs);
+    line-height: 1.35;
+    color: var(--text-muted-aa);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xs);
+  }
+
+  .service__cta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    margin-top: auto;
+    padding-top: var(--space-md);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-bold);
+    color: var(--accent);
+  }
+
+  .service__arrow {
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .service:hover .service__arrow {
+    transform: translateX(3px);
+  }
+</style>

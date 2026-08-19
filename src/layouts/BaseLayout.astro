@@ -1,0 +1,166 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import '../styles/components.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Ruta canonica con trailing slash. Por defecto, la ruta actual. */
+  canonicalPath?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  /** Objetos JSON-LD ya construidos. Se serializan tal cual. */
+  schema?: Record<string, unknown>[];
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description,
+  canonicalPath,
+  ogImage,
+  ogType = 'website',
+  noindex = false,
+  schema = [],
+  bodyClass,
+} = Astro.props;
+
+// Canonico derivado de `site` en astro.config.mjs. Nunca hardcodeado:
+// la V1 declaraba no-www en las 6 paginas mientras produccion redirige a www.
+const site = Astro.site ?? new URL('https://www.digitaimotor.lat');
+const path = canonicalPath ?? Astro.url.pathname;
+const canonical = new URL(path, site).href;
+// Sin imagen real no se emite og:image. La V1 declaraba /assets/og-image.png
+// y ese archivo devuelve 404 en produccion: cada share salia sin preview.
+// Repetir el tag apuntando a un archivo inexistente seria el mismo bug.
+const ogImageUrl = ogImage ? new URL(ogImage, site).href : null;
+
+// Sin ID configurado, sin script inyectado. Ver docs/ANALYTICS.md.
+// No hay valores por defecto ni placeholders: si falta, no se emite nada.
+const GA4_ID = import.meta.env.PUBLIC_GA4_ID?.trim() || '';
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex
+      ? <meta name="robots" content="noindex, nofollow" />
+      : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />}
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImageUrl && (
+      <>
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+      </>
+    )}
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:site_name" content="digitAI motor" />
+
+    <meta name="twitter:card" content={ogImageUrl ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+    <meta name="theme-color" content="#05070B" />
+
+    <!-- Solo el peso critico del H1. Preload de mas compite con el LCP. -->
+    <link
+      rel="preload"
+      href="/fonts/manrope-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    {schema.map((entry) => (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(entry)} />
+    ))}
+
+    <!-- Marca html.js antes del primer paint: sin esto los elementos con
+         [data-reveal] parpadearian visibles antes de ocultarse (FOUC). -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
+    {GA4_ID && (
+      <script
+        is:inline
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}
+      />
+    )}
+    {GA4_ID && (
+      <script is:inline define:vars={{ GA4_ID }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', GA4_ID);
+      </script>
+    )}
+  </head>
+
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Reveal en scroll sin libreria. GSAP + ScrollTrigger de la V1 eran
+      // ~70 KB de CDN para esto mismo, y dejaron contenido invisible dos
+      // veces (commits 8e7c262 y 1306f34).
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const targets = document.querySelectorAll('[data-reveal]');
+
+      if (reduced.matches || !('IntersectionObserver' in window)) {
+        targets.forEach((el) => el.setAttribute('data-reveal', 'in'));
+      } else {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.setAttribute('data-reveal', 'in');
+              observer.unobserve(entry.target);
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
+        );
+        targets.forEach((el) => observer.observe(el));
+
+        // Red de seguridad: nada puede quedar invisible de forma permanente.
+        // Si por cualquier motivo el observer no disparo (scroll programatico
+        // que saltea posiciones, captura full-page, viewport raro), a los 3s
+        // se revela todo lo que siga oculto. La V1 envio a produccion
+        // contenido invisible dos veces por no tener esto.
+        window.setTimeout(() => {
+          targets.forEach((el) => el.setAttribute('data-reveal', 'in'));
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>

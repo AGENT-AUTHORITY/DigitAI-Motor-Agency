@@ -1,0 +1,328 @@
+---
+import { MAIN_NAV, NAV_CTA, isActivePath } from '../data/navigation';
+import Button from './Button.astro';
+
+const pathname = Astro.url.pathname;
+---
+
+<header class="site-header" data-header>
+  <div class="container site-header__inner">
+    <a class="site-header__brand" href="/" aria-label="digitAI motor — inicio">
+      <img
+        src="/assets/logo.svg"
+        alt=""
+        width="90"
+        height="84"
+        aria-hidden="true"
+      />
+      <span class="site-header__wordmark">digit<em>AI</em> motor</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Navegación principal">
+      <ul class="site-nav__list" role="list">
+        {
+          MAIN_NAV.map((link) => (
+            <li>
+              <a
+                class="site-nav__link"
+                href={link.href}
+                aria-current={isActivePath(link.href, pathname) ? 'page' : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <Button
+        label={NAV_CTA.label}
+        href={NAV_CTA.href}
+        size="sm"
+        trackingEvent="click_primary_cta"
+        trackingContext="header"
+      />
+      <button
+        class="site-header__toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        data-nav-toggle
+      >
+        <span class="visually-hidden">Abrir menú</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-nav" id="mobile-nav" hidden data-mobile-nav>
+    <ul class="mobile-nav__list" role="list">
+      {
+        MAIN_NAV.map((link) => (
+          <li>
+            <a
+              class="mobile-nav__link"
+              href={link.href}
+              aria-current={isActivePath(link.href, pathname) ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <Button label={NAV_CTA.label} href={NAV_CTA.href} block arrow />
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    background: color-mix(in srgb, var(--bg-primary) 82%, transparent);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--duration-normal) var(--ease-out),
+      background-color var(--duration-normal) var(--ease-out);
+  }
+
+  /* backdrop-filter solo donde el navegador lo soporta: sin el, el fallback
+     es un fondo casi opaco, que sigue siendo legible. */
+  @supports (backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px)) {
+    .site-header {
+      background: color-mix(in srgb, var(--bg-primary) 68%, transparent);
+      -webkit-backdrop-filter: blur(14px) saturate(150%);
+      backdrop-filter: blur(14px) saturate(150%);
+    }
+  }
+
+  /* El borde aparece recien al scrollear. Header flotando limpio arriba,
+     anclado con linea cuando hay contenido detras. */
+  .site-header[data-scrolled] {
+    border-bottom-color: var(--border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    min-block-size: var(--header-height);
+  }
+
+  .site-header__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    flex: none;
+    text-decoration: none;
+    border-radius: var(--radius-xs);
+  }
+
+  /* El logo es un glifo casi cuadrado (90x84), no un wordmark. El nombre va
+     al lado como texto: asi la marca se lee, escala y queda seleccionable. */
+  .site-header__brand img {
+    block-size: 28px;
+    inline-size: auto;
+  }
+
+  .site-header__wordmark {
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  /* digitAI motor: la I y la A van en mayuscula dentro del nombre. El em no
+     aporta enfasis semantico real, solo el corte visual de la marca. */
+  .site-header__wordmark em {
+    font-style: normal;
+  }
+
+  .site-nav {
+    display: none;
+  }
+
+  .site-nav__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-nav__link {
+    position: relative;
+    display: inline-block;
+    padding: var(--space-2xs) var(--space-xs);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-xs);
+    transition: color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .site-nav__link:hover {
+    color: var(--text-primary);
+    background: var(--accent-soft);
+  }
+
+  /* La pagina activa se marca con color y con una linea inferior corta:
+     dos senales, no solo color (WCAG 1.4.1 — no depender del color). */
+  .site-nav__link[aria-current='page'] {
+    color: var(--text-primary);
+  }
+
+  .site-nav__link[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    inset-inline: var(--space-xs);
+    bottom: 2px;
+    block-size: 2px;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    flex: none;
+  }
+
+  .site-header__actions :global(.btn) {
+    display: none;
+  }
+
+  .site-header__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    transition: border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .site-header__toggle:hover {
+    border-color: var(--border-active);
+    background: var(--surface-hover);
+  }
+
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--gutter) var(--space-lg);
+    border-top: 1px solid var(--border);
+    background: var(--bg-secondary);
+  }
+
+  .mobile-nav[hidden] {
+    display: none;
+  }
+
+  .mobile-nav__list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mobile-nav__link {
+    display: block;
+    padding: var(--space-xs) 0;
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mobile-nav__link[aria-current='page'] {
+    color: var(--accent);
+  }
+
+  @media (min-width: 60rem) {
+    .site-nav {
+      display: block;
+    }
+
+    .site-header__actions :global(.btn) {
+      display: inline-flex;
+    }
+
+    .site-header__toggle,
+    .mobile-nav {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const panel = document.querySelector<HTMLElement>('[data-mobile-nav]');
+
+  // Borde del header al scrollear. IntersectionObserver sobre un centinela
+  // en vez de un listener de scroll: no corre en cada frame.
+  if (header) {
+    const sentinel = document.createElement('div');
+    sentinel.setAttribute('aria-hidden', 'true');
+    sentinel.style.cssText = 'position:absolute;top:0;height:1px;width:1px;';
+    document.body.prepend(sentinel);
+
+    new IntersectionObserver(
+      ([entry]) => {
+        header.toggleAttribute('data-scrolled', !entry.isIntersecting);
+      },
+      { threshold: 0 }
+    ).observe(sentinel);
+  }
+
+  if (toggle && panel) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+      toggle.querySelector('.visually-hidden')!.textContent = open
+        ? 'Cerrar menú'
+        : 'Abrir menú';
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Escape cierra y devuelve el foco al boton: sin esto el usuario de
+    // teclado queda atrapado dentro del panel.
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      if (toggle.getAttribute('aria-expanded') !== 'true') return;
+      setOpen(false);
+      toggle.focus();
+    });
+
+    // Al pasar a desktop el panel debe cerrarse, o queda un bloque huerfano
+    // visible bajo el header.
+    const desktop = window.matchMedia('(min-width: 60rem)');
+    desktop.addEventListener('change', (event) => {
+      if (event.matches) setOpen(false);
+    });
+  }
+</script>

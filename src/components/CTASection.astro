@@ -1,0 +1,161 @@
+---
+import Button from './Button.astro';
+
+/**
+ * CTASection — bloque de cierre reutilizable.
+ *
+ * variant "panel" (default): superficie contenida, para cerrar una pagina.
+ * variant "flush": a sangre sobre bg-secondary, para cortar entre secciones.
+ */
+export interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  primaryCta: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+  note?: string;
+  variant?: 'panel' | 'flush';
+  id?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  description,
+  primaryCta,
+  secondaryCta,
+  note,
+  variant = 'panel',
+  id,
+} = Astro.props;
+
+const headingId = id ? `${id}-title` : 'cta-title';
+---
+
+<section
+  class:list={['cta-section', `cta-section--${variant}`]}
+  aria-labelledby={headingId}
+  id={id}
+>
+  <div class="container">
+    <div class="cta-section__inner" data-reveal>
+      {eyebrow && <p class="eyebrow eyebrow--dot">{eyebrow}</p>}
+
+      <h2 id={headingId} class="cta-section__title">{title}</h2>
+
+      {description && <p class="cta-section__description">{description}</p>}
+
+      <div class="cta-section__actions">
+        <Button
+          label={primaryCta.label}
+          href={primaryCta.href}
+          size="lg"
+          arrow
+          trackingEvent="click_primary_cta"
+          trackingContext="cta_section"
+        />
+        {
+          secondaryCta && (
+            <Button
+              label={secondaryCta.label}
+              href={secondaryCta.href}
+              variant="secondary"
+              size="lg"
+              trackingEvent="click_secondary_cta"
+              trackingContext="cta_section"
+            />
+          )
+        }
+      </div>
+
+      {note && <p class="source-note cta-section__note">{note}</p>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-section {
+    padding-block: var(--space-section);
+  }
+
+  .cta-section--flush {
+    background: var(--bg-secondary);
+    border-block: 1px solid var(--border);
+  }
+
+  .cta-section__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .cta-section--panel .cta-section__inner {
+    position: relative;
+    padding: var(--space-xl) var(--space-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--highlight-top);
+    overflow: hidden;
+  }
+
+  /* Halo azul en la esquina superior derecha. Da direccion al bloque sin
+     recurrir a un blob centrado. */
+  .cta-section--panel .cta-section__inner::before {
+    content: '';
+    position: absolute;
+    inset-block-start: -60%;
+    inset-inline-end: -20%;
+    inline-size: 34rem;
+    block-size: 34rem;
+    background: radial-gradient(
+      circle,
+      rgba(35, 136, 255, 0.14),
+      transparent 62%
+    );
+    pointer-events: none;
+  }
+
+  .cta-section__inner > * {
+    position: relative;
+  }
+
+  .cta-section__title {
+    font-size: var(--text-3xl);
+    max-width: 22ch;
+  }
+
+  .cta-section__description {
+    max-width: 52ch;
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .cta-section__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    width: 100%;
+    margin-top: var(--space-md);
+  }
+
+  .cta-section__note {
+    margin-top: var(--space-2xs);
+  }
+
+  @media (min-width: 30rem) {
+    .cta-section__actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: auto;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .cta-section--panel .cta-section__inner {
+      padding: var(--space-2xl) var(--space-2xl);
+    }
+  }
+</style>

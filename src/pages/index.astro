@@ -1,17 +1,135 @@
 ---
-// Placeholder de FASE 1 — la homepage real se construye en FASE 3.
+/**
+ * FASE 2 — checkpoint del design system.
+ *
+ * NO es la homepage comercial: eso es FASE 3. Esta pagina existe solo para
+ * revisar cada componente aislado en el navegador. Va noindex y se reemplaza
+ * por completo en la proxima fase.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ProofBar from '../components/ProofBar.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import CTASection from '../components/CTASection.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Button from '../components/Button.astro';
+
+// Datos reales de docs/COPY.md, no lorem ipsum: si el sistema no aguanta el
+// copy definitivo, mejor descubrirlo ahora y no en FASE 3.
+const metrics = [
+  { value: '46.4K+', label: 'Impresiones analizadas' },
+  { value: '59', label: 'Conversiones en account data auditada' },
+  { value: '23%', label: 'Spend improductivo identificado', status: 'attention' as const },
+  { value: '44K+', label: 'Impresiones orgánicas generadas', status: 'positive' as const },
+];
+
+const services = [
+  {
+    number: '01',
+    title: 'Performance Marketing',
+    description:
+      'No compramos tráfico por comprar tráfico. Buscamos intención y medimos qué ocurre después.',
+    items: ['Google Ads', 'Meta Ads', 'Campaign Audit', 'Budget Allocation'],
+    href: '/performance-marketing/',
+    cta: 'Ver Performance',
+  },
+  {
+    number: '02',
+    title: 'Conversion',
+    description: 'Más tráfico no arregla una experiencia que no convierte.',
+    items: ['CRO', 'Landing Pages', 'Forms', 'A/B Testing'],
+    href: '/landing-pages/',
+    cta: 'Mejorar conversión',
+  },
+  {
+    number: '03',
+    title: 'Revenue Systems',
+    description:
+      'Un lead no es revenue. Conectamos adquisición con lo que ocurre después.',
+    items: ['CRM', 'Tracking', 'Attribution', 'Automation'],
+    href: '/crm-automation/',
+    cta: 'Conectar mis datos',
+  },
+  {
+    number: '04',
+    title: 'Growth Engineering',
+    description:
+      'Cuando el problema no se arregla dentro del Ads Manager, construimos lo que falta.',
+    items: ['Internal Tools', 'Dashboards', 'APIs', 'Integrations'],
+    href: '/growth-engineering/',
+    cta: 'Ver Growth Engineering',
+  },
+];
 ---
 
-<!doctype html>
-<html lang="es-AR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex, nofollow" />
-    <title>digitAI Motor — Growth V2 (scaffold)</title>
-  </head>
-  <body>
-    <h1>digitAI Motor — Growth V2</h1>
-    <p>Scaffold de FASE 1. Homepage real en FASE 3.</p>
-  </body>
-</html>
+<BaseLayout
+  title="Design system — FASE 2 | digitAI Motor"
+  description="Checkpoint interno del design system. No es la homepage."
+  noindex
+>
+  <Hero
+    eyebrow="Performance · Conversion · Growth"
+    title="Convertimos adquisición digital en crecimiento medible."
+    subtitle="Google Ads, Meta Ads, CRO, analytics y sistemas comerciales conectados desde el clic hasta la venta."
+    supporting="Detectamos dónde se pierde rendimiento y trabajamos sobre el punto que realmente está frenando el crecimiento."
+    primaryCta={{ label: 'Analizar mi adquisición', href: '/contacto/' }}
+    secondaryCta={{ label: 'Tengo un problema puntual', href: '/quick-fix/' }}
+    capabilities={[
+      'Paid Media',
+      'CRO',
+      'Analytics',
+      'CRM',
+      'Automation',
+      'Growth Engineering',
+    ]}
+  />
+
+  <ProofBar
+    metrics={metrics}
+    eyebrow="Evidence"
+    note="Datos provenientes de análisis y proyectos documentados."
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow eyebrow--dot">Capabilities</p>
+        <h2>Cuatro frentes, un solo objetivo.</h2>
+        <p class="section-head__lead">
+          El dinero puede perderse antes del clic, durante la conversión o
+          después de que entra el lead.
+        </p>
+      </div>
+
+      <div class="grid grid--2">
+        {services.map((service) => <ServiceCard {...service} />)}
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-rule" />
+
+  <section class="section--sm">
+    <div class="container">
+      <p class="eyebrow eyebrow--muted" style="margin-bottom: var(--space-sm)">
+        Controles
+      </p>
+      <Breadcrumbs items={[{ label: 'Servicios', href: '/performance-marketing/' }, { label: 'Google Ads' }]} />
+      <div style="display:flex;flex-wrap:wrap;gap:var(--space-xs);margin-top:var(--space-md)">
+        <Button label="Primario" href="/contacto/" arrow />
+        <Button label="Secundario" href="/quick-fix/" variant="secondary" />
+        <Button label="Ghost" href="/nosotros/" variant="ghost" />
+        <Button label="Pequeño" href="/contacto/" size="sm" />
+        <Button label="Grande" href="/contacto/" size="lg" arrow />
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    eyebrow="Próximo paso"
+    title="Encontrá dónde se está perdiendo tu presupuesto antes de invertir más."
+    description="Revisamos campañas, tracking, landing, funnel, CRM y attribution."
+    primaryCta={{ label: 'Solicitar auditoría', href: '/auditoria-performance/' }}
+    secondaryCta={{ label: 'Contame qué está fallando', href: '/quick-fix/' }}
+  />
+</BaseLayout>

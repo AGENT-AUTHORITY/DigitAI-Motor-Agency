@@ -20,6 +20,15 @@ export default defineConfig({
     inlineStylesheets: 'auto',
   },
   compressHTML: true,
+  vite: {
+    css: {
+      // PostCSS explicito y vacio. Sin esto Vite busca hacia arriba y
+      // levanta un postcss.config.cjs global de la maquina, que exige
+      // autoprefixer y rompe el build. El proyecto no usa PostCSS: los
+      // pocos prefijos que hacen falta estan escritos a mano.
+      postcss: {},
+    },
+  },
   prefetch: {
     prefetchAll: false,
     defaultStrategy: 'hover',

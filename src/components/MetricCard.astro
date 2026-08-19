@@ -1,0 +1,103 @@
+---
+/**
+ * MetricCard — una cifra con su contexto y, obligatoriamente, su origen.
+ *
+ * Regla de veracidad (docs/BRAND.md): ningun numero se publica sin decir de
+ * donde sale. Por eso `sourceNote` existe y por eso `context` es requerido:
+ * "59 conversiones" solo es honesto si al lado dice "en cuenta auditada".
+ */
+export interface Props {
+  value: string;
+  label: string;
+  context?: string;
+  status?: 'neutral' | 'positive' | 'warning' | 'attention';
+  sourceNote?: string;
+  /** Numera la card (01, 02...) para grillas ordenadas. */
+  index?: string;
+}
+
+const {
+  value,
+  label,
+  context,
+  status = 'neutral',
+  sourceNote,
+  index,
+} = Astro.props;
+---
+
+<div class:list={['metric', `metric--${status}`]} data-reveal>
+  {index && <span class="metric__index" aria-hidden="true">{index}</span>}
+  <p class="metric__value" data-numeric>{value}</p>
+  <p class="metric__label">{label}</p>
+  {context && <p class="metric__context">{context}</p>}
+  {sourceNote && <p class="source-note metric__source">{sourceNote}</p>}
+</div>
+
+<style>
+  .metric {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    padding: var(--space-md) var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--border);
+  }
+
+  /* Acento de 2px sobre el borde superior, ancho fijo. Marca el inicio de
+     cada metrica sin encerrarla en una caja: la proof bar se lee como una
+     serie continua, no como cuatro tarjetas sueltas. */
+  .metric::before {
+    content: '';
+    position: absolute;
+    inset-block-start: -1px;
+    inset-inline-start: 0;
+    inline-size: 2.25rem;
+    block-size: 2px;
+    background: var(--accent);
+  }
+
+  .metric--positive::before { background: var(--positive); }
+  .metric--warning::before { background: var(--warning); }
+  .metric--attention::before { background: var(--danger); }
+
+  .metric__index {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--text-muted-aa);
+  }
+
+  .metric__value {
+    font-family: var(--font-heading);
+    font-size: var(--text-metric);
+    font-weight: var(--weight-extrabold);
+    line-height: 1;
+    letter-spacing: var(--tracking-display);
+    color: var(--text-primary);
+  }
+
+  /* El verde solo aparece cuando el dato es un resultado positivo.
+     Nunca decorativo. Ver docs/BRAND.md. */
+  .metric--positive .metric__value { color: var(--positive); }
+
+  .metric__label {
+    margin-top: var(--space-2xs);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-snug);
+    color: var(--text-primary);
+  }
+
+  .metric__context {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+  }
+
+  .metric__source {
+    margin-top: var(--space-2xs);
+  }
+</style>

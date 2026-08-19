@@ -1,0 +1,115 @@
+---
+/**
+ * Breadcrumbs — navegacion jerarquica + BreadcrumbList JSON-LD.
+ *
+ * El schema se genera del mismo array que el markup: no puede desincronizarse
+ * del contenido visible, que es lo que Google penaliza como marcado no visible.
+ */
+export interface Crumb {
+  label: string;
+  href?: string;
+}
+
+export interface Props {
+  items: Crumb[];
+}
+
+const { items } = Astro.props;
+
+const site = Astro.site ?? new URL('https://www.digitaimotor.lat');
+const trail: Crumb[] = [{ label: 'Inicio', href: '/' }, ...items];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: trail.map((crumb, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: crumb.label,
+    ...(crumb.href ? { item: new URL(crumb.href, site).href } : {}),
+  })),
+};
+---
+
+<nav class="breadcrumbs" aria-label="Ruta de navegación">
+  <ol class="breadcrumbs__list" role="list">
+    {
+      trail.map((crumb, index) => {
+        const isLast = index === trail.length - 1;
+        return (
+          <li class="breadcrumbs__item">
+            {crumb.href && !isLast ? (
+              <a class="breadcrumbs__link" href={crumb.href}>
+                {crumb.label}
+              </a>
+            ) : (
+              <span aria-current={isLast ? 'page' : undefined}>{crumb.label}</span>
+            )}
+            {!isLast && (
+              <svg
+                class="breadcrumbs__sep"
+                width="12"
+                height="12"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M6 3l5 5-5 5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+<style>
+  .breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--text-xs);
+    color: var(--text-muted-aa);
+  }
+
+  .breadcrumbs__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  .breadcrumbs__link {
+    color: var(--text-muted-aa);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .breadcrumbs__link:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .breadcrumbs__item [aria-current='page'] {
+    color: var(--text-secondary);
+  }
+
+  .breadcrumbs__sep {
+    flex: none;
+    opacity: 0.55;
+  }
+</style>

@@ -1,0 +1,199 @@
+---
+import Button from './Button.astro';
+
+/**
+ * Hero — bloque superior. Es el elemento mas trabajado del sitio.
+ *
+ * El video legacy de 12.5 MB no se reutiliza. El fondo es CSS puro: no pesa,
+ * no bloquea el LCP y no depende de un asset que todavia no existe.
+ * Cuando llegue /assets/hero-growth.webm se pasa por `media` y el slot lo
+ * renderiza sin tocar este componente.
+ */
+export interface Props {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  supporting?: string;
+  primaryCta: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+  capabilities?: string[];
+  /** Titulo como H1. Solo false en paginas donde el H1 es otro. */
+  asH1?: boolean;
+}
+
+const {
+  eyebrow,
+  title,
+  subtitle,
+  supporting,
+  primaryCta,
+  secondaryCta,
+  capabilities = [],
+  asH1 = true,
+} = Astro.props;
+
+const Heading = asH1 ? 'h1' : 'h2';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__field" aria-hidden="true"></div>
+
+  <div class="container hero__inner">
+    <p class="eyebrow eyebrow--dot hero__eyebrow">{eyebrow}</p>
+
+    <Heading id="hero-title" class="hero__title">{title}</Heading>
+
+    <p class="hero__subtitle">{subtitle}</p>
+
+    {supporting && <p class="hero__supporting">{supporting}</p>}
+
+    <div class="hero__actions">
+      <Button
+        label={primaryCta.label}
+        href={primaryCta.href}
+        size="lg"
+        arrow
+        trackingEvent="click_primary_cta"
+        trackingContext="hero"
+      />
+      {
+        secondaryCta && (
+          <Button
+            label={secondaryCta.label}
+            href={secondaryCta.href}
+            variant="secondary"
+            size="lg"
+            trackingEvent="click_secondary_cta"
+            trackingContext="hero"
+          />
+        )
+      }
+    </div>
+
+    {
+      capabilities.length > 0 && (
+        <ul class="capability-list hero__capabilities" role="list">
+          {capabilities.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      )
+    }
+
+    <slot name="media" />
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: var(--space-section-lg) var(--space-section);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Fondo: grilla tenue + halo azul desplazado del centro.
+     CSS puro, 0 KB de red. Reemplaza el mp4 de 12.5 MB de la V1 y las cuatro
+     PNG decorativas (3.4 MB combinadas). Nada de circuitos ni speed lines. */
+  .hero__field {
+    position: absolute;
+    inset: -20% -10% auto;
+    block-size: 130%;
+    z-index: -1;
+    background-image:
+      radial-gradient(
+        42rem 30rem at 68% 12%,
+        rgba(35, 136, 255, 0.16),
+        transparent 62%
+      ),
+      radial-gradient(
+        28rem 22rem at 12% 4%,
+        rgba(35, 136, 255, 0.07),
+        transparent 60%
+      ),
+      linear-gradient(rgba(35, 136, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(35, 136, 255, 0.045) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 72px 72px, 72px 72px;
+    /* La grilla se desvanece hacia abajo en vez de cortarse en seco. */
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 42%,
+      transparent 88%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 42%,
+      transparent 88%
+    );
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* Alineado a la izquierda, no centrado: el hero centrado con blob es
+       justamente el patron de template que hay que evitar. */
+  }
+
+  .hero__eyebrow {
+    margin-bottom: var(--space-md);
+  }
+
+  .hero__title {
+    font-size: var(--text-display);
+    max-width: 18ch;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero__subtitle {
+    max-width: 46ch;
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .hero__supporting {
+    max-width: 52ch;
+    margin-top: var(--space-sm);
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--text-muted-aa);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    width: 100%;
+    margin-top: var(--space-xl);
+  }
+
+  .hero__capabilities {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+    width: 100%;
+    font-size: var(--text-xs);
+    color: var(--text-muted-aa);
+  }
+
+  @media (min-width: 30rem) {
+    .hero__actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: auto;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .hero__title {
+      max-width: 16ch;
+    }
+
+    .hero__capabilities {
+      font-size: var(--text-sm);
+    }
+  }
+</style>

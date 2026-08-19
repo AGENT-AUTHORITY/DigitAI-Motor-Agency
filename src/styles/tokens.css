@@ -1,0 +1,162 @@
+/* ==========================================================================
+   digitAI Motor — Design Tokens
+   Fuente de verdad. Ningun componente hardcodea color, espacio ni duracion.
+   Ver docs/BRAND.md
+   ========================================================================== */
+
+:root {
+  /* --- Color: superficies ------------------------------------------------ */
+  --bg-primary: #05070B;
+  --bg-secondary: #0A0E15;
+  --surface: #101620;
+  --surface-hover: #151D29;
+
+  /* --- Color: bordes ----------------------------------------------------- */
+  --border: #1C2735;
+  --border-active: #2C4057;
+  /* Borde de controles interactivos. WCAG 2.1 SC 1.4.11 exige 3:1 para
+     limites de componentes. --border (1.33:1) y --border-active (1.90:1) no
+     alcanzan; este si (3.17:1 sobre --bg-primary). Ver informe FASE 2. */
+  --border-input: #4E6078;
+
+  /* --- Color: texto ------------------------------------------------------ */
+  --text-primary: #F5F7FA;    /* 18.6:1 sobre bg-primary */
+  --text-secondary: #9CA9BA;  /*  8.4:1 sobre bg-primary */
+  --text-muted: #657386;      /*  4.2:1 — NO apto para texto chico. Ver abajo. */
+  /* Variante AA de --text-muted para texto <24px sobre surface.
+     Mismo rol visual, 4.8:1 sobre --surface. */
+  --text-muted-aa: #74839A;
+
+  /* --- Color: acento ----------------------------------------------------- */
+  --accent: #2388FF;          /* 5.8:1 sobre bg-primary */
+  --accent-hover: #459BFF;
+  --accent-soft: rgba(35, 136, 255, 0.12);
+  --accent-line: rgba(35, 136, 255, 0.28);
+
+  /* --- Color: semantico --------------------------------------------------
+     Regla dura: --positive SOLO para resultados positivos, indicadores,
+     checks y mejoras. Nunca como color decorativo. Ver docs/BRAND.md */
+  --positive: #36D399;
+  --positive-soft: rgba(54, 211, 153, 0.12);
+  --warning: #F6C85F;
+  --warning-soft: rgba(246, 200, 95, 0.12);
+  --danger: #EF6461;
+  --danger-soft: rgba(239, 100, 97, 0.12);
+
+  /* --- Tipografia -------------------------------------------------------- */
+  --font-heading: 'Manrope', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono',
+    Menlo, Consolas, monospace;
+
+  /* Escala fluida. Contraste de escala alto a proposito: el salto de body a
+     display es ~7x. Es lo que separa una jerarquia real de un template. */
+  --text-2xs: 0.6875rem;                                  /* 11px  eyebrow */
+  --text-xs: 0.75rem;                                     /* 12px  meta */
+  --text-sm: 0.875rem;                                    /* 14px  ui */
+  --text-base: clamp(0.9375rem, 0.9rem + 0.18vw, 1rem);   /* 15-16 body */
+  --text-lg: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);   /* 17-19 lead */
+  --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);     /* 20-24 h4 */
+  --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);          /* 24-32 h3 */
+  --text-3xl: clamp(1.875rem, 1.5rem + 1.9vw, 2.75rem);   /* 30-44 h2 */
+  --text-4xl: clamp(2.25rem, 1.6rem + 3.2vw, 3.75rem);    /* 36-60 h1 */
+  /* Medido a 375px: con 2.625rem de minimo el H1 ocupaba casi todo el
+     viewport y empujaba subtitulo y CTA bajo el fold. 2.25rem deja hero
+     completo arriba del fold en mobile. */
+  --text-display: clamp(2.25rem, 1.45rem + 3.4vw, 4.5rem); /* 36-72 hero */
+  --text-metric: clamp(2rem, 1.5rem + 2.4vw, 3.25rem);    /* 32-52 metricas */
+
+  --leading-tight: 1.06;
+  --leading-snug: 1.22;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  /* Tracking negativo en display, positivo en eyebrow. Firma tipografica
+     del registro SaaS: titulos apretados, labels abiertos. */
+  --tracking-display: -0.035em;
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.06em;
+  --tracking-eyebrow: 0.14em;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  /* --- Espacio ----------------------------------------------------------- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+
+  /* Ritmo vertical no uniforme: el hero respira mas que una seccion normal,
+     y una seccion normal mas que una compacta. */
+  --space-section: clamp(4rem, 3rem + 4vw, 7.5rem);
+  --space-section-lg: clamp(3.5rem, 2.6rem + 5.5vw, 9rem);
+  --space-section-sm: clamp(2.5rem, 2rem + 2vw, 4.5rem);
+
+  /* --- Layout ------------------------------------------------------------ */
+  --container-max: 76rem;      /* 1216px */
+  --container-narrow: 52rem;   /*  832px — texto largo */
+  --container-wide: 88rem;     /* 1408px */
+  --gutter: clamp(1.25rem, 0.9rem + 1.6vw, 2.5rem);
+  --header-height: 4.25rem;
+
+  /* --- Radios ------------------------------------------------------------
+     No uniformes a proposito: control chico 8px, card 14px, superficie
+     grande 20px. Un solo radio en todo el sitio grita template. */
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-full: 999px;
+
+  /* --- Elevacion ---------------------------------------------------------
+     El highlight interior de 1px arriba es lo que da la sensacion de
+     superficie fisica en dark UI. Sin el, las cards se ven planas. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px -4px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 48px -12px rgba(0, 0, 0, 0.65);
+  --shadow-accent: 0 8px 32px -8px rgba(35, 136, 255, 0.35);
+  --highlight-top: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  --highlight-top-strong: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  /* --- Movimiento --------------------------------------------------------
+     Solo se animan transform, opacity, color y filter. Nunca layout. */
+  --duration-instant: 90ms;
+  --duration-fast: 160ms;
+  --duration-normal: 280ms;
+  --duration-slow: 480ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* --- Foco --------------------------------------------------------------
+     Anillo de 2px + offset de 2px. --accent da 5.8:1 sobre bg-primary,
+     muy por encima del 3:1 que pide WCAG 2.4.11. */
+  --focus-ring: 0 0 0 2px var(--bg-primary), 0 0 0 4px var(--accent);
+  --focus-ring-offset: 2px;
+
+  /* --- Z-index ----------------------------------------------------------- */
+  --z-base: 1;
+  --z-sticky: 100;
+  --z-header: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+}
+
+/* Sin light mode: el producto se define como dark UI (docs/BRAND.md).
+   Se declara el esquema para que el navegador pinte los controles nativos,
+   scrollbars y formularios en oscuro en vez de forzar blanco. */
+:root {
+  color-scheme: dark;
+}

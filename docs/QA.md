@@ -98,7 +98,7 @@ Desktop: 1440, 1280, 1024. Mobile: 375, 390, 430, 768.
 - [ ] Sin texto cortado
 - [ ] Ningún CTA oculto o inalcanzable
 - [ ] Nav usable en mobile
-- [ ] Targets táctiles de 44x44px o más
+- [ ] Targets táctiles: mínimo 24x24px (WCAG 2.5.8, nivel AA). Objetivo propio 44px de alto en enlaces y botones
 - [ ] Tablas con scroll contenido
 
 ## Cross-browser
