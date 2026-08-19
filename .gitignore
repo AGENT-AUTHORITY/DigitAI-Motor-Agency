@@ -1,0 +1,23 @@
+# build
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# env — nunca commitear IDs ni secrets
+.env
+.env.production
+.env.local
+*.local
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# logs
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*

@@ -1,0 +1,72 @@
+# digitAI Motor — deploy a GitHub Pages
+#
+# DESACTIVADO A PROPOSITO.
+# Solo corre con ejecucion manual (workflow_dispatch). No hay trigger en push.
+#
+# Para activarlo, DESPUES de aprobacion expresa del owner:
+#   1. Settings > Pages > Source: cambiar a "GitHub Actions"
+#   2. Descomentar el bloque `push:` de abajo
+#
+# Sin el paso 1, este workflow falla o no publica nada.
+
+name: Deploy to GitHub Pages
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # Sin CNAME en dist/, GitHub Pages descarta el dominio custom
+      # y el sitio pasa a responder en abraxasgroup.github.io.
+      - name: Verify CNAME survived the build
+        run: |
+          test -f dist/CNAME || { echo "::error::dist/CNAME no existe. El dominio custom se perderia."; exit 1; }
+          grep -q "www.digitaimotor.lat" dist/CNAME || { echo "::error::dist/CNAME tiene contenido inesperado."; exit 1; }
+          echo "CNAME ok: $(cat dist/CNAME)"
+
+      - name: Verify sitemap
+        run: test -f dist/sitemap-index.xml || { echo "::error::sitemap-index.xml no generado."; exit 1; }
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
