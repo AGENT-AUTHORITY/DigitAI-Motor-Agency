@@ -8,6 +8,7 @@ import CreativeFlow from '../components/CreativeFlow.astro';
 import CapabilityGrid from '../components/CapabilityGrid.astro';
 import EvidenceCase from '../components/EvidenceCase.astro';
 import QuickFixMatrix from '../components/QuickFixMatrix.astro';
+import FounderNote from '../components/FounderNote.astro';
 import FAQ from '../components/FAQ.astro';
 import ContactIntent from '../components/ContactIntent.astro';
 import Button from '../components/Button.astro';
@@ -34,37 +35,45 @@ const processSteps = [
       'Antes de tocar una campaña miramos el negocio completo y cómo se conecta con lo que se está comprando.',
     detail: [
       'Negocio', 'Mercado', 'Oferta', 'Cliente', 'Competencia',
-      'Ads', 'Creative', 'Landing', 'Funnel', 'Sales process',
+      'Ads', 'Creative', 'Landing', 'Funnel', 'Proceso comercial',
     ],
   },
-  { number: '02', title: 'Diagnose', description: 'Encontrar el cuello de botella real, no el más visible.' },
-  { number: '03', title: 'Prioritize', description: 'Separar impacto potencial de trabajo cosmético.' },
-  { number: '04', title: 'Test', description: 'Convertir hipótesis en experimentos que se puedan leer.' },
-  { number: '05', title: 'Learn', description: 'Leer datos y señales, incluso cuando el resultado es negativo.' },
-  { number: '06', title: 'Improve', description: 'Iterar sobre aprendizajes, no sobre intuiciones.' },
-  { number: '07', title: 'Scale', description: 'Escalar únicamente aquello que ya demostró valor.' },
+  { number: '02', title: 'Diagnose', description: 'El cuello de botella real, no el más visible.' },
+  { number: '03', title: 'Prioritize', description: 'Impacto potencial por encima de trabajo cosmético.' },
+  { number: '04', title: 'Test', description: 'Hipótesis convertidas en experimentos legibles.' },
+  { number: '05', title: 'Learn', description: 'Leer las señales, también las negativas.' },
+  { number: '06', title: 'Improve', description: 'Iterar sobre datos, no sobre intuición.' },
+  { number: '07', title: 'Scale', description: 'Escalar solo lo que ya demostró valor.' },
 ];
 
 const capabilities = [
   {
+    problem: '¿Estás pagando por tráfico que no debería llegar?',
     title: 'Paid Media',
-    quote: 'Compramos intención, no tráfico por comprar tráfico.',
-    items: ['Google Ads', 'Meta Ads', 'Paid Acquisition', 'Search', 'Remarketing', 'Campaign Audits'],
+    answer:
+      'Compramos intención, no tráfico por comprar tráfico. Revisamos términos, segmentación, estructura y presupuesto contra lo que ocurre después del clic.',
+    items: ['Google Ads', 'Meta Ads', 'Search', 'Remarketing', 'Auditoría de campañas'],
   },
   {
+    problem: '¿Llega el tráfico pero la página no cierra?',
     title: 'CRO & Conversion',
-    quote: 'Más tráfico no arregla una experiencia que no convierte.',
-    items: ['Landing Pages', 'Offers', 'Forms', 'WhatsApp', 'Mobile UX', 'Lead Flow'],
+    answer:
+      'Más tráfico no arregla una experiencia que no convierte. Trabajamos oferta, mensaje, formulario, velocidad y flujo de contacto.',
+    items: ['Landing pages', 'Oferta', 'Formularios', 'WhatsApp', 'Mobile UX', 'Flujo de leads'],
   },
   {
+    problem: '¿Entran leads pero no sabés cuáles terminaron vendiendo?',
     title: 'Revenue Systems',
-    quote: 'Un lead no es revenue.',
-    items: ['Tracking', 'Analytics', 'CRM', 'Attribution', 'Follow-up', 'Automation'],
+    answer:
+      'Un lead no es revenue. Conectamos la adquisición con el proceso comercial para poder leer qué campaña generó negocio y cuál solo generó contactos.',
+    items: ['Tracking', 'Analytics', 'CRM', 'Atribución', 'Seguimiento', 'Automatización'],
   },
   {
+    problem: '¿El problema está fuera del Ads Manager?',
     title: 'Growth Engineering',
-    quote: 'Cuando el problema está fuera de Ads Manager, construimos lo que falta.',
-    items: ['Dashboards', 'Internal Tools', 'APIs', 'CRMs', 'Automation', 'AI Workflows'],
+    answer:
+      'Cuando la limitación es de infraestructura y no de campaña, construimos lo que falta en lugar de trabajar alrededor del problema.',
+    items: ['Dashboards', 'Herramientas internas', 'APIs', 'CRMs', 'Automatización', 'AI workflows'],
   },
 ];
 
@@ -178,7 +187,7 @@ const serviceSchema = {
   </Hero>
 
   <!-- 02 · WHERE GROWTH BREAKS -->
-  <section class="section section--alt" aria-labelledby="breaks-title">
+  <section class="section section--alt section--tight-top" aria-labelledby="breaks-title">
     <div class="container">
       <div class="section-head">
         <p class="eyebrow eyebrow--dot">Where growth breaks</p>
@@ -213,7 +222,7 @@ const serviceSchema = {
 
   <!-- 04 · PERFORMANCE CREATIVE -->
   <section
-    class="section creative-section"
+    class="section section--alt creative-section"
     id="performance-creative"
     aria-labelledby="creative-title"
   >
@@ -249,7 +258,7 @@ const serviceSchema = {
   </section>
 
   <!-- 05 · CAPABILITIES -->
-  <section class="section section--alt" id="capabilities" aria-labelledby="caps-title">
+  <section class="section" id="capabilities" aria-labelledby="caps-title">
     <div class="container">
       <div class="section-head">
         <p class="eyebrow eyebrow--dot">Capabilities</p>
@@ -265,7 +274,7 @@ const serviceSchema = {
   </section>
 
   <!-- 06 · EVIDENCE -->
-  <section class="section" id="evidence" aria-labelledby="evidence-title">
+  <section class="section section--alt" id="evidence" aria-labelledby="evidence-title">
     <div class="container">
       <div class="section-head">
         <p class="eyebrow eyebrow--dot">Evidence, not claims</p>
@@ -296,18 +305,18 @@ const serviceSchema = {
         narrative="El objetivo no era celebrar volumen. Era encontrar dónde el presupuesto dejaba de generar señal útil."
         secondaryTitle="Campaña Display adicional"
         secondary={[
-          { label: 'Impressions', value: '34.433' },
-          { label: 'Clicks', value: '179' },
+          { label: 'Impresiones', value: '34.433' },
+          { label: 'Clics', value: '179' },
           { label: 'CTR', value: '0,52%' },
-          { label: 'Spend', value: 'ARS 13.975' },
-          { label: 'Conversions', value: '0' },
+          { label: 'Inversión', value: 'ARS 13.975' },
+          { label: 'Conversiones', value: '0' },
         ]}
         recommended={[
-          'Negative keyword review',
-          'Budget allocation',
-          'Campaign structure review',
-          'Display evaluation',
-          'Landing / conversion review',
+          'Revisión de términos y palabras negativas',
+          'Redistribución de presupuesto',
+          'Revisión de estructura de campañas',
+          'Evaluación de Display',
+          'Revisión de landing y conversión',
         ]}
         closing="Performance también consiste en saber qué dejar de pagar."
       />
@@ -315,7 +324,7 @@ const serviceSchema = {
   </section>
 
   <!-- 07 · QUICK FIX -->
-  <section class="section section--alt" id="quick-fix" aria-labelledby="qf-title">
+  <section class="section" id="quick-fix" aria-labelledby="qf-title">
     <div class="container">
       <div class="section-head">
         <p class="eyebrow eyebrow--dot">Quick Fix</p>
@@ -344,55 +353,31 @@ const serviceSchema = {
   </section>
 
   <!-- 08 · BUSINESS PERSPECTIVE -->
-  <section class="section" aria-labelledby="founder-title">
-    <div class="container founder">
-      <div class="founder__text">
-        <p class="eyebrow eyebrow--dot">Business perspective</p>
-        <h2 id="founder-title" class="founder__title">Performance con criterio comercial.</h2>
-        <p class="founder__copy">
-          digitAI Motor fue creada por Oscar Chinchilla, con más de una década
-          de experiencia en ventas B2B, negociación, pipeline y gestión
-          comercial.
-        </p>
-        <p class="founder__copy">
-          Ese background define cómo analizamos Growth: una campaña no termina
-          cuando entra un lead. Queremos entender qué ocurrió después.
-        </p>
-        <div class="founder__cta">
-          <Button
-            label="Ver perfil en LinkedIn"
-            href={LINKEDIN_URL}
-            variant="ghost"
-            size="sm"
-            trackingEvent="linkedin_click"
-            trackingContext="founder"
-          />
-        </div>
-      </div>
-
-      <div class="founder__evidence">
-        <p class="founder__evidence-title">Organic B2B Distribution</p>
-        <dl class="founder__stats">
-          <div class="founder__stat">
-            <dt>Followers</dt>
-            <dd data-numeric>1.749</dd>
-          </div>
-          <div class="founder__stat">
-            <dt>Follower growth vs. previous 365 days</dt>
-            <dd data-numeric>+281%</dd>
-          </div>
-          <div class="founder__stat">
-            <dt>Reach outside existing network</dt>
-            <dd data-numeric>71%</dd>
-          </div>
-        </dl>
-        <p class="source-note">Datos de perfil personal de LinkedIn.</p>
-      </div>
+  <section class="section section--alt" aria-labelledby="founder-title">
+    <div class="container">
+      <FounderNote
+        eyebrow="Business perspective"
+        title="Performance con criterio comercial."
+        paragraphs={[
+          'digitAI Motor fue creada por Oscar Chinchilla, con más de una década de experiencia en ventas B2B, negociación, pipeline y gestión comercial.',
+          'Esa experiencia define cómo analizamos Growth: el trabajo no termina cuando entra un lead.',
+        ]}
+        quote="Una campaña no se juzga solamente por CTR o CPL. Queremos entender qué ocurrió después."
+        statsTitle="Organic B2B Distribution"
+        stats={[
+          { label: 'Seguidores', value: '1.749' },
+          { label: 'Crecimiento vs. los 365 días previos', value: '+281%' },
+          { label: 'Alcance fuera de la red existente', value: '71%' },
+        ]}
+        statsNote="Datos de perfil personal de LinkedIn."
+        ctaLabel="Ver perfil en LinkedIn"
+        ctaHref={LINKEDIN_URL}
+      />
     </div>
   </section>
 
   <!-- 09 · FAQ -->
-  <section class="section section--alt" aria-labelledby="faq-title">
+  <section class="section" aria-labelledby="faq-title">
     <div class="container container--narrow">
       <div class="section-head">
         <p class="eyebrow eyebrow--dot">FAQ</p>
@@ -468,85 +453,4 @@ const serviceSchema = {
     margin-top: var(--space-lg);
   }
 
-  .founder {
-    display: grid;
-    gap: var(--space-xl);
-    align-items: start;
-  }
-
-  .founder__title {
-    margin-block: var(--space-sm) var(--space-md);
-    font-size: var(--text-3xl);
-    max-width: 18ch;
-  }
-
-  .founder__copy {
-    max-width: 52ch;
-    font-size: var(--text-base);
-    line-height: var(--leading-relaxed);
-    color: var(--text-secondary);
-  }
-
-  .founder__copy + .founder__copy {
-    margin-top: var(--space-sm);
-  }
-
-  .founder__cta {
-    margin-top: var(--space-md);
-    margin-inline-start: -0.75rem;
-  }
-
-  .founder__evidence {
-    padding: var(--space-md);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--highlight-top);
-  }
-
-  .founder__evidence-title {
-    font-family: var(--font-heading);
-    font-size: var(--text-2xs);
-    font-weight: var(--weight-bold);
-    letter-spacing: var(--tracking-eyebrow);
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  .founder__stats {
-    display: grid;
-    gap: 0;
-    margin: var(--space-sm) 0;
-  }
-
-  .founder__stat {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    padding-block: var(--space-2xs);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .founder__stat dt {
-    font-size: var(--text-sm);
-    color: var(--text-muted);
-    max-width: 22ch;
-  }
-
-  .founder__stat dd {
-    margin: 0;
-    font-family: var(--font-heading);
-    font-size: var(--text-xl);
-    font-weight: var(--weight-extrabold);
-    letter-spacing: var(--tracking-tight);
-    color: var(--text-primary);
-  }
-
-  @media (min-width: 64rem) {
-    .founder {
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-      column-gap: var(--space-2xl);
-    }
-  }
 </style>

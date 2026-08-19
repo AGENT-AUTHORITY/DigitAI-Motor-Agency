@@ -331,3 +331,9 @@
     transform: none !important;
   }
 }
+
+/* Continuidad con el bloque anterior: menos aire arriba para que la seccion
+   se lea como consecuencia del hero y no como un capitulo nuevo. */
+.section--tight-top {
+  padding-block-start: var(--space-section-sm);
+}

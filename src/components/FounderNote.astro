@@ -1,0 +1,213 @@
+---
+import Button from './Button.astro';
+
+/**
+ * FounderNote — perspectiva comercial.
+ *
+ * Compacta a proposito: la marca va por delante del founder y esta seccion no
+ * puede pesar mas que Evidence.
+ *
+ * FOTO FUTURA
+ * Si mas adelante se decide usar una foto real, se pasa por props y el bloque
+ * la ubica sin tocar el copy ni el resto del layout:
+ *
+ *   <FounderNote photo="/assets/oscar.webp" photoAlt="Oscar Chinchilla" ... />
+ *
+ * No se genera ni se inventa ninguna imagen mientras tanto.
+ */
+export interface Stat {
+  label: string;
+  value: string;
+}
+
+export interface Props {
+  eyebrow: string;
+  title: string;
+  paragraphs: string[];
+  quote?: string;
+  statsTitle: string;
+  stats: Stat[];
+  statsNote: string;
+  ctaLabel: string;
+  ctaHref: string;
+  photo?: string;
+  photoAlt?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  paragraphs,
+  quote,
+  statsTitle,
+  stats,
+  statsNote,
+  ctaLabel,
+  ctaHref,
+  photo,
+  photoAlt = '',
+} = Astro.props;
+---
+
+<div class="fn">
+  <div class="fn__main" data-reveal>
+    <p class="eyebrow eyebrow--dot">{eyebrow}</p>
+    {/* id fijo: la seccion que lo envuelve lo referencia con aria-labelledby */}
+    <h2 id="founder-title" class="fn__title">{title}</h2>
+
+    <div class="fn__body">
+      {photo && (
+        <img class="fn__photo" src={photo} alt={photoAlt} width="112" height="112" loading="lazy" />
+      )}
+      <div class="fn__copy">
+        {paragraphs.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+
+    {quote && <p class="fn__quote">{quote}</p>}
+
+    <div class="fn__cta">
+      <Button
+        label={ctaLabel}
+        href={ctaHref}
+        variant="secondary"
+        size="sm"
+        arrow
+        trackingEvent="linkedin_click"
+        trackingContext="founder"
+      />
+    </div>
+  </div>
+
+  <aside class="fn__stats" data-reveal data-reveal-delay="1">
+    <p class="fn__stats-title">{statsTitle}</p>
+    <dl class="fn__list">
+      {
+        stats.map((s) => (
+          <div class="fn__stat">
+            <dt>{s.label}</dt>
+            <dd data-numeric>{s.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+    <p class="source-note">{statsNote}</p>
+  </aside>
+</div>
+
+<style>
+  .fn {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .fn__title {
+    margin-block: var(--space-sm) var(--space-md);
+    font-size: var(--text-3xl);
+    max-width: 18ch;
+  }
+
+  .fn__body {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  /* Ranura de foto: si no hay imagen no ocupa nada y el copy usa todo el ancho. */
+  .fn__photo {
+    flex: none;
+    inline-size: 5rem;
+    block-size: 5rem;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    border: 1px solid var(--border);
+  }
+
+  .fn__copy p {
+    max-width: 54ch;
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .fn__copy p + p {
+    margin-top: var(--space-sm);
+  }
+
+  /* La frase que resume el criterio comercial, separada del cuerpo y con la
+     barra de acento: es lo unico que se retiene si el visitante no lee todo. */
+  .fn__quote {
+    margin-top: var(--space-md);
+    padding-inline-start: var(--space-md);
+    border-inline-start: 2px solid var(--accent);
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+    max-width: 40ch;
+  }
+
+  .fn__cta {
+    margin-top: var(--space-md);
+  }
+
+  .fn__stats {
+    padding: var(--space-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--highlight-top);
+  }
+
+  .fn__stats-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .fn__list {
+    display: grid;
+    margin: var(--space-sm) 0;
+  }
+
+  .fn__stat {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding-block: var(--space-2xs);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .fn__stat:last-child {
+    border-bottom: 0;
+  }
+
+  .fn__stat dt {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    max-width: 20ch;
+  }
+
+  .fn__stat dd {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 64rem) {
+    .fn {
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      column-gap: var(--space-2xl);
+    }
+  }
+</style>

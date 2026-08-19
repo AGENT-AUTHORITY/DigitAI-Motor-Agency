@@ -2,9 +2,16 @@
 /**
  * ProcessFlow — los 7 pasos del sistema de trabajo.
  *
- * Compacto por diseno: 7 pasos como 7 cards grandes serian media pagina.
- * El paso 01 (Research) es el unico que expande su detalle, porque es el que
- * define el posicionamiento: no empezamos optimizando, empezamos entendiendo.
+ * Rediseno de FASE 3.1: antes eran 7 cards apiladas y generaban demasiado
+ * scroll. Ahora es un flow con riel.
+ *
+ * Desktop: Research ocupa la fila superior completa (es el paso que define el
+ * posicionamiento) y los 6 restantes van en una sola fila de 6 columnas con
+ * riel horizontal. Dos filas en total.
+ * Mobile: columna con riel vertical y numeros sobre la linea.
+ *
+ * Sin cards para los pasos 02-07: el numero, el titulo y una linea de texto
+ * alcanzan. Menos superficie, mismo contenido.
  */
 export interface Step {
   number: string;
@@ -18,89 +25,72 @@ export interface Props {
 }
 
 const { steps } = Astro.props;
+const [lead, ...rest] = steps;
 ---
 
-<ol class="process" role="list">
-  {
-    steps.map((step, i) => (
-      <li
-        class:list={['process__step', step.detail && 'process__step--wide']}
-        data-reveal
-        data-reveal-delay={String((i % 3) + 1)}
-      >
-        <div class="process__head">
-          <span class="process__number">{step.number}</span>
-          <h3 class="process__title">{step.title}</h3>
-        </div>
-        <p class="process__description">{step.description}</p>
-        {step.detail && (
-          <ul class="process__detail" role="list">
-            {step.detail.map((item) => (
-              <li>{item}</li>
-            ))}
-          </ul>
-        )}
-      </li>
-    ))
-  }
-</ol>
+<div class="pf">
+  <article class="pf__lead" data-reveal>
+    <div class="pf__lead-head">
+      <span class="pf__number pf__number--lead">{lead.number}</span>
+      <h3 class="pf__title pf__title--lead">{lead.title}</h3>
+    </div>
+    <p class="pf__lead-desc">{lead.description}</p>
+    {
+      lead.detail && (
+        <ul class="pf__detail" role="list">
+          {lead.detail.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      )
+    }
+  </article>
+
+  <ol class="pf__rail" role="list">
+    {
+      rest.map((step, i) => (
+        <li class="pf__step" data-reveal data-reveal-delay={String((i % 3) + 1)}>
+          <div class="pf__marker" aria-hidden="true">
+            <span class="pf__dot" />
+            <span class="pf__line" />
+          </div>
+          <span class="pf__number">{step.number}</span>
+          <h3 class="pf__title">{step.title}</h3>
+          <p class="pf__desc">{step.description}</p>
+        </li>
+      ))
+    }
+  </ol>
+</div>
 
 <style>
-  .process {
+  .pf {
     display: grid;
-    gap: var(--space-2xs);
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    gap: var(--space-lg);
   }
 
-  .process__step {
-    position: relative;
-    padding: var(--space-md);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--highlight-top);
-    transition: border-color var(--duration-normal) var(--ease-out),
-      background-color var(--duration-normal) var(--ease-out);
+  /* --- Paso 01: el unico con superficie ------------------------------------ */
+
+  .pf__lead {
+    padding-inline-start: var(--space-md);
+    border-inline-start: 2px solid var(--accent);
   }
 
-  .process__step:hover {
-    border-color: var(--border-active);
-    background: var(--surface-hover);
-  }
-
-  .process__head {
+  .pf__lead-head {
     display: flex;
     align-items: baseline;
     gap: var(--space-2xs);
-    margin-bottom: var(--space-2xs);
   }
 
-  .process__number {
-    font-family: var(--font-heading);
-    font-size: var(--text-xs);
-    font-weight: var(--weight-extrabold);
-    letter-spacing: var(--tracking-wide);
-    color: var(--accent);
-    flex: none;
-  }
-
-  .process__title {
-    font-size: var(--text-sm);
-    font-weight: var(--weight-extrabold);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    color: var(--text-primary);
-  }
-
-  .process__description {
-    font-size: var(--text-sm);
-    line-height: var(--leading-normal);
+  .pf__lead-desc {
+    margin-top: var(--space-2xs);
+    max-width: 64ch;
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
     color: var(--text-secondary);
   }
 
-  .process__detail {
+  .pf__detail {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3xs) var(--space-2xs);
@@ -109,7 +99,7 @@ const { steps } = Astro.props;
     padding: 0;
   }
 
-  .process__detail li {
+  .pf__detail li {
     padding: 0.1875rem 0.5rem;
     font-size: var(--text-2xs);
     line-height: 1.4;
@@ -119,23 +109,148 @@ const { steps } = Astro.props;
     border-radius: var(--radius-xs);
   }
 
-  @media (min-width: 48rem) {
-    .process {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  /* --- Pasos 02-07: sin superficie, solo riel ------------------------------ */
 
-    .process__step--wide {
-      grid-column: 1 / -1;
-    }
+  .pf__rail {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 
+  .pf__step {
+    display: grid;
+    grid-template-columns: 1.25rem 1fr;
+    grid-template-areas:
+      'marker number'
+      'marker title'
+      'marker desc';
+    column-gap: var(--space-sm);
+    padding-bottom: var(--space-md);
+  }
+
+  .pf__marker {
+    grid-area: marker;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding-top: 0.25rem;
+  }
+
+  .pf__dot {
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: var(--radius-full);
+    background: var(--bg-primary);
+    border: 2px solid var(--accent);
+    z-index: 1;
+  }
+
+  .pf__line {
+    position: absolute;
+    inset-block-start: 0.9rem;
+    inline-size: 1px;
+    block-size: calc(100% + var(--space-md));
+    background: linear-gradient(var(--border-active), var(--border));
+  }
+
+  .pf__step:last-child .pf__line {
+    display: none;
+  }
+
+  .pf__number {
+    grid-area: number;
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-wide);
+    color: var(--accent);
+  }
+
+  .pf__number--lead {
+    font-size: var(--text-xs);
+  }
+
+  .pf__title {
+    grid-area: title;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .pf__title--lead {
+    font-size: var(--text-xl);
+    text-transform: none;
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .pf__desc {
+    grid-area: desc;
+    margin-top: var(--space-3xs);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-muted);
+  }
+
+  /* --- Desktop: el riel se acuesta ----------------------------------------- */
+
   @media (min-width: 64rem) {
-    .process {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    .pf {
+      gap: var(--space-lg);
     }
 
-    .process__step--wide {
-      grid-column: 1 / -1;
+    .pf__lead {
+      display: grid;
+      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+      align-items: start;
+      column-gap: var(--space-xl);
+    }
+
+    .pf__lead-desc {
+      margin-top: 0;
+    }
+
+    .pf__detail {
+      grid-column: 2;
+      margin-top: var(--space-sm);
+    }
+
+    .pf__rail {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      column-gap: var(--space-sm);
+    }
+
+    .pf__step {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'marker'
+        'number'
+        'title'
+        'desc';
+      padding-bottom: 0;
+    }
+
+    .pf__marker {
+      justify-content: flex-start;
+      padding-top: 0;
+      padding-bottom: var(--space-sm);
+    }
+
+    .pf__line {
+      inset-block-start: 3px;
+      inset-inline-start: 0.625rem;
+      inline-size: calc(100% + var(--space-sm));
+      block-size: 1px;
+      background: linear-gradient(90deg, var(--border-active), var(--border));
+    }
+
+    .pf__desc {
+      font-size: var(--text-xs);
+      line-height: 1.45;
     }
   }
 </style>

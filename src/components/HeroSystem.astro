@@ -1,82 +1,155 @@
 ---
 /**
- * HeroSystem — visual del hero.
+ * HeroSystem — visual principal del hero.
  *
- * Concepto: el sistema de crecimiento como infraestructura, no como embudo de
- * PowerPoint. Riel vertical con los nodos, dos puntos de fuga marcados y un
- * arco de retorno que cierra el ciclo.
+ * Concepto: infraestructura de Growth, no un embudo de PowerPoint. Nodos,
+ * conexiones reales, dos puntos de perdida marcados, el tramo hacia revenue
+ * enfatizado y un loop de feedback que vuelve de DATA a TRAFFIC.
  *
- * aria-hidden a proposito: toda la informacion que transmite esta escrita en
- * texto en la seccion "Where growth breaks". El SVG no es la unica fuente.
+ * Cero imagenes, cero video, cero dependencias. Todo SVG inline.
  *
- * Cero imagenes, cero video, cero dependencias. Se oculta bajo 64rem: en
- * mobile el hero tiene que dejar visibles H1, subheadline y CTA primario.
+ * SUSTITUCION FUTURA POR VIDEO
+ * Cuando existan los assets, se pasan por props y el componente cambia el
+ * diagrama por el video sin tocar el copy ni el layout del hero:
+ *
+ *   <HeroSystem
+ *     poster="/assets/hero-growth-poster.webp"
+ *     sources={[
+ *       { src: '/assets/hero-growth.webm', type: 'video/webm' },
+ *       { src: '/assets/hero-growth.mp4', type: 'video/mp4' },
+ *     ]}
+ *   />
+ *
+ * El video hereda la misma caja, el mismo radio y el mismo aspect-ratio,
+ * arranca en el poster y respeta prefers-reduced-motion.
+ *
+ * aria-hidden: toda la informacion que transmite esta escrita en texto en la
+ * seccion "Where growth breaks". El grafico nunca es la unica fuente.
  */
+export interface Props {
+  poster?: string;
+  sources?: { src: string; type: string }[];
+}
+
+const { poster, sources = [] } = Astro.props;
+const hasVideo = Boolean(poster && sources.length > 0);
+
+/** y de cada nodo en el viewBox. Paso constante de 42. */
 const NODES = [
-  { label: 'TRAFFIC', leak: null },
-  { label: 'CREATIVE', leak: 'Mensaje que no conecta' },
-  { label: 'LANDING', leak: null },
-  { label: 'LEAD', leak: null },
-  { label: 'SALES', leak: 'Seguimiento lento' },
-  { label: 'REVENUE', leak: null },
-  { label: 'DATA', leak: null },
+  { label: 'TRAFFIC', y: 26 },
+  { label: 'CREATIVE', y: 68, leak: 'Mensaje que no conecta' },
+  { label: 'LANDING', y: 110 },
+  { label: 'LEAD', y: 152 },
+  { label: 'SALES', y: 194, leak: 'Seguimiento lento' },
+  { label: 'REVENUE', y: 236, gain: true },
+  { label: 'DATA', y: 278 },
 ];
+
+const RAIL_X = 30;
 ---
 
 <div class="hero-system" aria-hidden="true">
-  <div class="hero-system__panel">
+  <div class="hero-system__frame">
     <div class="hero-system__head">
-      <span class="hero-system__label">GROWTH SYSTEM</span>
-      <span class="hero-system__pulse"></span>
+      <span class="hero-system__label">Growth system</span>
+      <span class="hero-system__live">
+        <span class="hero-system__pulse"></span>
+        conectado
+      </span>
     </div>
 
-    <ol class="hero-system__rail">
-      {
-        NODES.map((node, i) => (
-          <li class:list={['hero-node', node.leak && 'hero-node--leak']}>
-            <span class="hero-node__dot" />
-            <span class="hero-node__label">{node.label}</span>
-            {node.leak && <span class="hero-node__leak">{node.leak}</span>}
-            {i < NODES.length - 1 && <span class="hero-node__link" />}
-          </li>
-        ))
-      }
-    </ol>
+    {
+      hasVideo ? (
+        <video
+          class="hero-system__video"
+          poster={poster}
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="none"
+        >
+          {sources.map((s) => <source src={s.src} type={s.type} />)}
+        </video>
+      ) : (
+        <svg class="hero-system__svg" viewBox="0 0 300 312" role="presentation" focusable="false">
+          {/* Loop de feedback: sale de DATA, rodea por la derecha y vuelve a
+              TRAFFIC. Es lo que convierte la cadena en un sistema. */}
+          <path
+            class="hs-loop"
+            d={`M ${RAIL_X} 278 H 244 a 16 16 0 0 0 16 -16 V 24 a 14 14 0 0 0 -14 -14 H ${RAIL_X} V 17`}
+            fill="none"
+          />
+          <path class="hs-loop-arrow" d={`M ${RAIL_X - 5} 12 l 5 5 l 5 -5`} fill="none" />
+          <text class="hs-loop-label" x="276" y="152" transform="rotate(-90 276 152)">
+            ITERATE
+          </text>
 
-    <div class="hero-system__loop">
-      <svg width="100%" height="34" viewBox="0 0 200 34" fill="none" focusable="false">
-        <path
-          d="M188 2 v18 a10 10 0 0 1 -10 10 H22 a10 10 0 0 1 -10 -10 V12"
-          stroke="var(--accent-line)"
-          stroke-width="1.25"
-          stroke-dasharray="3 4"
-        />
-        <path
-          d="M8 17 l4 -6 l4 6"
-          stroke="var(--accent)"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-      <span class="hero-system__loop-label">ITERATE</span>
+          {NODES.map((node, i) => {
+            const next = NODES[i + 1];
+            // El tramo LEAD -> SALES -> REVENUE es el que lleva a ingreso:
+            // se dibuja mas marcado que el resto.
+            // includes() y no una comparacion con <: el parser de Astro lee
+            // el < dentro de JSX como apertura de tag.
+            const toRevenue = [3, 4].includes(i);
+            return (
+              <>
+                {next && (
+                  <line
+                    class:list={['hs-link', toRevenue && 'hs-link--gain']}
+                    x1={RAIL_X}
+                    y1={node.y + 7}
+                    x2={RAIL_X}
+                    y2={next.y - 7}
+                  />
+                )}
+                {node.leak && (
+                  <>
+                    <line class="hs-leak-line" x1={RAIL_X} y1={node.y} x2={RAIL_X + 20} y2={node.y} />
+                    <circle class="hs-leak-dot" cx={RAIL_X + 24} cy={node.y} r="2.5" />
+                  </>
+                )}
+                <circle
+                  class:list={['hs-node', node.leak && 'hs-node--leak', node.gain && 'hs-node--gain']}
+                  cx={RAIL_X}
+                  cy={node.y}
+                  r={node.gain ? 6.5 : 5}
+                />
+                <text
+                  class:list={['hs-label', node.leak && 'hs-label--leak', node.gain && 'hs-label--gain']}
+                  x={node.leak ? RAIL_X + 34 : RAIL_X + 18}
+                  y={node.y + 3.5}
+                >
+                  {node.label}
+                </text>
+                {node.leak && (
+                  <text class="hs-leak-text" x={RAIL_X + 34} y={node.y + 16}>
+                    {node.leak}
+                  </text>
+                )}
+              </>
+            );
+          })}
+        </svg>
+      )
+    }
+
+    <div class="hero-system__legend">
+      <span class="hs-key hs-key--leak">Punto de pérdida</span>
+      <span class="hs-key hs-key--gain">Tramo a ingreso</span>
     </div>
   </div>
 </div>
 
 <style>
   .hero-system {
-    display: none;
+    inline-size: 100%;
   }
 
-  .hero-system__panel {
+  .hero-system__frame {
     position: relative;
-    padding: var(--space-md) var(--space-md) var(--space-sm);
-    background: linear-gradient(
-      160deg,
-      var(--surface) 0%,
-      var(--bg-secondary) 100%
-    );
+    padding: var(--space-sm) var(--space-sm) var(--space-xs);
+    background: linear-gradient(158deg, var(--surface) 0%, var(--bg-secondary) 100%);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     box-shadow: var(--highlight-top), var(--shadow-lg);
@@ -86,127 +159,183 @@ const NODES = [
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: var(--space-sm);
+    gap: var(--space-sm);
+    padding-bottom: var(--space-xs);
     border-bottom: 1px solid var(--border);
   }
 
-  .hero-system__label {
+  .hero-system__label,
+  .hero-system__live {
     font-family: var(--font-heading);
     font-size: var(--text-2xs);
     font-weight: var(--weight-bold);
     letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+  }
+
+  .hero-system__label {
     color: var(--text-muted);
   }
 
-  /* Punto vivo. Unica animacion del hero, y se apaga con reduced-motion. */
+  /* Verde solo aca y en el nodo de revenue: sistema conectado y resultado
+     positivo. Nunca decorativo. */
+  .hero-system__live {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    color: var(--positive);
+  }
+
   .hero-system__pulse {
     inline-size: 6px;
     block-size: 6px;
     border-radius: var(--radius-full);
     background: var(--positive);
-    box-shadow: 0 0 0 0 rgba(54, 211, 153, 0.5);
-    animation: heroPulse 2.6s var(--ease-out) infinite;
+    animation: hsPulse 2.8s var(--ease-out) infinite;
   }
 
-  @keyframes heroPulse {
+  @keyframes hsPulse {
     0% { box-shadow: 0 0 0 0 rgba(54, 211, 153, 0.45); }
     70% { box-shadow: 0 0 0 7px rgba(54, 211, 153, 0); }
     100% { box-shadow: 0 0 0 0 rgba(54, 211, 153, 0); }
   }
 
+  .hero-system__svg,
+  .hero-system__video {
+    display: block;
+    inline-size: 100%;
+    margin-block: var(--space-2xs);
+    font-family: var(--font-heading);
+  }
+
+  .hero-system__video {
+    aspect-ratio: 300 / 312;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+  }
+
+  /* --- Nodos y conexiones -------------------------------------------------- */
+
+  .hs-node {
+    fill: var(--bg-primary);
+    stroke: var(--border-active);
+    stroke-width: 2;
+  }
+
+  .hs-node--leak {
+    stroke: var(--warning);
+  }
+
+  .hs-node--gain {
+    fill: var(--positive);
+    stroke: var(--positive);
+  }
+
+  .hs-link {
+    stroke: var(--border-active);
+    stroke-width: 1.25;
+  }
+
+  /* El tramo que efectivamente lleva a ingreso se dibuja mas presente. */
+  .hs-link--gain {
+    stroke: var(--accent);
+    stroke-width: 2;
+  }
+
+  .hs-leak-line,
+  .hs-leak-dot {
+    stroke: var(--warning);
+    stroke-width: 1.25;
+    fill: none;
+    opacity: 0.75;
+  }
+
+  .hs-leak-dot {
+    fill: var(--warning);
+  }
+
+  .hs-label {
+    fill: var(--text-secondary);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+  }
+
+  .hs-label--leak,
+  .hs-label--gain {
+    fill: var(--text-primary);
+  }
+
+  .hs-leak-text {
+    fill: var(--warning);
+    font-size: 8.5px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    opacity: 0.9;
+  }
+
+  .hs-loop {
+    stroke: var(--accent-line);
+    stroke-width: 1.25;
+    stroke-dasharray: 3 5;
+  }
+
+  .hs-loop-arrow {
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .hs-loop-label {
+    fill: var(--accent);
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-anchor: middle;
+  }
+
+  /* --- Leyenda ------------------------------------------------------------- */
+
+  .hero-system__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-sm);
+    padding-top: var(--space-2xs);
+    border-top: 1px solid var(--border);
+  }
+
+  .hs-key {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+  }
+
+  .hs-key::before {
+    content: '';
+    inline-size: 6px;
+    block-size: 6px;
+    border-radius: var(--radius-full);
+  }
+
+  .hs-key--leak::before { background: var(--warning); }
+  .hs-key--gain::before { background: var(--accent); }
+
   @media (prefers-reduced-motion: reduce) {
     .hero-system__pulse { animation: none; }
-  }
-
-  .hero-system__rail {
-    list-style: none;
-    margin: 0;
-    padding: var(--space-sm) 0 0;
-  }
-
-  .hero-node {
-    position: relative;
-    display: grid;
-    grid-template-columns: 14px 1fr;
-    align-items: center;
-    column-gap: var(--space-2xs);
-    padding-block: 0.4375rem;
-  }
-
-  .hero-node__dot {
-    inline-size: 7px;
-    block-size: 7px;
-    margin-inline-start: 3px;
-    border-radius: var(--radius-full);
-    background: var(--border-active);
-    box-shadow: 0 0 0 3px var(--bg-secondary);
-    z-index: 1;
-  }
-
-  .hero-node--leak .hero-node__dot {
-    background: var(--warning);
-  }
-
-  /* Segmento de riel entre nodo y nodo */
-  .hero-node__link {
-    position: absolute;
-    inset-block-start: 60%;
-    inset-inline-start: 6px;
-    inline-size: 1px;
-    block-size: 100%;
-    background: var(--border);
-  }
-
-  .hero-node--leak .hero-node__link {
-    background: linear-gradient(var(--warning), var(--border));
-    opacity: 0.5;
-  }
-
-  .hero-node__label {
-    font-family: var(--font-heading);
-    font-size: var(--text-2xs);
-    font-weight: var(--weight-bold);
-    letter-spacing: var(--tracking-wide);
-    color: var(--text-secondary);
-  }
-
-  .hero-node--leak .hero-node__label {
-    color: var(--text-primary);
-  }
-
-  .hero-node__leak {
-    grid-column: 2;
-    font-size: var(--text-2xs);
-    letter-spacing: 0;
-    color: var(--warning);
-    opacity: 0.85;
-  }
-
-  .hero-system__loop {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2xs);
-    padding-top: var(--space-2xs);
-  }
-
-  .hero-system__loop svg {
-    flex: 1;
-  }
-
-  .hero-system__loop-label {
-    font-family: var(--font-heading);
-    font-size: var(--text-2xs);
-    font-weight: var(--weight-bold);
-    letter-spacing: var(--tracking-eyebrow);
-    color: var(--accent);
+    .hero-system__video { display: none; }
   }
 
   @media (min-width: 64rem) {
     .hero-system {
-      display: block;
-      inline-size: 100%;
-      max-inline-size: 20rem;
+      max-inline-size: 21rem;
       justify-self: end;
+    }
+
+    .hero-system__frame {
+      padding: var(--space-md) var(--space-md) var(--space-sm);
     }
   }
 </style>
