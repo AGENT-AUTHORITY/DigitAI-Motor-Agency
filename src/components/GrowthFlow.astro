@@ -1,10 +1,14 @@
 ---
 /**
- * GrowthFlow — "Where growth breaks".
+ * GrowthFlow — cadena de nodos con nota por nodo.
  *
- * Cadena horizontal en desktop, vertical en mobile. Cada nodo lleva su
- * perdida tipica en TEXTO, no dentro de un SVG: la informacion no puede
- * existir solo como grafico (WCAG 1.1.1).
+ * Cadena horizontal en desktop, vertical en mobile. La nota de cada nodo va
+ * en TEXTO, no dentro de un SVG: la informacion no puede existir solo como
+ * grafico (WCAG 1.1.1).
+ *
+ * Se usa con tres lecturas distintas: donde se pierde rendimiento (home),
+ * el recorrido de la intencion (CRO) y el de los sistemas comerciales
+ * (Growth Engineering).
  *
  * Orientacion distinta a la del visual del hero a proposito: alli es un riel
  * vertical con el ciclo, aca es la cadena con el detalle de cada fuga. Mismo
@@ -12,7 +16,7 @@
  */
 export interface FlowNode {
   label: string;
-  loss: string;
+  note: string;
 }
 
 export interface Props {
@@ -20,9 +24,12 @@ export interface Props {
 }
 
 const { nodes } = Astro.props;
+
+// El numero de columnas sale de la cantidad de nodos, no de un valor fijo.
+const cols = nodes.length;
 ---
 
-<ol class="flow" role="list">
+<ol class="flow" role="list" style={`--flow-cols:${cols}`}>
   {
     nodes.map((node, i) => (
       <li class="flow__node" data-reveal data-reveal-delay={String((i % 3) + 1)}>
@@ -31,7 +38,7 @@ const { nodes } = Astro.props;
           {i < nodes.length - 1 && <span class="flow__line" />}
         </div>
         <p class="flow__label">{node.label}</p>
-        <p class="flow__loss">{node.loss}</p>
+        <p class="flow__note">{node.note}</p>
       </li>
     ))
   }
@@ -53,7 +60,7 @@ const { nodes } = Astro.props;
     grid-template-columns: 1.5rem 1fr;
     grid-template-areas:
       'marker label'
-      '.      loss';
+      '.      note';
     column-gap: var(--space-sm);
     padding-block: var(--space-xs) var(--space-md);
   }
@@ -92,8 +99,8 @@ const { nodes } = Astro.props;
     color: var(--text-primary);
   }
 
-  .flow__loss {
-    grid-area: loss;
+  .flow__note {
+    grid-area: note;
     margin-top: var(--space-3xs);
     font-size: var(--text-sm);
     line-height: var(--leading-normal);
@@ -104,7 +111,7 @@ const { nodes } = Astro.props;
      Los nodos son 7, asi que a partir de 64rem entran comodos. */
   @media (min-width: 64rem) {
     .flow {
-      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-columns: repeat(var(--flow-cols, 7), minmax(0, 1fr));
       column-gap: var(--space-sm);
     }
 
@@ -113,7 +120,7 @@ const { nodes } = Astro.props;
       grid-template-areas:
         'marker'
         'label'
-        'loss';
+        'note';
       padding-block: 0 0;
     }
 
@@ -135,7 +142,7 @@ const { nodes } = Astro.props;
       font-size: var(--text-xs);
     }
 
-    .flow__loss {
+    .flow__note {
       margin-top: var(--space-2xs);
       font-size: var(--text-xs);
       line-height: var(--leading-normal);

@@ -1,0 +1,90 @@
+---
+/**
+ * RelatedLinks — enlaces contextuales al final de una service page.
+ *
+ * Cada enlace lleva el motivo por el que existe. Si no se puede escribir un
+ * motivo que le sirva al lector, el enlace no va: no se enlaza por SEO.
+ */
+export interface Related {
+  label: string;
+  href: string;
+  reason: string;
+}
+
+export interface Props {
+  items: Related[];
+  title?: string;
+}
+
+const { items, title = 'Si el problema está en otro lado' } = Astro.props;
+---
+
+<aside class="rel" aria-labelledby="rel-title">
+  <p class="eyebrow eyebrow--muted" id="rel-title">{title}</p>
+  <ul class="rel__list" role="list">
+    {
+      items.map((item) => (
+        <li class="rel__item">
+          <a class="rel__link" href={item.href}>
+            {item.label}
+            <svg class="rel__arrow" width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+          <p class="rel__reason">{item.reason}</p>
+        </li>
+      ))
+    }
+  </ul>
+</aside>
+
+<style>
+  .rel {
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border);
+  }
+
+  .rel__list {
+    display: grid;
+    gap: var(--space-md);
+    list-style: none;
+    margin: var(--space-md) 0 0;
+    padding: 0;
+  }
+
+  .rel__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .rel__link:hover {
+    color: var(--accent);
+  }
+
+  .rel__arrow {
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .rel__link:hover .rel__arrow {
+    transform: translateX(3px);
+  }
+
+  .rel__reason {
+    margin-top: var(--space-3xs);
+    max-width: 46ch;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 48rem) {
+    .rel__list { grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: var(--space-lg); }
+  }
+</style>

@@ -3,6 +3,7 @@ import ServiceLayout from '../layouts/ServiceLayout.astro';
 import ServiceSection from '../components/ServiceSection.astro';
 import CheckList from '../components/CheckList.astro';
 import FAQ from '../components/FAQ.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
 import { ANCHORS } from '../data/navigation';
 
 const alcance = [
@@ -71,5 +72,27 @@ const faqs = [
 
   <ServiceSection title="Preguntas frecuentes." narrow alt id="faq">
     <FAQ items={faqs} />
+    <div class="ma-related">
+      <RelatedLinks
+        items={[
+          {
+            label: 'Performance Creative',
+            href: '/performance-creative/',
+            reason: 'En Meta el creativo es la variable principal. Si no hay ángulos nuevos que probar, la cuenta se estanca.',
+          },
+          {
+            label: 'Growth Engineering',
+            href: '/growth-engineering/',
+            reason: 'Conectar el CRM con la plataforma cambia hacia qué optimiza la campaña.',
+          },
+        ]}
+      />
+    </div>
   </ServiceSection>
 </ServiceLayout>
+
+<style>
+  .ma-related {
+    margin-top: var(--space-xl);
+  }
+</style>

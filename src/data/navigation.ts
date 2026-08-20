@@ -49,13 +49,39 @@ export const ANCHORS = {
   evidence: '/#evidence',
 } as const;
 
-/** Nav principal. Orden = prioridad comercial. */
+/**
+ * Submenu de servicios. Agrupado en dos bloques porque son dos decisiones
+ * distintas: sobre que frente trabajar, y con que sistema resolverlo.
+ */
+export const SERVICES_MENU: NavGroup[] = [
+  {
+    title: 'Growth',
+    links: [
+      { label: 'Growth Audit', href: '/growth-audit/', description: 'Dónde se pierde el rendimiento' },
+      { label: 'Performance Creative', href: '/performance-creative/', description: 'Research, hooks y testing' },
+      { label: 'Paid Media', href: '/paid-media/', description: 'Google Ads y Meta Ads' },
+    ],
+  },
+  {
+    title: 'Soluciones',
+    links: [
+      { label: 'Google Ads', href: '/google-ads/', description: 'Intención declarada' },
+      { label: 'Meta Ads', href: '/meta-ads/', description: 'Demanda que todavía no busca' },
+      { label: 'CRO & Landing Pages', href: '/cro-landing-pages/', description: 'Convertir la intención que llega' },
+      { label: 'Growth Engineering', href: '/growth-engineering/', description: 'Construir lo que falta' },
+    ],
+  },
+];
+
+/**
+ * Nav principal. Cuatro items y un CTA: Growth Audit es la puerta comercial y
+ * Quick Fix la entrada acotada, asi que ambos van al primer nivel. El resto
+ * vive dentro de Servicios.
+ */
 export const MAIN_NAV: NavLink[] = [
   { label: 'Growth Audit', href: '/growth-audit/' },
-  { label: 'Performance Creative', href: '/performance-creative/' },
-  { label: 'Paid Media', href: '/paid-media/' },
+  { label: 'Quick Fix', href: '/quick-fix/' },
   { label: 'Evidencia', href: ANCHORS.evidence },
-  { label: 'Quick Fix', href: ANCHORS.quickFix },
 ];
 
 export const NAV_CTA: NavLink = {
@@ -71,7 +97,8 @@ export const FOOTER_NAV: NavGroup[] = [
       { label: 'Performance Creative', href: '/performance-creative/' },
       { label: 'Paid Media', href: '/paid-media/' },
       { label: 'Google Ads', href: '/google-ads/' },
-      { label: 'CRO & Landing Pages', href: '/cro-landing-pages/', pending: true },
+      { label: 'Meta Ads', href: '/meta-ads/' },
+      { label: 'CRO & Landing Pages', href: '/cro-landing-pages/' },
     ],
   },
   {
@@ -79,8 +106,8 @@ export const FOOTER_NAV: NavGroup[] = [
     links: [
       { label: 'Tracking & Analytics', href: '/tracking-analytics/', pending: true },
       { label: 'CRM & Automation', href: '/crm-automation/', pending: true },
-      { label: 'Growth Engineering', href: '/growth-engineering/', pending: true },
-      { label: 'Quick Fix', href: '/quick-fix/', pending: true },
+      { label: 'Growth Engineering', href: '/growth-engineering/' },
+      { label: 'Quick Fix', href: '/quick-fix/' },
     ],
   },
   {

@@ -4,6 +4,7 @@ import ServiceSection from '../components/ServiceSection.astro';
 import CheckList from '../components/CheckList.astro';
 import CreativeFlow from '../components/CreativeFlow.astro';
 import FAQ from '../components/FAQ.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
 import { ANCHORS } from '../data/navigation';
 
 const research = [
@@ -59,7 +60,7 @@ const faqs = [
 ---
 
 <ServiceLayout
-  title="Performance Creative | Creative testing y estrategia | digitAI Motor"
+  title="Performance Creative y creative testing | digitAI Motor"
   description="Research, ángulos, conceptos, hooks y testing. Convertimos creatividad en hipótesis medibles y leemos qué merece iteración."
   eyebrow="Performance Creative"
   heading="Tu próximo ganador puede estar escondido en los datos que ya tenés."
@@ -113,5 +114,27 @@ const faqs = [
 
   <ServiceSection title="Preguntas frecuentes." narrow id="faq">
     <FAQ items={faqs} />
+    <div class="pc-related">
+      <RelatedLinks
+        items={[
+          {
+            label: 'Meta Ads',
+            href: '/meta-ads/',
+            reason: 'Es donde el creativo tiene más peso: sin demanda que busque, el ángulo hace todo el trabajo.',
+          },
+          {
+            label: 'CRO & Landing Pages',
+            href: '/cro-landing-pages/',
+            reason: 'Si el ángulo cambia, la landing tiene que responder a esa promesa y no a la anterior.',
+          },
+        ]}
+      />
+    </div>
   </ServiceSection>
 </ServiceLayout>
+
+<style>
+  .pc-related {
+    margin-top: var(--space-xl);
+  }
+</style>

@@ -4,6 +4,7 @@ import ServiceSection from '../components/ServiceSection.astro';
 import CheckList from '../components/CheckList.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import FAQ from '../components/FAQ.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
 import { ANCHORS } from '../data/navigation';
 
 const canales = [
@@ -104,5 +105,32 @@ const faqs = [
 
   <ServiceSection title="Preguntas frecuentes." narrow id="faq">
     <FAQ items={faqs} />
+    <div class="pm-related">
+      <RelatedLinks
+        items={[
+          {
+            label: 'Growth Audit',
+            href: '/growth-audit/',
+            reason: 'Antes de mover presupuesto conviene saber qué está midiendo la cuenta hoy.',
+          },
+          {
+            label: 'CRO & Landing Pages',
+            href: '/cro-landing-pages/',
+            reason: 'El rendimiento de una campaña se define tanto en la página de destino como en la puja.',
+          },
+          {
+            label: 'Performance Creative',
+            href: '/performance-creative/',
+            reason: 'Sin ángulos nuevos que probar, la optimización de campaña llega a un techo.',
+          },
+        ]}
+      />
+    </div>
   </ServiceSection>
 </ServiceLayout>
+
+<style>
+  .pm-related {
+    margin-top: var(--space-xl);
+  }
+</style>

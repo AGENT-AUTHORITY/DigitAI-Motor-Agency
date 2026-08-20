@@ -18,13 +18,13 @@ import { ANCHORS, LINKEDIN_URL, SITE } from '../data/navigation';
 const site = Astro.site ?? new URL('https://www.digitaimotor.lat');
 
 const growthNodes = [
-  { label: 'TRAFFIC', loss: 'Tráfico que no debería llegar' },
-  { label: 'CREATIVE', loss: 'Mensaje que no conecta' },
-  { label: 'LANDING', loss: 'La intención se pierde en la página' },
-  { label: 'LEAD', loss: 'Contactos que no califican' },
-  { label: 'SALES', loss: 'Seguimiento lento o inexistente' },
-  { label: 'REVENUE', loss: 'No se sabe qué terminó vendiendo' },
-  { label: 'DATA', loss: 'Atribución rota' },
+  { label: 'TRAFFIC', note: 'Tráfico que no debería llegar' },
+  { label: 'CREATIVE', note: 'Mensaje que no conecta' },
+  { label: 'LANDING', note: 'La intención se pierde en la página' },
+  { label: 'LEAD', note: 'Contactos que no califican' },
+  { label: 'SALES', note: 'Seguimiento lento o inexistente' },
+  { label: 'REVENUE', note: 'No se sabe qué terminó vendiendo' },
+  { label: 'DATA', note: 'Atribución rota' },
 ];
 
 const processSteps = [

@@ -4,6 +4,7 @@ import ServiceSection from '../components/ServiceSection.astro';
 import CheckList from '../components/CheckList.astro';
 import MetricCard from '../components/MetricCard.astro';
 import FAQ from '../components/FAQ.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
 import { ANCHORS } from '../data/navigation';
 
 const alcance = [
@@ -90,10 +91,30 @@ const faqs = [
 
   <ServiceSection title="Preguntas frecuentes." narrow id="faq">
     <FAQ items={faqs} />
+    <div class="ga-related">
+      <RelatedLinks
+        items={[
+          {
+            label: 'CRO & Landing Pages',
+            href: '/cro-landing-pages/',
+            reason: 'Si el término es correcto pero la página no responde a esa búsqueda, la intención se pierde después del clic.',
+          },
+          {
+            label: 'Growth Audit',
+            href: '/growth-audit/',
+            reason: 'Si no está claro dónde se está yendo el presupuesto, conviene mirar el recorrido completo antes de optimizar.',
+          },
+        ]}
+      />
+    </div>
   </ServiceSection>
 </ServiceLayout>
 
 <style>
+  .ga-related {
+    margin-top: var(--space-xl);
+  }
+
   .ga-metrics {
     display: grid;
     grid-template-columns: 1fr;

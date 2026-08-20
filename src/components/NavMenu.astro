@@ -1,0 +1,210 @@
+---
+import type { NavGroup } from '../data/navigation';
+
+/**
+ * NavMenu — submenu accesible de servicios.
+ *
+ * Abre por CLICK, no por hover: un menu solo-hover es inalcanzable con
+ * teclado y errático en touch. El boton lleva aria-expanded y aria-controls,
+ * Escape cierra y devuelve el foco, y un click afuera tambien cierra.
+ *
+ * No es un mega-menu: son dos columnas de enlaces con una linea de contexto
+ * cada uno. En mobile no se usa — ahi el panel lista todo plano.
+ */
+export interface Props {
+  label: string;
+  groups: NavGroup[];
+  pathname: string;
+}
+
+const { label, groups, pathname } = Astro.props;
+const isActive = groups.some((g) => g.links.some((l) => pathname.startsWith(l.href)));
+---
+
+<div class="navmenu" data-navmenu>
+  <button
+    class="navmenu__trigger"
+    type="button"
+    aria-expanded="false"
+    aria-controls="services-menu"
+    aria-current={isActive ? 'true' : undefined}
+    data-navmenu-trigger
+  >
+    {label}
+    <svg class="navmenu__chevron" width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <div class="navmenu__panel" id="services-menu" hidden data-navmenu-panel>
+    {
+      groups.map((group) => (
+        <div class="navmenu__group">
+          <p class="navmenu__group-title">{group.title}</p>
+          <ul class="navmenu__list" role="list">
+            {group.links.map((link) => (
+              <li>
+                <a
+                  class="navmenu__link"
+                  href={link.href}
+                  aria-current={pathname.startsWith(link.href) ? 'page' : undefined}
+                >
+                  <span class="navmenu__link-label">{link.label}</span>
+                  {link.description && <span class="navmenu__link-desc">{link.description}</span>}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .navmenu {
+    position: relative;
+  }
+
+  .navmenu__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    padding: var(--space-2xs) var(--space-xs);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text-secondary);
+    border-radius: var(--radius-xs);
+    transition: color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .navmenu__trigger:hover,
+  .navmenu__trigger[aria-expanded='true'] {
+    color: var(--text-primary);
+    background: var(--accent-soft);
+  }
+
+  .navmenu__trigger[aria-current='true'] {
+    color: var(--text-primary);
+  }
+
+  .navmenu__chevron {
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .navmenu__trigger[aria-expanded='true'] .navmenu__chevron {
+    transform: rotate(180deg);
+  }
+
+  .navmenu__panel {
+    position: absolute;
+    inset-block-start: calc(100% + var(--space-2xs));
+    inset-inline-start: 50%;
+    translate: -50% 0;
+    z-index: var(--z-overlay);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-lg);
+    inline-size: max-content;
+    max-inline-size: 40rem;
+    padding: var(--space-md);
+    background: var(--surface);
+    border: 1px solid var(--border-active);
+    border-radius: var(--radius-md);
+    box-shadow: var(--highlight-top), var(--shadow-lg);
+  }
+
+  .navmenu__panel[hidden] {
+    display: none;
+  }
+
+  .navmenu__group-title {
+    margin-bottom: var(--space-2xs);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .navmenu__list {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navmenu__link {
+    display: grid;
+    gap: 1px;
+    padding: var(--space-2xs) var(--space-2xs);
+    margin-inline: calc(var(--space-2xs) * -1);
+    border-radius: var(--radius-xs);
+    text-decoration: none;
+    transition: background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .navmenu__link:hover {
+    background: var(--surface-hover);
+  }
+
+  .navmenu__link-label {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+
+  .navmenu__link[aria-current='page'] .navmenu__link-label {
+    color: var(--accent);
+  }
+
+  .navmenu__link-desc {
+    font-size: var(--text-xs);
+    line-height: var(--leading-normal);
+    color: var(--text-muted);
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-navmenu]');
+  const trigger = root?.querySelector<HTMLButtonElement>('[data-navmenu-trigger]');
+  const panel = root?.querySelector<HTMLElement>('[data-navmenu-panel]');
+
+  if (root && trigger && panel) {
+    const setOpen = (open: boolean) => {
+      trigger.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+    };
+
+    trigger.addEventListener('click', () => {
+      setOpen(trigger.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Escape cierra y devuelve el foco al boton: sin esto el usuario de
+    // teclado queda con el foco dentro de un panel que ya no ve.
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      if (trigger.getAttribute('aria-expanded') !== 'true') return;
+      setOpen(false);
+      trigger.focus();
+    });
+
+    // Click afuera cierra. Con pointerdown en vez de click para que no quede
+    // abierto un instante cuando se hace click sobre otro trigger.
+    document.addEventListener('pointerdown', (event) => {
+      if (root.contains(event.target as Node)) return;
+      setOpen(false);
+    });
+
+    // Salir del panel con Tab tambien cierra.
+    root.addEventListener('focusout', (event) => {
+      if (root.contains(event.relatedTarget as Node)) return;
+      setOpen(false);
+    });
+  }
+</script>

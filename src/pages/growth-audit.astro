@@ -4,6 +4,7 @@ import ServiceSection from '../components/ServiceSection.astro';
 import CheckList from '../components/CheckList.astro';
 import ProcessFlow from '../components/ProcessFlow.astro';
 import FAQ from '../components/FAQ.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
 import { ANCHORS } from '../data/navigation';
 
 const audita = [
@@ -68,7 +69,7 @@ const faqs = [
 ---
 
 <ServiceLayout
-  title="Auditoría de Growth | Diagnóstico de adquisición | digitAI Motor"
+  title="Auditoría de Growth y adquisición digital | digitAI Motor"
   description="Auditamos campañas, creativos, landing, medición y proceso comercial para encontrar dónde se pierde rendimiento antes de invertir más."
   eyebrow="Growth Audit"
   heading="Encontrá dónde se está perdiendo tu presupuesto antes de invertir más."
@@ -113,5 +114,38 @@ const faqs = [
 
   <ServiceSection title="Preguntas antes de empezar." narrow id="faq">
     <FAQ items={faqs} />
+    <div class="ga-related">
+      <RelatedLinks
+        title="Dónde suele terminar el diagnóstico"
+        items={[
+          {
+            label: 'Paid Media',
+            href: '/paid-media/',
+            reason: 'Cuando el problema está en qué se está comprando y con qué estructura.',
+          },
+          {
+            label: 'Performance Creative',
+            href: '/performance-creative/',
+            reason: 'Cuando el tráfico es correcto pero el mensaje no conecta.',
+          },
+          {
+            label: 'CRO & Landing Pages',
+            href: '/cro-landing-pages/',
+            reason: 'Cuando la intención llega y se pierde en la página.',
+          },
+          {
+            label: 'Growth Engineering',
+            href: '/growth-engineering/',
+            reason: 'Cuando la pieza que hace falta directamente no existe.',
+          },
+        ]}
+      />
+    </div>
   </ServiceSection>
 </ServiceLayout>
+
+<style>
+  .ga-related {
+    margin-top: var(--space-xl);
+  }
+</style>

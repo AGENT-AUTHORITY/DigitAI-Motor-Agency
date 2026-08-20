@@ -1,7 +1,8 @@
 ---
-import { MAIN_NAV, NAV_CTA, isActivePath } from '../data/navigation';
+import { MAIN_NAV, NAV_CTA, SERVICES_MENU, isActivePath } from '../data/navigation';
 import Button from './Button.astro';
 import BrandLockup from './BrandLockup.astro';
+import NavMenu from './NavMenu.astro';
 
 const pathname = Astro.url.pathname;
 ---
@@ -18,6 +19,9 @@ const pathname = Astro.url.pathname;
 
     <nav class="site-nav" aria-label="Navegación principal">
       <ul class="site-nav__list" role="list">
+        <li>
+          <NavMenu label="Servicios" groups={SERVICES_MENU} pathname={pathname} />
+        </li>
         {
           MAIN_NAV.map((link) => (
             <li>
@@ -73,6 +77,29 @@ const pathname = Astro.url.pathname;
         ))
       }
     </ul>
+
+    {/* En mobile no hay submenu: desplegar dentro de un panel ya desplegado
+        agrega un nivel que nadie necesita. Se listan los grupos completos. */}
+    {
+      SERVICES_MENU.map((group) => (
+        <div class="mobile-nav__group">
+          <p class="mobile-nav__group-title">{group.title}</p>
+          <ul class="mobile-nav__list" role="list">
+            {group.links.map((link) => (
+              <li>
+                <a
+                  class="mobile-nav__link mobile-nav__link--sub"
+                  href={link.href}
+                  aria-current={isActivePath(link.href, pathname) ? 'page' : undefined}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
     <Button label={NAV_CTA.label} href={NAV_CTA.href} block arrow />
   </div>
 </header>
@@ -229,6 +256,24 @@ const pathname = Astro.url.pathname;
 
   .mobile-nav__link[aria-current='page'] {
     color: var(--accent);
+  }
+
+  .mobile-nav__group-title {
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-3xs);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* Los items de grupo van un escalon abajo en jerarquia tipografica: son
+     destinos mas especificos que Growth Audit o Quick Fix. */
+  .mobile-nav__link--sub {
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
   }
 
   @media (min-width: 60rem) {

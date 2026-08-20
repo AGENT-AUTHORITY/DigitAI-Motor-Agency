@@ -59,18 +59,53 @@ del merge:
    proyecto de preview con dominio temporal. Requiere decisión del owner.
    No toca DNS del dominio de producción.
 
-## Secuencia de deploy (cuando se apruebe)
+## Checklist de lanzamiento
 
-1. Revisión visual local aprobada.
-2. Confirmar decisión sobre `posicionamiento-geo.html` con dato de Search Console.
-3. Cargar variables `PUBLIC_*` reales.
-4. Cambiar Pages a GitHub Actions.
-5. Merge de `feature/growth-v2` a `main`.
-6. Verificar que el workflow corre verde y que `dist/CNAME` está presente.
-7. Verificar en producción: home carga, HTTPS ok, dominio custom ok.
-8. Probar las 6 URLs legacy manualmente.
-9. Reenviar `sitemap-index.xml` en Search Console.
-10. Monitorear Cobertura en Search Console durante 14 días.
+**No confiar en memoria.** Este es el orden exacto. Cada paso depende del
+anterior.
+
+### Antes de tocar nada
+
+- [ ] Revisión visual aprobada por el owner en local
+- [ ] Decisión tomada sobre `posicionamiento-geo.html` con dato de Search Console
+- [ ] `og-default.webp` 1200×630 existe y se ve bien en el validador de LinkedIn
+- [ ] `favicon.ico` y `apple-touch-icon.png` generados desde `favicon.svg`
+- [ ] Endpoint del formulario definido y probado, o decisión explícita de seguir con el handoff a WhatsApp
+
+### Publicación
+
+1. [ ] **`SITE_IS_PUBLIC = true`** en `astro.config.mjs`
+2. [ ] **Retirar `noindex`** — en `BaseLayout` (home) y en `ServiceLayout` (`noindex = false` por defecto)
+3. [ ] **`npm run build`** y verificar que el sitemap ahora sí lista las páginas indexables
+4. [ ] **Canonical:** todas con `https://www.digitaimotor.lat` y trailing slash
+5. [ ] **`robots.txt`:** regenerado con el `Sitemap:` apuntando a www, sin bloquear CSS/JS/imágenes
+6. [ ] **Redirects legacy:** los 6 stubs responden y su canonical apunta al destino correcto
+7. [ ] **Pages a GitHub Actions:** `Settings > Pages > Source` — sin esto el merge tira el sitio
+8. [ ] **Merge y deploy:** verificar que `dist/CNAME` sobrevivió al build
+9. [ ] **Search Console:** reenviar `sitemap-index.xml`, inspeccionar las URLs legacy
+10. [ ] **Analytics:** cargar `PUBLIC_GA4_ID`, `PUBLIC_GTM_ID`, `PUBLIC_META_PIXEL_ID` y verificar eventos en DebugView
+
+### Después de publicar
+
+- [ ] QA en producción: las 9 páginas cargan, HTTPS ok, dominio custom ok
+- [ ] Lighthouse mobile sobre home y sobre una service page
+- [ ] Search Console → Cobertura durante 14 días: sin aumento de 404
+- [ ] Verificar que ninguna página quedó huérfana
+
+### Rollback
+
+`Settings > Pages > Source > Deploy from a branch > backup/pre-growth-v2 > (root)`
+
+Restaura la V1 completa sin tocar git ni DNS.
+
+### Interruptor único
+
+`SITE_IS_PUBLIC` en `astro.config.mjs` controla el sitemap. Mientras sea
+`false`, el sitemap sale vacío a propósito: un sitemap que lista páginas
+`noindex` es una contradicción que Search Console reporta como error.
+
+El `noindex` en sí vive en los layouts y se retira por separado — son dos
+gestos distintos justamente para que ninguno se active por accidente.
 
 ## Rollback
 

@@ -1,0 +1,174 @@
+---
+import ServiceLayout from '../layouts/ServiceLayout.astro';
+import ServiceSection from '../components/ServiceSection.astro';
+import GrowthFlow from '../components/GrowthFlow.astro';
+import CapabilityGrid from '../components/CapabilityGrid.astro';
+import CheckList from '../components/CheckList.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import FAQ from '../components/FAQ.astro';
+import { ANCHORS } from '../data/navigation';
+
+const cadena = [
+  { label: 'CAMPAIGN', note: 'Lo que se compra' },
+  { label: 'LANDING', note: 'Dónde aterriza' },
+  { label: 'CRM', note: 'Dónde queda registrado' },
+  { label: 'AUTOMATION', note: 'Qué se dispara solo' },
+  { label: 'SALES', note: 'Quién lo trabaja y cuándo' },
+  { label: 'DATA', note: 'Qué se puede leer después' },
+];
+
+const capacidades = [
+  {
+    problem: '¿Tenés los datos pero nadie los mira?',
+    title: 'Dashboards',
+    answer:
+      'Un tablero sirve cuando responde una pregunta que alguien se hace todas las semanas. Si no, es un informe que nadie abre.',
+    items: ['Paid media', 'Pipeline', 'Atribución', 'Operación'],
+  },
+  {
+    problem: '¿El lead entra y se queda esperando?',
+    title: 'CRM y lead routing',
+    answer:
+      'Configuración, integración o desarrollo del recorrido del contacto: a quién le llega, en cuánto tiempo y con qué contexto.',
+    items: ['Configuración', 'Integración', 'Routing', 'Recordatorios'],
+  },
+  {
+    problem: '¿Hay una tarea manual que se repite todos los días?',
+    title: 'Automatizaciones y APIs',
+    answer:
+      'Se automatiza cuando el proceso ya está claro. Automatizar un proceso confuso solo lo vuelve un proceso confuso más rápido.',
+    items: ['Integraciones', 'APIs', 'Workflows', 'AI workflows'],
+  },
+  {
+    problem: '¿Falta una herramienta que directamente no existe?',
+    title: 'Internal tools',
+    answer:
+      'Sistemas de cotización, prospección o soporte comercial construidos a medida del proceso real, no del proceso ideal.',
+    items: ['Quote systems', 'Prospecting', 'Sales tools', 'Apps internas'],
+  },
+];
+
+const criterio = [
+  'Se construye cuando el cuello de botella está en que la pieza no existe',
+  'No se construye para reemplazar una herramienta que ya funciona',
+  'Antes de desarrollar se busca si una integración estándar alcanza',
+  'El alcance sale del diagnóstico, no de lo que sea interesante de programar',
+  'Si el proceso todavía no está definido, se define antes de automatizarlo',
+];
+
+const relacionados = [
+  {
+    label: 'Growth Audit',
+    href: '/growth-audit/',
+    reason:
+      'Antes de construir conviene confirmar que el cuello de botella es realmente técnico y no de oferta o de mensaje.',
+  },
+  {
+    label: 'CRO & Landing Pages',
+    href: '/cro-landing-pages/',
+    reason:
+      'Muchas veces lo que parece un problema de sistema es fricción en el formulario o en el flujo de contacto.',
+  },
+  {
+    label: 'Meta Ads',
+    href: '/meta-ads/',
+    reason:
+      'Conectar el CRM con la plataforma cambia hacia qué optimiza la campaña: de lead barato a lead que califica.',
+  },
+];
+
+const faqs = [
+  {
+    question: '¿Son una software house?',
+    answer:
+      'No. La tecnología existe acá para resolver un cuello de botella de crecimiento. Si el problema se resuelve sin construir nada, esa es la recomendación.',
+  },
+  {
+    question: '¿Trabajan sobre sistemas que ya tenemos?',
+    answer:
+      'Sí, y es lo más frecuente. Reemplazar un sistema que funciona por uno nuevo suele costar más de lo que resuelve.',
+  },
+  {
+    question: '¿Qué pasa con el mantenimiento después?',
+    answer:
+      'Se define antes de empezar: qué queda documentado, quién puede modificarlo y qué depende de nosotros. No entregamos algo que solo nosotros podamos tocar.',
+  },
+  {
+    question: '¿Pueden integrar con nuestro CRM actual?',
+    answer:
+      'Depende de qué exponga el CRM. Si tiene API o webhooks, en general sí. Si no, lo decimos antes en vez de prometer una integración que va a terminar siendo un proceso manual disfrazado.',
+  },
+];
+---
+
+<ServiceLayout
+  title="Growth Engineering | Dashboards, CRM y APIs | digitAI Motor"
+  description="Cuando el cuello de botella está fuera del Ads Manager, construimos lo que falta: dashboards, CRM, routing, integraciones y automatización."
+  eyebrow="Growth Engineering"
+  heading="Cuando el problema está fuera de Ads Manager, construimos lo que falta."
+  intro="La tecnología existe acá para resolver un cuello de botella de crecimiento. No construimos software por construir software: si el problema se resuelve sin desarrollar nada, esa es la recomendación."
+  breadcrumbs={[{ label: 'Growth Engineering' }]}
+  serviceType="Custom software development"
+  cta={{
+    title: 'Tengo algo para construir.',
+    description:
+      'Contanos qué parte del recorrido comercial se está resolviendo a mano, o directamente no se está resolviendo.',
+    primary: { label: 'Tengo algo para construir', href: ANCHORS.growthAudit },
+    secondary: { label: 'Ver Growth Audit', href: '/growth-audit/' },
+  }}
+>
+  <ServiceSection
+    eyebrow="La cadena"
+    title="Cuando una pieza falta, la construimos."
+    lead="El recorrido comercial es una cadena de sistemas. Basta con que uno no exista para que todo lo que viene después se haga a mano."
+    alt
+    id="cadena"
+  >
+    <GrowthFlow nodes={cadena} />
+    <p class="ge-close">
+      Technology exists to solve a growth bottleneck.
+    </p>
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Capacidades"
+    title="Qué construimos, y para resolver qué."
+    id="capacidades"
+  >
+    <CapabilityGrid capabilities={capacidades} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Criterio"
+    title="Cuándo conviene construir y cuándo no."
+    lead="Lo que se decide no construir cuenta tanto como lo que se construye."
+    alt
+    id="criterio"
+  >
+    <CheckList items={criterio} />
+  </ServiceSection>
+
+  <ServiceSection title="Preguntas frecuentes." narrow id="faq">
+    <FAQ items={faqs} />
+    <div class="ge-related">
+      <RelatedLinks items={relacionados} />
+    </div>
+  </ServiceSection>
+</ServiceLayout>
+
+<style>
+  .ge-close {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--accent);
+  }
+
+  .ge-related {
+    margin-top: var(--space-xl);
+  }
+</style>
