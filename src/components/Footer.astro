@@ -1,5 +1,6 @@
 ---
 import { FOOTER_NAV, SITE } from '../data/navigation';
+import BrandMark from './BrandMark.astro';
 
 const year = new Date().getFullYear();
 
@@ -17,7 +18,7 @@ const groups = FOOTER_NAV.map((group) => ({
     <div class="site-footer__top">
       <div class="site-footer__brand">
         <a class="site-footer__lockup" href="/">
-          <img src="/assets/logo.svg" alt="" width="90" height="84" aria-hidden="true" />
+          <BrandMark size={28} title="digitAI Motor" />
           <span class="site-footer__wordmark">digitAI motor</span>
         </a>
         <p class="site-footer__tagline">{SITE.descriptor}</p>
@@ -86,13 +87,8 @@ const groups = FOOTER_NAV.map((group) => ({
   .site-footer__lockup {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2xs);
+    gap: 0.625rem;
     text-decoration: none;
-  }
-
-  .site-footer__brand img {
-    block-size: 28px;
-    inline-size: auto;
   }
 
   .site-footer__wordmark {
@@ -105,7 +101,7 @@ const groups = FOOTER_NAV.map((group) => ({
 
   .site-footer__tagline {
     margin-top: var(--space-xs);
-    max-width: 22ch;
+    max-width: 30ch;
     font-family: var(--font-heading);
     font-size: var(--text-2xs);
     font-weight: var(--weight-bold);

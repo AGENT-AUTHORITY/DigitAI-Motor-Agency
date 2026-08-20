@@ -1,6 +1,7 @@
 ---
 import { MAIN_NAV, NAV_CTA, isActivePath } from '../data/navigation';
 import Button from './Button.astro';
+import BrandMark from './BrandMark.astro';
 
 const pathname = Astro.url.pathname;
 ---
@@ -8,13 +9,7 @@ const pathname = Astro.url.pathname;
 <header class="site-header" data-header>
   <div class="container site-header__inner">
     <a class="site-header__brand" href="/" aria-label="digitAI motor — inicio">
-      <img
-        src="/assets/logo.svg"
-        alt=""
-        width="90"
-        height="84"
-        aria-hidden="true"
-      />
+      <BrandMark size={30} animated />
       <span class="site-header__wordmark">digit<em>AI</em> motor</span>
     </a>
 
@@ -117,17 +112,11 @@ const pathname = Astro.url.pathname;
   .site-header__brand {
     display: flex;
     align-items: center;
-    gap: var(--space-2xs);
+    /* Espacio de seguridad: media altura del isotipo. */
+    gap: 0.625rem;
     flex: none;
     text-decoration: none;
     border-radius: var(--radius-xs);
-  }
-
-  /* El logo es un glifo casi cuadrado (90x84), no un wordmark. El nombre va
-     al lado como texto: asi la marca se lee, escala y queda seleccionable. */
-  .site-header__brand img {
-    block-size: 28px;
-    inline-size: auto;
   }
 
   .site-header__wordmark {

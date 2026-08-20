@@ -87,13 +87,32 @@ const { capabilities } = Astro.props;
     color: var(--accent);
   }
 
-  /* Guion que ancla la capacidad a la pregunta. Reemplaza al icono generico. */
+  /* Guion que ancla la capacidad a la pregunta. Reemplaza al icono generico.
+     En hover se extiende: la fila responde sin moverse ni cambiar de color. */
   .cap__title::before {
     content: '';
     inline-size: 1.5rem;
     block-size: 2px;
     background: var(--accent);
     flex: none;
+    transform-origin: left;
+    transition: inline-size var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .cap:hover .cap__title::before {
+    inline-size: 2.75rem;
+  }
+
+  .cap {
+    transition: background-color var(--duration-normal) var(--ease-out);
+  }
+
+  .cap:hover {
+    background: linear-gradient(
+      90deg,
+      var(--accent-soft) 0%,
+      transparent 55%
+    );
   }
 
   .cap__copy {

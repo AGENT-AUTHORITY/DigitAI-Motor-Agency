@@ -95,13 +95,23 @@ const RAIL_X = 30;
             return (
               <>
                 {next && (
-                  <line
-                    class:list={['hs-link', toRevenue && 'hs-link--gain']}
-                    x1={RAIL_X}
-                    y1={node.y + 7}
-                    x2={RAIL_X}
-                    y2={next.y - 7}
-                  />
+                  <>
+                    <line
+                      class:list={['hs-link', toRevenue && 'hs-link--gain']}
+                      x1={RAIL_X}
+                      y1={node.y + 7}
+                      x2={RAIL_X}
+                      y2={next.y - 7}
+                    />
+                    <line
+                      class="hs-pulse"
+                      style={`animation-delay: ${i * 0.42}s`}
+                      x1={RAIL_X}
+                      y1={node.y + 7}
+                      x2={RAIL_X}
+                      y2={next.y - 7}
+                    />
+                  </>
                 )}
                 {node.leak && (
                   <>
@@ -109,8 +119,10 @@ const RAIL_X = 30;
                     <circle class="hs-leak-dot" cx={RAIL_X + 24} cy={node.y} r="2.5" />
                   </>
                 )}
+                {node.gain && <circle class="hs-halo" cx={RAIL_X} cy={node.y} r="6.5" />}
                 <circle
                   class:list={['hs-node', node.leak && 'hs-node--leak', node.gain && 'hs-node--gain']}
+                  style={node.leak ? `animation-delay: ${i * 1.1}s` : undefined}
                   cx={RAIL_X}
                   cy={node.y}
                   r={node.gain ? 6.5 : 5}
@@ -325,7 +337,6 @@ const RAIL_X = 30;
 
   @media (prefers-reduced-motion: reduce) {
     .hero-system__pulse { animation: none; }
-    .hero-system__video { display: none; }
   }
 
   @media (min-width: 64rem) {
@@ -339,3 +350,108 @@ const RAIL_X = 30;
     }
   }
 </style>
+
+<style>
+  /* ====================================================================
+     MOTION — FASE 3.2
+     Todo el movimiento del diagrama vive aca. Una sola familia: senales que
+     recorren el sistema. Nada rebota, nada escala de golpe.
+     ==================================================================== */
+
+  /* Senal que recorre cada tramo del riel. El dash corto viaja y desaparece;
+     el ciclo largo hace que el diagrama respire en vez de parpadear. */
+  .hs-pulse {
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 7 100;
+    stroke-dashoffset: 107;
+    opacity: 0.9;
+    animation: hsFlow 5.2s linear infinite;
+  }
+
+  @keyframes hsFlow {
+    0% { stroke-dashoffset: 107; opacity: 0; }
+    12% { opacity: 0.9; }
+    62% { opacity: 0.9; }
+    72%, 100% { stroke-dashoffset: 40; opacity: 0; }
+  }
+
+  /* Puntos de perdida: senal distinta y contenida. No pulsa hacia afuera como
+     el resto; late en el lugar, mas lento, en warning. */
+  .hs-node--leak {
+    animation: hsLeak 3.6s var(--ease-in-out) infinite;
+  }
+
+  @keyframes hsLeak {
+    0%, 72%, 100% { stroke-opacity: 1; }
+    84% { stroke-opacity: 0.35; }
+  }
+
+  /* Revenue: anillo de resultado. Se expande y se desvanece, una sola vez por
+     ciclo largo. Verde, semantico. */
+  .hs-halo {
+    fill: none;
+    stroke: var(--positive);
+    stroke-width: 1.5;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hsHalo 5.2s var(--ease-out) infinite;
+  }
+
+  @keyframes hsHalo {
+    0%, 55% { transform: scale(1); opacity: 0; }
+    70% { opacity: 0.55; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+
+  /* Loop DATA -> TRAFFIC: el recorrido se dibuja cada ciclo, marcando que el
+     sistema realimenta. Periodo distinto al del riel para que no rimen. */
+  .hs-loop {
+    stroke-dasharray: 3 5;
+    animation: hsLoopFade 8.5s var(--ease-in-out) infinite;
+  }
+
+  .hs-loop-arrow {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hsArrow 8.5s var(--ease-in-out) infinite;
+  }
+
+  @keyframes hsLoopFade {
+    0%, 55% { opacity: 0.5; }
+    72% { opacity: 1; }
+    100% { opacity: 0.5; }
+  }
+
+  @keyframes hsArrow {
+    0%, 62% { opacity: 0.45; transform: translateY(0); }
+    78% { opacity: 1; transform: translateY(2px); }
+    100% { opacity: 0.45; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hs-pulse { display: none; }
+    .hs-halo { display: none; }
+    .hs-node--leak,
+    .hs-loop,
+    .hs-loop-arrow {
+      animation: none;
+    }
+    .hs-loop { opacity: 0.6; }
+    .hs-loop-arrow { opacity: 1; }
+  }
+</style>
+
+<script>
+  // Con prefers-reduced-motion el video del hero no se reproduce: queda en su
+  // poster. CSS no puede impedir autoplay, asi que se quita el atributo.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document
+      .querySelectorAll<HTMLVideoElement>('.hero-system__video')
+      .forEach((video) => {
+        video.removeAttribute('autoplay');
+        video.pause();
+      });
+  }
+</script>

@@ -104,13 +104,36 @@ const schema = {
   .faq__icon {
     flex: none;
     color: var(--text-muted);
-    transition: transform var(--duration-normal) var(--ease-out),
+    transition: transform 320ms var(--ease-out-expo),
       color var(--duration-fast) var(--ease-out);
   }
 
-  .faq__item[open] .faq__icon {
-    transform: rotate(45deg);
+  .faq__question:hover .faq__icon {
     color: var(--accent);
+  }
+
+  /* 135 grados y no 45: el simbolo pasa de + a x completando el giro en el
+     mismo sentido, sin el rebote visual de volver atras. */
+  .faq__item[open] .faq__icon {
+    transform: rotate(135deg);
+    color: var(--accent);
+  }
+
+  /* <details> no anima altura de forma portable. Se anima el contenido:
+     entra desplazado y se asienta. Alcanza para que la apertura no sea un
+     salto seco, sin depender de soporte de interpolate-size. */
+  .faq__item[open] .faq__answer {
+    animation: faqReveal 300ms var(--ease-out) both;
+  }
+
+  @keyframes faqReveal {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq__item[open] .faq__answer { animation: none; }
+    .faq__icon { transition: none; }
   }
 
   .faq__answer {
