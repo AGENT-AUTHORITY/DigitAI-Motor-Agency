@@ -137,41 +137,62 @@ Dashboards, Internal Tools, APIs, CRMs, Automation, AI Workflows.
 **H2:** Un análisis vale más cuando termina en una decisión.
 
 **Caso:** `Performance Audit · Energy B2C/B2B`
-**Contexto:** Auditoría de adquisición digital. Periodo 16 al 22 de julio 2026.
+**Alcance:** `Ads · Search Console · SEO · CRO`
+**Contexto:** Auditoría de adquisición y performance digital que combinó Google
+Ads, Search Console, SEO técnico, landings y atribución.
 
 > AVISO: nunca nombrar a Extragas públicamente. No implicar relación de agencia.
 
+### Métricas principales (4)
+
 | Valor | Label | Contexto |
 |---|---|---|
-| 46,4K+ | Impresiones analizadas | — |
-| 1.272 | Clics / interacciones | — |
-| 59 | Conversiones registradas | en la cuenta auditada |
-| ARS 198,6K | Inversión analizada | ARS 198.622 exactos |
+| 263K+ | Impresiones orgánicas auditadas | en 4 páginas comerciales |
+| 46,4K | Impresiones de Google Ads | analizadas en una semana |
+| 23% | Del presupuesto semanal | detectado en búsquedas sin conversión |
+| 15/15 | Páginas monitorizadas | con Core Web Vitals móvil en estado malo |
 
-Labels en español: la fila mezclaba tres labels en inglés con uno en español
-y se leía como un error. Los eyebrows y micro-labels siguen pudiendo ir en
-inglés, pero estos son contenido, no decoración.
+**Base del 263K+:** 87.212 + 59.505 + 59.403 + 57.418 = **263.538**.
 
-**Disclaimer obligatorio bajo la fila** (texto aprobado, no modificar):
+**Disclaimer bajo la fila** (no modificar):
 
-> Datos provenientes de una cuenta auditada. Valor exacto registrado en el
-> período: 58,97 conversiones. No son resultados producidos por digitAI Motor.
+> Datos provenientes de una cuenta y una propiedad auditadas. No son
+> resultados producidos por digitAI Motor.
 
-⚠️ El 59 es redondeo. El valor exacto (58,97) se conserva en la nota de
-origen del caso. La redacción nunca puede sugerir que digitAI Motor produjo
-esas conversiones.
+### Narrativa
 
-**Narrativa:** 129 términos de búsqueda acumulaban inversión sin registrar
-conversiones. ARS 45.918 semanales, aproximadamente 23% del presupuesto
-semanal analizado.
+**Hallazgo:** El problema no estaba en una sola campaña.
 
-**Campaña Display adicional:** 34.433 impressions, 179 clicks, 0 conversions.
+**Detalle:** Había señales de fuga en adquisición, visibilidad orgánica,
+infraestructura técnica y atribución.
 
-**Copy:** El objetivo no era celebrar volumen. Era encontrar dónde el
-presupuesto dejaba de generar señal útil.
+**Cuerpo:** Una semana de Ads explica una parte. El resto aparece cuando se
+cruzan las búsquedas que ya traían impresiones, el estado técnico de las
+páginas que las recibían y qué quedaba registrado después del clic.
 
-**Recomendado:** negative keyword review, budget allocation, campaign
-structure review, Display evaluation, landing / conversion review.
+### Señales detectadas (panel lateral)
+
+| Señal | Valor |
+|---|---|
+| Términos con inversión y cero conversiones | 129 |
+| Clics fragmentados entre 4 variantes de la home | 9.465 |
+| Del tráfico era móvil, aprox. | 87% |
+| Conversiones registradas en la semana analizada | 58,97 |
+
+### Recomendado
+
+Revisión de términos y palabras negativas · Canonicalización de las variantes
+de la home · Corrección de Core Web Vitals en móvil · Revisión de estructura de
+campañas y presupuesto · Revisión de landing y conversión · Corrección del
+modelo de atribución.
+
+### Trazabilidad — nunca titular
+
+> Trazabilidad: ARS 198.622 de inversión analizada en la semana, de los cuales
+> ARS 45.918 correspondían a los 129 términos sin conversión.
+
+Los importes viven **solo** en esta línea. No son KPI, no van en la fila de
+métricas y no se convierten a USD.
 
 **Cierre:** Performance también consiste en saber qué dejar de pagar.
 
@@ -179,7 +200,12 @@ structure review, Display evaluation, landing / conversion review.
 
 | Nunca | Siempre |
 |---|---|
-| generated, saved, increased, improved | analyzed, identified, detected, recommended |
+| generamos, aumentamos, ahorramos, gestionamos, mejoramos | auditamos, analizamos, detectamos, identificamos, recomendamos |
+
+Prohibido también: **presupuesto gestionado**. No se gestionó ese presupuesto,
+se analizó.
+
+No atribuir mejoras posteriores que no fueron medidas.
 
 ---
 

@@ -14,7 +14,10 @@ import MetricCard from './MetricCard.astro';
 export interface Props {
   title: string;
   context: string;
-  period: string;
+  /** Importes del caso. Trazabilidad, nunca titular. */
+  traceability?: string;
+  /** Alcance del trabajo. Antes era un periodo, pero ya no cubre todo. */
+  scope: string;
   metrics: {
     value: string;
     label: string;
@@ -36,7 +39,8 @@ export interface Props {
 const {
   title,
   context,
-  period,
+  traceability,
+  scope,
   metrics,
   findingLead,
   findingDetail,
@@ -55,7 +59,7 @@ const {
       <h3 class="evidence__title">{title}</h3>
       <p class="evidence__context">{context}</p>
     </div>
-    <p class="chip evidence__period">{period}</p>
+    <p class="chip evidence__scope">{scope}</p>
   </div>
 
   <div class="evidence__metrics">
@@ -96,6 +100,8 @@ const {
           {recommended.map((r) => <li>{r}</li>)}
         </ul>
       </div>
+
+      {traceability && <p class="source-note evidence__trace">{traceability}</p>}
     </div>
   </div>
 
@@ -133,7 +139,7 @@ const {
     color: var(--text-secondary);
   }
 
-  .evidence__period {
+  .evidence__scope {
     flex: none;
   }
 
@@ -258,6 +264,10 @@ const {
     margin-top: 0.55em;
     border-radius: var(--radius-full);
     background: var(--accent);
+  }
+
+  .evidence__trace {
+    margin-top: calc(var(--space-2xs) * -1);
   }
 
   .evidence__closing {

@@ -283,44 +283,54 @@ const serviceSchema = {
 
       <EvidenceCase
         title="Performance Audit · Energy B2C/B2B"
-        context="Auditoría de adquisición digital sobre una cuenta activa."
-        period="16–22 julio 2026"
+        context="Auditoría de adquisición y performance digital que combinó Google Ads, Search Console, SEO técnico, landings y atribución."
+        scope="Ads · Search Console · SEO · CRO"
         metrics={[
-          { value: '46,4K+', label: 'Impresiones analizadas' },
-          { value: '1.272', label: 'Clics / interacciones' },
           {
-            value: '59',
-            label: 'Conversiones registradas',
-            context: 'en la cuenta auditada',
+            value: '263K+',
+            label: 'Impresiones orgánicas auditadas',
+            context: 'en 4 páginas comerciales',
           },
           {
-            value: 'ARS 198,6K',
-            label: 'Inversión analizada',
-            context: 'ARS 198.622 exactos',
+            value: '46,4K',
+            label: 'Impresiones de Google Ads',
+            context: 'analizadas en una semana',
+          },
+          {
+            value: '23%',
+            label: 'Del presupuesto semanal',
+            context: 'detectado en búsquedas sin conversión',
+            status: 'attention',
+          },
+          {
+            value: '15/15',
+            label: 'Páginas monitorizadas',
+            context: 'con Core Web Vitals móvil en estado malo',
+            status: 'attention',
           },
         ]}
-        sourceNote="Datos provenientes de una cuenta auditada. Valor exacto registrado en el período: 58,97 conversiones. No son resultados producidos por digitAI Motor."
-        findingLead="129 términos de búsqueda acumulaban inversión sin registrar conversiones."
-        findingDetail="ARS 45.918 semanales — aproximadamente 23% del presupuesto semanal analizado."
-        narrative="El objetivo no era celebrar volumen. Era encontrar dónde el presupuesto dejaba de generar señal útil."
-        secondaryTitle="Campaña Display adicional"
+        sourceNote="Datos provenientes de una cuenta y una propiedad auditadas. No son resultados producidos por digitAI Motor."
+        findingLead="El problema no estaba en una sola campaña."
+        findingDetail="Había señales de fuga en adquisición, visibilidad orgánica, infraestructura técnica y atribución."
+        narrative="Una semana de Ads explica una parte. El resto aparece cuando se cruzan las búsquedas que ya traían impresiones, el estado técnico de las páginas que las recibían y qué quedaba registrado después del clic."
+        secondaryTitle="Señales detectadas"
         secondary={[
-          { label: 'Impresiones', value: '34.433' },
-          { label: 'Clics', value: '179' },
-          { label: 'CTR', value: '0,52%' },
-          { label: 'Inversión', value: 'ARS 13.975' },
-          { label: 'Conversiones', value: '0' },
+          { label: 'Términos con inversión y cero conversiones', value: '129' },
+          { label: 'Clics fragmentados entre 4 variantes de la home', value: '9.465' },
+          { label: 'Del tráfico era móvil, aprox.', value: '87%' },
+          { label: 'Conversiones registradas en la semana analizada', value: '58,97' },
         ]}
         recommended={[
           'Revisión de términos y palabras negativas',
-          'Redistribución de presupuesto',
-          'Revisión de estructura de campañas',
-          'Evaluación de Display',
+          'Canonicalización de las variantes de la home',
+          'Corrección de Core Web Vitals en móvil',
+          'Revisión de estructura de campañas y presupuesto',
           'Revisión de landing y conversión',
+          'Corrección del modelo de atribución',
         ]}
+        traceability="Trazabilidad: ARS 198.622 de inversión analizada en la semana, de los cuales ARS 45.918 correspondían a los 129 términos sin conversión."
         closing="Performance también consiste en saber qué dejar de pagar."
-      />
-    </div>
+      />    </div>
   </section>
 
   <!-- 07 · QUICK FIX -->
