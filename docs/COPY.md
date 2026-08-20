@@ -179,11 +179,12 @@ infraestructura técnica y atribución.
 1. El análisis cruzó aproximadamente 2 millones de impresiones orgánicas con
    adquisición paga, estado técnico de las landings y señales de atribución.
 2. Solo cuatro páginas comerciales acumulaban más de 263.000 impresiones,
-   mientras sus CTR orgánicos se movían entre 0,14% y 0,77%. Exposición alta y
-   conversión baja sobre la misma superficie.
+   mientras sus CTR orgánicos se movían entre 0,14% y 0,77%. Alta visibilidad,
+   pero muy baja captura de clic.
 
-El segundo párrafo hace tres cosas a la vez: escala, exposición y problema de
-conversión.
+El segundo párrafo hace tres cosas a la vez: escala, exposición y captura de
+clic. CTR mide clic sobre impresión, no conversión: mezclarlos en la misma
+frase desdibuja el diagnóstico.
 
 ### Señales detectadas (panel lateral)
 
@@ -204,14 +205,16 @@ modelo de atribución.
 ### Trazabilidad — al pie, nunca titular
 
 > Datos de trazabilidad · Google Ads 16–22 jul 2026 · ARS 198.622 de inversión
-> analizada · ARS 45.918 identificados en términos sin conversión · 58,97
-> conversiones registradas.
+> analizada · ARS 45.918 identificados en términos sin conversión.
 
 Va **al pie de todo el bloque**, después del cierre. No dentro del panel
 lateral: ahí inflaba la altura y desbalanceaba las columnas.
 
 Source note: 12px, sin superficie, sin count-up, contraste 5,02:1 (AA).
 Los importes viven solo acá. No son KPI y no se convierten a USD.
+
+58,97 NO va acá: ya vive en Señales detectadas. Repetirlo no agrega
+trazabilidad, agrega ruido.
 
 **Cierre:** Performance también consiste en saber qué dejar de pagar.
 
