@@ -8,31 +8,51 @@
  *
  * Cero imagenes, cero video, cero dependencias. Todo SVG inline.
  *
- * SUSTITUCION FUTURA POR VIDEO
- * Cuando existan los assets, se pasan por props y el componente cambia el
- * diagrama por el video sin tocar el copy ni el layout del hero:
+ * CAPA DE VIDEO — deteccion de senal
+ * Cuando existen los assets del hero, el diagrama deja de flotar sobre un
+ * degradado y pasa a ser una capa de diagnostico SOBRE una toma real de una
+ * antena. La metafora es literal: la antena no crea la senal, la encuentra.
  *
- *   <HeroSystem
- *     poster="/assets/hero-growth-poster.webp"
- *     sources={[
- *       { src: '/assets/hero-growth.webm', type: 'video/webm' },
- *       { src: '/assets/hero-growth.mp4', type: 'video/mp4' },
- *     ]}
- *   />
+ * Los assets se detectan en build. Si no estan, el componente cae al fondo
+ * CSS de siempre sin dejar una caja vacia y sin pedir archivos que no existen.
+ * Generarlos con: bash scripts/build-hero-assets.sh
  *
- * El video hereda la misma caja, el mismo radio y el mismo aspect-ratio,
- * arranca en el poster y respeta prefers-reduced-motion.
+ * Con video presente el rail se simplifica: solo se etiquetan los dos puntos
+ * de perdida y revenue. Sobre imagen, siete labels compiten con la toma; la
+ * primera lectura tiene que ser la antena y recien despues el sistema.
  *
  * aria-hidden: toda la informacion que transmite esta escrita en texto en la
  * seccion "Where growth breaks". El grafico nunca es la unica fuente.
  */
+import { existsSync } from 'node:fs';
+
 export interface Props {
   poster?: string;
   sources?: { src: string; type: string }[];
+  /** Recorte del video. Ver nota de OBJECT POSITION abajo. */
+  objectPosition?: string;
 }
 
-const { poster, sources = [] } = Astro.props;
-const hasVideo = Boolean(poster && sources.length > 0);
+const {
+  poster = '/assets/hero-signal-poster.webp',
+  sources = [
+    { src: '/assets/hero-signal.webm', type: 'video/webm' },
+    { src: '/assets/hero-signal.mp4', type: 'video/mp4' },
+  ],
+  // El original es 1080x1920 y el marco es apaisado-vertical, asi que el
+  // recorte decide si la antena entra o queda fuera de cuadro. 50% 38%
+  // privilegia el tercio superior, que es donde vive la estructura, y deja
+  // la mitad inferior mas limpia para los overlays.
+  // PENDIENTE: elegir el valor definitivo mirando el video real.
+  objectPosition = '50% 38%',
+} = Astro.props;
+
+// Deteccion en build: sin assets no se emite <video> ni se pide nada.
+const assetExists = (publicPath: string) =>
+  existsSync(new URL('../../public' + publicPath, import.meta.url));
+
+const hasVideo = assetExists(poster) && sources.some((s) => assetExists(s.src));
+const availableSources = hasVideo ? sources.filter((s) => assetExists(s.src)) : [];
 
 /** y de cada nodo en el viewBox. Paso constante de 42. */
 const NODES = [
@@ -54,79 +74,102 @@ const RAIL_X = 30;
       <span class="hero-system__label">Growth system</span>
       <span class="hero-system__live">
         <span class="hero-system__pulse"></span>
-        conectado
+        {hasVideo ? 'señal detectada' : 'conectado'}
       </span>
     </div>
 
-    {
-      hasVideo ? (
-        <video
-          class="hero-system__video"
-          poster={poster}
-          autoplay
-          muted
-          loop
-          playsinline
-          preload="none"
-        >
-          {sources.map((s) => <source src={s.src} type={s.type} />)}
-        </video>
-      ) : (
-        <svg class="hero-system__svg" viewBox="0 0 300 312" role="presentation" focusable="false">
-          {/* Loop de feedback: sale de DATA, rodea por la derecha y vuelve a
-              TRAFFIC. Es lo que convierte la cadena en un sistema. */}
-          <path
-            class="hs-loop"
-            d={`M ${RAIL_X} 278 H 244 a 16 16 0 0 0 16 -16 V 24 a 14 14 0 0 0 -14 -14 H ${RAIL_X} V 17`}
-            fill="none"
-          />
-          <path class="hs-loop-arrow" d={`M ${RAIL_X - 5} 12 l 5 5 l 5 -5`} fill="none" />
-          <text class="hs-loop-label" x="276" y="152" transform="rotate(-90 276 152)">
-            ITERATE
-          </text>
+    <div class="hero-system__stage">
+      {
+        hasVideo && (
+          <>
+            {/* preload none + sources inyectadas por JS: en mobile el video
+                nunca se descarga, y sin JS queda el poster. */}
+            <video
+              class="hero-system__video"
+              poster={poster}
+              muted
+              loop
+              playsinline
+              preload="none"
+              tabindex="-1"
+              style={`object-position: ${objectPosition}`}
+              data-hero-video
+            >
+              {availableSources.map((s) => (
+                <source data-src={s.src} type={s.type} />
+              ))}
+            </video>
+            <div class="hero-system__scrim" />
+            <div class="hero-system__scan" />
+          </>
+        )
+      }
 
-          {NODES.map((node, i) => {
-            const next = NODES[i + 1];
-            // El tramo LEAD -> SALES -> REVENUE es el que lleva a ingreso:
-            // se dibuja mas marcado que el resto.
-            // includes() y no una comparacion con <: el parser de Astro lee
-            // el < dentro de JSX como apertura de tag.
-            const toRevenue = [3, 4].includes(i);
-            return (
-              <>
-                {next && (
-                  <>
-                    <line
-                      class:list={['hs-link', toRevenue && 'hs-link--gain']}
-                      x1={RAIL_X}
-                      y1={node.y + 7}
-                      x2={RAIL_X}
-                      y2={next.y - 7}
-                    />
-                    <line
-                      class="hs-pulse"
-                      style={`animation-delay: ${i * 0.42}s`}
-                      x1={RAIL_X}
-                      y1={node.y + 7}
-                      x2={RAIL_X}
-                      y2={next.y - 7}
-                    />
-                  </>
-                )}
-                {node.leak && (
-                  <>
-                    <line class="hs-leak-line" x1={RAIL_X} y1={node.y} x2={RAIL_X + 20} y2={node.y} />
-                    <circle class="hs-leak-dot" cx={RAIL_X + 24} cy={node.y} r="2.5" />
-                  </>
-                )}
-                {node.gain && <circle class="hs-halo" cx={RAIL_X} cy={node.y} r="6.5" />}
-                <circle
-                  class:list={['hs-node', node.leak && 'hs-node--leak', node.gain && 'hs-node--gain']}
-                  style={node.leak ? `animation-delay: ${i * 1.1}s` : undefined}
-                  cx={RAIL_X}
-                  cy={node.y}
-                  r={node.gain ? 6.5 : 5}
-                />
+      {!hasVideo && <div class="hero-system__field" />}
+
+      <svg
+        class="hero-system__svg"
+        viewBox="0 0 300 312"
+        role="presentation"
+        focusable="false"
+        preserveAspectRatio="xMinYMid meet"
+      >
+        {/* Loop de feedback: sale de DATA, rodea por la derecha y vuelve a
+            TRAFFIC. Es lo que convierte la cadena en un sistema. */}
+        <path
+          class="hs-loop"
+          d={`M ${RAIL_X} 278 H 244 a 16 16 0 0 0 16 -16 V 24 a 14 14 0 0 0 -14 -14 H ${RAIL_X} V 17`}
+          fill="none"
+        />
+        <path class="hs-loop-arrow" d={`M ${RAIL_X - 5} 12 l 5 5 l 5 -5`} fill="none" />
+        <text class="hs-loop-label" x="276" y="152" transform="rotate(-90 276 152)">
+          ITERATE
+        </text>
+
+        {NODES.map((node, i) => {
+          const next = NODES[i + 1];
+          // includes() y no una comparacion con <: el parser de Astro lee
+          // el < dentro de JSX como apertura de tag.
+          const toRevenue = [3, 4].includes(i);
+          // Sobre video solo se etiqueta lo que aporta lectura: las dos fugas
+          // y el resultado. El resto quedan como nodos.
+          const showLabel = !hasVideo || node.leak || node.gain;
+          return (
+            <>
+              {next && (
+                <>
+                  <line
+                    class:list={['hs-link', toRevenue && 'hs-link--gain']}
+                    x1={RAIL_X}
+                    y1={node.y + 7}
+                    x2={RAIL_X}
+                    y2={next.y - 7}
+                  />
+                  <line
+                    class="hs-pulse"
+                    style={`animation-delay: ${i * 0.42}s`}
+                    x1={RAIL_X}
+                    y1={node.y + 7}
+                    x2={RAIL_X}
+                    y2={next.y - 7}
+                  />
+                </>
+              )}
+              {node.leak && (
+                <>
+                  <line class="hs-leak-line" x1={RAIL_X} y1={node.y} x2={RAIL_X + 20} y2={node.y} />
+                  <circle class="hs-leak-dot" cx={RAIL_X + 24} cy={node.y} r="2.5" />
+                </>
+              )}
+              {node.gain && <circle class="hs-halo" cx={RAIL_X} cy={node.y} r="6.5" />}
+              <circle
+                class:list={['hs-node', node.leak && 'hs-node--leak', node.gain && 'hs-node--gain']}
+                style={node.leak ? `animation-delay: ${i * 1.1}s` : undefined}
+                cx={RAIL_X}
+                cy={node.y}
+                r={node.gain ? 6.5 : 5}
+              />
+              {showLabel && (
                 <text
                   class:list={['hs-label', node.leak && 'hs-label--leak', node.gain && 'hs-label--gain']}
                   x={node.leak ? RAIL_X + 34 : RAIL_X + 18}
@@ -134,17 +177,17 @@ const RAIL_X = 30;
                 >
                   {node.label}
                 </text>
-                {node.leak && (
-                  <text class="hs-leak-text" x={RAIL_X + 34} y={node.y + 16}>
-                    {node.leak}
-                  </text>
-                )}
-              </>
-            );
-          })}
-        </svg>
-      )
-    }
+              )}
+              {node.leak && (
+                <text class="hs-leak-text" x={RAIL_X + 34} y={node.y + 16}>
+                  {node.leak}
+                </text>
+              )}
+            </>
+          );
+        })}
+      </svg>
+    </div>
 
     <div class="hero-system__legend">
       <span class="hs-key hs-key--leak">Punto de pérdida</span>
@@ -212,18 +255,10 @@ const RAIL_X = 30;
     100% { box-shadow: 0 0 0 0 rgba(54, 211, 153, 0); }
   }
 
-  .hero-system__svg,
-  .hero-system__video {
+  .hero-system__svg {
     display: block;
     inline-size: 100%;
-    margin-block: var(--space-2xs);
     font-family: var(--font-heading);
-  }
-
-  .hero-system__video {
-    aspect-ratio: 300 / 312;
-    object-fit: cover;
-    border-radius: var(--radius-md);
   }
 
   /* --- Nodos y conexiones -------------------------------------------------- */
@@ -443,15 +478,176 @@ const RAIL_X = 30;
   }
 </style>
 
+
+<style>
+  /* ====================================================================
+     CAPA DE VIDEO — deteccion de senal
+     El video vive DENTRO del marco del sistema, con el mismo borde y el
+     mismo radio que el resto de la interfaz. No es un fondo del hero: es
+     una toma dentro de un instrumento. Esa diferencia es la que evita que
+     se lea como video stock pegado atras del texto.
+     ==================================================================== */
+
+  .hero-system__stage {
+    position: relative;
+    /* Alto fijo por relacion, no por contenido: sin esto el SVG define la
+       altura y el video la cambia al cargar, lo que mueve el layout. */
+    aspect-ratio: 300 / 312;
+    margin-block: var(--space-2xs);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero-system__video,
+  .hero-system__field {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Tratamiento: se baja el brillo y la saturacion para que la toma entre en
+     la paleta oscura, y se sube apenas el contraste para que la estructura de
+     la antena no se pierda al oscurecerla.
+     PENDIENTE: ajustar mirando el video real. Estos valores son un punto de
+     partida razonable, no una eleccion visual. */
+  .hero-system__video {
+    object-fit: cover;
+    filter: saturate(0.5) contrast(1.12) brightness(0.52);
+  }
+
+  /* Fondo cuando no hay assets. Mismo lugar, misma caja: el marco nunca
+     queda vacio. */
+  .hero-system__field {
+    background:
+      radial-gradient(20rem 16rem at 70% 20%, rgba(35, 136, 255, 0.14), transparent 65%),
+      linear-gradient(158deg, var(--surface) 0%, var(--bg-secondary) 100%);
+  }
+
+  /* Scrim: degradado navy que garantiza legibilidad del rail y hunde la toma
+     en el fondo de la marca. Mas denso abajo, que es donde cae mas texto. */
+  .hero-system__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(5, 7, 11, 0.45) 0%,
+        rgba(5, 7, 11, 0.62) 45%,
+        rgba(5, 7, 11, 0.86) 100%
+      ),
+      radial-gradient(
+        120% 90% at 50% 40%,
+        transparent 30%,
+        rgba(2, 5, 10, 0.55) 100%
+      ),
+      linear-gradient(180deg, rgba(35, 136, 255, 0.1), transparent 60%);
+    pointer-events: none;
+  }
+
+  /* Linea que recibe la senal. Una sola pasada muy lenta, dentro de la misma
+     gramatica que el pulso del riel. No es un scanline de sci-fi: es una
+     barrida de instrumento. */
+  .hero-system__scan {
+    position: absolute;
+    inset-inline: 0;
+    block-size: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(35, 136, 255, 0.55),
+      transparent
+    );
+    opacity: 0;
+    animation: hsScan 9s var(--ease-in-out) infinite;
+    pointer-events: none;
+  }
+
+  @keyframes hsScan {
+    0% { transform: translateY(0); opacity: 0; }
+    8% { opacity: 0.8; }
+    55% { opacity: 0.8; }
+    70%, 100% { transform: translateY(var(--scan-travel, 300px)); opacity: 0; }
+  }
+
+  /* El rail se apoya sobre la toma. */
+  .hero-system__svg {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+  }
+
+  /* Sobre video los textos necesitan separarse del fondo: una sombra corta
+     alcanza y no ensucia como un contorno. */
+  .hero-system__stage:has(.hero-system__video) .hs-label,
+  .hero-system__stage:has(.hero-system__video) .hs-leak-text,
+  .hero-system__stage:has(.hero-system__video) .hs-loop-label {
+    paint-order: stroke fill;
+    stroke: rgba(2, 5, 10, 0.85);
+    stroke-width: 2.5px;
+    stroke-linejoin: round;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-system__scan { animation: none; opacity: 0; }
+  }
+</style>
+
 <script>
-  // Con prefers-reduced-motion el video del hero no se reproduce: queda en su
-  // poster. CSS no puede impedir autoplay, asi que se quita el atributo.
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document
-      .querySelectorAll<HTMLVideoElement>('.hero-system__video')
-      .forEach((video) => {
-        video.removeAttribute('autoplay');
-        video.pause();
+  /**
+   * Carga condicional del video del hero.
+   *
+   * Las <source> vienen con data-src, no con src: asi el navegador no pide
+   * nada hasta que este script decide que corresponde. En mobile el video
+   * nunca se descarga, y sin JS queda el poster, que es un atributo del
+   * propio <video> y no depende de nada.
+   *
+   * No se carga si:
+   *  - el viewport es de mobile (el poster alcanza y el CTA manda)
+   *  - el usuario pidio menos movimiento
+   *  - la conexion esta declarada como lenta o con ahorro de datos
+   */
+  const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+
+  if (video) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const desktopish = window.matchMedia('(min-width: 48rem)').matches;
+    const conn = (navigator as any).connection;
+    const stingy = Boolean(conn?.saveData) || /2g/.test(conn?.effectiveType ?? '');
+
+    if (desktopish && !reduced && !stingy) {
+      // Se promueve UNA sola fuente, no todas. Dejar ambas y confiar en que
+      // el navegador elija bien alcanza casi siempre, pero si el primer
+      // formato falla al decodificar se descarga el segundo encima. Eligiendo
+      // nosotros, nunca hay dos descargas.
+      const sourceEls = [...video.querySelectorAll<HTMLSourceElement>('source[data-src]')];
+      const chosen =
+        sourceEls.find((el) => {
+          const type = el.getAttribute('type') ?? '';
+          return video.canPlayType(type) !== '';
+        }) ?? sourceEls[sourceEls.length - 1];
+
+      sourceEls.forEach((el) => {
+        if (el !== chosen) el.remove();
       });
+      if (chosen) chosen.src = chosen.dataset.src ?? '';
+
+      video.load();
+      // play() puede rechazar si el navegador bloquea autoplay. Se ignora a
+      // proposito: el poster ya esta en pantalla y no hay nada que reparar.
+      video.play().catch(() => {});
+    }
+
+    // El recorrido de la barrida se ajusta al alto real del marco.
+    const stage = video.closest<HTMLElement>('.hero-system__stage');
+    if (stage) {
+      const setTravel = () =>
+        stage.style.setProperty('--scan-travel', stage.clientHeight + 'px');
+      setTravel();
+      window.addEventListener('resize', setTravel, { passive: true });
+    }
   }
 </script>

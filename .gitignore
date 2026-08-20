@@ -21,3 +21,6 @@ Thumbs.db
 npm-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# originales de assets: pesados, binarios y no se sirven
+assets-source/
