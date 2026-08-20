@@ -25,12 +25,15 @@ export interface Props {
      *  como un resultado producido por digitAI Motor. */
     context?: string;
     status?: 'neutral' | 'positive' | 'warning' | 'attention';
+    /** Apagar en valores aproximados. */
+    countUp?: boolean;
   }[];
   findingLead: string;
   findingDetail: string;
   secondary: { label: string; value: string }[];
   secondaryTitle: string;
-  narrative: string;
+  /** Uno o varios parrafos. */
+  narrative: string | string[];
   recommended: string[];
   closing: string;
   sourceNote: string;
@@ -65,7 +68,13 @@ const {
   <div class="evidence__metrics">
     {
       metrics.map((m) => (
-        <MetricCard value={m.value} label={m.label} context={m.context} status={m.status} />
+        <MetricCard
+          value={m.value}
+          label={m.label}
+          context={m.context}
+          status={m.status}
+          countUp={m.countUp !== false}
+        />
       ))
     }
   </div>
@@ -76,7 +85,9 @@ const {
     <div class="evidence__finding" data-reveal>
       <p class="evidence__finding-lead">{findingLead}</p>
       <p class="evidence__finding-detail">{findingDetail}</p>
-      <p class="evidence__narrative">{narrative}</p>
+      {(Array.isArray(narrative) ? narrative : [narrative]).map((p) => (
+        <p class="evidence__narrative">{p}</p>
+      ))}
     </div>
 
     <div class="evidence__side" data-reveal data-reveal-delay="1">
@@ -101,11 +112,12 @@ const {
         </ul>
       </div>
 
-      {traceability && <p class="source-note evidence__trace">{traceability}</p>}
     </div>
   </div>
 
   <p class="evidence__closing" data-reveal>{closing}</p>
+
+  {traceability && <p class="source-note evidence__trace">{traceability}</p>}
 </div>
 
 <style>
@@ -175,6 +187,10 @@ const {
     font-size: var(--text-lg);
     line-height: var(--leading-relaxed);
     color: var(--warning);
+  }
+
+  .evidence__narrative + .evidence__narrative {
+    margin-top: var(--space-sm);
   }
 
   .evidence__narrative {
@@ -266,8 +282,11 @@ const {
     background: var(--accent);
   }
 
+  /* Pie de todo el bloque. Es letra chica de respaldo, no un dato de la
+     lectura principal: por eso va despues del cierre y sin superficie. */
   .evidence__trace {
-    margin-top: calc(var(--space-2xs) * -1);
+    margin-top: var(--space-xs);
+    max-width: 78ch;
   }
 
   .evidence__closing {

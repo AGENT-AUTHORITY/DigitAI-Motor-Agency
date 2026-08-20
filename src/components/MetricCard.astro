@@ -14,6 +14,8 @@ export interface Props {
   sourceNote?: string;
   /** Numera la card (01, 02...) para grillas ordenadas. */
   index?: string;
+  /** Apagar en valores aproximados: animar "~2M" finge precision. */
+  countUp?: boolean;
 }
 
 // Un valor de 9+ caracteres ("ARS 198,6K") no entra en una columna angosta a
@@ -27,12 +29,13 @@ const {
   status = 'neutral',
   sourceNote,
   index,
+  countUp = true,
 } = Astro.props;
 ---
 
 <div class:list={['metric', `metric--${status}`, isLong(value) && 'metric--long']} data-reveal>
   {index && <span class="metric__index" aria-hidden="true">{index}</span>}
-  <p class="metric__value" data-numeric data-countup={value}>{value}</p>
+  <p class="metric__value" data-numeric data-countup={countUp ? value : undefined}>{value}</p>
   <p class="metric__label">{label}</p>
   {context && <p class="metric__context">{context}</p>}
   {sourceNote && <p class="source-note metric__source">{sourceNote}</p>}

@@ -147,12 +147,20 @@ Ads, Search Console, SEO técnico, landings y atribución.
 
 | Valor | Label | Contexto |
 |---|---|---|
-| 263K+ | Impresiones orgánicas auditadas | en 4 páginas comerciales |
+| ~2M | Impresiones orgánicas analizadas | Search Console · 12 meses |
 | 46,4K | Impresiones de Google Ads | analizadas en una semana |
 | 23% | Del presupuesto semanal | detectado en búsquedas sin conversión |
 | 15/15 | Páginas monitorizadas | con Core Web Vitals móvil en estado malo |
 
-**Base del 263K+:** 87.212 + 59.505 + 59.403 + 57.418 = **263.538**.
+**`~2M` y no `2M+`.** La tilde comunica aproximación; el signo más afirmaría
+un mínimo exacto que el dato no respalda. Por el mismo motivo esa métrica **no
+lleva count-up**: animarla de 0 a 2 le pondría una precisión inexistente. Se
+pasa `countUp: false`.
+
+**El 263K vive en la narrativa, no en la fila.** 87.212 + 59.505 + 59.403 +
+57.418 = **263.538**, que es el subconjunto de cuatro páginas comerciales
+dentro del universo de ~2M. Presentarlo como métrica principal
+subrepresentaba la escala real del análisis.
 
 **Disclaimer bajo la fila** (no modificar):
 
@@ -166,9 +174,16 @@ Ads, Search Console, SEO técnico, landings y atribución.
 **Detalle:** Había señales de fuga en adquisición, visibilidad orgánica,
 infraestructura técnica y atribución.
 
-**Cuerpo:** Una semana de Ads explica una parte. El resto aparece cuando se
-cruzan las búsquedas que ya traían impresiones, el estado técnico de las
-páginas que las recibían y qué quedaba registrado después del clic.
+**Cuerpo, dos párrafos:**
+
+1. El análisis cruzó aproximadamente 2 millones de impresiones orgánicas con
+   adquisición paga, estado técnico de las landings y señales de atribución.
+2. Solo cuatro páginas comerciales acumulaban más de 263.000 impresiones,
+   mientras sus CTR orgánicos se movían entre 0,14% y 0,77%. Exposición alta y
+   conversión baja sobre la misma superficie.
+
+El segundo párrafo hace tres cosas a la vez: escala, exposición y problema de
+conversión.
 
 ### Señales detectadas (panel lateral)
 
@@ -186,21 +201,36 @@ de la home · Corrección de Core Web Vitals en móvil · Revisión de estructur
 campañas y presupuesto · Revisión de landing y conversión · Corrección del
 modelo de atribución.
 
-### Trazabilidad — nunca titular
+### Trazabilidad — al pie, nunca titular
 
-> Trazabilidad: ARS 198.622 de inversión analizada en la semana, de los cuales
-> ARS 45.918 correspondían a los 129 términos sin conversión.
+> Datos de trazabilidad · Google Ads 16–22 jul 2026 · ARS 198.622 de inversión
+> analizada · ARS 45.918 identificados en términos sin conversión · 58,97
+> conversiones registradas.
 
-Los importes viven **solo** en esta línea. No son KPI, no van en la fila de
-métricas y no se convierten a USD.
+Va **al pie de todo el bloque**, después del cierre. No dentro del panel
+lateral: ahí inflaba la altura y desbalanceaba las columnas.
+
+Source note: 12px, sin superficie, sin count-up, contraste 5,02:1 (AA).
+Los importes viven solo acá. No son KPI y no se convierten a USD.
 
 **Cierre:** Performance también consiste en saber qué dejar de pagar.
+
+### Orden de lectura
+
+1. **Escala** — ~2M orgánico, 46,4K paid
+2. **Diagnóstico** — 23% presupuesto, 15/15 CWV
+3. **Señales** — 129, 9.465, 87%, 58,97
+4. **Profundidad** — 263K concentradas en 4 páginas
+5. **Decisiones** — recomendaciones
+6. **Trazabilidad** — pie
 
 ### Lenguaje obligatorio
 
 | Nunca | Siempre |
 |---|---|
-| generamos, aumentamos, ahorramos, gestionamos, mejoramos | auditamos, analizamos, detectamos, identificamos, recomendamos |
+| generamos, conseguimos, producimos, gestionamos, aumentamos, ahorramos, mejoramos | auditamos, analizamos, detectamos, identificamos, recomendamos |
+
+Nunca `gestionamos 2M`: no se gestionaron esas impresiones, se analizaron.
 
 Prohibido también: **presupuesto gestionado**. No se gestionó ese presupuesto,
 se analizó.

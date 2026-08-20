@@ -287,9 +287,12 @@ const serviceSchema = {
         scope="Ads · Search Console · SEO · CRO"
         metrics={[
           {
-            value: '263K+',
-            label: 'Impresiones orgánicas auditadas',
-            context: 'en 4 páginas comerciales',
+            value: '~2M',
+            label: 'Impresiones orgánicas analizadas',
+            context: 'Search Console · 12 meses',
+            // Sin count-up: la tilde dice que el número es aproximado, y
+            // animarlo de 0 a 2 le pondría una precisión que no tiene.
+            countUp: false,
           },
           {
             value: '46,4K',
@@ -312,7 +315,10 @@ const serviceSchema = {
         sourceNote="Datos provenientes de una cuenta y una propiedad auditadas. No son resultados producidos por digitAI Motor."
         findingLead="El problema no estaba en una sola campaña."
         findingDetail="Había señales de fuga en adquisición, visibilidad orgánica, infraestructura técnica y atribución."
-        narrative="Una semana de Ads explica una parte. El resto aparece cuando se cruzan las búsquedas que ya traían impresiones, el estado técnico de las páginas que las recibían y qué quedaba registrado después del clic."
+        narrative={[
+          'El análisis cruzó aproximadamente 2 millones de impresiones orgánicas con adquisición paga, estado técnico de las landings y señales de atribución.',
+          'Solo cuatro páginas comerciales acumulaban más de 263.000 impresiones, mientras sus CTR orgánicos se movían entre 0,14% y 0,77%. Exposición alta y conversión baja sobre la misma superficie.',
+        ]}
         secondaryTitle="Señales detectadas"
         secondary={[
           { label: 'Términos con inversión y cero conversiones', value: '129' },
@@ -328,9 +334,9 @@ const serviceSchema = {
           'Revisión de landing y conversión',
           'Corrección del modelo de atribución',
         ]}
-        traceability="Trazabilidad: ARS 198.622 de inversión analizada en la semana, de los cuales ARS 45.918 correspondían a los 129 términos sin conversión."
         closing="Performance también consiste en saber qué dejar de pagar."
-      />    </div>
+        traceability="Datos de trazabilidad · Google Ads 16–22 jul 2026 · ARS 198.622 de inversión analizada · ARS 45.918 identificados en términos sin conversión · 58,97 conversiones registradas."
+      />   </div>
   </section>
 
   <!-- 07 · QUICK FIX -->
