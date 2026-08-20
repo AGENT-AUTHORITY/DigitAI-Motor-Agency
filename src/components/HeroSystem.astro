@@ -39,12 +39,15 @@ const {
     { src: '/assets/hero-signal.webm', type: 'video/webm' },
     { src: '/assets/hero-signal.mp4', type: 'video/mp4' },
   ],
-  // El original es 1080x1920 y el marco es apaisado-vertical, asi que el
-  // recorte decide si la antena entra o queda fuera de cuadro. 50% 38%
-  // privilegia el tercio superior, que es donde vive la estructura, y deja
-  // la mitad inferior mas limpia para los overlays.
-  // PENDIENTE: elegir el valor definitivo mirando el video real.
-  objectPosition = '50% 38%',
+  // El original es 1080x1920 y el marco es casi cuadrado, asi que el recorte
+  // decide cuanto entra del plato y cuanto de cielo.
+  //
+  // Elegido comparando 30 / 42 / 55 / 68 / 80 sobre el video real. A 38% (el
+  // valor tentativo anterior) el encuadre quedaba dominado por cielo vacio;
+  // a 80% el plato tapa todo y se pierde la escala. 55% deja las tres cosas:
+  // el plato abajo, el tripode subiendo en el centro y las sierras al fondo,
+  // que son las que dan la nocion de tamano.
+  objectPosition = '50% 55%',
 } = Astro.props;
 
 // Deteccion en build: sin assets no se emite <video> ni se pide nada.
@@ -199,6 +202,8 @@ const RAIL_X = 30;
 <style>
   .hero-system {
     inline-size: 100%;
+    max-inline-size: 26rem;
+    margin-inline: auto;
   }
 
   .hero-system__frame {
@@ -377,6 +382,7 @@ const RAIL_X = 30;
   @media (min-width: 64rem) {
     .hero-system {
       max-inline-size: 21rem;
+      margin-inline: 0;
       justify-self: end;
     }
 
@@ -507,14 +513,15 @@ const RAIL_X = 30;
     block-size: 100%;
   }
 
-  /* Tratamiento: se baja el brillo y la saturacion para que la toma entre en
-     la paleta oscura, y se sube apenas el contraste para que la estructura de
-     la antena no se pierda al oscurecerla.
-     PENDIENTE: ajustar mirando el video real. Estos valores son un punto de
-     partida razonable, no una eleccion visual. */
+  /* Tratamiento elegido comparando cuatro variantes sobre el video real.
+     brightness .52 (el valor tentativo) dejaba la antena irreconocible: entre
+     el filtro y el scrim el plato desaparecia. .9 la volvia legible pero el
+     cielo recuperaba azul de dia y rompia la paleta.
+     .76 es el punto donde la estructura del plato se lee y el cielo sigue
+     siendo un gris frio que pertenece al fondo de la marca. */
   .hero-system__video {
     object-fit: cover;
-    filter: saturate(0.5) contrast(1.12) brightness(0.52);
+    filter: saturate(0.55) contrast(1.1) brightness(0.76);
   }
 
   /* Fondo cuando no hay assets. Mismo lugar, misma caja: el marco nunca
@@ -533,16 +540,16 @@ const RAIL_X = 30;
     background:
       linear-gradient(
         to bottom,
-        rgba(5, 7, 11, 0.45) 0%,
-        rgba(5, 7, 11, 0.62) 45%,
-        rgba(5, 7, 11, 0.86) 100%
+        rgba(5, 7, 11, 0.26) 0%,
+        rgba(5, 7, 11, 0.42) 45%,
+        rgba(5, 7, 11, 0.72) 100%
       ),
       radial-gradient(
         120% 90% at 50% 40%,
-        transparent 30%,
-        rgba(2, 5, 10, 0.55) 100%
+        transparent 34%,
+        rgba(2, 5, 10, 0.5) 100%
       ),
-      linear-gradient(180deg, rgba(35, 136, 255, 0.1), transparent 60%);
+      linear-gradient(180deg, rgba(35, 136, 255, 0.13), transparent 62%);
     pointer-events: none;
   }
 
