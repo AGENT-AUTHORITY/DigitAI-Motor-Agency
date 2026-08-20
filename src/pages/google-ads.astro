@@ -1,0 +1,113 @@
+---
+import ServiceLayout from '../layouts/ServiceLayout.astro';
+import ServiceSection from '../components/ServiceSection.astro';
+import CheckList from '../components/CheckList.astro';
+import MetricCard from '../components/MetricCard.astro';
+import FAQ from '../components/FAQ.astro';
+import { ANCHORS } from '../data/navigation';
+
+const alcance = [
+  'Estructura de campañas, grupos y presupuesto',
+  'Search: intención, concordancias y términos reales',
+  'Palabras negativas revisadas de forma periódica',
+  'Display: cuándo suma y cuándo solo consume',
+  'Remarketing segmentado por etapa, no por defecto',
+  'Conversion tracking que represente negocio',
+  'Experiencia de la landing y su relación con el anuncio',
+  'Calidad de lead, no solo cantidad',
+];
+
+const auditoria = [
+  'Términos de búsqueda con inversión y sin conversión',
+  'Solapamiento entre campañas por el mismo término',
+  'Conversiones duplicadas o mal atribuidas',
+  'Campañas de Display heredadas que nadie revisa',
+  'Presupuesto concentrado donde ya no rinde',
+];
+
+const faqs = [
+  {
+    question: '¿Auditan cuentas que gestiona otra agencia?',
+    answer:
+      'Sí. La auditoría se entrega igual y es tuya, la ejecute quien la ejecute. No condicionamos el diagnóstico a quedarnos con la gestión.',
+  },
+  {
+    question: '¿Por qué empiezan por los términos de búsqueda?',
+    answer:
+      'Porque es donde el desvío suele ser más grande y más fácil de demostrar con datos de la propia cuenta. En la auditoría publicada en la home, 129 términos acumulaban inversión sin registrar una sola conversión.',
+  },
+  {
+    question: '¿Trabajan Performance Max?',
+    answer:
+      'Sí, con la salvedad de que su opacidad exige más rigor en la medición externa. Sin buena señal de conversión, delegar la optimización a la automatización amplifica el error en vez de corregirlo.',
+  },
+];
+---
+
+<ServiceLayout
+  title="Gestión y Auditoría de Google Ads | digitAI Motor"
+  description="Gestión y auditoría de Google Ads: estructura, términos de búsqueda, negativas, tracking y calidad de lead. Optimizado para negocio, no para métricas bonitas."
+  eyebrow="Google Ads"
+  heading="Google Ads optimizado para negocio, no para métricas bonitas."
+  intro="Un CTR alto y un CPC bajo pueden convivir con cero ventas. Trabajamos la cuenta contra lo que ocurre después del clic: qué términos generan oportunidades reales y cuáles solo consumen presupuesto."
+  breadcrumbs={[{ label: 'Paid Media', href: '/paid-media/' }, { label: 'Google Ads' }]}
+  serviceType="Google Ads management"
+  cta={{
+    title: 'Revisemos qué está comprando tu cuenta hoy.',
+    primary: { label: 'Solicitar auditoría de Google Ads', href: `/${ANCHORS.growthAudit}` },
+    secondary: { label: 'Ver Growth Audit', href: '/growth-audit/' },
+  }}
+>
+  <ServiceSection eyebrow="Alcance" title="Sobre qué trabajamos." alt id="alcance">
+    <CheckList items={alcance} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Evidencia"
+    title="Lo que suele aparecer en una auditoría."
+    lead="Estos números vienen de una cuenta auditada en el sector energético, no de resultados producidos por digitAI Motor. El caso completo está en la home."
+    id="evidencia"
+  >
+    <div class="ga-metrics">
+      <MetricCard
+        value="129"
+        label="Términos con inversión"
+        context="y sin conversiones registradas"
+        status="attention"
+      />
+      <MetricCard value="ARS 45.918" label="Inversión semanal" context="concentrada en esos términos" />
+      <MetricCard value="23%" label="Del presupuesto semanal" context="analizado en el período" status="attention" />
+    </div>
+    <p class="source-note ga-note">
+      Período 16 al 22 de julio de 2026. Datos provenientes de una cuenta
+      auditada. No son resultados producidos por digitAI Motor.
+    </p>
+  </ServiceSection>
+
+  <ServiceSection eyebrow="Auditoría" title="Qué buscamos primero." alt id="auditoria">
+    <CheckList items={auditoria} />
+  </ServiceSection>
+
+  <ServiceSection title="Preguntas frecuentes." narrow id="faq">
+    <FAQ items={faqs} />
+  </ServiceSection>
+</ServiceLayout>
+
+<style>
+  .ga-metrics {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2xs);
+  }
+
+  .ga-note {
+    margin-top: var(--space-md);
+  }
+
+  @media (min-width: 48rem) {
+    .ga-metrics {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+  }
+</style>

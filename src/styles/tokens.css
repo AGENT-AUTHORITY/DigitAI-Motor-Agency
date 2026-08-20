@@ -36,14 +36,21 @@
   --accent-line: rgba(35, 136, 255, 0.28);
 
   /* --- Color: marca -------------------------------------------------------
-     Paleta del isotipo RETURN WEAVE, definida en la hoja de marca. Vive
-     separada de --accent a proposito: --accent es color de interfaz (botones,
-     enlaces, foco) y estos tres son color de identidad.
-     Ver DECISION ABIERTA en docs/BRAND.md sobre unificar ambos azules. */
-  --brand-route-a: #155EEF;
-  --brand-route-b: #46C8FF;
+     Sacred Weave usa blanco + azul digitAI. Nada mas.
+
+     Sin verde: el verde queda reservado a la interfaz para positive, revenue,
+     connected y success. Si formara parte del isotipo perderia ese significado.
+
+     --brand-accent apunta a --accent, asi que el azul de marca y el de
+     interfaz son el mismo. Un solo azul en toda la pagina.
+
+     --brand-ground es el color que rellena el nucleo y el keyline que lo
+     separa de las rutas que pasan por detras. Debe coincidir con el fondo
+     sobre el que se apoya el simbolo: sobre superficie clara hay que
+     redefinirlo, por ejemplo style="--brand-ground:#fff". */
   --brand-ink: #F4F8FF;
-  --brand-ground: #02050A;
+  --brand-accent: var(--accent);
+  --brand-ground: #05070B;
 
   /* --- Color: semantico --------------------------------------------------
      Regla dura: --positive SOLO para resultados positivos, indicadores,

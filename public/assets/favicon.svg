@@ -1,14 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-160 -160 320 320" fill="none">
-  <!-- Favicon · RETURN WEAVE variante compacta.
-       Misma trama y mismo nucleo que el isotipo completo, con los dos
-       pliegues internos cortados y el trazo engrosado. A 32px el trazo de 16
-       mide 1,6px y la separacion entre pliegues 1,8px: se cierran. Esta
-       variante mantiene la lectura hasta 16px. -->
-  <rect x="-160" y="-160" width="320" height="320" rx="68" fill="#02050A"/>
+  <!-- Favicon · Sacred Weave, variante micro.
+       Conserva silueta, centro y lectura de weave. Corta los dos pliegues
+       internos y engrosa el trazo: a 32px el trazo completo de 16 mide 1,6px
+       y la separacion entre pliegues 1,8px, y se cierran. -->
+  <rect x="-160" y="-160" width="320" height="320" rx="68" fill="#05070B"/>
   <g transform="rotate(45)">
-    <path d="M-123-76H76V47H-29" fill="none" stroke="#155EEF" stroke-width="24" stroke-linecap="square" stroke-linejoin="miter"/>
-    <path d="M123 76H-76V-47H29" fill="none" stroke="#46C8FF" stroke-width="24" stroke-linecap="square" stroke-linejoin="miter"/>
-    <rect x="-27" y="-27" width="54" height="54" fill="#46C8FF" stroke="#02050A" stroke-width="6" stroke-linejoin="miter"/>
-    <rect x="-10" y="-10" width="20" height="20" fill="#02050A"/>
+    <path d="M-123-76H76V47H-29" fill="none" stroke="#F4F8FF" stroke-width="24" stroke-linecap="square" stroke-linejoin="miter"/>
+    <path d="M123 76H-76V-47H29" fill="none" stroke="#2388FF" stroke-width="24" stroke-linecap="square" stroke-linejoin="miter"/>
+    <rect x="-27" y="-27" width="54" height="54" fill="#2388FF" stroke="#05070B" stroke-width="6" stroke-linejoin="miter"/>
+    <rect x="-10" y="-10" width="20" height="20" fill="#05070B"/>
   </g>
 </svg>

@@ -1,0 +1,117 @@
+---
+import ServiceLayout from '../layouts/ServiceLayout.astro';
+import ServiceSection from '../components/ServiceSection.astro';
+import CheckList from '../components/CheckList.astro';
+import ProcessFlow from '../components/ProcessFlow.astro';
+import FAQ from '../components/FAQ.astro';
+import { ANCHORS } from '../data/navigation';
+
+const audita = [
+  'Estructura de campañas y asignación de presupuesto',
+  'Términos de búsqueda y palabras negativas',
+  'Segmentación, públicos y remarketing',
+  'Creativos: ángulos, hooks y formatos en rotación',
+  'Landing: oferta, mensaje, velocidad y formulario',
+  'Eventos de conversión y su configuración real',
+  'GA4, GTM, Pixel y calidad de la medición',
+  'Atribución y qué campaña se lleva el crédito',
+  'Calidad de lead y qué pasa después del contacto',
+  'Seguimiento comercial y tiempos de respuesta',
+];
+
+const steps = [
+  {
+    number: '01',
+    title: 'Research',
+    description:
+      'Miramos el negocio antes que la cuenta: qué se vende, a quién, con qué margen y contra quién.',
+    detail: ['Negocio', 'Oferta', 'Cliente', 'Competencia', 'Mercado'],
+  },
+  { number: '02', title: 'Acceso', description: 'Lectura sobre cuentas, analytics y CRM. Sin tocar nada.' },
+  { number: '03', title: 'Diagnóstico', description: 'Dónde se rompe la cadena y por qué importa.' },
+  { number: '04', title: 'Priorización', description: 'Qué mover primero por impacto, no por facilidad.' },
+  { number: '05', title: 'Hipótesis', description: 'Qué probar y contra qué se va a leer.' },
+  { number: '06', title: 'Entrega', description: 'Documento con hallazgos, evidencia y orden de trabajo.' },
+  { number: '07', title: 'Revisión', description: 'Lo recorremos juntos y se decide qué sigue.' },
+];
+
+const entregables = [
+  'Mapa de dónde se pierde rendimiento, nodo por nodo',
+  'Hallazgos con la evidencia que los respalda',
+  'Prioridades ordenadas por impacto potencial',
+  'Hipótesis de test con su métrica de lectura',
+  'Qué conviene dejar de hacer, no solo qué empezar',
+];
+
+const faqs = [
+  {
+    question: '¿Necesito darles acceso a mis cuentas?',
+    answer:
+      'Sí, con permisos de lectura. No hace falta acceso de edición para diagnosticar: durante la auditoría no tocamos ninguna configuración.',
+  },
+  {
+    question: '¿Sirve si mis campañas recién arrancan?',
+    answer:
+      'Depende del volumen. Sin datos suficientes la auditoría se enfoca en estructura, medición y oferta en lugar de en rendimiento histórico. Te lo decimos antes de empezar, no después.',
+  },
+  {
+    question: '¿Qué pasa si el problema no está en las campañas?',
+    answer:
+      'Es el resultado más frecuente, y es precisamente el motivo de auditar todo el recorrido. Si el cuello de botella está en la landing, la medición o el seguimiento comercial, el informe lo dice y ahí se trabaja.',
+  },
+  {
+    question: '¿Tengo que contratar la implementación después?',
+    answer:
+      'No. La auditoría se entrega completa y es tuya. Podés ejecutarla con tu equipo, con otro proveedor o con nosotros.',
+  },
+];
+---
+
+<ServiceLayout
+  title="Auditoría de Growth | Diagnóstico de adquisición | digitAI Motor"
+  description="Auditamos campañas, creativos, landing, medición y proceso comercial para encontrar dónde se pierde rendimiento antes de invertir más."
+  eyebrow="Growth Audit"
+  heading="Encontrá dónde se está perdiendo tu presupuesto antes de invertir más."
+  intro="Revisamos el recorrido completo — tráfico, mensaje, conversión, medición y seguimiento comercial — y te decimos qué está frenando el crecimiento, por qué importa y en qué orden conviene resolverlo."
+  breadcrumbs={[{ label: 'Growth Audit' }]}
+  serviceType="Marketing audit"
+  cta={{
+    title: 'Antes de gastar más, encontremos qué está frenando el crecimiento.',
+    description:
+      'Contanos qué estás intentando mejorar y sobre qué cuentas trabajás. Si el cuello de botella está en otro lado, también lo vas a saber.',
+    primary: { label: 'Solicitar diagnóstico de crecimiento', href: ANCHORS.growthAudit },
+    secondary: { label: 'Tengo un problema puntual', href: ANCHORS.quickFix },
+  }}
+>
+  <ServiceSection
+    eyebrow="Alcance"
+    title="Qué miramos."
+    lead="No auditamos solo el Ads Manager. El rendimiento se pierde en cualquier punto entre el anuncio y la venta, así que se revisa la cadena entera."
+    alt
+    id="alcance"
+  >
+    <CheckList items={audita} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Cómo trabajamos"
+    title="No empezamos optimizando. Empezamos entendiendo."
+    id="proceso"
+  >
+    <ProcessFlow steps={steps} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Entregable"
+    title="Un análisis vale más cuando termina en una decisión."
+    lead="El informe no es una lista de observaciones. Es un orden de trabajo."
+    alt
+    id="entregable"
+  >
+    <CheckList items={entregables} />
+  </ServiceSection>
+
+  <ServiceSection title="Preguntas antes de empezar." narrow id="faq">
+    <FAQ items={faqs} />
+  </ServiceSection>
+</ServiceLayout>

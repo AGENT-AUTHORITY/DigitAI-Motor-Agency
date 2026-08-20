@@ -1,0 +1,108 @@
+---
+import ServiceLayout from '../layouts/ServiceLayout.astro';
+import ServiceSection from '../components/ServiceSection.astro';
+import CheckList from '../components/CheckList.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import FAQ from '../components/FAQ.astro';
+import { ANCHORS } from '../data/navigation';
+
+const canales = [
+  {
+    number: '01',
+    title: 'Google Ads',
+    description:
+      'Intención declarada. Search, Display y remarketing, con el foco en qué términos generan negocio y cuáles solo generan clics.',
+    items: ['Search', 'Display', 'Remarketing', 'Auditoría'],
+    href: '/google-ads/',
+    cta: 'Ver Google Ads',
+  },
+  {
+    number: '02',
+    title: 'Meta Ads',
+    description:
+      'Demanda que todavía no busca. Creativos, públicos, eventos de conversión y calidad de lead conectados con el CRM.',
+    items: ['Lead gen', 'WhatsApp', 'Creativos', 'CAPI'],
+    href: '/meta-ads/',
+    cta: 'Ver Meta Ads',
+  },
+];
+
+const trabajo = [
+  'Estructura de cuenta pensada para leer, no solo para gastar',
+  'Asignación de presupuesto por intención y por etapa',
+  'Palabras y públicos negativos, revisados de forma periódica',
+  'Eventos de conversión que representan negocio real',
+  'Testing de creativos con hipótesis, no rotación al azar',
+  'Lectura conjunta con landing, CRM y proceso comercial',
+];
+
+const noHacemos = [
+  'Optimizar sobre métricas que no se conectan con ingreso',
+  'Escalar presupuesto antes de entender qué está funcionando',
+  'Reportar volumen de clics como si fuera resultado',
+  'Tocar una cuenta activa sin diagnosticar primero',
+];
+
+const faqs = [
+  {
+    question: '¿Trabajan con presupuestos chicos?',
+    answer:
+      'El presupuesto define qué se puede leer, no si trabajamos. Con inversión baja hay menos margen para testear en paralelo, así que el trabajo se concentra en menos hipótesis por vez. Te decimos de antemano qué es razonable esperar.',
+  },
+  {
+    question: '¿Se puede empezar solo por un canal?',
+    answer:
+      'Sí. La recomendación de dónde empezar sale del diagnóstico, no de una preferencia nuestra por un canal.',
+  },
+  {
+    question: '¿Qué pasa si la medición está rota?',
+    answer:
+      'Se arregla antes de optimizar. Optimizar sobre datos incorrectos empeora el resultado con más velocidad, no con menos.',
+  },
+];
+---
+
+<ServiceLayout
+  title="Performance Marketing y Paid Media | digitAI Motor"
+  description="Google Ads, Meta Ads y adquisición pagada conectados con landing, medición y proceso comercial. Compramos intención, no volumen."
+  eyebrow="Paid Media"
+  heading="Compramos intención, no tráfico por comprar tráfico."
+  intro="La adquisición pagada solo rinde cuando se lee junto con lo que pasa después del clic. Trabajamos campañas, presupuesto y creativos con la landing, la medición y el seguimiento comercial en la misma mesa."
+  breadcrumbs={[{ label: 'Paid Media' }]}
+  serviceType="Paid media management"
+  cta={{
+    title: 'Antes de mover presupuesto, veamos qué está midiendo la cuenta.',
+    primary: { label: 'Solicitar diagnóstico de crecimiento', href: ANCHORS.growthAudit },
+    secondary: { label: 'Tengo un problema puntual', href: ANCHORS.quickFix },
+  }}
+>
+  <ServiceSection
+    eyebrow="Canales"
+    title="Dos lógicas distintas de demanda."
+    lead="Google captura intención que ya existe. Meta la crea. Se estructuran distinto porque el problema que resuelven es distinto."
+    alt
+    id="canales"
+  >
+    <div class="grid grid--2">
+      {canales.map((c) => <ServiceCard {...c} trackingEvent="capability_view" />)}
+    </div>
+  </ServiceSection>
+
+  <ServiceSection eyebrow="Alcance" title="Sobre qué trabajamos." id="alcance">
+    <CheckList items={trabajo} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Criterio"
+    title="Y qué no hacemos."
+    lead="Lo que se deja de hacer define el resultado tanto como lo que se hace."
+    alt
+    id="criterio"
+  >
+    <CheckList items={noHacemos} />
+  </ServiceSection>
+
+  <ServiceSection title="Preguntas frecuentes." narrow id="faq">
+    <FAQ items={faqs} />
+  </ServiceSection>
+</ServiceLayout>

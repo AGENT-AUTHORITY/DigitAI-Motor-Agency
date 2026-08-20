@@ -22,6 +22,7 @@ export interface Props {
   serviceType?: string;
   canonicalPath?: string;
   ogImage?: string;
+  noindex?: boolean;
   cta?: {
     title: string;
     description?: string;
@@ -41,6 +42,7 @@ const {
   serviceType,
   canonicalPath,
   ogImage,
+  noindex = true,
   cta,
 } = Astro.props;
 
@@ -73,6 +75,7 @@ const serviceSchema = {
   description={description}
   canonicalPath={canonicalPath}
   ogImage={ogImage}
+  noindex={noindex}
   schema={[serviceSchema]}
 >
   <div class="service-page">

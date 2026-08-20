@@ -35,6 +35,8 @@ export interface Props {
   mono?: boolean;
   animated?: boolean;
   class?: string;
+  /** Texto accesible. Convierte el SVG en img con nombre. */
+  ariaLabel?: string;
   title?: string;
 }
 
@@ -44,8 +46,12 @@ const {
   mono = false,
   animated = false,
   class: className = '',
+  ariaLabel,
   title,
 } = Astro.props;
+
+// title y ariaLabel son intercambiables: cualquiera de los dos nombra el simbolo.
+const label = ariaLabel ?? title;
 
 // 40px es el punto medido donde los dos pliegues internos se cierran.
 const compact = variant === 'compact' || (variant === 'auto' && size < 40);
@@ -65,12 +71,12 @@ const VOID = compact ? 10 : 8;
   height={size}
   viewBox="-160 -160 320 320"
   fill="none"
-  role={title ? 'img' : 'presentation'}
-  aria-label={title}
-  aria-hidden={title ? undefined : 'true'}
+  role={label ? 'img' : 'presentation'}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
   focusable="false"
 >
-  {title && <title>{title}</title>}
+  {label && <title>{label}</title>}
 
   <g transform="rotate(45)">
     <path class="bmk-route bmk-route--a" d={ROUTE_A} stroke-width={STROKE} />
@@ -94,13 +100,13 @@ const VOID = compact ? 10 : 8;
     stroke-linejoin: miter;
   }
 
-  .bmk-route--a { stroke: var(--brand-route-a); }
-  .bmk-route--b { stroke: var(--brand-route-b); }
+  .bmk-route--a { stroke: var(--brand-ink); }
+  .bmk-route--b { stroke: var(--brand-accent); }
 
   /* El keyline oscuro separa el nucleo de las rutas que pasan por detras.
      Sin el, el cuadrado se funde con la trama. */
   .bmk-core {
-    fill: var(--brand-route-b);
+    fill: var(--brand-accent);
     stroke: var(--brand-ground);
     stroke-width: 6;
     stroke-linejoin: miter;
@@ -122,18 +128,20 @@ const VOID = compact ? 10 : 8;
 
   /* --- Trazado ----------------------------------------------------------- */
 
+  /* Carga: se dibuja la primera trayectoria, la segunda completa el weave y
+     ambas quedan estaticas. 760ms en total, una sola vez, sin loop. */
   .bmk--animated .bmk-route {
     stroke-dasharray: 620;
     stroke-dashoffset: 620;
-    animation: bmkDraw 1.4s var(--ease-out-expo) 0.1s forwards;
+    animation: bmkDraw 420ms var(--ease-out) both;
   }
 
-  .bmk--animated .bmk-route--b { animation-delay: 0.24s; }
+  .bmk--animated .bmk-route--b { animation-delay: 340ms; }
 
   .bmk--animated .bmk-core,
   .bmk--animated .bmk-void {
     opacity: 0;
-    animation: bmkCore 0.5s var(--ease-out) 0.9s forwards;
+    animation: bmkCore 220ms var(--ease-out) 540ms both;
   }
 
   @keyframes bmkDraw { to { stroke-dashoffset: 0; } }

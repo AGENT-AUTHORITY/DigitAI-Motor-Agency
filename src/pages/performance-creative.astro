@@ -1,0 +1,117 @@
+---
+import ServiceLayout from '../layouts/ServiceLayout.astro';
+import ServiceSection from '../components/ServiceSection.astro';
+import CheckList from '../components/CheckList.astro';
+import CreativeFlow from '../components/CreativeFlow.astro';
+import FAQ from '../components/FAQ.astro';
+import { ANCHORS } from '../data/navigation';
+
+const research = [
+  'Entrevistas y material comercial existente',
+  'Objeciones reales del proceso de venta',
+  'Reseñas, chats y consultas entrantes',
+  'Lenguaje del cliente, no el del brief',
+  'Competencia: qué ángulo ya está saturado',
+  'Histórico de creativos y qué mostró señal',
+];
+
+const testeamos = [
+  'Concepto A contra concepto B',
+  'Hook A contra hook B',
+  'Problema contra beneficio',
+  'Founder contra UGC',
+  'Demostración contra testimonio',
+  'Educación contra respuesta directa',
+  'Estático contra reel',
+  'Oferta A contra oferta B',
+];
+
+const iteracion = [
+  'Un mensaje con señal se lleva a nuevos formatos antes de descartarse',
+  'Reel a estático, carrusel, UGC, testimonial o pieza gráfica',
+  'Nuevos hooks sobre el mismo ángulo ganador',
+  'Versiones por temperatura de audiencia',
+  'Lo que no muestra señal se archiva con la hipótesis que descartó',
+];
+
+const faqs = [
+  {
+    question: '¿Producen las piezas o solo la estrategia?',
+    answer:
+      'Ambas cosas, según el caso. Lo que no hacemos es producir sin hipótesis: cada pieza entra a testear algo concreto y se lee contra una métrica definida de antemano.',
+  },
+  {
+    question: '¿Cuántos creativos hacen falta para tener una lectura?',
+    answer:
+      'Depende del volumen de la cuenta y del presupuesto disponible. Sin tráfico suficiente por variante no hay señal, solo ruido — y en ese caso lo decimos en vez de entregar conclusiones que no se sostienen.',
+  },
+  {
+    question: '¿Trabajan con el material que ya tenemos?',
+    answer:
+      'Sí, y suele ser el mejor punto de partida. El histórico de creativos muestra qué ángulos ya se probaron y cuáles nunca se exploraron.',
+  },
+  {
+    question: '¿Esto reemplaza a mi diseñador o agencia creativa?',
+    answer:
+      'No necesariamente. Performance Creative define qué probar y por qué; la producción puede quedar en tu equipo. Lo importante es que la decisión de qué producir salga de datos y no de gusto.',
+  },
+];
+---
+
+<ServiceLayout
+  title="Performance Creative | Creative testing y estrategia | digitAI Motor"
+  description="Research, ángulos, conceptos, hooks y testing. Convertimos creatividad en hipótesis medibles y leemos qué merece iteración."
+  eyebrow="Performance Creative"
+  heading="Tu próximo ganador puede estar escondido en los datos que ya tenés."
+  intro="Creative isn't decoration. It's performance. Investigamos clientes, mensajes, conceptos y resultados para convertir creatividad en hipótesis que se puedan leer contra una métrica."
+  breadcrumbs={[{ label: 'Performance Creative' }]}
+  serviceType="Creative strategy"
+  cta={{
+    title: 'Empecemos por entender qué mensaje ya mostró señal.',
+    description:
+      'Si hay histórico de creativos, ahí suele estar la respuesta. Si no lo hay, empezamos por el research.',
+    primary: { label: 'Solicitar análisis creativo', href: `/${ANCHORS.growthAudit}` },
+    secondary: { label: 'Ver Growth Audit', href: '/growth-audit/' },
+  }}
+>
+  <ServiceSection
+    eyebrow="El sistema"
+    title="De research a señal, y de señal a escala."
+    lead="Cada concepto entra como hipótesis, no como pieza terminada. El test decide si se aprende o se itera."
+    alt
+    id="sistema"
+  >
+    <CreativeFlow />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Research"
+    title="El ángulo no se inventa en una reunión."
+    lead="Sale de escuchar cómo el cliente describe su problema, no de cómo la empresa describe su producto."
+    id="research"
+  >
+    <CheckList items={research} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Testing"
+    title="No probamos fondo rojo contra fondo azul."
+    lead="Primero se buscan señales sobre decisiones grandes. La optimización fina viene después, sobre lo que ya funcionó."
+    alt
+    id="testing"
+  >
+    <CheckList items={testeamos} columns={2} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Iteración"
+    title="Un insight ganador no se reinicia desde cero."
+    id="iteracion"
+  >
+    <CheckList items={iteracion} />
+  </ServiceSection>
+
+  <ServiceSection title="Preguntas frecuentes." narrow id="faq">
+    <FAQ items={faqs} />
+  </ServiceSection>
+</ServiceLayout>

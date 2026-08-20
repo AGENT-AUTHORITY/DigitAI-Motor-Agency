@@ -42,18 +42,18 @@ export const SITE = {
  * apuntan aca en vez de a rutas inexistentes.
  */
 export const ANCHORS = {
-  growthAudit: '#growth-audit',
-  quickFix: '#quick-fix',
-  performanceCreative: '#performance-creative',
-  capabilities: '#capabilities',
-  evidence: '#evidence',
+  growthAudit: '/#growth-audit',
+  quickFix: '/#quick-fix',
+  performanceCreative: '/#performance-creative',
+  capabilities: '/#capabilities',
+  evidence: '/#evidence',
 } as const;
 
 /** Nav principal. Orden = prioridad comercial. */
 export const MAIN_NAV: NavLink[] = [
-  { label: 'Growth Audit', href: ANCHORS.growthAudit },
-  { label: 'Performance Creative', href: ANCHORS.performanceCreative },
-  { label: 'Capacidades', href: ANCHORS.capabilities },
+  { label: 'Growth Audit', href: '/growth-audit/' },
+  { label: 'Performance Creative', href: '/performance-creative/' },
+  { label: 'Paid Media', href: '/paid-media/' },
   { label: 'Evidencia', href: ANCHORS.evidence },
   { label: 'Quick Fix', href: ANCHORS.quickFix },
 ];
@@ -67,9 +67,10 @@ export const FOOTER_NAV: NavGroup[] = [
   {
     title: 'Growth',
     links: [
-      { label: 'Growth Audit', href: '/growth-audit/', pending: true },
-      { label: 'Performance Creative', href: '/performance-creative/', pending: true },
-      { label: 'Paid Media', href: '/paid-media/', pending: true },
+      { label: 'Growth Audit', href: '/growth-audit/' },
+      { label: 'Performance Creative', href: '/performance-creative/' },
+      { label: 'Paid Media', href: '/paid-media/' },
+      { label: 'Google Ads', href: '/google-ads/' },
       { label: 'CRO & Landing Pages', href: '/cro-landing-pages/', pending: true },
     ],
   },

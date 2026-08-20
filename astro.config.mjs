@@ -3,6 +3,13 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 /**
+ * Interruptor unico de publicacion. Mientras sea false, el sitio entero va
+ * con noindex y el sitemap sale vacio. Se pone en true recien cuando el
+ * owner apruebe publicar.
+ */
+const SITE_IS_PUBLIC = false;
+
+/**
  * digitAI Motor — Growth V2
  *
  * site: host canónico REAL de producción. El dominio no-www hace 301 -> www,
@@ -35,8 +42,13 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
+      // Durante el checkpoint TODAS las páginas van con noindex, así que
+      // ninguna debe entrar al sitemap: un sitemap que lista páginas noindex
+      // es una contradicción que Search Console reporta. Poner esto en false
+      // cuando se apruebe la publicación.
       filter: (page) =>
-        // Las páginas de redirect legacy no deben entrar al sitemap
+        SITE_IS_PUBLIC &&
+        // Los redirects legacy nunca entran, ni siquiera publicado.
         !page.includes('/paginas-web') &&
         !page.includes('/crm-zoho') &&
         !page.includes('/automatizacion') &&
