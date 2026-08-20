@@ -35,6 +35,16 @@
   --accent-soft: rgba(35, 136, 255, 0.12);
   --accent-line: rgba(35, 136, 255, 0.28);
 
+  /* --- Color: marca -------------------------------------------------------
+     Paleta del isotipo RETURN WEAVE, definida en la hoja de marca. Vive
+     separada de --accent a proposito: --accent es color de interfaz (botones,
+     enlaces, foco) y estos tres son color de identidad.
+     Ver DECISION ABIERTA en docs/BRAND.md sobre unificar ambos azules. */
+  --brand-route-a: #155EEF;
+  --brand-route-b: #46C8FF;
+  --brand-ink: #F4F8FF;
+  --brand-ground: #02050A;
+
   /* --- Color: semantico --------------------------------------------------
      Regla dura: --positive SOLO para resultados positivos, indicadores,
      checks y mejoras. Nunca como color decorativo. Ver docs/BRAND.md */

@@ -1,0 +1,117 @@
+---
+import BrandMark from './BrandMark.astro';
+
+/**
+ * BrandLockup — isotipo + wordmark.
+ *
+ * PROPORCIONES (de la hoja de marca)
+ * Horizontal: simbolo 1x, separacion 0,72x de la altura del simbolo.
+ * Vertical: separacion 0,5x, wordmark centrado sobre el eje del simbolo.
+ *
+ * WORDMARK
+ * "digitAI Motor". "AI" en cyan y peso alto; "Motor" en peso ligero. El
+ * contraste de peso es lo que separa las tres partes sin necesidad de espacio.
+ *
+ * ESPACIO DE SEGURIDAD
+ * 0,4x de la altura del simbolo en los cuatro lados. Se aplica como padding
+ * cuando el lockup va sobre una superficie que no controlamos.
+ */
+export interface Props {
+  orientation?: 'horizontal' | 'vertical';
+  /** Altura del isotipo en px. El wordmark escala en proporcion. */
+  size?: number;
+  mono?: boolean;
+  animated?: boolean;
+  /** Reserva el espacio de seguridad alrededor. */
+  clearspace?: boolean;
+  href?: string;
+  class?: string;
+  title?: string;
+}
+
+const {
+  orientation = 'horizontal',
+  size = 40,
+  mono = false,
+  animated = false,
+  clearspace = false,
+  href,
+  class: className = '',
+  title = 'digitAI Motor',
+} = Astro.props;
+
+const Tag = href ? 'a' : 'div';
+const gap = orientation === 'horizontal' ? size * 0.72 : size * 0.5;
+// El wordmark se dimensiona contra la altura del simbolo, no al reves.
+const wordSize = orientation === 'horizontal' ? size * 0.62 : size * 0.52;
+---
+
+<Tag
+  class:list={[
+    'lockup',
+    `lockup--${orientation}`,
+    mono && 'lockup--mono',
+    clearspace && 'lockup--clearspace',
+    className,
+  ]}
+  href={href}
+  style={`--lk-gap:${gap}px; --lk-word:${wordSize}px; --lk-size:${size}px`}
+  aria-label={href ? title : undefined}
+>
+  <BrandMark size={size} mono={mono} animated={animated} />
+  <span class="lockup__word" aria-hidden={href ? 'true' : undefined}>
+    digit<em>AI</em><span class="lockup__motor">Motor</span>
+  </span>
+</Tag>
+
+<style>
+  .lockup {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--lk-gap);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .lockup--vertical {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .lockup--clearspace {
+    padding: calc(var(--lk-size) * 0.4);
+  }
+
+  .lockup__word {
+    font-family: var(--font-heading);
+    font-size: var(--lk-word);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--brand-ink);
+  }
+
+  /* "AI" es el unico elemento del wordmark que toma el color de marca.
+     El peso alto lo separa del resto sin abrir espacio. */
+  .lockup__word em {
+    font-style: normal;
+    font-weight: 800;
+    color: var(--brand-route-b);
+  }
+
+  .lockup__motor {
+    font-weight: 350;
+    margin-inline-start: 0.19em;
+  }
+
+  .lockup--mono .lockup__word,
+  .lockup--mono .lockup__word em {
+    color: currentColor;
+  }
+
+  .lockup:where(a):hover .lockup__word {
+    color: var(--brand-ink);
+  }
+</style>

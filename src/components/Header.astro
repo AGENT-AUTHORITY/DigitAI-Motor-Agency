@@ -1,17 +1,20 @@
 ---
 import { MAIN_NAV, NAV_CTA, isActivePath } from '../data/navigation';
 import Button from './Button.astro';
-import BrandMark from './BrandMark.astro';
+import BrandLockup from './BrandLockup.astro';
 
 const pathname = Astro.url.pathname;
 ---
 
 <header class="site-header" data-header>
   <div class="container site-header__inner">
-    <a class="site-header__brand" href="/" aria-label="digitAI motor — inicio">
-      <BrandMark size={30} animated />
-      <span class="site-header__wordmark">digit<em>AI</em> motor</span>
-    </a>
+    <BrandLockup
+      href="/"
+      size={28}
+      animated
+      class="site-header__brand"
+      title="digitAI Motor — inicio"
+    />
 
     <nav class="site-nav" aria-label="Navegación principal">
       <ul class="site-nav__list" role="list">
@@ -110,28 +113,8 @@ const pathname = Astro.url.pathname;
   }
 
   .site-header__brand {
-    display: flex;
-    align-items: center;
-    /* Espacio de seguridad: media altura del isotipo. */
-    gap: 0.625rem;
     flex: none;
-    text-decoration: none;
     border-radius: var(--radius-xs);
-  }
-
-  .site-header__wordmark {
-    font-family: var(--font-heading);
-    font-size: var(--text-base);
-    font-weight: var(--weight-bold);
-    letter-spacing: var(--tracking-tight);
-    color: var(--text-primary);
-    white-space: nowrap;
-  }
-
-  /* digitAI motor: la I y la A van en mayuscula dentro del nombre. El em no
-     aporta enfasis semantico real, solo el corte visual de la marca. */
-  .site-header__wordmark em {
-    font-style: normal;
   }
 
   .site-nav {

@@ -215,11 +215,99 @@ editorial · microinteracciones.
 Performance Creative debe tener lenguaje visual propio **dentro** del mismo
 design system.
 
-## Logo
+## Isotipo — RETURN WEAVE / Sacred Weave
 
-Se conserva `assets/logo.svg` sin rediseño: glifo casi cuadrado (90×84) más
-wordmark textual "digitAI motor" al lado. Pendiente: su gradiente
-teal→navy (`#38b8c4`→`#1b4285`) no conversa con el accent `#2388FF`.
+Definición oficial. **No se abren más familias ni direcciones conceptuales.**
+
+### Sistema
+
+Dos recorridos recíprocos salen del borde, pliegan hacia adentro y terminan
+apuntando al núcleo. Cada uno es el otro **rotado 180°**: el símbolo tiene
+simetría rotacional de orden 2, no simetría espejo. Eso es lo que lo hace
+leer como *retorno* y no como flecha.
+
+El conjunto va rotado 45°. Las rutas son ortogonales; la rotación es lo único
+que las pone en diagonal.
+
+### Progresión
+
+Los pliegues siguen **11 · 18 · 29 · 47 · 76 · 123**. Cada término es la suma
+de los dos anteriores, así que la razón converge a φ. Ningún valor está
+elegido a ojo.
+
+### Núcleo
+
+Cuadrado con vacío central. El doble vacío es el diagnóstico: el sistema mira
+hacia adentro antes de devolver.
+
+### Color
+
+| Rol | Token | Valor |
+|---|---|---|
+| Ruta A | `--brand-route-a` | `#155EEF` |
+| Ruta B + núcleo | `--brand-route-b` | `#46C8FF` |
+| Wordmark | `--brand-ink` | `#F4F8FF` |
+| Fondo / keyline | `--brand-ground` | `#02050A` |
+
+**Regla de la hoja de marca:** ningún refinamiento depende del azul. El color
+separa funciones; la geometría sostiene la marca. Por eso existe la versión
+monocroma y por eso es válida en cualquier soporte.
+
+> **DECISIÓN ABIERTA.** El azul de marca (`#155EEF`) y el azul de interfaz
+> (`--accent` `#2388FF`) conviven en la misma página. Están separados a
+> propósito — identidad vs. interfaz — pero son dos azules a poca distancia y
+> puede leerse como inconsistencia. Las opciones son unificar la interfaz a
+> `#155EEF`, unificar la marca a `#2388FF`, o dejarlo como está. Los tokens
+> permiten cambiarlo en una línea. Pendiente de tu decisión.
+
+### Refinamiento aplicado — variante compacta
+
+Único cambio sobre la hoja aprobada, y es de tamaño, no de esencia.
+
+Con trazo 16 sobre un lienzo de 320, **a 32px el trazo mide 1,6px y la
+separación entre pliegues 1,8px**: se cierran visualmente. Medido en
+navegador.
+
+`variant="compact"` conserva la misma trama, el mismo núcleo y la misma
+progresión, pero **corta los dos pliegues internos** (11 y 18) y engrosa el
+trazo a 24. No es otro logo: es A leída a distancia corta.
+
+**Se elige sola:** `BrandMark` usa la compacta bajo 40px sin que quien la
+consume tenga que decidirlo. 40px es el punto medido donde los pliegues se
+cierran.
+
+### Lockups
+
+| | Separación | Wordmark |
+|---|---|---|
+| Horizontal | 0,72× la altura del símbolo | 0,62× |
+| Vertical | 0,5× | 0,52×, centrado sobre el eje |
+
+**Espacio de seguridad:** 0,4× la altura del símbolo en los cuatro lados.
+`<BrandLockup clearspace />` lo reserva.
+
+### Wordmark
+
+**digitAI Motor.** "AI" en `--brand-route-b` y peso 800; "Motor" en peso 350.
+El contraste de peso separa las tres partes sin abrir espacio.
+
+⚠️ Cambio respecto de la V2 anterior: era `digitAI motor` (motor en
+minúscula). La hoja de marca define `Motor` con mayúscula.
+
+### Archivos
+
+| Archivo | Uso |
+|---|---|
+| `BrandMark.astro` | Isotipo inline, tokens, variante automática |
+| `BrandLockup.astro` | Horizontal y vertical |
+| `logo-mark.svg` | Isotipo color, standalone |
+| `logo-mark-mono.svg` | Monocromo, una tinta |
+| `logo-lockup-horizontal.svg` | Lockup horizontal |
+| `logo-lockup-vertical.svg` | Lockup vertical |
+| `favicon.svg` | Variante compacta sobre fondo redondeado |
+
+`logo.svg` de la V1 queda en el repo **sin uso**. No lo borré: es un asset de
+marca y esa decisión es del owner.
 
 ## Geo
 
