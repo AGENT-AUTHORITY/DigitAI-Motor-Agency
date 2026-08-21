@@ -1,0 +1,46 @@
+---
+import { TRACK_FN } from '../lib/analytics';
+
+/**
+ * Analytics — punto unico de inyeccion.
+ *
+ * Sin ID configurado no se emite NINGUN script y no sale ningun request a
+ * terceros. La pagina queda exactamente igual que si el componente no
+ * existiera.
+ *
+ * `window.dmTrack(evento, params)` se define siempre, incluso deshabilitado:
+ * asi los llamadores no necesitan saber si hay tracking activo ni envolver
+ * cada llamada en un condicional.
+ */
+const GA4_ID = import.meta.env.PUBLIC_GA4_ID?.trim() || '';
+
+// Sin consentimiento no se carga nada de GA4. Hoy no hay banner porque no hay
+// analytics activo — y un banner sin nada que consentir es decorado. Cuando
+// exista un ID real hay que decidir e implementar el consentimiento ANTES de
+// desplegarlo. Ver docs/PRIVACY.md.
+const analyticsEnabled = Boolean(GA4_ID);
+---
+
+<script is:inline define:vars={{ TRACK_FN, analyticsEnabled }}>
+  // Se define siempre. Deshabilitado, es un no-op: cero costo, cero requests.
+  window[TRACK_FN] = function (event, params) {
+    if (!analyticsEnabled) return;
+    if (typeof window.gtag !== 'function') return;
+    window.gtag('event', event, params || {});
+  };
+</script>
+
+{
+  analyticsEnabled && (
+    <>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`} />
+      <script is:inline define:vars={{ GA4_ID }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', GA4_ID);
+      </script>
+    </>
+  )
+}

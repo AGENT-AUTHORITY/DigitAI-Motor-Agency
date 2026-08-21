@@ -102,3 +102,75 @@ Parámetros preservados: `utm_source`, `utm_medium`, `utm_campaign`,
 - [ ] Marcar Qualified Lead / Booked Call / Contact Form como primarias
 - [ ] Configurar endpoint del formulario y probar entrega
 - [ ] Vincular GA4 con Google Ads y GA4 con Search Console
+
+---
+
+# FASE 5 — Arquitectura implementada
+
+## Estado de los IDs
+
+Buscados en `.env`, `.env.example`, todo el código y los HTML de la V1:
+
+| ID | Estado |
+|---|---|
+| GA4 (`PUBLIC_GA4_ID`) | **MISSING** |
+| Google Tag Manager | **MISSING** |
+| Meta Pixel | **MISSING** |
+| Google Ads | **MISSING** |
+| Google Ads conversion label | **MISSING** |
+
+No existe archivo `.env`. **El tracking queda deshabilitado**, y es el estado
+correcto: sin ID no se inventa ninguno.
+
+## Dónde vive ahora
+
+| Archivo | Rol |
+|---|---|
+| `src/lib/analytics.ts` | Nombres de evento y la reserva de `generate_lead` |
+| `src/components/Analytics.astro` | Único punto de inyección |
+
+`BaseLayout` ya no contiene lógica de tracking: llama a `<Analytics />` y nada más.
+
+**Con el tracking deshabilitado el sitio emite cero peticiones a terceros.**
+Verificado en la traza: 8 peticiones en la home, todas al propio dominio.
+
+`window.dmTrack(evento, payload)` se define siempre. Deshabilitado es un no-op,
+así que quien lo llama no necesita saber si hay tracking activo.
+
+## Modelo de eventos
+
+Tres eventos. Pocos y con significado exacto.
+
+| Evento | Cuándo | Qué significa |
+|---|---|---|
+| `service_intent_selected` | Llega con `?intent=` o cambia el select | Qué servicio le interesa |
+| `contact_form_completed` | El formulario pasó validación | Los datos están completos |
+| `whatsapp_handoff_started` | El sitio abrió WhatsApp | **El sitio preparó la conversación** |
+
+### Por qué no hay `generate_lead`
+
+El formulario no tiene backend. Al enviarlo se abre WhatsApp con el mensaje ya
+escrito, pero **la persona todavía tiene que apretar enviar**, y desde el sitio
+no hay forma de saber si lo hizo.
+
+Contar eso como lead haría dos daños:
+
+1. Infla la conversión en el reporte.
+2. Peor: entrena a las plataformas hacia una señal falsa. Meta y Google
+   optimizan hacia el evento que reciben. Si el evento miente, la campaña
+   aprende a traer gente que abre WhatsApp y no escribe.
+
+Es exactamente el problema que este sitio dice saber resolver. `generate_lead`
+queda **reservado** en `src/lib/analytics.ts` para cuando exista backend,
+webhook, alta en CRM o cualquier confirmación real de recepción.
+
+## Decisión sobre el backend del formulario — V1
+
+**No se construye backend para este lanzamiento.** El handoff por WhatsApp se
+mantiene tal cual.
+
+Motivo: el sitio ya puede captar conversaciones y no tiene sentido bloquear el
+lanzamiento por infraestructura adicional.
+
+**POST-LAUNCH PRIORITY:** captura server-side con alta en CRM. Cuando exista,
+se habilita `generate_lead` y recién ahí hay una conversión real que contar.

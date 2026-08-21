@@ -2,10 +2,11 @@
 import ServiceLayout from '../layouts/ServiceLayout.astro';
 import ServiceSection from '../components/ServiceSection.astro';
 import GrowthFlow from '../components/GrowthFlow.astro';
+import MessageMatch from '../components/MessageMatch.astro';
 import CheckList from '../components/CheckList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import FAQ from '../components/FAQ.astro';
-import { ANCHORS } from '../data/navigation';
+import { intentLink } from '../data/navigation';
 
 const recorrido = [
   { label: 'AD / SEARCH', note: 'La intención con la que llega la persona' },
@@ -13,6 +14,48 @@ const recorrido = [
   { label: 'LANDING', note: 'Lo que la página efectivamente responde' },
   { label: 'ACTION', note: 'Qué tan fácil es hacer lo que le pedimos' },
   { label: 'LEAD', note: 'Si el contacto sirve para vender' },
+];
+
+const messageMatch = [
+  {
+    stage: 'Anuncio',
+    carries: 'Promete A',
+    state: 'Coherente',
+    tone: 'ok' as const,
+    note: 'La persona hace clic por un motivo puntual: un precio, un plazo, una solución concreta. Ese motivo viaja con ella.',
+  },
+  {
+    stage: 'Landing',
+    carries: 'Habla de B',
+    state: 'No coincide',
+    tone: 'break' as const,
+    note: 'La página abre con un mensaje institucional, con otra oferta o con la misma idea dicha de otra forma. Nada está roto técnicamente.',
+  },
+  {
+    stage: 'Intención',
+    carries: 'Se pierde',
+    state: 'Fuga',
+    tone: 'loss' as const,
+    note: 'No hay error ni rebote evidente: la persona simplemente deja de reconocer aquello por lo que entró.',
+  },
+];
+
+const testing = [
+  { label: 'HYPOTHESIS', note: 'Qué creemos que está frenando, y por qué' },
+  { label: 'TEST', note: 'Un cambio acotado que pueda dar respuesta' },
+  { label: 'SIGNAL', note: 'Contra qué métrica se lee, definida antes' },
+  { label: 'LEARN', note: 'Qué quedó confirmado y qué quedó descartado' },
+  { label: 'ITERATE', note: 'La próxima hipótesis parte de la anterior' },
+];
+
+const testeable = [
+  'Headline: la promesa que sostiene el resto de la página',
+  'Oferta: qué se propone y por qué alguien lo tomaría hoy',
+  'CTA: qué se pide, cuándo y con qué fricción',
+  'Formulario: cuántos campos y en qué orden',
+  'Prueba: qué respalda lo que se afirma',
+  'Mensaje: el mismo argumento dicho desde otro ángulo',
+  'Estructura: qué va arriba y qué puede esperar',
 ];
 
 const trabajo = [
@@ -94,7 +137,7 @@ const faqs = [
     title: 'Revisemos dónde se está perdiendo la intención.',
     description:
       'Si el tráfico llega y no cierra, el problema tiene una causa concreta. Empezamos por encontrarla.',
-    primary: { label: 'Revisar mi conversión', href: ANCHORS.growthAudit },
+    primary: { label: 'Revisar mi conversión', href: intentLink('cro') },
     secondary: { label: 'Ver Growth Audit', href: '/growth-audit/' },
   }}
 >
@@ -113,11 +156,39 @@ const faqs = [
   </ServiceSection>
 
   <ServiceSection
+    eyebrow="Message match"
+    title="El clic no empieza de cero cuando llega a la landing."
+    lead="El anuncio inicia una conversación. La landing tiene que continuarla. Cuando no lo hace, no aparece ningún error: aparece una caída de conversión sin causa visible."
+    id="message-match"
+  >
+    <MessageMatch steps={messageMatch} />
+    <p class="cro-note">
+      Por eso más tráfico hacia una experiencia que no continúa la conversación
+      no arregla el número: lo escala.
+    </p>
+  </ServiceSection>
+
+  <ServiceSection
     eyebrow="Alcance"
     title="CRO no es solamente hacer una landing linda."
+    alt
     id="alcance"
   >
     <CheckList items={trabajo} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Testing"
+    title="Un ciclo, no una serie de cambios sueltos."
+    lead="Cada vuelta empieza donde terminó la anterior. Un test que no modifica la próxima hipótesis no dejó nada."
+    id="testing"
+  >
+    <GrowthFlow nodes={testing} loop="Lo aprendido redefine la siguiente hipótesis" />
+
+    <div class="cro-testable">
+      <p class="cro-testable__title">Qué se puede testear</p>
+      <CheckList items={testeable} />
+    </div>
   </ServiceSection>
 
   <ServiceSection
@@ -150,6 +221,30 @@ const faqs = [
     letter-spacing: var(--tracking-tight);
     color: var(--text-primary);
     max-width: 40ch;
+  }
+
+  .cro-note {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+    max-width: 56ch;
+  }
+
+  .cro-testable {
+    margin-top: var(--space-xl);
+  }
+
+  .cro-testable__title {
+    margin-bottom: var(--space-sm);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--accent);
   }
 
   .cro-related {

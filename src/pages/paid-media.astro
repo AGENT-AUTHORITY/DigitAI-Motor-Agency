@@ -5,7 +5,7 @@ import CheckList from '../components/CheckList.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import FAQ from '../components/FAQ.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
-import { ANCHORS } from '../data/navigation';
+import { intentLink } from '../data/navigation';
 
 const canales = [
   {
@@ -73,8 +73,8 @@ const faqs = [
   serviceType="Paid media management"
   cta={{
     title: 'Antes de mover presupuesto, veamos qué está midiendo la cuenta.',
-    primary: { label: 'Solicitar diagnóstico de crecimiento', href: ANCHORS.growthAudit },
-    secondary: { label: 'Tengo un problema puntual', href: ANCHORS.quickFix },
+    primary: { label: 'Revisar mi adquisición', href: intentLink('paid_media') },
+    secondary: { label: 'Tengo un problema puntual', href: '/quick-fix/' },
   }}
 >
   <ServiceSection

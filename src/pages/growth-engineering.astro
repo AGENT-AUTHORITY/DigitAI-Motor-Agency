@@ -3,10 +3,12 @@ import ServiceLayout from '../layouts/ServiceLayout.astro';
 import ServiceSection from '../components/ServiceSection.astro';
 import GrowthFlow from '../components/GrowthFlow.astro';
 import CapabilityGrid from '../components/CapabilityGrid.astro';
+import ConnectionGap from '../components/ConnectionGap.astro';
+import BuildCases from '../components/BuildCases.astro';
 import CheckList from '../components/CheckList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import FAQ from '../components/FAQ.astro';
-import { ANCHORS } from '../data/navigation';
+import { intentLink } from '../data/navigation';
 
 const cadena = [
   { label: 'CAMPAIGN', note: 'Lo que se compra' },
@@ -15,6 +17,66 @@ const cadena = [
   { label: 'AUTOMATION', note: 'Qué se dispara solo' },
   { label: 'SALES', note: 'Quién lo trabaja y cuándo' },
   { label: 'DATA', note: 'Qué se puede leer después' },
+];
+
+const huecos = [
+  {
+    from: 'Landing',
+    to: 'CRM',
+    symptom:
+      'El formulario envía y alguien recibe un mail. A partir de ahí el contacto depende de que una persona se acuerde de cargarlo.',
+    build:
+      'La entrada del lead al sistema con su origen, su campaña y su contexto ya asociados.',
+  },
+  {
+    from: 'CRM',
+    to: 'Seguimiento',
+    symptom:
+      'El lead queda registrado, pero nada indica quién lo trabaja, en cuánto tiempo ni qué pasa si nadie lo hace.',
+    build:
+      'Asignación, tiempos de respuesta y recordatorios sobre el recorrido que el equipo ya usa.',
+  },
+  {
+    from: 'Venta',
+    to: 'Atribución',
+    symptom:
+      'La venta se cierra y se registra, pero esa información nunca vuelve. Las campañas siguen optimizando hacia el lead barato.',
+    build:
+      'El camino de retorno de la señal de venta hacia las plataformas y hacia los tableros.',
+  },
+];
+
+const construido = [
+  {
+    kind: 'Prospecting system',
+    problem:
+      'Prospección comercial B2B hecha a mano: listados sueltos, criterios distintos por persona y sin forma de saber a quién conviene contactar primero.',
+    tool:
+      'Un sistema de descubrimiento territorial que releva empresas desde fuentes públicas, las deduplica, las clasifica y las puntúa con reglas explícitas.',
+    use:
+      'Le da estructura al trabajo comercial: el equipo abre una zona y encuentra las oportunidades ya ordenadas por prioridad, con el criterio a la vista.',
+    parts: ['FastAPI', 'Scoring', 'Territorio', 'Pipeline', 'Mapa'],
+  },
+  {
+    kind: 'Quote system',
+    problem:
+      'Cotizaciones técnicas armadas en planillas: cada propuesta se rehacía desde cero y el criterio de precio dependía de quién la preparaba.',
+    tool:
+      'Un cotizador con la lógica técnica y comercial adentro: selección de equipamiento, materiales, mano de obra y resumen económico calculado sobre un catálogo único.',
+    use:
+      'Estandariza el armado de propuestas: la misma configuración da el mismo resultado, sin importar quién la carga.',
+    parts: ['Catálogo', 'Cálculo técnico', 'Resumen económico', 'Tests'],
+  },
+  {
+    kind: 'Sales tool',
+    problem:
+      'La información comercial se cortaba entre etapas: lo relevado en prospección no llegaba al seguimiento y el seguimiento no llegaba a la propuesta.',
+    tool:
+      'Un CRM construido alrededor del recorrido real — prospección, diagnóstico, contacto, seguimiento, propuesta, cierre — y no alrededor de un modelo genérico.',
+    use:
+      'Centraliza la operación comercial en un solo lugar, con el historial del prospecto disponible en la etapa donde hace falta.',
+    parts: ['Postgres + RLS', 'Pipeline', 'Auditoría', 'Dashboard'],
+  },
 ];
 
 const capacidades = [
@@ -81,7 +143,7 @@ const faqs = [
   {
     question: '¿Son una software house?',
     answer:
-      'No. La tecnología existe acá para resolver un cuello de botella de crecimiento. Si el problema se resuelve sin construir nada, esa es la recomendación.',
+      'No. Un software house arranca preguntando qué hay que construir; nosotros arrancamos preguntando qué está frenando el crecimiento. A veces la respuesta es construir y a veces es cambiar una configuración, y en ese caso lo decimos aunque signifique menos trabajo para nosotros.',
   },
   {
     question: '¿Trabajan sobre sistemas que ya tenemos?',
@@ -113,8 +175,8 @@ const faqs = [
     title: 'Tengo algo para construir.',
     description:
       'Contanos qué parte del recorrido comercial se está resolviendo a mano, o directamente no se está resolviendo.',
-    primary: { label: 'Tengo algo para construir', href: ANCHORS.growthAudit },
-    secondary: { label: 'Ver Growth Audit', href: '/growth-audit/' },
+    primary: { label: 'Tengo algo para construir', href: intentLink('growth_engineering') },
+    secondary: { label: 'Primero quiero diagnosticar el problema', href: '/growth-audit/' },
   }}
 >
   <ServiceSection
@@ -124,18 +186,38 @@ const faqs = [
     alt
     id="cadena"
   >
-    <GrowthFlow nodes={cadena} />
+    <GrowthFlow nodes={cadena} loop="Lo que se aprende vuelve a la campaña" />
     <p class="ge-close">
-      Technology exists to solve a growth bottleneck.
+      Una cadena vale lo que vale su eslabón más débil, y el más débil suele
+      ser el que no existe.
     </p>
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="El hueco"
+    title="El problema suele estar entre dos capas, no dentro de una."
+    lead="Cada pieza puede funcionar bien por separado y el negocio perder igual. Lo que falta es el enlace, y por eso no aparece en ningún panel."
+    id="hueco"
+  >
+    <ConnectionGap gaps={huecos} />
   </ServiceSection>
 
   <ServiceSection
     eyebrow="Capacidades"
     title="Qué construimos, y para resolver qué."
+    alt
     id="capacidades"
   >
     <CapabilityGrid capabilities={capacidades} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Sistemas construidos"
+    title="Qué se construyó y para qué se usa."
+    lead="Cada uno salió de un cuello de botella comercial concreto, no de una oportunidad técnica. Describimos la construcción: no atribuimos resultados de negocio a la herramienta."
+    id="construido"
+  >
+    <BuildCases cases={construido} />
   </ServiceSection>
 
   <ServiceSection

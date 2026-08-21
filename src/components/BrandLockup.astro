@@ -56,11 +56,11 @@ const wordSize = orientation === 'horizontal' ? size * 0.62 : size * 0.52;
   ]}
   href={href}
   style={`--lk-gap:${gap}px; --lk-word:${wordSize}px; --lk-size:${size}px`}
-  aria-label={href ? title : undefined}
+  aria-label={href ? undefined : title}
 >
   <BrandMark size={size} mono={mono} animated={animated} />
-  <span class="lockup__word" aria-hidden={href ? 'true' : undefined}>
-    digit<em>AI</em><span class="lockup__motor">Motor</span>
+  <span class="lockup__word">
+    digit<em>AI</em> <span class="lockup__motor">Motor</span>
   </span>
 </Tag>
 
@@ -103,7 +103,9 @@ const wordSize = orientation === 'horizontal' ? size * 0.62 : size * 0.52;
 
   .lockup__motor {
     font-weight: 350;
-    margin-inline-start: 0.19em;
+    /* 0.19em originales menos lo que ocupa el espacio real que ahora existe
+       en el markup (medido: 0.1653em). Resultado visual identico. */
+    margin-inline-start: 0.0247em;
   }
 
   .lockup--mono .lockup__word,

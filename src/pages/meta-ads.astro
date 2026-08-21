@@ -1,10 +1,11 @@
 ---
 import ServiceLayout from '../layouts/ServiceLayout.astro';
 import ServiceSection from '../components/ServiceSection.astro';
+import GrowthFlow from '../components/GrowthFlow.astro';
 import CheckList from '../components/CheckList.astro';
 import FAQ from '../components/FAQ.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
-import { ANCHORS } from '../data/navigation';
+import { intentLink } from '../data/navigation';
 
 const alcance = [
   'Estructura de campañas por objetivo real, no por defecto',
@@ -15,6 +16,18 @@ const alcance = [
   'Eventos de conversión que representan negocio',
   'Pixel: instalación, deduplicación y eventos duplicados',
   'Lectura conjunta con el CRM: qué lead terminó vendiendo',
+];
+
+// Arquitectura de atribucion: se describe como DISEÑO POSIBLE, no como algo
+// implementado. No hay evidencia publicable de un closed loop completo en
+// produccion, asi que el lenguaje es "puede conectar" / "el objetivo es".
+const atribucion = [
+  { label: 'AD', note: 'La campaña que compra la conversación' },
+  { label: 'CLICK / MESSAGE', note: 'Formulario o mensaje directo' },
+  { label: 'WHATSAPP', note: 'Donde la conversación realmente pasa' },
+  { label: 'CRM', note: 'El contacto con su origen asociado' },
+  { label: 'SALE', note: 'Lo que efectivamente se cerró' },
+  { label: 'CAPI', note: 'La señal de venta de vuelta hacia Meta' },
 ];
 
 const calidad = [
@@ -53,7 +66,7 @@ const faqs = [
   serviceType="Meta Ads management"
   cta={{
     title: 'Veamos qué está entrando por Meta y cuánto de eso califica.',
-    primary: { label: 'Solicitar diagnóstico de crecimiento', href: ANCHORS.growthAudit },
+    primary: { label: 'Solicitar diagnóstico de crecimiento', href: intentLink('meta_ads') },
     secondary: { label: 'Ver Performance Creative', href: '/performance-creative/' },
   }}
 >
@@ -70,7 +83,24 @@ const faqs = [
     <CheckList items={calidad} />
   </ServiceSection>
 
-  <ServiceSection title="Preguntas frecuentes." narrow alt id="faq">
+  <ServiceSection
+    eyebrow="Atribución"
+    title="Devolver la señal de venta, no solo contar leads."
+    lead="Una arquitectura de atribución puede conectar la campaña con lo que pasó después del contacto. Sin ese retorno, la plataforma solo sabe optimizar hacia el lead más barato: no tiene forma de saber cuáles se convirtieron en venta."
+    alt
+    id="atribucion"
+  >
+    <GrowthFlow nodes={atribucion} loop="La venta vuelve a Meta como señal de optimización" />
+
+    <p class="ma-note">
+      Podemos diseñar este recorrido y decir con qué piezas se sostiene. El
+      objetivo es que la campaña optimice hacia lo que cierra, no hacia lo que
+      entra. Qué parte ya existe y qué parte hay que construir sale del
+      diagnóstico, no de una promesa previa.
+    </p>
+  </ServiceSection>
+
+  <ServiceSection title="Preguntas frecuentes." narrow id="faq">
     <FAQ items={faqs} />
     <div class="ma-related">
       <RelatedLinks

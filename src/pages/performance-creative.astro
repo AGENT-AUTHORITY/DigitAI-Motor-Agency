@@ -5,7 +5,7 @@ import CheckList from '../components/CheckList.astro';
 import CreativeFlow from '../components/CreativeFlow.astro';
 import FAQ from '../components/FAQ.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
-import { ANCHORS } from '../data/navigation';
+import { intentLink } from '../data/navigation';
 
 const research = [
   'Entrevistas y material comercial existente',
@@ -71,7 +71,7 @@ const faqs = [
     title: 'Empecemos por entender qué mensaje ya mostró señal.',
     description:
       'Si hay histórico de creativos, ahí suele estar la respuesta. Si no lo hay, empezamos por el research.',
-    primary: { label: 'Solicitar análisis creativo', href: `/${ANCHORS.growthAudit}` },
+    primary: { label: 'Solicitar análisis creativo', href: intentLink('performance_creative') },
     secondary: { label: 'Ver Growth Audit', href: '/growth-audit/' },
   }}
 >

@@ -380,3 +380,85 @@ veces ni Growth Engineering en tres lugares.
 | `Más potencia para tu negocio. Vos siempre al volante.` | Metáfora descartada |
 | `Pack Automatización Pro USD 497` | Oferta discontinuada |
 | `desde USD 350` | Regla absoluta: sin precios |
+
+---
+
+# FASE 4 — Copy de service pages
+
+La home queda **congelada**. Todo lo de abajo es copy de las ocho service
+pages, escrito bajo las mismas reglas de veracidad.
+
+## Conceptos que cada página tiene que dejar instalados
+
+| Página | Idea que se lleva el lector |
+|---|---|
+| Growth Audit | Entrada para el problema que todavía no tiene diagnóstico |
+| Quick Fix | Si sabés qué está roto, se puede entrar directamente ahí |
+| Performance Creative | El ángulo no se inventa en una reunión; sale del research |
+| Paid Media | Se compra intención, no tráfico. El canal es una decisión, no un default |
+| Google Ads | La intención puede ser buena y aun así perderse después del clic |
+| Meta Ads | Un lead barato no es un lead bueno; la señal de venta tiene que volver |
+| CRO & Landing Pages | El clic no empieza de cero cuando llega a la landing |
+| Growth Engineering | El problema suele estar entre dos capas, no dentro de una |
+
+## MESSAGE MATCH — CRO
+
+Estructura fija de tres estados. El estado va **en texto** además de en color:
+`COHERENTE` / `NO COINCIDE` / `FUGA`. Un lector que no distingue el rojo del
+verde tiene que poder leer el diagnóstico igual.
+
+```
+ANUNCIO      Promete A     COHERENTE
+LANDING      Habla de B    NO COINCIDE
+INTENCIÓN    Se pierde     FUGA
+```
+
+Cierre permitido: *"más tráfico hacia una experiencia que no continúa la
+conversación no arregla el número: lo escala."* Sin dramatismo, sin "estás
+tirando la plata".
+
+## TESTING LOOP — CRO
+
+`HYPOTHESIS → TEST → SIGNAL → LEARN → ITERATE`, y el retorno cierra el ciclo.
+
+**Prohibido:** experimentos concretos, winners, porcentajes de uplift, "subimos
+la conversión un X%". Se muestra el método, nunca resultados que no existen.
+
+## Growth Engineering — sistemas construidos
+
+Formato obligatorio: `PROBLEMA → SE CONSTRUYÓ → USO COMERCIAL`.
+
+Solo es afirmable **la construcción**. Prohibido: nombre del cliente,
+adopción, cantidad de usuarios, revenue, tiempo ahorrado, resultados
+atribuidos a la herramienta.
+
+Los tres casos publicados (prospecting system, quote system, sales tool)
+corresponden a sistemas reales del repositorio. Cualquier caso nuevo pasa por
+la misma verificación antes de escribirse.
+
+## Meta Ads — atribución
+
+La arquitectura `AD → CLICK/MESSAGE → WHATSAPP → CRM → SALE → CAPI ↺ META` se
+presenta como **diseño posible**, nunca como algo implementado.
+
+| Permitido | Prohibido |
+|---|---|
+| "Una arquitectura de atribución puede conectar…" | "Implementamos este sistema para…" |
+| "Podemos diseñar este recorrido…" | "Nuestro closed loop generó…" |
+| "El objetivo es devolver la señal de venta…" | "Recuperamos X% de atribución" |
+
+Única excepción vigente: la FAQ de Conversions API dice que se diseña y se
+implementa **cuando el proyecto lo incluye**, y aclara explícitamente que no se
+afirma que esté funcionando en ninguna cuenta.
+
+## Idioma
+
+Español como base. Inglés solo en nombres técnicos y etiquetas de framework
+(`MESSAGE MATCH`, `HYPOTHESIS`, `CAPI`, `Quick Fix`).
+
+Prohibido el Spanglish de relleno: *"optimizamos tu customer journey haciendo
+testing del funnel"*. Si la frase entera funciona en español, va en español.
+
+Corregido en FASE 4: `Technology exists to solve a growth bottleneck.` cerraba
+Growth Engineering repitiendo en inglés la misma idea que ya estaba en la intro
+en español, y la FAQ la repetía una tercera vez.

@@ -5,7 +5,7 @@ import CheckList from '../components/CheckList.astro';
 import MetricCard from '../components/MetricCard.astro';
 import FAQ from '../components/FAQ.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
-import { ANCHORS } from '../data/navigation';
+import { intentLink } from '../data/navigation';
 
 const alcance = [
   'Estructura de campañas, grupos y presupuesto',
@@ -55,7 +55,7 @@ const faqs = [
   serviceType="Google Ads management"
   cta={{
     title: 'Revisemos qué está comprando tu cuenta hoy.',
-    primary: { label: 'Solicitar auditoría de Google Ads', href: `/${ANCHORS.growthAudit}` },
+    primary: { label: 'Solicitar auditoría de Google Ads', href: intentLink('google_ads') },
     secondary: { label: 'Ver Growth Audit', href: '/growth-audit/' },
   }}
 >
@@ -82,6 +82,19 @@ const faqs = [
     <p class="source-note ga-note">
       Período 16 al 22 de julio de 2026. Datos provenientes de una cuenta
       auditada. No son resultados producidos por digitAI Motor.
+    </p>
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Después del clic"
+    title="La intención puede ser buena y aun así perderse."
+    id="despues-del-clic"
+  >
+    <p class="ga-bridge">
+      Un término de búsqueda correcto, con la puja correcta, puede terminar en
+      una página que responde otra cosa. Cuando eso pasa, el problema deja de
+      estar en la cuenta: está en
+      <a href="/cro-landing-pages/">lo que ocurre después del clic</a>.
     </p>
   </ServiceSection>
 
@@ -130,5 +143,14 @@ const faqs = [
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: var(--space-md);
     }
+  }
+</style>
+
+<style>
+  .ga-bridge {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+    max-width: 56ch;
   }
 </style>

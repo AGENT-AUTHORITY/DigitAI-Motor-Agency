@@ -1,13 +1,9 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-
-/**
- * Interruptor unico de publicacion. Mientras sea false, el sitio entero va
- * con noindex y el sitemap sale vacio. Se pone en true recien cuando el
- * owner apruebe publicar.
- */
-const SITE_IS_PUBLIC = false;
+// Interruptor unico de publicacion. Ver site.config.mjs: de ese valor dependen
+// el noindex, el sitemap y el robots.txt a la vez.
+import { SITE_IS_PUBLIC } from './site.config.mjs';
 
 /**
  * digitAI Motor — Growth V2
@@ -28,6 +24,11 @@ export default defineConfig({
   },
   compressHTML: true,
   vite: {
+    // Propaga el interruptor al codigo del sitio para que robots.txt y el
+    // noindex lean exactamente el mismo valor que el sitemap.
+    define: {
+      'import.meta.env.PUBLIC_SITE_IS_PUBLIC': JSON.stringify(String(SITE_IS_PUBLIC)),
+    },
     css: {
       // PostCSS explicito y vacio. Sin esto Vite busca hacia arriba y
       // levanta un postcss.config.cjs global de la maquina, que exige
@@ -53,7 +54,8 @@ export default defineConfig({
         !page.includes('/crm-zoho') &&
         !page.includes('/automatizacion') &&
         !page.includes('/posicionamiento-geo') &&
-        !page.includes('/funnel'),
+        !page.includes('/funnel') &&
+        !page.includes('/404'),
       changefreq: 'monthly',
       lastmod: new Date(),
     }),

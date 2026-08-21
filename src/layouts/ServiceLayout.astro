@@ -22,6 +22,7 @@ export interface Props {
   serviceType?: string;
   canonicalPath?: string;
   ogImage?: string;
+  /** Solo para forzar. Por defecto lo decide el interruptor de publicacion. */
   noindex?: boolean;
   cta?: {
     title: string;
@@ -42,7 +43,7 @@ const {
   serviceType,
   canonicalPath,
   ogImage,
-  noindex = true,
+  noindex,
   cta,
 } = Astro.props;
 

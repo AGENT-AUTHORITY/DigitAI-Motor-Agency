@@ -138,3 +138,87 @@ Un visitante nuevo entiende, sin scrollear más de un viewport:
 - [ ] Para quién
 - [ ] Qué problema resolvemos
 - [ ] Qué nos diferencia
+
+---
+
+# FASE 4 — Resultados medidos
+
+Fecha de corrida: cierre de FASE 4. Todo verificado sobre `dist/` compilado y
+sobre el sitio servido en local, no sobre el código fuente.
+
+## Build
+
+| Comando | Resultado |
+|---|---|
+| `npm run check` | 0 errores · 0 warnings · 0 hints (42 archivos) |
+| `npm run build` | 9 páginas · sin errores |
+
+Único warning: `[@astrojs/sitemap] No pages found!`. Esperado con
+`SITE_IS_PUBLIC = false`.
+
+## Enlaces y estructura
+
+0 enlaces internos rotos · 0 anclas rotas (66 verificadas) · 0 enlaces
+protocol-relative · 0 IDs duplicados · 0 assets locales faltantes.
+
+Enlaces entrantes por ruta: mínimo 26. Ninguna ruta huérfana.
+
+## Responsive
+
+63 combinaciones (9 rutas × 375, 390, 430, 768, 1024, 1280, 1440).
+**0 con overflow horizontal.**
+
+## Accesibilidad
+
+| Chequeo | Resultado |
+|---|---|
+| Orden de headings (sin saltos) | 9/9 |
+| Un `<h1>` por página | 9/9 |
+| Controles de formulario con label | todos |
+| `alt` en imágenes | todas |
+| Enlaces con nombre accesible | todos |
+| Contraste, componentes nuevos | 49 muestras, mínimo 5.02:1 |
+
+Contraste medido **componiendo el alfa** contra los fondos reales acumulados.
+Sin eso, un color semitransparente mide como si flotara sobre negro puro y
+da falsos negativos.
+
+Estado que no depende solo del color: `COHERENTE` / `NO COINCIDE` / `FUGA` en
+Message Match y `× sin conexión` en Connection Gap llevan el estado escrito.
+
+### Navegación
+
+Abre con click (no hover) · `aria-expanded` + `aria-controls` apuntando a un
+elemento real · Escape cierra y devuelve el foco al trigger · click afuera
+cierra · 6 enlaces tabulables.
+
+Objetivos táctiles del header entre 32 y 39px de alto: cumplen WCAG 2.5.8 AA
+(24px mínimo), no el 2.5.5 AAA de 44px. En mobile el nav supera los 44px.
+
+### Reduced motion
+
+Los componentes nuevos no traen animación propia: solo `data-reveal`, ya
+neutralizado por el catch-all global.
+
+## Formulario — intent routing
+
+| Chequeo | Resultado |
+|---|---|
+| Preselección desde `?intent=` | OK, los 8 intents |
+| Intent inválido | Rechazado, el select queda vacío |
+| Intento de inyección en el intent | Sin efecto, siguen 10 opciones |
+| UTMs junto al intent | Los 5 sobreviven |
+| `referrer` y `landing_page` | Preservados |
+| WhatsApp expone claves internas | No: viaja `Servicio: Growth Engineering` |
+
+## Bundle
+
+|  | Antes | Después | Delta |
+|---|---|---|---|
+| HTML (9 páginas) | 410,3 KB | 431,5 KB | +21,2 KB · +5,2% |
+| HTML gzip | 80,5 KB | 85,4 KB | +4,9 KB · +6,1% |
+| CSS | 50,2 KB | 50,2 KB | 0 |
+| JS | 2,2 KB | 2,2 KB | 0 |
+
+El CSS de los componentes nuevos viaja dentro del HTML: Astro lo inlinea con
+`inlineStylesheets: 'auto'`. Sin dependencias nuevas y sin archivos nuevos.

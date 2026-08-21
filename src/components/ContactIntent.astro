@@ -1,5 +1,17 @@
 ---
-import { WHATSAPP_NUMBER, SITE } from '../data/navigation';
+import { WHATSAPP_NUMBER, SITE, SERVICE_INTENTS, INTENT_UNSURE } from '../data/navigation';
+import { EVENTS, TRACK_FN } from '../lib/analytics';
+
+// La direccion del mensaje de error tiene que salir de la misma fuente que el
+// resto: escrita a mano quedaria vieja al cambiar de canal corporativo.
+const CONTACT_MAIL = SITE.email;
+
+// Se pasan como constantes planas y no como objeto: define:vars inyecta
+// valores, y un identificador de objeto deja al type-checker sin forma de
+// resolver los accesos dentro del inline script.
+const EV_INTENT = EVENTS.SERVICE_INTENT_SELECTED;
+const EV_FORM = EVENTS.CONTACT_FORM_COMPLETED;
+const EV_HANDOFF = EVENTS.WHATSAPP_HANDOFF_STARTED;
 
 /**
  * ContactIntent — bloque de conversion final.
@@ -14,15 +26,9 @@ import { WHATSAPP_NUMBER, SITE } from '../data/navigation';
  * Cuando exista endpoint: reemplazar handoff() por el POST y conservar la
  * validacion, los hidden de UTM y los estados de error.
  */
-const INTERESTS = [
-  'Growth Audit',
-  'Performance Creative',
-  'Paid Media',
-  'Conversion / CRO',
-  'CRM / Automation',
-  'Growth Engineering',
-  'Quick Fix',
-  'No estoy seguro',
+const OPTIONS = [
+  ...Object.entries(SERVICE_INTENTS).map(([value, label]) => ({ value, label })),
+  { value: INTENT_UNSURE.key, label: INTENT_UNSURE.label },
 ];
 ---
 
@@ -68,10 +74,10 @@ const INTERESTS = [
       </div>
 
       <div class="field field--full">
-        <label class="field__label" for="cf-interest">¿Qué querés mejorar?</label>
+        <label class="field__label" for="cf-interest">¿Sobre qué querés que miremos?</label>
         <select class="field__input" id="cf-interest" name="interest" required>
           <option value="">Elegí una opción</option>
-          {INTERESTS.map((i) => <option value={i}>{i}</option>)}
+          {OPTIONS.map((o) => <option value={o.value}>{o.label}</option>)}
         </select>
         <p class="field__error" id="cf-interest-error" aria-live="polite"></p>
       </div>
@@ -274,10 +280,17 @@ const INTERESTS = [
   }
 </style>
 
-<script is:inline define:vars={{ WHATSAPP_NUMBER }}>
+<script is:inline define:vars={{ WHATSAPP_NUMBER, TRACK_FN, EV_INTENT, EV_FORM, EV_HANDOFF, CONTACT_MAIL }}>
   const form = document.querySelector('#growth-audit-form');
   if (form) {
     const status = form.querySelector('[data-form-status]');
+
+    // Declarada antes que cualquier llamador. Con tracking deshabilitado
+    // dmTrack existe igual y es un no-op, asi que esto nunca condiciona.
+    const track = (event, payload) => {
+      if (typeof window[TRACK_FN] === 'function') window[TRACK_FN](event, payload);
+    };
+
     const UTM_KEYS = [
       'utm_source',
       'utm_medium',
@@ -300,11 +313,48 @@ const INTERESTS = [
     const landing = form.querySelector('input[name="landing_page"]');
     if (landing) landing.value = window.location.pathname;
 
+    // Intent routing: cada service page abre este formulario con ?intent=<clave>.
+    // Solo se acepta si coincide con una opcion real del select, asi un valor
+    // arbitrario en la URL no puede inyectar nada ni dejar el campo en un
+    // estado invisible. No toca los UTM: son ejes distintos (que quiere la
+    // persona vs. de donde vino).
+    const interestField = form.querySelector('#cf-interest');
+    const requestedIntent = params.get('intent');
+    if (interestField && requestedIntent) {
+      const match = Array.from(interestField.options).some(
+        (opt) => opt.value === requestedIntent
+      );
+      if (match) {
+        interestField.value = requestedIntent;
+        track(EV_INTENT, {
+          intent: requestedIntent,
+          source: 'service_page',
+        });
+      }
+    }
+
+    if (interestField) {
+      interestField.addEventListener('change', () => {
+        if (!interestField.value) return;
+        track(EV_INTENT, {
+          intent: interestField.value,
+          source: 'form',
+        });
+      });
+    }
+
     const setError = (input, message) => {
       const target = document.querySelector(`#${input.id}-error`);
       input.setAttribute('aria-invalid', message ? 'true' : 'false');
       if (target) target.textContent = message;
       if (message) input.setAttribute('aria-describedby', `${input.id}-error`);
+    };
+
+    // El payload viaja con el label humano: nadie deberia leer
+    // "growth_engineering" en un WhatsApp.
+    const interestLabel = () => {
+      const el = form.querySelector('#cf-interest');
+      return el.options[el.selectedIndex]?.text ?? '';
     };
 
     const validate = () => {
@@ -346,10 +396,17 @@ const INTERESTS = [
         return;
       }
 
+      const data = new FormData(form);
+
+      track(EV_FORM, {
+        intent: data.get('interest'),
+        has_company: Boolean(data.get('company')),
+        has_detail: Boolean(data.get('detail')),
+      });
+
       // FORM DELIVERY PENDING: sin backend. En vez de simular un envio, se
       // entrega por un canal real y el mensaje de estado dice exactamente
       // lo que ocurrio. Nunca "enviado" si no se envio a ningun lado.
-      const data = new FormData(form);
       const utm = UTM_KEYS.map((k) => data.get(k))
         .filter(Boolean)
         .join(' / ');
@@ -361,7 +418,7 @@ const INTERESTS = [
         data.get('company') ? `Empresa: ${data.get('company')}` : '',
         `Contacto: ${data.get('contact')}`,
         data.get('website') ? `Web: ${data.get('website')}` : '',
-        `Interés: ${data.get('interest')}`,
+        `Servicio: ${interestLabel()}`,
         data.get('detail') ? `Contexto: ${data.get('detail')}` : '',
         utm ? `Origen: ${utm}` : '',
       ]
@@ -371,9 +428,16 @@ const INTERESTS = [
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
       const opened = window.open(url, '_blank', 'noopener,noreferrer');
 
+      // Significa "el sitio preparo la conversacion", nunca "lead confirmado":
+      // nada nos permite saber si la persona apreto enviar en WhatsApp.
+      track(EV_HANDOFF, {
+        intent: data.get('interest'),
+        opened: Boolean(opened),
+      });
+
       status.textContent = opened
         ? 'Abrimos WhatsApp con tus datos cargados. Todavía falta que envíes el mensaje desde ahí.'
-        : 'No pudimos abrir WhatsApp. Escribinos a hola@digitaimotor.lat y te respondemos.';
+        : `No pudimos abrir WhatsApp. Escribinos a ${CONTACT_MAIL} y te respondemos.`;
     });
 
     // Limpia el error del campo apenas el usuario corrige.

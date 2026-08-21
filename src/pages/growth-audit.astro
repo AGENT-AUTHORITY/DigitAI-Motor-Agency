@@ -5,7 +5,7 @@ import CheckList from '../components/CheckList.astro';
 import ProcessFlow from '../components/ProcessFlow.astro';
 import FAQ from '../components/FAQ.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
-import { ANCHORS } from '../data/navigation';
+import { intentLink } from '../data/navigation';
 
 const audita = [
   'Estructura de campañas y asignación de presupuesto',
@@ -80,8 +80,8 @@ const faqs = [
     title: 'Antes de gastar más, encontremos qué está frenando el crecimiento.',
     description:
       'Contanos qué estás intentando mejorar y sobre qué cuentas trabajás. Si el cuello de botella está en otro lado, también lo vas a saber.',
-    primary: { label: 'Solicitar diagnóstico de crecimiento', href: ANCHORS.growthAudit },
-    secondary: { label: 'Tengo un problema puntual', href: ANCHORS.quickFix },
+    primary: { label: 'Solicitar diagnóstico de crecimiento', href: intentLink('growth_audit') },
+    secondary: { label: 'Tengo un problema puntual', href: '/quick-fix/' },
   }}
 >
   <ServiceSection

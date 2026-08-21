@@ -131,3 +131,131 @@ tomadas.
 `Cañuelas · Buenos Aires · Argentina` + `Remote across LATAM` en el footer y
 en `ProfessionalService`. **No** crear páginas geo spam por ciudad, que es lo
 que hacía `posicionamiento-geo.html`.
+
+---
+
+# FASE 4 — Estado medido de las service pages
+
+Medido sobre `dist/` al cierre de FASE 4, no declarado.
+
+| Chequeo | Resultado |
+|---|---|
+| Rutas construidas | 9 |
+| `noindex, nofollow` | 9/9 |
+| Canonical `https://www.` | 9/9 |
+| Un solo `<h1>` por página | 9/9 |
+| `<title>` duplicados | 0 |
+| `description` duplicadas | 0 |
+| `<h1>` duplicados | 0 |
+| `og:title` / `og:description` | 9/9 |
+| BreadcrumbList | 8/8 service pages |
+| Service schema | 8/8 service pages |
+| `offers` / `priceRange` / `aggregateRating` / `review` | 0 |
+| Enlaces internos rotos | 0 |
+| Anclas rotas (66 verificadas) | 0 |
+| Enlaces protocol-relative (`//`) | 0 |
+| IDs duplicados | 0 |
+| Assets locales faltantes | 0 |
+
+La home no lleva BreadcrumbList (es la raíz) ni Service schema: usa
+`Organization` + `ProfessionalService`.
+
+## Longitudes
+
+`description` de las 9 páginas entre 123 y 162 caracteres. `title` entre 49 y
+59, salvo la home con 64 — dentro de lo razonable y la home está congelada.
+
+## Bug corregido
+
+`/google-ads/` y `/performance-creative/` compilaban su CTA primario como
+`href="//#growth-audit"`. El navegador lee `//` como URL protocol-relative, así
+que el CTA principal de dos service pages **no navegaba a ningún lado**.
+Venía de interpolar `` `/${ANCHORS.growthAudit}` `` cuando `ANCHORS.growthAudit`
+ya empezaba con `/`. Hoy ambas usan `intentLink()`.
+
+## Pendiente antes de publicar
+
+- `og-default.webp`, `favicon.ico`, `apple-touch-icon` — sin generar.
+- `SITE_IS_PUBLIC = false`: el sitemap se emite vacío a propósito y el build
+  avisa `No pages found!`. Es el comportamiento buscado mientras haya `noindex`.
+- `/privacy/` y `/cookies/` no existen.
+- Redirects legacy sin definir.
+
+---
+
+# FASE 5 — Open Graph, iconos y simulación pública
+
+## Social card
+
+`public/assets/og-default.png` — 1200×630, PNG, 57 KB.
+
+PNG y no WebP a propósito: LinkedIn y WhatsApp no resuelven WebP de forma
+confiable en la preview.
+
+Se emite en las 12 páginas como imagen por defecto, con `og:image:width`,
+`og:image:height`, `og:image:type` y `og:image:alt`. `twitter:card` es
+`summary_large_image` en todas.
+
+La V1 declaraba `/assets/og-image.png` sin que el archivo existiera: cada vez
+que alguien compartía el sitio, salía sin preview.
+
+## Iconos
+
+| Archivo | Detalle |
+|---|---|
+| `assets/favicon.svg` | Sacred Weave, variante micro |
+| `favicon.ico` | 16 / 32 / 48 en un contenedor con PNG embebido |
+| `apple-touch-icon.png` | 180×180, **sin** esquinas redondeadas propias |
+
+El de 16px usa una variante con el trazo engrosado a 44 sobre viewBox 320: con
+el trazo normal de 24, a 16px mide 1,2 px reales y se deshace en el antialias.
+Se recorta la vuelta interior, que a ese tamaño solo agrega ruido. Es la misma
+identidad, no otra.
+
+El apple-touch va sin redondear porque iOS aplica su propia máscara; con
+esquinas propias quedaría doble redondeo y una franja de fondo en el borde.
+
+## Simulación pública — verificado
+
+`PUBLIC_SITE_IS_PUBLIC=true npm run build`:
+
+| Chequeo | Resultado |
+|---|---|
+| Páginas con `noindex` | Solo `/404.html` |
+| URLs en el sitemap | 11, todas `https://www.` |
+| 404 en el sitemap | No |
+| Legacy en el sitemap | No |
+| `robots.txt` | `Allow: /` + `Sitemap: https://www.digitaimotor.lat/sitemap-index.xml` |
+| Nombre real del sitemap | `sitemap-index.xml` — verificado en el output, no asumido |
+| Canonical | 12/12 `https://www.`, una por página |
+
+Estado seguro tras la prueba: `robots.txt` con `Disallow: /` y 12/12 con
+`noindex`.
+
+## Title de la home — medido, sin cambio
+
+Se venía arrastrando como "64 caracteres, por encima del límite". El límite
+real de Google es **ancho en píxeles**, no caracteres.
+
+Medido con Arial 20px, que es lo que usa el SERP de escritorio:
+
+| Título | px | ¿Trunca? |
+|---|---|---|
+| `Growth Partner \| Performance, Creative & CRO \| digitAI Motor` | **549** | **No** (límite ~600) |
+
+**No truncaba.** Se mantiene: entra completo, conserva la marca al final y
+lleva las keywords. Las alternativas más cortas no aportaban nada.
+
+## Corrección de accesibilidad
+
+`label-content-name-mismatch` (WCAG 2.5.3, nivel A) en el lockup de marca del
+header y del footer.
+
+El espacio entre "AI" y "Motor" lo hacía un margen CSS, así que el texto
+visible era `digitAIMotor` mientras el nombre accesible decía
+`digitAI Motor — inicio`. Para control por voz, decir "digitAI Motor" no
+coincidía con la etiqueta visible.
+
+Corregido: el espacio pasa a ser un carácter real y el margen se reduce para
+compensar exactamente su ancho. Geometría verificada antes y después:
+**111,59 px de ancho y Motor en x=148,84 en ambos casos.** Cero cambio visual.

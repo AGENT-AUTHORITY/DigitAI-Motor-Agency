@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<title>OG source</title>
+<style>
+  /* Fuentes propias: la card usa la misma Manrope del sitio, no una
+     sustitucion del sistema. Por eso se rasteriza con Chrome y no con
+     sharp, que no resuelve @font-face. */
+  @font-face {
+    font-family: 'Manrope';
+    src: url('../public/fonts/manrope-latin.woff2') format('woff2');
+    font-weight: 200 800;
+    font-display: block;
+  }
+  @font-face {
+    font-family: 'Inter';
+    src: url('../public/fonts/inter-latin.woff2') format('woff2');
+    font-weight: 100 900;
+    font-display: block;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    background: #05070B;
+    font-family: 'Inter', sans-serif;
+    color: #F4F8FF;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Halo muy contenido. La marca es dark premium, no glow. */
+  .glow {
+    position: absolute;
+    inset-block-start: -220px;
+    inset-inline-end: -160px;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(35,136,255,0.16), rgba(35,136,255,0) 68%);
+  }
+
+  /* Retícula tenue: da textura sin competir con el texto. */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(244,248,255,0.028) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(244,248,255,0.028) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .frame {
+    position: relative;
+    height: 100%;
+    padding: 72px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .top { display: flex; align-items: center; gap: 20px; }
+
+  .mark { width: 64px; height: 64px; flex: none; }
+
+  .wordmark {
+    font-family: 'Manrope', sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .wordmark .ai { color: #2388FF; }
+  .wordmark .motor { font-weight: 400; color: #C9D4E4; }
+
+  .badge {
+    margin-inline-start: auto;
+    padding: 9px 18px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: #2388FF;
+    border: 1px solid rgba(35,136,255,0.42);
+    border-radius: 999px;
+  }
+
+  h1 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 66px;
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    max-width: 17ch;
+  }
+  h1 .dim { color: #8FA3BC; display: block; }
+
+  .bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    padding-top: 34px;
+    border-top: 1px solid rgba(244,248,255,0.12);
+  }
+
+  .descriptor {
+    font-family: 'Manrope', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #C9D4E4;
+  }
+  .descriptor .sep { color: #2388FF; padding: 0 8px; }
+
+  .domain {
+    font-family: 'Manrope', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #74839A;
+  }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="grid"></div>
+
+  <div class="frame">
+    <div class="top">
+      <svg class="mark" viewBox="-160 -160 320 320" fill="none" aria-hidden="true">
+        <g transform="rotate(45)">
+          <path d="M-123-76H76V47H-29V-18H11" fill="none" stroke="#F4F8FF" stroke-width="16" stroke-linecap="square" stroke-linejoin="miter"/>
+          <path d="M123 76H-76V-47H29V18H-11" fill="none" stroke="#2388FF" stroke-width="16" stroke-linecap="square" stroke-linejoin="miter"/>
+          <rect x="-27" y="-27" width="54" height="54" fill="#2388FF" stroke="#05070B" stroke-width="6" stroke-linejoin="miter"/>
+          <rect x="-10" y="-10" width="20" height="20" fill="#05070B"/>
+        </g>
+      </svg>
+      <span class="wordmark">digit<span class="ai">AI</span> <span class="motor">Motor</span></span>
+      <span class="badge">GROWTH PARTNER</span>
+    </div>
+
+    <h1>
+      Encontramos qué está frenando tu crecimiento.
+      <span class="dim">Después lo arreglamos.</span>
+    </h1>
+
+    <div class="bottom">
+      <p class="descriptor">
+        Performance<span class="sep">·</span>Creative<span class="sep">·</span>Conversion<span class="sep">·</span>Growth Systems
+      </p>
+      <p class="domain">digitaimotor.lat</p>
+    </div>
+  </div>
+</body>
+</html>

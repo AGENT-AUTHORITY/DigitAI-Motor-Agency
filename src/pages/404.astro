@@ -1,0 +1,130 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+
+/**
+ * 404.
+ *
+ * Astro con build.format 'directory' emite esta pagina como /404.html en la
+ * raiz de dist, que es exactamente el archivo que GitHub Pages sirve ante una
+ * ruta inexistente. Verificado en QA, no asumido.
+ *
+ * Siempre noindex, publicado o no: una pagina de error no se indexa nunca.
+ */
+const DESTINOS = [
+  { label: 'Inicio', href: '/', note: 'Volver al principio' },
+  { label: 'Growth Audit', href: '/growth-audit/', note: 'Si no sabés dónde está el problema' },
+  { label: 'Quick Fix', href: '/quick-fix/', note: 'Si ya sabés qué está fallando' },
+];
+---
+
+<BaseLayout
+  title="Página no encontrada | digitAI Motor"
+  description="La página que buscabas no existe o cambió de dirección."
+  noindex={true}
+>
+  <section class="nf container">
+    <p class="eyebrow eyebrow--dot">Error 404</p>
+    <h1 class="nf__title">No encontramos esta página.</h1>
+    <p class="nf__body">
+      Puede que haya cambiado de dirección o que el enlace esté mal escrito.
+      Estas son las entradas principales:
+    </p>
+
+    <ul class="nf__links" role="list">
+      {
+        DESTINOS.map((d) => (
+          <li class="nf__item">
+            <a class="nf__link" href={d.href}>
+              {d.label}
+              <span class="nf__arrow" aria-hidden="true">
+                &#8594;
+              </span>
+            </a>
+            <span class="nf__note">{d.note}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="nf__cta">
+      <Button label="Volver al inicio" href="/" variant="secondary" arrow />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: var(--space-section) var(--space-section-lg);
+    max-width: 44rem;
+  }
+
+  .nf__title {
+    margin-top: var(--space-md);
+    font-size: var(--text-3xl);
+    max-width: 16ch;
+  }
+
+  .nf__body {
+    margin-top: var(--space-md);
+    max-width: 48ch;
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .nf__links {
+    margin-top: var(--space-xl);
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0;
+    inline-size: 100%;
+    border-top: 1px solid var(--border);
+  }
+
+  .nf__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2xs) var(--space-sm);
+    padding-block: var(--space-sm);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nf__link {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .nf__link:hover,
+  .nf__link:focus-visible {
+    color: var(--accent);
+  }
+
+  .nf__arrow {
+    display: inline-block;
+    margin-inline-start: 0.375rem;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .nf__link:hover .nf__arrow {
+    transform: translateX(3px);
+  }
+
+  .nf__note {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  .nf__cta {
+    margin-top: var(--space-xl);
+  }
+</style>

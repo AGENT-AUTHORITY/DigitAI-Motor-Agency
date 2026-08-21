@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-160 -160 320 320" fill="none">
+  <!-- Sacred Weave · variante 16px.
+       A 16px un trazo de 24 sobre viewBox 320 mide 1,2px y se deshace en el
+       antialias. Se sube a 44 (2,2px reales) y se recorta el recorrido a la
+       vuelta exterior: a este tamano el pliegue interno no se distingue y
+       solo aporta ruido. Sigue siendo el mismo weave, no otra identidad. -->
+  <rect x="-160" y="-160" width="320" height="320" rx="68" fill="#05070B"/>
+  <g transform="rotate(45)">
+    <path d="M-116-84H84V52" fill="none" stroke="#F4F8FF" stroke-width="44" stroke-linecap="butt" stroke-linejoin="miter"/>
+    <path d="M116 84H-84V-52" fill="none" stroke="#2388FF" stroke-width="44" stroke-linecap="butt" stroke-linejoin="miter"/>
+    <rect x="-30" y="-30" width="60" height="60" fill="#2388FF" stroke="#05070B" stroke-width="14" stroke-linejoin="miter"/>
+  </g>
+</svg>

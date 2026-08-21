@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-160 -160 320 320" fill="none">
+  <!-- Apple Touch Icon · Sacred Weave, variante micro.
+       Sin esquinas redondeadas a proposito: iOS aplica su propia mascara.
+       Si el SVG ya viniera redondeado, el resultado seria doble redondeo con
+       una franja de fondo visible en el borde. -->
+  <rect x="-160" y="-160" width="320" height="320" fill="#05070B"/>
+  <g transform="rotate(45)">
+    <path d="M-123-76H76V47H-29" fill="none" stroke="#F4F8FF" stroke-width="24" stroke-linecap="square" stroke-linejoin="miter"/>
+    <path d="M123 76H-76V-47H29" fill="none" stroke="#2388FF" stroke-width="24" stroke-linecap="square" stroke-linejoin="miter"/>
+    <rect x="-27" y="-27" width="54" height="54" fill="#2388FF" stroke="#05070B" stroke-width="6" stroke-linejoin="miter"/>
+    <rect x="-10" y="-10" width="20" height="20" fill="#05070B"/>
+  </g>
+</svg>
