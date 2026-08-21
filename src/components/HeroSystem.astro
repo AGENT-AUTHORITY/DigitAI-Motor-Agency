@@ -1,0 +1,660 @@
+---
+/**
+ * HeroSystem — visual principal del hero.
+ *
+ * Concepto: infraestructura de Growth, no un embudo de PowerPoint. Nodos,
+ * conexiones reales, dos puntos de perdida marcados, el tramo hacia revenue
+ * enfatizado y un loop de feedback que vuelve de DATA a TRAFFIC.
+ *
+ * Cero imagenes, cero video, cero dependencias. Todo SVG inline.
+ *
+ * CAPA DE VIDEO — deteccion de senal
+ * Cuando existen los assets del hero, el diagrama deja de flotar sobre un
+ * degradado y pasa a ser una capa de diagnostico SOBRE una toma real de una
+ * antena. La metafora es literal: la antena no crea la senal, la encuentra.
+ *
+ * Los assets se detectan en build. Si no estan, el componente cae al fondo
+ * CSS de siempre sin dejar una caja vacia y sin pedir archivos que no existen.
+ * Generarlos con: bash scripts/build-hero-assets.sh
+ *
+ * Con video presente el rail se simplifica: solo se etiquetan los dos puntos
+ * de perdida y revenue. Sobre imagen, siete labels compiten con la toma; la
+ * primera lectura tiene que ser la antena y recien despues el sistema.
+ *
+ * aria-hidden: toda la informacion que transmite esta escrita en texto en la
+ * seccion "Where growth breaks". El grafico nunca es la unica fuente.
+ */
+import { existsSync } from 'node:fs';
+
+export interface Props {
+  poster?: string;
+  sources?: { src: string; type: string }[];
+  /** Recorte del video. Ver nota de OBJECT POSITION abajo. */
+  objectPosition?: string;
+}
+
+const {
+  poster = '/assets/hero-signal-poster.webp',
+  sources = [
+    { src: '/assets/hero-signal.webm', type: 'video/webm' },
+    { src: '/assets/hero-signal.mp4', type: 'video/mp4' },
+  ],
+  // El original es 1080x1920 y el marco es casi cuadrado, asi que el recorte
+  // decide cuanto entra del plato y cuanto de cielo.
+  //
+  // Elegido comparando 30 / 42 / 55 / 68 / 80 sobre el video real. A 38% (el
+  // valor tentativo anterior) el encuadre quedaba dominado por cielo vacio;
+  // a 80% el plato tapa todo y se pierde la escala. 55% deja las tres cosas:
+  // el plato abajo, el tripode subiendo en el centro y las sierras al fondo,
+  // que son las que dan la nocion de tamano.
+  objectPosition = '50% 55%',
+} = Astro.props;
+
+// Deteccion en build: sin assets no se emite <video> ni se pide nada.
+const assetExists = (publicPath: string) =>
+  existsSync(new URL('../../public' + publicPath, import.meta.url));
+
+const hasVideo = assetExists(poster) && sources.some((s) => assetExists(s.src));
+const availableSources = hasVideo ? sources.filter((s) => assetExists(s.src)) : [];
+
+/** y de cada nodo en el viewBox. Paso constante de 42. */
+const NODES = [
+  { label: 'TRAFFIC', y: 26 },
+  { label: 'CREATIVE', y: 68, leak: 'Mensaje que no conecta' },
+  { label: 'LANDING', y: 110 },
+  { label: 'LEAD', y: 152 },
+  { label: 'SALES', y: 194, leak: 'Seguimiento lento' },
+  { label: 'REVENUE', y: 236, gain: true },
+  { label: 'DATA', y: 278 },
+];
+
+const RAIL_X = 30;
+---
+
+<div class="hero-system" aria-hidden="true">
+  <div class="hero-system__frame">
+    <div class="hero-system__head">
+      <span class="hero-system__label">Growth system</span>
+      <span class="hero-system__live">
+        <span class="hero-system__pulse"></span>
+        {hasVideo ? 'señal detectada' : 'conectado'}
+      </span>
+    </div>
+
+    <div class="hero-system__stage">
+      {
+        hasVideo && (
+          <>
+            {/* preload none + sources inyectadas por JS: en mobile el video
+                nunca se descarga, y sin JS queda el poster. */}
+            <video
+              class="hero-system__video"
+              poster={poster}
+              muted
+              loop
+              playsinline
+              preload="none"
+              tabindex="-1"
+              style={`object-position: ${objectPosition}`}
+              data-hero-video
+            >
+              {availableSources.map((s) => (
+                <source data-src={s.src} type={s.type} />
+              ))}
+            </video>
+            <div class="hero-system__scrim" />
+            <div class="hero-system__scan" />
+          </>
+        )
+      }
+
+      {!hasVideo && <div class="hero-system__field" />}
+
+      <svg
+        class="hero-system__svg"
+        viewBox="0 0 300 312"
+        role="presentation"
+        focusable="false"
+        preserveAspectRatio="xMinYMid meet"
+      >
+        {/* Loop de feedback: sale de DATA, rodea por la derecha y vuelve a
+            TRAFFIC. Es lo que convierte la cadena en un sistema. */}
+        <path
+          class="hs-loop"
+          d={`M ${RAIL_X} 278 H 244 a 16 16 0 0 0 16 -16 V 24 a 14 14 0 0 0 -14 -14 H ${RAIL_X} V 17`}
+          fill="none"
+        />
+        <path class="hs-loop-arrow" d={`M ${RAIL_X - 5} 12 l 5 5 l 5 -5`} fill="none" />
+        <text class="hs-loop-label" x="276" y="152" transform="rotate(-90 276 152)">
+          ITERATE
+        </text>
+
+        {NODES.map((node, i) => {
+          const next = NODES[i + 1];
+          // includes() y no una comparacion con <: el parser de Astro lee
+          // el < dentro de JSX como apertura de tag.
+          const toRevenue = [3, 4].includes(i);
+          // Sobre video solo se etiqueta lo que aporta lectura: las dos fugas
+          // y el resultado. El resto quedan como nodos.
+          const showLabel = !hasVideo || node.leak || node.gain;
+          return (
+            <>
+              {next && (
+                <>
+                  <line
+                    class:list={['hs-link', toRevenue && 'hs-link--gain']}
+                    x1={RAIL_X}
+                    y1={node.y + 7}
+                    x2={RAIL_X}
+                    y2={next.y - 7}
+                  />
+                  <line
+                    class="hs-pulse"
+                    style={`animation-delay: ${i * 0.42}s`}
+                    x1={RAIL_X}
+                    y1={node.y + 7}
+                    x2={RAIL_X}
+                    y2={next.y - 7}
+                  />
+                </>
+              )}
+              {node.leak && (
+                <>
+                  <line class="hs-leak-line" x1={RAIL_X} y1={node.y} x2={RAIL_X + 20} y2={node.y} />
+                  <circle class="hs-leak-dot" cx={RAIL_X + 24} cy={node.y} r="2.5" />
+                </>
+              )}
+              {node.gain && <circle class="hs-halo" cx={RAIL_X} cy={node.y} r="6.5" />}
+              <circle
+                class:list={['hs-node', node.leak && 'hs-node--leak', node.gain && 'hs-node--gain']}
+                style={node.leak ? `animation-delay: ${i * 1.1}s` : undefined}
+                cx={RAIL_X}
+                cy={node.y}
+                r={node.gain ? 6.5 : 5}
+              />
+              {showLabel && (
+                <text
+                  class:list={['hs-label', node.leak && 'hs-label--leak', node.gain && 'hs-label--gain']}
+                  x={node.leak ? RAIL_X + 34 : RAIL_X + 18}
+                  y={node.y + 3.5}
+                >
+                  {node.label}
+                </text>
+              )}
+              {node.leak && (
+                <text class="hs-leak-text" x={RAIL_X + 34} y={node.y + 16}>
+                  {node.leak}
+                </text>
+              )}
+            </>
+          );
+        })}
+      </svg>
+    </div>
+
+    <div class="hero-system__legend">
+      <span class="hs-key hs-key--leak">Punto de pérdida</span>
+      <span class="hs-key hs-key--gain">Tramo a ingreso</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hero-system {
+    inline-size: 100%;
+    max-inline-size: 26rem;
+    margin-inline: auto;
+  }
+
+  .hero-system__frame {
+    position: relative;
+    padding: var(--space-sm) var(--space-sm) var(--space-xs);
+    background: linear-gradient(158deg, var(--surface) 0%, var(--bg-secondary) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--highlight-top), var(--shadow-lg);
+  }
+
+  .hero-system__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-system__label,
+  .hero-system__live {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+  }
+
+  .hero-system__label {
+    color: var(--text-muted);
+  }
+
+  /* Verde solo aca y en el nodo de revenue: sistema conectado y resultado
+     positivo. Nunca decorativo. */
+  .hero-system__live {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    color: var(--positive);
+  }
+
+  .hero-system__pulse {
+    inline-size: 6px;
+    block-size: 6px;
+    border-radius: var(--radius-full);
+    background: var(--positive);
+    animation: hsPulse 2.8s var(--ease-out) infinite;
+  }
+
+  @keyframes hsPulse {
+    0% { box-shadow: 0 0 0 0 rgba(54, 211, 153, 0.45); }
+    70% { box-shadow: 0 0 0 7px rgba(54, 211, 153, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(54, 211, 153, 0); }
+  }
+
+  .hero-system__svg {
+    display: block;
+    inline-size: 100%;
+    font-family: var(--font-heading);
+  }
+
+  /* --- Nodos y conexiones -------------------------------------------------- */
+
+  .hs-node {
+    fill: var(--bg-primary);
+    stroke: var(--border-active);
+    stroke-width: 2;
+  }
+
+  .hs-node--leak {
+    stroke: var(--warning);
+  }
+
+  .hs-node--gain {
+    fill: var(--positive);
+    stroke: var(--positive);
+  }
+
+  .hs-link {
+    stroke: var(--border-active);
+    stroke-width: 1.25;
+  }
+
+  /* El tramo que efectivamente lleva a ingreso se dibuja mas presente. */
+  .hs-link--gain {
+    stroke: var(--accent);
+    stroke-width: 2;
+  }
+
+  .hs-leak-line,
+  .hs-leak-dot {
+    stroke: var(--warning);
+    stroke-width: 1.25;
+    fill: none;
+    opacity: 0.75;
+  }
+
+  .hs-leak-dot {
+    fill: var(--warning);
+  }
+
+  .hs-label {
+    fill: var(--text-secondary);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+  }
+
+  .hs-label--leak,
+  .hs-label--gain {
+    fill: var(--text-primary);
+  }
+
+  .hs-leak-text {
+    fill: var(--warning);
+    font-size: 8.5px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    opacity: 0.9;
+  }
+
+  .hs-loop {
+    stroke: var(--accent-line);
+    stroke-width: 1.25;
+    stroke-dasharray: 3 5;
+  }
+
+  .hs-loop-arrow {
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .hs-loop-label {
+    fill: var(--accent);
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-anchor: middle;
+  }
+
+  /* --- Leyenda ------------------------------------------------------------- */
+
+  .hero-system__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-sm);
+    padding-top: var(--space-2xs);
+    border-top: 1px solid var(--border);
+  }
+
+  .hs-key {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+  }
+
+  .hs-key::before {
+    content: '';
+    inline-size: 6px;
+    block-size: 6px;
+    border-radius: var(--radius-full);
+  }
+
+  .hs-key--leak::before { background: var(--warning); }
+  .hs-key--gain::before { background: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-system__pulse { animation: none; }
+  }
+
+  @media (min-width: 64rem) {
+    .hero-system {
+      max-inline-size: 21rem;
+      margin-inline: 0;
+      justify-self: end;
+    }
+
+    .hero-system__frame {
+      padding: var(--space-md) var(--space-md) var(--space-sm);
+    }
+  }
+</style>
+
+<style>
+  /* ====================================================================
+     MOTION — FASE 3.2
+     Todo el movimiento del diagrama vive aca. Una sola familia: senales que
+     recorren el sistema. Nada rebota, nada escala de golpe.
+     ==================================================================== */
+
+  /* Senal que recorre cada tramo del riel. El dash corto viaja y desaparece;
+     el ciclo largo hace que el diagrama respire en vez de parpadear. */
+  .hs-pulse {
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 7 100;
+    stroke-dashoffset: 107;
+    opacity: 0.9;
+    animation: hsFlow 5.2s linear infinite;
+  }
+
+  @keyframes hsFlow {
+    0% { stroke-dashoffset: 107; opacity: 0; }
+    12% { opacity: 0.9; }
+    62% { opacity: 0.9; }
+    72%, 100% { stroke-dashoffset: 40; opacity: 0; }
+  }
+
+  /* Puntos de perdida: senal distinta y contenida. No pulsa hacia afuera como
+     el resto; late en el lugar, mas lento, en warning. */
+  .hs-node--leak {
+    animation: hsLeak 3.6s var(--ease-in-out) infinite;
+  }
+
+  @keyframes hsLeak {
+    0%, 72%, 100% { stroke-opacity: 1; }
+    84% { stroke-opacity: 0.35; }
+  }
+
+  /* Revenue: anillo de resultado. Se expande y se desvanece, una sola vez por
+     ciclo largo. Verde, semantico. */
+  .hs-halo {
+    fill: none;
+    stroke: var(--positive);
+    stroke-width: 1.5;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hsHalo 5.2s var(--ease-out) infinite;
+  }
+
+  @keyframes hsHalo {
+    0%, 55% { transform: scale(1); opacity: 0; }
+    70% { opacity: 0.55; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+
+  /* Loop DATA -> TRAFFIC: el recorrido se dibuja cada ciclo, marcando que el
+     sistema realimenta. Periodo distinto al del riel para que no rimen. */
+  .hs-loop {
+    stroke-dasharray: 3 5;
+    animation: hsLoopFade 8.5s var(--ease-in-out) infinite;
+  }
+
+  .hs-loop-arrow {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hsArrow 8.5s var(--ease-in-out) infinite;
+  }
+
+  @keyframes hsLoopFade {
+    0%, 55% { opacity: 0.5; }
+    72% { opacity: 1; }
+    100% { opacity: 0.5; }
+  }
+
+  @keyframes hsArrow {
+    0%, 62% { opacity: 0.45; transform: translateY(0); }
+    78% { opacity: 1; transform: translateY(2px); }
+    100% { opacity: 0.45; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hs-pulse { display: none; }
+    .hs-halo { display: none; }
+    .hs-node--leak,
+    .hs-loop,
+    .hs-loop-arrow {
+      animation: none;
+    }
+    .hs-loop { opacity: 0.6; }
+    .hs-loop-arrow { opacity: 1; }
+  }
+</style>
+
+
+<style>
+  /* ====================================================================
+     CAPA DE VIDEO — deteccion de senal
+     El video vive DENTRO del marco del sistema, con el mismo borde y el
+     mismo radio que el resto de la interfaz. No es un fondo del hero: es
+     una toma dentro de un instrumento. Esa diferencia es la que evita que
+     se lea como video stock pegado atras del texto.
+     ==================================================================== */
+
+  .hero-system__stage {
+    position: relative;
+    /* Alto fijo por relacion, no por contenido: sin esto el SVG define la
+       altura y el video la cambia al cargar, lo que mueve el layout. */
+    aspect-ratio: 300 / 312;
+    margin-block: var(--space-2xs);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero-system__video,
+  .hero-system__field {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Tratamiento elegido comparando cuatro variantes sobre el video real.
+     brightness .52 (el valor tentativo) dejaba la antena irreconocible: entre
+     el filtro y el scrim el plato desaparecia. .9 la volvia legible pero el
+     cielo recuperaba azul de dia y rompia la paleta.
+     .76 es el punto donde la estructura del plato se lee y el cielo sigue
+     siendo un gris frio que pertenece al fondo de la marca. */
+  .hero-system__video {
+    object-fit: cover;
+    filter: saturate(0.55) contrast(1.1) brightness(0.76);
+  }
+
+  /* Fondo cuando no hay assets. Mismo lugar, misma caja: el marco nunca
+     queda vacio. */
+  .hero-system__field {
+    background:
+      radial-gradient(20rem 16rem at 70% 20%, rgba(35, 136, 255, 0.14), transparent 65%),
+      linear-gradient(158deg, var(--surface) 0%, var(--bg-secondary) 100%);
+  }
+
+  /* Scrim: degradado navy que garantiza legibilidad del rail y hunde la toma
+     en el fondo de la marca. Mas denso abajo, que es donde cae mas texto. */
+  .hero-system__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(5, 7, 11, 0.26) 0%,
+        rgba(5, 7, 11, 0.42) 45%,
+        rgba(5, 7, 11, 0.72) 100%
+      ),
+      radial-gradient(
+        120% 90% at 50% 40%,
+        transparent 34%,
+        rgba(2, 5, 10, 0.5) 100%
+      ),
+      linear-gradient(180deg, rgba(35, 136, 255, 0.13), transparent 62%);
+    pointer-events: none;
+  }
+
+  /* Linea que recibe la senal. Una sola pasada muy lenta, dentro de la misma
+     gramatica que el pulso del riel. No es un scanline de sci-fi: es una
+     barrida de instrumento. */
+  .hero-system__scan {
+    position: absolute;
+    inset-inline: 0;
+    block-size: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(35, 136, 255, 0.55),
+      transparent
+    );
+    opacity: 0;
+    animation: hsScan 9s var(--ease-in-out) infinite;
+    pointer-events: none;
+  }
+
+  @keyframes hsScan {
+    0% { transform: translateY(0); opacity: 0; }
+    8% { opacity: 0.8; }
+    55% { opacity: 0.8; }
+    70%, 100% { transform: translateY(var(--scan-travel, 300px)); opacity: 0; }
+  }
+
+  /* El rail se apoya sobre la toma. */
+  .hero-system__svg {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+  }
+
+  /* Sobre video los textos necesitan separarse del fondo: una sombra corta
+     alcanza y no ensucia como un contorno. */
+  .hero-system__stage:has(.hero-system__video) .hs-label,
+  .hero-system__stage:has(.hero-system__video) .hs-leak-text,
+  .hero-system__stage:has(.hero-system__video) .hs-loop-label {
+    paint-order: stroke fill;
+    stroke: rgba(2, 5, 10, 0.85);
+    stroke-width: 2.5px;
+    stroke-linejoin: round;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-system__scan { animation: none; opacity: 0; }
+  }
+</style>
+
+<script>
+  /**
+   * Carga condicional del video del hero.
+   *
+   * Las <source> vienen con data-src, no con src: asi el navegador no pide
+   * nada hasta que este script decide que corresponde. En mobile el video
+   * nunca se descarga, y sin JS queda el poster, que es un atributo del
+   * propio <video> y no depende de nada.
+   *
+   * No se carga si:
+   *  - el viewport es de mobile (el poster alcanza y el CTA manda)
+   *  - el usuario pidio menos movimiento
+   *  - la conexion esta declarada como lenta o con ahorro de datos
+   */
+  const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+
+  if (video) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const desktopish = window.matchMedia('(min-width: 48rem)').matches;
+    const conn = (navigator as any).connection;
+    const stingy = Boolean(conn?.saveData) || /2g/.test(conn?.effectiveType ?? '');
+
+    if (desktopish && !reduced && !stingy) {
+      // Se promueve UNA sola fuente, no todas. Dejar ambas y confiar en que
+      // el navegador elija bien alcanza casi siempre, pero si el primer
+      // formato falla al decodificar se descarga el segundo encima. Eligiendo
+      // nosotros, nunca hay dos descargas.
+      const sourceEls = [...video.querySelectorAll<HTMLSourceElement>('source[data-src]')];
+      const chosen =
+        sourceEls.find((el) => {
+          const type = el.getAttribute('type') ?? '';
+          return video.canPlayType(type) !== '';
+        }) ?? sourceEls[sourceEls.length - 1];
+
+      sourceEls.forEach((el) => {
+        if (el !== chosen) el.remove();
+      });
+      if (chosen) chosen.src = chosen.dataset.src ?? '';
+
+      video.load();
+      // play() puede rechazar si el navegador bloquea autoplay. Se ignora a
+      // proposito: el poster ya esta en pantalla y no hay nada que reparar.
+      video.play().catch(() => {});
+    }
+
+    // El recorrido de la barrida se ajusta al alto real del marco.
+    const stage = video.closest<HTMLElement>('.hero-system__stage');
+    if (stage) {
+      const setTravel = () =>
+        stage.style.setProperty('--scan-travel', stage.clientHeight + 'px');
+      setTravel();
+      window.addEventListener('resize', setTravel, { passive: true });
+    }
+  }
+</script>

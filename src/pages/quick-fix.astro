@@ -1,0 +1,175 @@
+---
+import ServiceLayout from '../layouts/ServiceLayout.astro';
+import ServiceSection from '../components/ServiceSection.astro';
+import QuickFixCategories from '../components/QuickFixCategories.astro';
+import ProcessFlow from '../components/ProcessFlow.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import FAQ from '../components/FAQ.astro';
+import { intentLink } from '../data/navigation';
+
+const categorias = [
+  {
+    title: 'Paid Media',
+    items: ['Google Ads', 'Meta Ads', 'Meta Business', 'Campaign structure', 'Conversion tracking'],
+  },
+  {
+    title: 'Tracking',
+    items: ['GA4', 'GTM', 'Meta Pixel', 'Eventos', 'UTMs', 'Problemas de atribución'],
+  },
+  {
+    title: 'Conversión',
+    items: ['Landing pages', 'Formularios', 'CTA', 'WhatsApp', 'Mobile UX'],
+  },
+  {
+    title: 'Sistemas',
+    items: ['CRM', 'Automatización', 'APIs', 'Dashboards', 'Integraciones'],
+  },
+  {
+    title: 'Técnico',
+    items: ['Search Console', 'Google Business Profile / Maps', 'SEO técnico', 'Canonical', 'Redirects', 'Bugs de tracking'],
+  },
+];
+
+const proceso = [
+  {
+    number: '01',
+    title: 'Problema concreto',
+    description:
+      'Nos contás qué dejó de funcionar y desde cuándo. No hace falta que sepas dónde está la causa: para eso está el paso siguiente.',
+    detail: ['Qué falla', 'Desde cuándo', 'Qué cambió antes', 'Qué ya probaste'],
+  },
+  { number: '02', title: 'Diagnóstico', description: 'Dónde está la causa real, que rara vez es donde se ve el síntoma.' },
+  { number: '03', title: 'Alcance', description: 'Qué se resuelve ahora y qué queda fuera. Explícito antes de empezar.' },
+  { number: '04', title: 'Intervención', description: 'Se toca lo acotado, no se aprovecha para rehacer todo.' },
+  { number: '05', title: 'Verificación', description: 'Se comprueba que quedó funcionando, no que quedó configurado.' },
+  { number: '06', title: 'Traspaso', description: 'Qué se cambió y qué conviene mirar de acá en más.' },
+];
+
+const relacionados = [
+  {
+    label: 'Growth Audit',
+    href: '/growth-audit/',
+    reason:
+      'Si el síntoma se repite o aparece en varios lugares a la vez, no es un problema puntual. Ahí conviene mirar el recorrido completo.',
+  },
+  {
+    label: 'CRO & Landing Pages',
+    href: '/cro-landing-pages/',
+    reason:
+      'Si el formulario funciona pero igual no entran contactos, el problema es de conversión, no de configuración.',
+  },
+  {
+    label: 'Growth Engineering',
+    href: '/growth-engineering/',
+    reason:
+      'Si lo que falta directamente no existe — una integración, un dashboard, un flujo — hay que construirlo.',
+  },
+];
+
+const faqs = [
+  {
+    question: '¿Qué tan puntual tiene que ser el problema?',
+    answer:
+      'Lo suficiente como para describirlo en una frase: el Pixel dejó de registrar compras, el formulario no envía, la cuenta quedó restringida. Si hace falta un párrafo para explicarlo, probablemente sean varios problemas encadenados y conviene diagnosticar antes de tocar.',
+  },
+  {
+    question: '¿Y si al diagnosticar aparece algo más grande?',
+    answer:
+      'Te lo decimos y decidís vos. No convertimos un trabajo acotado en un proyecto sin avisar, ni resolvemos a medias fingiendo que el problema era solo el visible.',
+  },
+  {
+    question: '¿Trabajan sobre cuentas que gestiona otro proveedor?',
+    answer:
+      'Sí, con los accesos que corresponda y con el proveedor al tanto. No trabajamos por detrás de nadie.',
+  },
+  {
+    question: '¿Esto es un servicio más barato?',
+    answer:
+      'Es un alcance más chico, que no es lo mismo. El criterio que se aplica y la forma de trabajar son los mismos que en un proyecto largo: diagnóstico primero, intervención después.',
+  },
+];
+---
+
+<ServiceLayout
+  title="Quick Fix | Intervenciones puntuales | digitAI Motor"
+  description="Un problema concreto frenando campañas, tracking, conversión o sistemas comerciales. Entramos, diagnosticamos y lo resolvemos sin abrir un proyecto de tres meses."
+  eyebrow="Quick Fix"
+  heading="No todo necesita un proyecto completo."
+  intro="Si hay un problema puntual frenando campañas, tracking, conversión o sistemas comerciales, podemos entrar directamente ahí. Alcance acotado, con el mismo criterio que aplicamos en un proyecto largo."
+  breadcrumbs={[{ label: 'Quick Fix' }]}
+  serviceType="Technical consulting"
+  cta={{
+    title: 'Contame qué está fallando.',
+    description:
+      'Si sabés qué está roto, podemos entrar directamente ahí. Si todavía no sabés dónde está el problema, empezamos con un Growth Audit.',
+    primary: { label: 'Contame qué está fallando', href: intentLink('quick_fix') },
+    secondary: { label: 'No sé dónde está el problema', href: '/growth-audit/' },
+  }}
+>
+  <ServiceSection
+    eyebrow="Cobertura"
+    title="Dónde podemos entrar."
+    lead="La lista no es un catálogo de tareas sueltas: son los puntos del sistema donde un fallo acotado frena todo lo que viene después."
+    alt
+    id="cobertura"
+  >
+    <QuickFixCategories categories={categorias} />
+
+    <div class="qf-fork">
+      <p class="qf-fork__lead">
+        Si sabés qué está roto, podemos entrar directamente ahí.
+      </p>
+      <p class="qf-fork__alt">
+        Si todavía no sabés dónde está el problema, empezamos con un
+        <a href="/growth-audit/">Growth Audit</a>: el síntoma que se ve casi
+        nunca está donde está la causa.
+      </p>
+    </div>
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Cómo funciona"
+    title="Problema concreto, diagnóstico, intervención puntual."
+    lead="El orden importa: sin diagnóstico, arreglar el síntoma visible suele mover el problema en vez de resolverlo."
+    id="proceso"
+  >
+    <ProcessFlow steps={proceso} />
+  </ServiceSection>
+
+  <ServiceSection title="Preguntas frecuentes." narrow alt id="faq">
+    <FAQ items={faqs} />
+    <div class="qf-related">
+      <RelatedLinks items={relacionados} />
+    </div>
+  </ServiceSection>
+</ServiceLayout>
+
+<style>
+  .qf-fork {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+    display: grid;
+    gap: var(--space-2xs);
+    max-width: 60ch;
+  }
+
+  .qf-fork__lead {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+  }
+
+  .qf-fork__alt {
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .qf-related {
+    margin-top: var(--space-xl);
+  }
+</style>

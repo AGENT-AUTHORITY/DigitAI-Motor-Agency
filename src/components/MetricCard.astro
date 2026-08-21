@@ -1,0 +1,236 @@
+---
+/**
+ * MetricCard — una cifra con su contexto y, obligatoriamente, su origen.
+ *
+ * Regla de veracidad (docs/BRAND.md): ningun numero se publica sin decir de
+ * donde sale. Por eso `sourceNote` existe y por eso `context` es requerido:
+ * "59 conversiones" solo es honesto si al lado dice "en cuenta auditada".
+ */
+export interface Props {
+  value: string;
+  label: string;
+  context?: string;
+  status?: 'neutral' | 'positive' | 'warning' | 'attention';
+  sourceNote?: string;
+  /** Numera la card (01, 02...) para grillas ordenadas. */
+  index?: string;
+  /** Apagar en valores aproximados: animar "~2M" finge precision. */
+  countUp?: boolean;
+}
+
+// Un valor de 9+ caracteres ("ARS 198,6K") no entra en una columna angosta a
+// tamano completo. Se achica en vez de partirse en dos lineas.
+const isLong = (v: string) => v.length >= 9;
+
+const {
+  value,
+  label,
+  context,
+  status = 'neutral',
+  sourceNote,
+  index,
+  countUp = true,
+} = Astro.props;
+---
+
+<div class:list={['metric', `metric--${status}`, isLong(value) && 'metric--long']} data-reveal>
+  {index && <span class="metric__index" aria-hidden="true">{index}</span>}
+  <p class="metric__value" data-numeric data-countup={countUp ? value : undefined}>{value}</p>
+  <p class="metric__label">{label}</p>
+  {context && <p class="metric__context">{context}</p>}
+  {sourceNote && <p class="source-note metric__source">{sourceNote}</p>}
+</div>
+
+<style>
+  .metric {
+    container-type: inline-size;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    padding: var(--space-md) var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--border);
+  }
+
+  /* Acento de 2px sobre el borde superior, ancho fijo. Marca el inicio de
+     cada metrica sin encerrarla en una caja: la proof bar se lee como una
+     serie continua, no como cuatro tarjetas sueltas. */
+  .metric::before {
+    content: '';
+    position: absolute;
+    inset-block-start: -1px;
+    inset-inline-start: 0;
+    inline-size: 2.25rem;
+    block-size: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 520ms var(--ease-out-expo) 120ms;
+  }
+
+  /* La barra se dibuja cuando la metrica entra en viewport. Sin JS extra:
+     reusa el mismo atributo que el sistema de reveals. */
+  .metric[data-reveal='in']::before {
+    transform: scaleX(1);
+  }
+
+  /* Fail-safe: sin JS el reveal nunca marca 'in', asi que la barra se muestra
+     igual. Mismo criterio que el resto del sistema. */
+  html:not(.js) .metric::before {
+    transform: scaleX(1);
+  }
+
+  .metric--positive::before { background: var(--positive); }
+  .metric--warning::before { background: var(--warning); }
+  .metric--attention::before { background: var(--danger); }
+
+  .metric__index {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--text-muted-aa);
+  }
+
+  .metric__value {
+    font-family: var(--font-heading);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--text-metric);
+    font-weight: var(--weight-extrabold);
+    line-height: 1;
+    letter-spacing: var(--tracking-display);
+    color: var(--text-primary);
+  }
+
+  /* Solo bajo 40rem: arriba de ese ancho la columna alcanza y achicar
+     romperia la consistencia de la fila. */
+  /* En columnas angostas el padding lateral de 24px por lado se comia el 30%
+     de la card. La regla de acento arranca en el borde igual, asi que sacarlo
+     no descoloca nada. */
+  @media (max-width: 47.999rem) {
+    .metric {
+      padding-inline: 0;
+    }
+  }
+
+  /* Un valor largo ("ARS 198,6K") no entra a tamano completo bajo ~14rem de
+     card. Pasaba a 375 con 2 columnas y tambien a 1024 con 4 columnas: el
+     viewport no es el dato relevante, el ancho de la card si.
+
+     El umbral se mide contra el CONTENT box del contenedor, no el border box:
+     a 1440 la card mide 267px pero su content box es 219px. Por eso 13rem
+     (208px) y no 14rem, que disparaba de mas en desktop. */
+  @container (max-width: 13rem) {
+    .metric--long .metric__value {
+      font-size: calc(var(--text-metric) * 0.72);
+    }
+  }
+
+  /* El verde solo aparece cuando el dato es un resultado positivo.
+     Nunca decorativo. Ver docs/BRAND.md. */
+  .metric--positive .metric__value { color: var(--positive); }
+
+  .metric__label {
+    margin-top: var(--space-2xs);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-snug);
+    color: var(--text-primary);
+  }
+
+  .metric__context {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+  }
+
+  .metric__source {
+    margin-top: var(--space-2xs);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .metric::before {
+      transform: scaleX(1);
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Count-up de metricas. Una sola vez, al entrar en viewport.
+   *
+   * El texto final SIEMPRE se restituye desde data-countup, asi que ningun
+   * error de parseo puede dejar en pantalla un numero distinto al aprobado.
+   * Si el valor no tiene un nucleo numerico legible, no se anima: se deja
+   * como esta.
+   *
+   * Formato es-AR: "." separa miles, "," separa decimales.
+   * Casos reales en la home: "46,4K+", "1.272", "59", "ARS 198,6K".
+   */
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const targets = document.querySelectorAll<HTMLElement>('[data-countup]');
+
+  if (targets.length && !reduced.matches && 'IntersectionObserver' in window) {
+    const parse = (raw: string) => {
+      const match = raw.match(/^(\D*?)([\d.,]+)(.*)$/);
+      if (!match) return null;
+      const [, prefix, digits, suffix] = match;
+      const decimalPart = digits.includes(',') ? digits.split(',')[1] : '';
+      const intPart = digits.split(',')[0].replace(/\./g, '');
+      const target = Number(`${intPart}.${decimalPart || 0}`);
+      if (!Number.isFinite(target)) return null;
+      return {
+        prefix,
+        suffix,
+        target,
+        decimals: decimalPart.length,
+        grouped: digits.includes('.'),
+      };
+    };
+
+    const run = (el: HTMLElement) => {
+      const finalText = el.dataset.countup ?? el.textContent ?? '';
+      const spec = parse(finalText);
+      if (!spec) return;
+
+      const fmt = new Intl.NumberFormat('es-AR', {
+        minimumFractionDigits: spec.decimals,
+        maximumFractionDigits: spec.decimals,
+        useGrouping: spec.grouped,
+      });
+
+      const DURATION = 900;
+      const start = performance.now();
+
+      const tick = (now: number) => {
+        const t = Math.min((now - start) / DURATION, 1);
+        // easeOutExpo: arranca rapido y se asienta, sin rebote.
+        const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+        el.textContent = spec.prefix + fmt.format(spec.target * eased) + spec.suffix;
+        if (t < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          // Estado final exacto, no el resultado del formateo.
+          el.textContent = finalText;
+        }
+      };
+
+      requestAnimationFrame(tick);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          observer.unobserve(entry.target);
+          run(entry.target as HTMLElement);
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    targets.forEach((el) => observer.observe(el));
+  }
+</script>

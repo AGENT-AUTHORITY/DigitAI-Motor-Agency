@@ -1,0 +1,162 @@
+---
+/**
+ * BrandMark — isotipo digitAI Motor · RETURN WEAVE / Sacred Weave (A).
+ *
+ * SISTEMA
+ * Dos recorridos reciprocos que salen del borde, pliegan hacia adentro y
+ * terminan apuntando al nucleo. Cada uno es el otro rotado 180 grados: el
+ * simbolo tiene simetria rotacional de orden 2, no espejo. Eso es lo que hace
+ * que se lea como retorno y no como flecha.
+ *
+ * PROGRESION
+ * Los pliegues siguen 11 - 18 - 29 - 47 - 76 - 123. Cada termino es la suma
+ * de los dos anteriores, asi que la razon converge a phi. Ningun valor esta
+ * elegido a ojo.
+ *
+ * NUCLEO
+ * Cuadrado con vacio central. El doble vacio es diagnostico: el sistema mira
+ * hacia adentro antes de devolver.
+ *
+ * TODO EL CONJUNTO va rotado 45 grados. Las rutas son ortogonales; la rotacion
+ * es lo unico que las pone en diagonal.
+ *
+ * VARIANTE COMPACTA
+ * Debajo de ~40px los dos pliegues internos se cierran visualmente: con trazo
+ * de 16 sobre un lienzo de 320, a 32px el trazo mide 1,6px y la separacion
+ * entre pliegues 1,8px. `variant="compact"` conserva la misma trama y el mismo
+ * nucleo pero corta los dos ultimos pliegues y engrosa el trazo. No es otro
+ * logo: es A leida a distancia corta.
+ */
+export interface Props {
+  size?: number;
+  /** Por defecto se elige sola: compacta bajo 40px. Forzar solo con motivo. */
+  variant?: 'full' | 'compact' | 'auto';
+  /** Una sola tinta: usa currentColor. */
+  mono?: boolean;
+  animated?: boolean;
+  class?: string;
+  /** Texto accesible. Convierte el SVG en img con nombre. */
+  ariaLabel?: string;
+  title?: string;
+}
+
+const {
+  size = 40,
+  variant = 'auto',
+  mono = false,
+  animated = false,
+  class: className = '',
+  ariaLabel,
+  title,
+} = Astro.props;
+
+// title y ariaLabel son intercambiables: cualquiera de los dos nombra el simbolo.
+const label = ariaLabel ?? title;
+
+// 40px es el punto medido donde los dos pliegues internos se cierran.
+const compact = variant === 'compact' || (variant === 'auto' && size < 40);
+
+// Ruta A y su reciproca. La compacta corta los pliegues 11 y 18.
+const ROUTE_A = compact ? 'M-123-76H76V47H-29' : 'M-123-76H76V47H-29V-18H11';
+const ROUTE_B = compact ? 'M123 76H-76V-47H29' : 'M123 76H-76V-47H29V18H-11';
+
+const STROKE = compact ? 24 : 16;
+const CORE = compact ? 27 : 22;
+const VOID = compact ? 10 : 8;
+---
+
+<svg
+  class:list={['bmk', mono && 'bmk--mono', animated && 'bmk--animated', className]}
+  width={size}
+  height={size}
+  viewBox="-160 -160 320 320"
+  fill="none"
+  role={label ? 'img' : 'presentation'}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+>
+  {label && <title>{label}</title>}
+
+  <g transform="rotate(45)">
+    <path class="bmk-route bmk-route--a" d={ROUTE_A} stroke-width={STROKE} />
+    <path class="bmk-route bmk-route--b" d={ROUTE_B} stroke-width={STROKE} />
+    <rect class="bmk-core" x={-CORE} y={-CORE} width={CORE * 2} height={CORE * 2} />
+    <rect class="bmk-void" x={-VOID} y={-VOID} width={VOID * 2} height={VOID * 2} />
+  </g>
+</svg>
+
+<style>
+  .bmk {
+    display: block;
+    flex: none;
+    overflow: visible;
+  }
+
+  /* Remate y union en angulo recto: la trama es ortogonal, nada se redondea. */
+  .bmk-route {
+    fill: none;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+  }
+
+  .bmk-route--a { stroke: var(--brand-ink); }
+  .bmk-route--b { stroke: var(--brand-accent); }
+
+  /* El keyline oscuro separa el nucleo de las rutas que pasan por detras.
+     Sin el, el cuadrado se funde con la trama. */
+  .bmk-core {
+    fill: var(--brand-accent);
+    stroke: var(--brand-ground);
+    stroke-width: 6;
+    stroke-linejoin: miter;
+  }
+
+  .bmk-void {
+    fill: var(--brand-ground);
+  }
+
+  /* --- Monocromo --------------------------------------------------------- */
+
+  .bmk--mono .bmk-route,
+  .bmk--mono .bmk-core {
+    stroke: currentColor;
+  }
+
+  .bmk--mono .bmk-core { fill: currentColor; stroke: var(--brand-ground); }
+  .bmk--mono .bmk-void { fill: var(--brand-ground); }
+
+  /* --- Trazado ----------------------------------------------------------- */
+
+  /* Carga: se dibuja la primera trayectoria, la segunda completa el weave y
+     ambas quedan estaticas. 760ms en total, una sola vez, sin loop. */
+  .bmk--animated .bmk-route {
+    stroke-dasharray: 620;
+    stroke-dashoffset: 620;
+    animation: bmkDraw 420ms var(--ease-out) both;
+  }
+
+  .bmk--animated .bmk-route--b { animation-delay: 340ms; }
+
+  .bmk--animated .bmk-core,
+  .bmk--animated .bmk-void {
+    opacity: 0;
+    animation: bmkCore 220ms var(--ease-out) 540ms both;
+  }
+
+  @keyframes bmkDraw { to { stroke-dashoffset: 0; } }
+  @keyframes bmkCore { to { opacity: 1; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bmk--animated .bmk-route {
+      stroke-dasharray: none;
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+    .bmk--animated .bmk-core,
+    .bmk--animated .bmk-void {
+      opacity: 1;
+      animation: none;
+    }
+  }
+</style>

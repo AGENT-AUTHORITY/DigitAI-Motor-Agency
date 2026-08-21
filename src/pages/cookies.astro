@@ -1,0 +1,119 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { contactEmail } from '../data/navigation';
+
+/**
+ * Almacenamiento del sitio.
+ *
+ * Se llama "almacenamiento" y no "cookies" porque el sitio no usa cookies.
+ * Llamarle cookie a sessionStorage seria describir mal lo que pasa, y es un
+ * error frecuente en las plantillas legales.
+ *
+ * Verificado contra el codigo: la unica escritura es
+ * ContactIntent.astro -> sessionStorage.setItem(<clave utm>).
+ */
+// Mismo canal que /privacy/: las dos paginas no pueden ofrecer contactos
+// distintos para lo mismo.
+const contactoPrivacidad = contactEmail();
+
+const STORAGE = [
+  { key: 'utm_source', purpose: 'De qué canal llegó la visita (por ejemplo google, meta)' },
+  { key: 'utm_medium', purpose: 'Qué tipo de tráfico fue (por ejemplo cpc, organic)' },
+  { key: 'utm_campaign', purpose: 'A qué campaña correspondía el enlace' },
+  { key: 'utm_content', purpose: 'Qué pieza o variante se hizo clic' },
+  { key: 'utm_term', purpose: 'Con qué término se llegó, cuando existe' },
+];
+---
+
+<LegalLayout
+  title="Almacenamiento del sitio | digitAI Motor"
+  description="Este sitio no usa cookies. Guarda cinco parámetros de origen en el almacenamiento de sesión del navegador, que se borra al cerrar la pestaña."
+  heading="Almacenamiento del sitio"
+  intro="Qué guarda este sitio en tu navegador, dónde lo guarda y por cuánto tiempo. Con los nombres técnicos correctos."
+  updated="agosto de 2026"
+  breadcrumbs={[{ label: 'Almacenamiento' }]}
+>
+  <h2>Este sitio no usa cookies</h2>
+  <p>
+    Ni propias ni de terceros. No hay cookies de sesión, ni de publicidad, ni de
+    analítica. Por eso <strong>no vas a ver un banner de cookies</strong>: un
+    aviso para aceptar algo que no existe sería puro decorado.
+  </p>
+
+  <h2>Lo que sí guarda: almacenamiento de sesión</h2>
+  <p>
+    El sitio usa <strong>sessionStorage</strong>, que no es lo mismo que una
+    cookie. La diferencia importa:
+  </p>
+  <ul>
+    <li>
+      Una <strong>cookie</strong> viaja al servidor en cada petición y puede
+      sobrevivir semanas o años.
+    </li>
+    <li>
+      El <strong>almacenamiento de sesión</strong> nunca sale de tu navegador —
+      no se envía a ningún servidor — y se borra solo al cerrar la pestaña.
+    </li>
+  </ul>
+
+  <h3>Qué se guarda exactamente</h3>
+  <div class="legal-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Clave</th>
+          <th>Para qué</th>
+        </tr>
+      </thead>
+      <tbody>
+        {STORAGE.map((item) => (
+          <tr>
+            <td><code>{item.key}</code></td>
+            <td>{item.purpose}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    Son los parámetros UTM que vienen en la URL cuando llegás desde una campaña.
+    Se guardan al entrar y se recuperan si completás el formulario, para que el
+    origen no se pierda si navegás por varias páginas antes de escribirnos.
+  </p>
+  <p>
+    <strong>Solo se guardan si la URL los trae.</strong> Si entraste escribiendo
+    la dirección o desde un resultado de búsqueda, no se guarda nada.
+  </p>
+
+  <h3>Cuánto duran</h3>
+  <p>
+    Hasta que cierres la pestaña. No hay forma de que persistan más allá de eso,
+    porque el almacenamiento de sesión se descarta al cerrarla.
+  </p>
+
+  <h3>Cómo borrarlos</h3>
+  <p>
+    Cerrá la pestaña. También podés borrarlos desde las herramientas de
+    desarrollo del navegador, en la sección de almacenamiento, o limpiando los
+    datos del sitio desde la configuración.
+  </p>
+
+  <h2>Analítica</h2>
+  <p>
+    Hoy el sitio <strong>no tiene analítica activa</strong>. No carga Google
+    Analytics, ni Tag Manager, ni el píxel de Meta, ni ninguna herramienta de
+    medición. Podés comprobarlo mirando las peticiones de red: no hay ninguna
+    hacia un dominio de terceros.
+  </p>
+  <p>
+    Si más adelante activamos analítica, actualizamos esta página, la
+    <a href="/privacy/">política de privacidad</a> y resolvemos el
+    consentimiento que corresponda <em>antes</em> de que cargue nada.
+  </p>
+
+  <h2>Consultas</h2>
+  <p>
+    Escribinos a <a href={`mailto:${contactoPrivacidad}`}>{contactoPrivacidad}</a>.
+  </p>
+</LegalLayout>

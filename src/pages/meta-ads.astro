@@ -1,0 +1,128 @@
+---
+import ServiceLayout from '../layouts/ServiceLayout.astro';
+import ServiceSection from '../components/ServiceSection.astro';
+import GrowthFlow from '../components/GrowthFlow.astro';
+import CheckList from '../components/CheckList.astro';
+import FAQ from '../components/FAQ.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import { intentLink } from '../data/navigation';
+
+const alcance = [
+  'Estructura de campañas por objetivo real, no por defecto',
+  'Públicos: frío, remarketing y exclusiones que no se pisan',
+  'Creativos con hipótesis, no rotación al azar',
+  'Formularios instantáneos y su efecto en calidad de lead',
+  'Campañas a WhatsApp y qué se puede medir de ellas',
+  'Eventos de conversión que representan negocio',
+  'Pixel: instalación, deduplicación y eventos duplicados',
+  'Lectura conjunta con el CRM: qué lead terminó vendiendo',
+];
+
+// Arquitectura de atribucion: se describe como DISEÑO POSIBLE, no como algo
+// implementado. No hay evidencia publicable de un closed loop completo en
+// produccion, asi que el lenguaje es "puede conectar" / "el objetivo es".
+const atribucion = [
+  { label: 'AD', note: 'La campaña que compra la conversación' },
+  { label: 'CLICK / MESSAGE', note: 'Formulario o mensaje directo' },
+  { label: 'WHATSAPP', note: 'Donde la conversación realmente pasa' },
+  { label: 'CRM', note: 'El contacto con su origen asociado' },
+  { label: 'SALE', note: 'Lo que efectivamente se cerró' },
+  { label: 'CAPI', note: 'La señal de venta de vuelta hacia Meta' },
+];
+
+const calidad = [
+  'Un formulario instantáneo baja el costo por lead y suele bajar la calidad',
+  'El costo por lead no dice nada si no se sabe cuántos califican',
+  'Sin conexión al CRM, Meta optimiza hacia el lead más barato',
+  'La decisión entre volumen y calidad es comercial, no de plataforma',
+];
+
+const faqs = [
+  {
+    question: '¿Conviene formulario instantáneo o mandar a la landing?',
+    answer:
+      'Depende de qué necesite tu proceso comercial. El formulario instantáneo baja la fricción y suele bajar el costo por lead; la landing filtra más y entrega contactos mejor calificados. La respuesta sale de mirar cuántos leads terminan en oportunidad, no de una preferencia general.',
+  },
+  {
+    question: '¿Tienen Conversions API configurada?',
+    answer:
+      'CAPI requiere un event source con backend que reciba el evento y lo reenvíe a Meta con deduplicación contra el Pixel. Lo diseñamos y lo implementamos cuando el proyecto lo incluye. No afirmamos que esté funcionando en una cuenta hasta que efectivamente lo esté.',
+  },
+  {
+    question: '¿Qué pasa si nuestra cuenta publicitaria está restringida?',
+    answer:
+      'Es uno de los casos típicos de Quick Fix. Se revisa el Business Manager, los activos, los permisos y el motivo de la restricción antes de intentar nada sobre las campañas.',
+  },
+];
+---
+
+<ServiceLayout
+  title="Gestión de Meta Ads y Facebook Ads | digitAI Motor"
+  description="Meta Ads conectado con oportunidades reales: creativos, públicos, eventos de conversión, Pixel y calidad de lead leída contra el CRM."
+  eyebrow="Meta Ads"
+  heading="Meta Ads conectado con oportunidades reales."
+  intro="En Meta la demanda no busca: hay que crearla. Eso vuelve al creativo la variable principal y a la calidad de lead el número que importa. Trabajamos ambas cosas contra lo que registra el CRM, no contra el panel de la plataforma."
+  breadcrumbs={[{ label: 'Paid Media', href: '/paid-media/' }, { label: 'Meta Ads' }]}
+  serviceType="Meta Ads management"
+  cta={{
+    title: 'Veamos qué está entrando por Meta y cuánto de eso califica.',
+    primary: { label: 'Solicitar diagnóstico de crecimiento', href: intentLink('meta_ads') },
+    secondary: { label: 'Ver Performance Creative', href: '/performance-creative/' },
+  }}
+>
+  <ServiceSection eyebrow="Alcance" title="Sobre qué trabajamos." alt id="alcance">
+    <CheckList items={alcance} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Calidad de lead"
+    title="Un lead barato no es un lead bueno."
+    lead="Es la discusión más frecuente en Meta y casi nunca es un problema de la plataforma."
+    id="calidad"
+  >
+    <CheckList items={calidad} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Atribución"
+    title="Devolver la señal de venta, no solo contar leads."
+    lead="Una arquitectura de atribución puede conectar la campaña con lo que pasó después del contacto. Sin ese retorno, la plataforma solo sabe optimizar hacia el lead más barato: no tiene forma de saber cuáles se convirtieron en venta."
+    alt
+    id="atribucion"
+  >
+    <GrowthFlow nodes={atribucion} loop="La venta vuelve a Meta como señal de optimización" />
+
+    <p class="ma-note">
+      Podemos diseñar este recorrido y decir con qué piezas se sostiene. El
+      objetivo es que la campaña optimice hacia lo que cierra, no hacia lo que
+      entra. Qué parte ya existe y qué parte hay que construir sale del
+      diagnóstico, no de una promesa previa.
+    </p>
+  </ServiceSection>
+
+  <ServiceSection title="Preguntas frecuentes." narrow id="faq">
+    <FAQ items={faqs} />
+    <div class="ma-related">
+      <RelatedLinks
+        items={[
+          {
+            label: 'Performance Creative',
+            href: '/performance-creative/',
+            reason: 'En Meta el creativo es la variable principal. Si no hay ángulos nuevos que probar, la cuenta se estanca.',
+          },
+          {
+            label: 'Growth Engineering',
+            href: '/growth-engineering/',
+            reason: 'Conectar el CRM con la plataforma cambia hacia qué optimiza la campaña.',
+          },
+        ]}
+      />
+    </div>
+  </ServiceSection>
+</ServiceLayout>
+
+<style>
+  .ma-related {
+    margin-top: var(--space-xl);
+  }
+</style>

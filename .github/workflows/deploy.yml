@@ -1,0 +1,105 @@
+# digitAI Motor — deploy a GitHub Pages
+#
+# EJECUCION MANUAL UNICAMENTE (workflow_dispatch). No hay trigger en push:
+# un merge a main no publica nada por si solo.
+#
+# Requisito previo, una sola vez:
+#   Settings > Pages > Build and deployment > Source: "GitHub Actions"
+# Sin ese paso este workflow no publica.
+#
+# EL ESTADO PUBLICO VIVE ACA, NO EN EL CODIGO.
+# site.config.mjs mantiene DEFAULT_IS_PUBLIC = false de forma permanente, asi
+# que cualquier build local o de otro entorno sale en estado seguro (noindex,
+# sin sitemap, robots bloqueado). El unico lugar que produce un build publico
+# es este workflow, con la variable de abajo. Publicar por accidente desde una
+# maquina deja de ser posible.
+
+name: Deploy to GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # `npm run build` corre `astro check && astro build`: el chequeo de tipos
+      # es parte del build y frena el deploy si falla.
+      - name: Build (produccion publica)
+        run: npm run build
+        env:
+          PUBLIC_SITE_IS_PUBLIC: 'true'
+
+      # Sin CNAME en dist/, GitHub Pages descarta el dominio custom y el sitio
+      # pasa a responder en la URL de github.io.
+      - name: Verify CNAME survived the build
+        run: |
+          test -f dist/CNAME || { echo "::error::dist/CNAME no existe. El dominio custom se perderia."; exit 1; }
+          grep -q "www.digitaimotor.lat" dist/CNAME || { echo "::error::dist/CNAME tiene contenido inesperado."; exit 1; }
+          echo "CNAME ok: $(cat dist/CNAME)"
+
+      # Si el build salio en estado seguro por error, el sitemap no existe.
+      # Este paso es la red que impide publicar un sitio entero con noindex.
+      - name: Verify public build (sitemap + indexabilidad)
+        run: |
+          test -f dist/sitemap-index.xml || { echo "::error::sitemap-index.xml no generado: el build salio en estado seguro."; exit 1; }
+          URLS=$(grep -o '<loc>' dist/sitemap-0.xml | wc -l)
+          test "$URLS" -eq 11 || { echo "::error::El sitemap tiene $URLS URLs, se esperaban 11."; exit 1; }
+          NOINDEX=$(grep -l 'content="noindex' dist/index.html dist/*/index.html 2>/dev/null | wc -l)
+          test "$NOINDEX" -eq 0 || { echo "::error::$NOINDEX paginas publicas salieron con noindex."; exit 1; }
+          grep -q 'content="noindex' dist/404.html || { echo "::error::/404.html perdio su noindex."; exit 1; }
+          grep -q '^Allow: /' dist/robots.txt || { echo "::error::robots.txt no permite crawling."; exit 1; }
+          echo "sitemap: $URLS URLs · paginas publicas indexables · 404 noindex · robots abierto"
+
+      # El buzon interno de correo nunca puede llegar al HTML publicado.
+      - name: Verify private mailbox never leaked
+        run: node scripts/check-no-private-mailbox.cjs
+
+      # Sin los stubs, las URLs de la V1 pasan a 404 el dia que Pages deja de
+      # servir la raiz de la rama.
+      - name: Verify legacy stubs
+        run: |
+          for f in crm-zoho automatizacion paginas-web funnel posicionamiento-geo; do
+            test -f "dist/$f.html" || { echo "::error::falta dist/$f.html"; exit 1; }
+            grep -q 'http-equiv="refresh" content="0; url=/' "dist/$f.html" || { echo "::error::$f.html sin meta refresh"; exit 1; }
+            grep -q 'rel="canonical" href="https://www.digitaimotor.lat/' "dist/$f.html" || { echo "::error::$f.html sin canonical correcto"; exit 1; }
+          done
+          grep -q "Growth Partner" dist/index.html || { echo "::error::dist/index.html no es la home."; exit 1; }
+          echo "5 stubs legacy ok · /index.html sigue siendo la home"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,152 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import type { Crumb } from '../components/Breadcrumbs.astro';
+
+/**
+ * LegalLayout — privacidad y almacenamiento.
+ *
+ * Prosa larga y angosta, sin CTA de conversion ni bloques comerciales: son
+ * paginas de consulta, no de venta. Sin schema Service, que aca no aplica.
+ */
+export interface Props {
+  title: string;
+  description: string;
+  heading: string;
+  intro: string;
+  updated: string;
+  breadcrumbs: Crumb[];
+  noindex?: boolean;
+}
+
+const { title, description, heading, intro, updated, breadcrumbs, noindex } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} noindex={noindex}>
+  <div class="container legal">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <h1 class="legal__title">{heading}</h1>
+    <p class="legal__intro">{intro}</p>
+    <p class="legal__updated">Última actualización: {updated}</p>
+
+    <div class="legal__body">
+      <slot />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal {
+    max-width: 46rem;
+    padding-block: var(--space-xl) var(--space-section);
+  }
+
+  .legal__title {
+    margin-top: var(--space-lg);
+    font-size: var(--text-3xl);
+    max-width: 18ch;
+  }
+
+  .legal__intro {
+    margin-top: var(--space-md);
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .legal__updated {
+    margin-top: var(--space-sm);
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-muted);
+  }
+
+  .legal__body {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border);
+  }
+
+  .legal__body :global(h2) {
+    margin-top: var(--space-xl);
+    font-size: var(--text-xl);
+    line-height: var(--leading-snug);
+  }
+
+  .legal__body :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .legal__body :global(h3) {
+    margin-top: var(--space-lg);
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    font-weight: var(--weight-bold);
+    color: var(--text-primary);
+  }
+
+  .legal__body :global(p) {
+    margin-top: var(--space-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .legal__body :global(ul) {
+    margin-top: var(--space-sm);
+    padding-left: 1.1rem;
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .legal__body :global(li) {
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .legal__body :global(a) {
+    color: var(--accent);
+  }
+
+  .legal__body :global(strong) {
+    color: var(--text-primary);
+    font-weight: var(--weight-bold);
+  }
+
+  /* Tabla de almacenamiento: se desborda sola en su contenedor, nunca
+     empuja la pagina. */
+  .legal__body :global(.legal-table-wrap) {
+    margin-top: var(--space-md);
+    overflow-x: auto;
+  }
+
+  .legal__body :global(table) {
+    width: 100%;
+    min-width: 34rem;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+  }
+
+  .legal__body :global(th),
+  .legal__body :global(td) {
+    padding: var(--space-2xs) var(--space-xs);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .legal__body :global(th) {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .legal__body :global(td) {
+    color: var(--text-secondary);
+  }
+</style>

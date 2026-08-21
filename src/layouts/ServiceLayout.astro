@@ -1,0 +1,131 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CTASection from '../components/CTASection.astro';
+import type { Crumb } from '../components/Breadcrumbs.astro';
+
+/**
+ * ServiceLayout — envoltorio de las paginas de servicio.
+ *
+ * Aporta breadcrumbs, encabezado de servicio, schema `Service` y el CTA de
+ * cierre, para que cada service page solo escriba su contenido propio.
+ */
+export interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  heading: string;
+  intro: string;
+  breadcrumbs: Crumb[];
+  /** Nombre del servicio para JSON-LD. Por defecto, el heading. */
+  serviceName?: string;
+  serviceType?: string;
+  canonicalPath?: string;
+  ogImage?: string;
+  /** Solo para forzar. Por defecto lo decide el interruptor de publicacion. */
+  noindex?: boolean;
+  cta?: {
+    title: string;
+    description?: string;
+    primary: { label: string; href: string };
+    secondary?: { label: string; href: string };
+  };
+}
+
+const {
+  title,
+  description,
+  eyebrow,
+  heading,
+  intro,
+  breadcrumbs,
+  serviceName,
+  serviceType,
+  canonicalPath,
+  ogImage,
+  noindex,
+  cta,
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://www.digitaimotor.lat');
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, site).href;
+
+// Sin AggregateRating ni Review: no hay reviews verificables (docs/SEO.md).
+// La V1 los tenia inventados en el JSON-LD de la home.
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: serviceName ?? heading,
+  description,
+  url: canonical,
+  ...(serviceType ? { serviceType } : {}),
+  provider: {
+    '@type': 'Organization',
+    name: 'digitAI Motor',
+    url: site.href,
+  },
+  areaServed: [
+    { '@type': 'Country', name: 'Argentina' },
+    { '@type': 'Place', name: 'LATAM' },
+  ],
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath={canonicalPath}
+  ogImage={ogImage}
+  noindex={noindex}
+  schema={[serviceSchema]}
+>
+  <div class="service-page">
+    <div class="container service-page__head">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <p class="eyebrow eyebrow--dot service-page__eyebrow">{eyebrow}</p>
+      <h1 class="service-page__title">{heading}</h1>
+      <p class="service-page__intro">{intro}</p>
+    </div>
+
+    <slot />
+
+    {
+      cta && (
+        <CTASection
+          title={cta.title}
+          description={cta.description}
+          primaryCta={cta.primary}
+          secondaryCta={cta.secondary}
+        />
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .service-page__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: var(--space-xl) var(--space-section);
+  }
+
+  .service-page__eyebrow {
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+  }
+
+  .service-page__title {
+    font-size: var(--text-4xl);
+    max-width: 20ch;
+    margin-bottom: var(--space-md);
+  }
+
+  .service-page__intro {
+    max-width: 54ch;
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+</style>

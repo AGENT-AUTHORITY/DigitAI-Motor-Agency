@@ -1,0 +1,36 @@
+# build
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# env — nunca commitear IDs ni secrets
+.env
+.env.production
+.env.local
+*.local
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# logs
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# originales de assets. Se ignora el contenido pesado, pero los fuentes de
+# texto SI se versionan: sin ellos no se puede regenerar la social card ni los
+# iconos de forma consistente. Se usa "assets-source/*" y no "assets-source/",
+# porque una negacion no puede reactivar nada si el directorio entero esta
+# excluido: git ni siquiera lo recorre.
+assets-source/*
+!assets-source/README.md
+!assets-source/*.svg
+!assets-source/*.html
+
+# Capturas de QA: artefactos de revision, no fuente
+qa-screens/

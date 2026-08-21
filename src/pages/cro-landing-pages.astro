@@ -1,0 +1,253 @@
+---
+import ServiceLayout from '../layouts/ServiceLayout.astro';
+import ServiceSection from '../components/ServiceSection.astro';
+import GrowthFlow from '../components/GrowthFlow.astro';
+import MessageMatch from '../components/MessageMatch.astro';
+import CheckList from '../components/CheckList.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import FAQ from '../components/FAQ.astro';
+import { intentLink } from '../data/navigation';
+
+const recorrido = [
+  { label: 'AD / SEARCH', note: 'La intención con la que llega la persona' },
+  { label: 'MESSAGE', note: 'Lo que el anuncio prometió' },
+  { label: 'LANDING', note: 'Lo que la página efectivamente responde' },
+  { label: 'ACTION', note: 'Qué tan fácil es hacer lo que le pedimos' },
+  { label: 'LEAD', note: 'Si el contacto sirve para vender' },
+];
+
+const messageMatch = [
+  {
+    stage: 'Anuncio',
+    carries: 'Promete A',
+    state: 'Coherente',
+    tone: 'ok' as const,
+    note: 'La persona hace clic por un motivo puntual: un precio, un plazo, una solución concreta. Ese motivo viaja con ella.',
+  },
+  {
+    stage: 'Landing',
+    carries: 'Habla de B',
+    state: 'No coincide',
+    tone: 'break' as const,
+    note: 'La página abre con un mensaje institucional, con otra oferta o con la misma idea dicha de otra forma. Nada está roto técnicamente.',
+  },
+  {
+    stage: 'Intención',
+    carries: 'Se pierde',
+    state: 'Fuga',
+    tone: 'loss' as const,
+    note: 'No hay error ni rebote evidente: la persona simplemente deja de reconocer aquello por lo que entró.',
+  },
+];
+
+const testing = [
+  { label: 'HYPOTHESIS', note: 'Qué creemos que está frenando, y por qué' },
+  { label: 'TEST', note: 'Un cambio acotado que pueda dar respuesta' },
+  { label: 'SIGNAL', note: 'Contra qué métrica se lee, definida antes' },
+  { label: 'LEARN', note: 'Qué quedó confirmado y qué quedó descartado' },
+  { label: 'ITERATE', note: 'La próxima hipótesis parte de la anterior' },
+];
+
+const testeable = [
+  'Headline: la promesa que sostiene el resto de la página',
+  'Oferta: qué se propone y por qué alguien lo tomaría hoy',
+  'CTA: qué se pide, cuándo y con qué fricción',
+  'Formulario: cuántos campos y en qué orden',
+  'Prueba: qué respalda lo que se afirma',
+  'Mensaje: el mismo argumento dicho desde otro ángulo',
+  'Estructura: qué va arriba y qué puede esperar',
+];
+
+const trabajo = [
+  'Oferta: qué se propone y por qué alguien lo aceptaría hoy',
+  'Message match entre anuncio y página',
+  'Headline: la primera línea que decide si se queda',
+  'CTA: una acción clara por página, no cinco compitiendo',
+  'Fricción del formulario: cada campo cuesta contactos',
+  'Mobile UX: donde se define la mayoría del tráfico pagado',
+  'Velocidad: la página más persuasiva no convierte si no carga',
+  'Señales de confianza reales, sin inventar respaldo',
+  'Flujo de WhatsApp: qué pasa entre el clic y la respuesta',
+  'Calidad de lead: quién completa y quién no debería',
+  'Tracking: si no se mide bien, no se puede iterar',
+];
+
+const metodo = [
+  'Se formula una hipótesis antes de tocar la página',
+  'Se define contra qué métrica se va a leer',
+  'Se cambia una cosa por vez cuando el volumen lo permite',
+  'Sin volumen suficiente se prioriza fricción evidente sobre test',
+  'Lo que no muestra señal se archiva con la hipótesis que descartó',
+];
+
+const relacionados = [
+  {
+    label: 'Google Ads',
+    href: '/google-ads/',
+    reason:
+      'Si el término de búsqueda no coincide con lo que promete la página, la intención se pierde antes de que la landing tenga chance.',
+  },
+  {
+    label: 'Performance Creative',
+    href: '/performance-creative/',
+    reason:
+      'El message match empieza en el anuncio. Si el ángulo cambia, la landing tiene que acompañar.',
+  },
+  {
+    label: 'Growth Engineering',
+    href: '/growth-engineering/',
+    reason:
+      'Cuando el flujo necesita una integración que no existe — routing, CRM, notificación — hay que construirla.',
+  },
+];
+
+const faqs = [
+  {
+    question: '¿Hacen el diseño o solo la estrategia?',
+    answer:
+      'Ambas cosas. Lo que no hacemos es rediseñar sin hipótesis: una página nueva que no sabe qué estaba fallando en la anterior tiene las mismas chances de convertir peor que mejor.',
+  },
+  {
+    question: '¿Cuánto tráfico hace falta para testear?',
+    answer:
+      'Depende del volumen de conversión, no de visitas. Con poco volumen un A/B test tarda meses en decir algo y mientras tanto no se decide nada. En ese caso se trabaja sobre fricción evidente, que no requiere significancia estadística para ser un problema.',
+  },
+  {
+    question: '¿Pueden garantizar una mejora de conversión?',
+    answer:
+      'No, y desconfiá de quien lo garantice. Lo que sí podemos es formular hipótesis con fundamento, medirlas bien y descartar las que no funcionan rápido en vez de sostenerlas por orgullo.',
+  },
+  {
+    question: '¿Trabajan sobre nuestra web actual o hacen una nueva?',
+    answer:
+      'Lo que convenga según el diagnóstico. Muchas veces el problema es de oferta y mensaje, y eso se arregla sobre la página que ya existe.',
+  },
+];
+---
+
+<ServiceLayout
+  title="Landing Pages y CRO orientados a conversión | digitAI Motor"
+  description="CRO no es hacer una landing linda. Trabajamos oferta, message match, fricción, mobile UX, velocidad y calidad de lead sobre hipótesis medibles."
+  eyebrow="CRO & Landing Pages"
+  heading="Más tráfico no arregla una experiencia que no convierte."
+  intro="Una landing no falla por fea. Falla porque promete algo distinto de lo que prometió el anuncio, porque pide más de lo que la persona está dispuesta a dar, o porque el contacto que genera no le sirve a nadie."
+  breadcrumbs={[{ label: 'CRO & Landing Pages' }]}
+  serviceType="Conversion rate optimization"
+  cta={{
+    title: 'Revisemos dónde se está perdiendo la intención.',
+    description:
+      'Si el tráfico llega y no cierra, el problema tiene una causa concreta. Empezamos por encontrarla.',
+    primary: { label: 'Revisar mi conversión', href: intentLink('cro') },
+    secondary: { label: 'Ver Growth Audit', href: '/growth-audit/' },
+  }}
+>
+  <ServiceSection
+    eyebrow="El recorrido"
+    title="Si el anuncio promete una cosa y la landing responde otra, perdemos intención."
+    lead="La persona llegó con una expectativa concreta. Cada paso del recorrido puede confirmarla o contradecirla."
+    alt
+    id="recorrido"
+  >
+    <GrowthFlow nodes={recorrido} />
+    <p class="cro-close">
+      La conversión no se define en el botón. Se define en si la página responde
+      a la pregunta con la que la persona llegó.
+    </p>
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Message match"
+    title="El clic no empieza de cero cuando llega a la landing."
+    lead="El anuncio inicia una conversación. La landing tiene que continuarla. Cuando no lo hace, no aparece ningún error: aparece una caída de conversión sin causa visible."
+    id="message-match"
+  >
+    <MessageMatch steps={messageMatch} />
+    <p class="cro-note">
+      Por eso más tráfico hacia una experiencia que no continúa la conversación
+      no arregla el número: lo escala.
+    </p>
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Alcance"
+    title="CRO no es solamente hacer una landing linda."
+    alt
+    id="alcance"
+  >
+    <CheckList items={trabajo} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Testing"
+    title="Un ciclo, no una serie de cambios sueltos."
+    lead="Cada vuelta empieza donde terminó la anterior. Un test que no modifica la próxima hipótesis no dejó nada."
+    id="testing"
+  >
+    <GrowthFlow nodes={testing} loop="Lo aprendido redefine la siguiente hipótesis" />
+
+    <div class="cro-testable">
+      <p class="cro-testable__title">Qué se puede testear</p>
+      <CheckList items={testeable} />
+    </div>
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Método"
+    title="Hipótesis, fricción y señal."
+    lead="No publicamos resultados de tests que no hicimos. Lo que sí definimos de antemano es qué se prueba y contra qué se lee."
+    alt
+    id="metodo"
+  >
+    <CheckList items={metodo} />
+  </ServiceSection>
+
+  <ServiceSection title="Preguntas frecuentes." narrow id="faq">
+    <FAQ items={faqs} />
+    <div class="cro-related">
+      <RelatedLinks items={relacionados} />
+    </div>
+  </ServiceSection>
+</ServiceLayout>
+
+<style>
+  .cro-close {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+    max-width: 40ch;
+  }
+
+  .cro-note {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+    max-width: 56ch;
+  }
+
+  .cro-testable {
+    margin-top: var(--space-xl);
+  }
+
+  .cro-testable__title {
+    margin-bottom: var(--space-sm);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .cro-related {
+    margin-top: var(--space-xl);
+  }
+</style>

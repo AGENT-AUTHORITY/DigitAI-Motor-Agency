@@ -1,0 +1,36 @@
+---
+/**
+ * ServiceSection — bloque de contenido de una pagina de servicio.
+ *
+ * Existe para que las ocho paginas compartan ritmo vertical, alternancia de
+ * fondo y jerarquia sin repetir markup. Lo especifico de cada pagina entra
+ * por el slot.
+ */
+export interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  alt?: boolean;
+  narrow?: boolean;
+  id?: string;
+}
+
+const { eyebrow, title, lead, alt = false, narrow = false, id } = Astro.props;
+const headingId = id ? `${id}-title` : undefined;
+---
+
+<section
+  class:list={['section', alt && 'section--alt']}
+  id={id}
+  aria-labelledby={headingId}
+>
+  <div class:list={['container', narrow && 'container--narrow']}>
+    <div class="section-head">
+      {eyebrow && <p class="eyebrow eyebrow--dot">{eyebrow}</p>}
+      <h2 id={headingId}>{title}</h2>
+      {lead && <p class="section-head__lead">{lead}</p>}
+    </div>
+
+    <slot />
+  </div>
+</section>

@@ -1,0 +1,195 @@
+---
+/**
+ * GrowthFlow — cadena de nodos con nota por nodo.
+ *
+ * Cadena horizontal en desktop, vertical en mobile. La nota de cada nodo va
+ * en TEXTO, no dentro de un SVG: la informacion no puede existir solo como
+ * grafico (WCAG 1.1.1).
+ *
+ * Se usa con tres lecturas distintas: donde se pierde rendimiento (home),
+ * el recorrido de la intencion (CRO) y el de los sistemas comerciales
+ * (Growth Engineering).
+ *
+ * Orientacion distinta a la del visual del hero a proposito: alli es un riel
+ * vertical con el ciclo, aca es la cadena con el detalle de cada fuga. Mismo
+ * modelo mental, distinta densidad de informacion.
+ */
+export interface FlowNode {
+  label: string;
+  note: string;
+}
+
+export interface Props {
+  nodes: FlowNode[];
+  /**
+   * Cierra la cadena sobre si misma. Se usa cuando el ultimo nodo alimenta al
+   * primero (atribucion, datos que vuelven a la plataforma). El texto del
+   * retorno es visible, no un simbolo suelto: una flecha sola no comunica a
+   * quien no ve el grafico.
+   */
+  loop?: string;
+}
+
+const { nodes, loop } = Astro.props;
+
+// El numero de columnas sale de la cantidad de nodos, no de un valor fijo.
+const cols = nodes.length;
+---
+
+<ol class="flow" role="list" style={`--flow-cols:${cols}`}>
+  {
+    nodes.map((node, i) => (
+      <li class="flow__node" data-reveal data-reveal-delay={String((i % 3) + 1)}>
+        <div class="flow__marker" aria-hidden="true">
+          <span class="flow__dot" />
+          {i < nodes.length - 1 && <span class="flow__line" />}
+        </div>
+        <p class="flow__label">{node.label}</p>
+        <p class="flow__note">{node.note}</p>
+      </li>
+    ))
+  }
+  {
+    loop && (
+      <li class="flow__return">
+        <span class="flow__return-mark" aria-hidden="true">
+          &#8635;
+        </span>
+        <p class="flow__return-text">{loop}</p>
+      </li>
+    )
+  }
+</ol>
+
+<style>
+  .flow {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: node;
+  }
+
+  .flow__node {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    grid-template-areas:
+      'marker label'
+      '.      note';
+    column-gap: var(--space-sm);
+    padding-block: var(--space-xs) var(--space-md);
+  }
+
+  .flow__marker {
+    grid-area: marker;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding-top: 0.3125rem;
+  }
+
+  .flow__dot {
+    inline-size: 9px;
+    block-size: 9px;
+    border-radius: var(--radius-full);
+    background: var(--bg-primary);
+    border: 2px solid var(--accent);
+    z-index: 1;
+  }
+
+  .flow__line {
+    position: absolute;
+    inset-block-start: 1rem;
+    inline-size: 1px;
+    block-size: calc(100% + var(--space-md));
+    background: linear-gradient(var(--border-active), var(--border));
+  }
+
+  .flow__label {
+    grid-area: label;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-primary);
+  }
+
+  .flow__note {
+    grid-area: note;
+    margin-top: var(--space-3xs);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-muted);
+  }
+
+  /* El retorno cruza la grilla entera: no es un nodo mas de la cadena,
+     es la senal que vuelve al principio. */
+  .flow__return {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    margin-top: var(--space-2xs);
+    padding-top: var(--space-sm);
+    border-top: 1px dashed var(--border-active);
+  }
+
+  .flow__return-mark {
+    flex: none;
+    font-size: var(--text-lg);
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .flow__return-text {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-secondary);
+  }
+
+  /* En desktop la cadena se acuesta: 7 columnas, riel horizontal.
+     Los nodos son 7, asi que a partir de 64rem entran comodos. */
+  @media (min-width: 64rem) {
+    .flow {
+      grid-template-columns: repeat(var(--flow-cols, 7), minmax(0, 1fr));
+      column-gap: var(--space-sm);
+    }
+
+    .flow__node {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'marker'
+        'label'
+        'note';
+      padding-block: 0 0;
+    }
+
+    .flow__marker {
+      justify-content: flex-start;
+      padding-top: 0;
+      padding-bottom: var(--space-sm);
+    }
+
+    .flow__line {
+      inset-block-start: 4px;
+      inset-inline-start: 0.75rem;
+      inline-size: calc(100% + var(--space-sm));
+      block-size: 1px;
+      background: linear-gradient(90deg, var(--border-active), var(--border));
+    }
+
+    .flow__label {
+      font-size: var(--text-xs);
+    }
+
+    .flow__note {
+      margin-top: var(--space-2xs);
+      font-size: var(--text-xs);
+      line-height: var(--leading-normal);
+    }
+  }
+</style>

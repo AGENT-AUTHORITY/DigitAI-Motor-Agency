@@ -1,0 +1,450 @@
+---
+import { WHATSAPP_NUMBER, SITE, SERVICE_INTENTS, INTENT_UNSURE } from '../data/navigation';
+import { EVENTS, TRACK_FN } from '../lib/analytics';
+
+// La direccion del mensaje de error tiene que salir de la misma fuente que el
+// resto: escrita a mano quedaria vieja al cambiar de canal corporativo.
+const CONTACT_MAIL = SITE.email;
+
+// Se pasan como constantes planas y no como objeto: define:vars inyecta
+// valores, y un identificador de objeto deja al type-checker sin forma de
+// resolver los accesos dentro del inline script.
+const EV_INTENT = EVENTS.SERVICE_INTENT_SELECTED;
+const EV_FORM = EVENTS.CONTACT_FORM_COMPLETED;
+const EV_HANDOFF = EVENTS.WHATSAPP_HANDOFF_STARTED;
+
+/**
+ * ContactIntent — bloque de conversion final.
+ *
+ * FORM DELIVERY PENDING. No hay backend.
+ *
+ * Decision: en vez de fingir un "enviado" que no existe, el submit valida y
+ * entrega los datos por un canal REAL (WhatsApp prellenado, con mailto de
+ * respaldo). El mensaje de estado dice literalmente lo que pasó. No se muestra
+ * ninguna confirmacion de envio que no corresponda a un envio.
+ *
+ * Cuando exista endpoint: reemplazar handoff() por el POST y conservar la
+ * validacion, los hidden de UTM y los estados de error.
+ */
+const OPTIONS = [
+  ...Object.entries(SERVICE_INTENTS).map(([value, label]) => ({ value, label })),
+  { value: INTENT_UNSURE.key, label: INTENT_UNSURE.label },
+];
+---
+
+<section class="contact section--lg" id="growth-audit" aria-labelledby="contact-title">
+  <div class="container contact__inner">
+    <div class="contact__pitch">
+      <p class="eyebrow eyebrow--dot">Growth Audit</p>
+      <h2 id="contact-title" class="contact__title">
+        <span>Antes de gastar más,</span>
+        <span>encontremos qué está frenando el crecimiento.</span>
+      </h2>
+      <p class="contact__body">
+        Contanos qué estás intentando mejorar. Si el cuello de botella está en
+        adquisición, creatividad, conversión, medición o proceso comercial,
+        empezamos por ahí.
+      </p>
+      <p class="contact__aside">
+        Primero diagnosticamos. Después cotizamos.
+      </p>
+    </div>
+
+    <form class="contact__form surface surface--lg" id="growth-audit-form" novalidate>
+      <div class="field">
+        <label class="field__label" for="cf-name">Nombre</label>
+        <input class="field__input" id="cf-name" name="name" type="text" autocomplete="name" required />
+        <p class="field__error" id="cf-name-error" aria-live="polite"></p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="cf-company">Empresa</label>
+        <input class="field__input" id="cf-company" name="company" type="text" autocomplete="organization" />
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="cf-contact">Email o WhatsApp</label>
+        <input class="field__input" id="cf-contact" name="contact" type="text" inputmode="email" autocomplete="email" required />
+        <p class="field__error" id="cf-contact-error" aria-live="polite"></p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="cf-site">Web</label>
+        <input class="field__input" id="cf-site" name="website" type="text" inputmode="url" placeholder="tuempresa.com" />
+      </div>
+
+      <div class="field field--full">
+        <label class="field__label" for="cf-interest">¿Sobre qué querés que miremos?</label>
+        <select class="field__input" id="cf-interest" name="interest" required>
+          <option value="">Elegí una opción</option>
+          {OPTIONS.map((o) => <option value={o.value}>{o.label}</option>)}
+        </select>
+        <p class="field__error" id="cf-interest-error" aria-live="polite"></p>
+      </div>
+
+      <div class="field field--full">
+        <label class="field__label" for="cf-detail">Contexto <span class="field__optional">(opcional)</span></label>
+        <textarea class="field__input field__input--area" id="cf-detail" name="detail" rows="3"></textarea>
+      </div>
+
+      <input type="hidden" name="utm_source" />
+      <input type="hidden" name="utm_medium" />
+      <input type="hidden" name="utm_campaign" />
+      <input type="hidden" name="utm_content" />
+      <input type="hidden" name="utm_term" />
+      <input type="hidden" name="referrer" />
+      <input type="hidden" name="landing_page" />
+
+      <div class="contact__actions">
+        <button
+          class="btn btn--primary btn--lg btn--block"
+          type="submit"
+          data-track="form_submit"
+          data-track-context="growth_audit"
+        >
+          Solicitar diagnóstico de crecimiento
+        </button>
+        <p class="contact__status" role="status" aria-live="polite" data-form-status></p>
+        <p class="source-note contact__fallback">
+          También podés escribir a
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+        </p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .contact {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+  }
+
+  .contact__inner {
+    display: grid;
+    /* minmax(0, 1fr) y no 1fr: por defecto un grid item tiene min-width auto
+       y no baja de su min-content. El formulario forzaba la columna a 362px
+       dentro de un contenedor de 334px y desbordaba la pagina a 375. */
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .contact__title {
+    margin-top: var(--space-md);
+    font-size: var(--text-3xl);
+    max-width: 20ch;
+  }
+
+  .contact__title span {
+    display: block;
+  }
+
+  .contact__title span + span {
+    color: var(--text-secondary);
+  }
+
+  .contact__body {
+    margin-top: var(--space-md);
+    max-width: 46ch;
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  .contact__aside {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-bold);
+    color: var(--text-muted);
+  }
+
+  .contact__form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .field {
+    display: grid;
+    gap: var(--space-3xs);
+    /* Los controles traen ancho intrinseco propio (size/cols por defecto).
+       Sin min-width 0 empujan la grilla del formulario. */
+    min-width: 0;
+  }
+
+  .field--full {
+    grid-column: 1 / -1;
+  }
+
+  .field__label {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-secondary);
+  }
+
+  .field__optional {
+    font-weight: var(--weight-normal);
+    color: var(--text-muted);
+  }
+
+  /* --border-input existe justamente para esto: --border (1.33:1) y
+     --border-active (1.90:1) no llegan al 3:1 que WCAG 1.4.11 pide para el
+     limite de un control. */
+  .field__input {
+    inline-size: 100%;
+    min-inline-size: 0;
+    min-block-size: 2.75rem;
+    padding: 0.625rem 0.75rem;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-input);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  .field__input--area {
+    min-block-size: 5rem;
+    resize: vertical;
+  }
+
+  .field__input:hover {
+    border-color: var(--text-muted);
+  }
+
+  .field__input:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .field__input[aria-invalid='true'] {
+    border-color: var(--danger);
+  }
+
+  .field__error:empty {
+    display: none;
+  }
+
+  .field__error {
+    font-size: var(--text-xs);
+    color: var(--danger);
+  }
+
+  .contact__actions {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: var(--space-2xs);
+    margin-top: var(--space-2xs);
+  }
+
+  .contact__status:empty {
+    display: none;
+  }
+
+  .contact__status {
+    padding: var(--space-2xs) var(--space-xs);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-primary);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: var(--radius-sm);
+  }
+
+  @media (min-width: 34rem) {
+    .contact__form {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--space-sm);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .contact__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      column-gap: var(--space-2xl);
+    }
+
+    .contact__form {
+      padding: var(--space-xl);
+    }
+  }
+</style>
+
+<script is:inline define:vars={{ WHATSAPP_NUMBER, TRACK_FN, EV_INTENT, EV_FORM, EV_HANDOFF, CONTACT_MAIL }}>
+  const form = document.querySelector('#growth-audit-form');
+  if (form) {
+    const status = form.querySelector('[data-form-status]');
+
+    // Declarada antes que cualquier llamador. Con tracking deshabilitado
+    // dmTrack existe igual y es un no-op, asi que esto nunca condiciona.
+    const track = (event, payload) => {
+      if (typeof window[TRACK_FN] === 'function') window[TRACK_FN](event, payload);
+    };
+
+    const UTM_KEYS = [
+      'utm_source',
+      'utm_medium',
+      'utm_campaign',
+      'utm_content',
+      'utm_term',
+    ];
+
+    // Captura de UTM en el primer landing y persistencia por sesion: si el
+    // usuario navega y vuelve, el origen no se pierde.
+    const params = new URLSearchParams(window.location.search);
+    UTM_KEYS.forEach((key) => {
+      const fromUrl = params.get(key);
+      if (fromUrl) sessionStorage.setItem(key, fromUrl);
+      const field = form.querySelector(`input[name="${key}"]`);
+      if (field) field.value = sessionStorage.getItem(key) || '';
+    });
+    const referrer = form.querySelector('input[name="referrer"]');
+    if (referrer) referrer.value = document.referrer || '';
+    const landing = form.querySelector('input[name="landing_page"]');
+    if (landing) landing.value = window.location.pathname;
+
+    // Intent routing: cada service page abre este formulario con ?intent=<clave>.
+    // Solo se acepta si coincide con una opcion real del select, asi un valor
+    // arbitrario en la URL no puede inyectar nada ni dejar el campo en un
+    // estado invisible. No toca los UTM: son ejes distintos (que quiere la
+    // persona vs. de donde vino).
+    const interestField = form.querySelector('#cf-interest');
+    const requestedIntent = params.get('intent');
+    if (interestField && requestedIntent) {
+      const match = Array.from(interestField.options).some(
+        (opt) => opt.value === requestedIntent
+      );
+      if (match) {
+        interestField.value = requestedIntent;
+        track(EV_INTENT, {
+          intent: requestedIntent,
+          source: 'service_page',
+        });
+      }
+    }
+
+    if (interestField) {
+      interestField.addEventListener('change', () => {
+        if (!interestField.value) return;
+        track(EV_INTENT, {
+          intent: interestField.value,
+          source: 'form',
+        });
+      });
+    }
+
+    const setError = (input, message) => {
+      const target = document.querySelector(`#${input.id}-error`);
+      input.setAttribute('aria-invalid', message ? 'true' : 'false');
+      if (target) target.textContent = message;
+      if (message) input.setAttribute('aria-describedby', `${input.id}-error`);
+    };
+
+    // El payload viaja con el label humano: nadie deberia leer
+    // "growth_engineering" en un WhatsApp.
+    const interestLabel = () => {
+      const el = form.querySelector('#cf-interest');
+      return el.options[el.selectedIndex]?.text ?? '';
+    };
+
+    const validate = () => {
+      let firstInvalid = null;
+
+      const name = form.querySelector('#cf-name');
+      if (!name.value.trim()) {
+        setError(name, 'Necesitamos un nombre para responderte.');
+        firstInvalid = firstInvalid || name;
+      } else setError(name, '');
+
+      const contact = form.querySelector('#cf-contact');
+      const value = contact.value.trim();
+      const looksEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+      const looksPhone = /^[+()\d\s-]{7,}$/.test(value);
+      if (!value) {
+        setError(contact, 'Dejanos un email o un WhatsApp.');
+        firstInvalid = firstInvalid || contact;
+      } else if (!looksEmail && !looksPhone) {
+        setError(contact, 'Revisá el email o el número: no parece válido.');
+        firstInvalid = firstInvalid || contact;
+      } else setError(contact, '');
+
+      const interest = form.querySelector('#cf-interest');
+      if (!interest.value) {
+        setError(interest, 'Elegí sobre qué querés que miremos.');
+        firstInvalid = firstInvalid || interest;
+      } else setError(interest, '');
+
+      return firstInvalid;
+    };
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const invalid = validate();
+      if (invalid) {
+        invalid.focus();
+        status.textContent = '';
+        return;
+      }
+
+      const data = new FormData(form);
+
+      track(EV_FORM, {
+        intent: data.get('interest'),
+        has_company: Boolean(data.get('company')),
+        has_detail: Boolean(data.get('detail')),
+      });
+
+      // FORM DELIVERY PENDING: sin backend. En vez de simular un envio, se
+      // entrega por un canal real y el mensaje de estado dice exactamente
+      // lo que ocurrio. Nunca "enviado" si no se envio a ningun lado.
+      const utm = UTM_KEYS.map((k) => data.get(k))
+        .filter(Boolean)
+        .join(' / ');
+
+      const message = [
+        'Solicitud de diagnóstico de crecimiento',
+        '',
+        `Nombre: ${data.get('name')}`,
+        data.get('company') ? `Empresa: ${data.get('company')}` : '',
+        `Contacto: ${data.get('contact')}`,
+        data.get('website') ? `Web: ${data.get('website')}` : '',
+        `Servicio: ${interestLabel()}`,
+        data.get('detail') ? `Contexto: ${data.get('detail')}` : '',
+        utm ? `Origen: ${utm}` : '',
+      ]
+        .filter(Boolean)
+        .join('\n');
+
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+      const opened = window.open(url, '_blank', 'noopener,noreferrer');
+
+      // Significa "el sitio preparo la conversacion", nunca "lead confirmado":
+      // nada nos permite saber si la persona apreto enviar en WhatsApp.
+      track(EV_HANDOFF, {
+        intent: data.get('interest'),
+        opened: Boolean(opened),
+      });
+
+      status.textContent = opened
+        ? 'Abrimos WhatsApp con tus datos cargados. Todavía falta que envíes el mensaje desde ahí.'
+        : `No pudimos abrir WhatsApp. Escribinos a ${CONTACT_MAIL} y te respondemos.`;
+    });
+
+    // Limpia el error del campo apenas el usuario corrige.
+    form.querySelectorAll('input, select, textarea').forEach((input) => {
+      input.addEventListener('input', () => {
+        if (input.getAttribute('aria-invalid') === 'true') setError(input, '');
+      });
+    });
+  }
+</script>

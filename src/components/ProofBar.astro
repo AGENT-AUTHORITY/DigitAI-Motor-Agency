@@ -1,0 +1,89 @@
+---
+import MetricCard from './MetricCard.astro';
+
+/**
+ * ProofBar — franja de evidencia.
+ *
+ * Maximo 4 metricas en homepage (docs/COPY.md). `note` es obligatoria: es la
+ * linea que aclara que los datos vienen de analisis y proyectos documentados,
+ * no de resultados atribuidos a digitAI Motor.
+ */
+export interface Metric {
+  value: string;
+  label: string;
+  context?: string;
+  status?: 'neutral' | 'positive' | 'warning' | 'attention';
+}
+
+export interface Props {
+  metrics: Metric[];
+  note: string;
+  eyebrow?: string;
+}
+
+const { metrics, note, eyebrow } = Astro.props;
+
+if (metrics.length > 4) {
+  throw new Error(
+    `ProofBar admite maximo 4 metricas (recibio ${metrics.length}). ` +
+      'Ver docs/COPY.md: mas de 4 diluye en vez de probar.'
+  );
+}
+---
+
+<section class="proof section--sm" aria-labelledby="proof-heading">
+  <div class="container">
+    <h2 id="proof-heading" class="visually-hidden">Evidencia</h2>
+    {eyebrow && <p class="eyebrow eyebrow--dot eyebrow--muted proof__eyebrow">{eyebrow}</p>}
+
+    <div class="proof__grid">
+      {
+        metrics.map((metric) => (
+          <MetricCard
+            value={metric.value}
+            label={metric.label}
+            context={metric.context}
+            status={metric.status}
+          />
+        ))
+      }
+    </div>
+
+    <p class="source-note proof__note">{note}</p>
+  </div>
+</section>
+
+<style>
+  .proof {
+    border-block: 1px solid var(--border);
+    background: var(--bg-secondary);
+  }
+
+  .proof__eyebrow {
+    margin-bottom: var(--space-md);
+  }
+
+  .proof__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2xs);
+  }
+
+  .proof__note {
+    margin-top: var(--space-md);
+  }
+
+  @media (min-width: 40rem) {
+    .proof__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-md);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .proof__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-lg);
+    }
+  }
+</style>

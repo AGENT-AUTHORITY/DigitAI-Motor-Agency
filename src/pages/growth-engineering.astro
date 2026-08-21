@@ -1,0 +1,256 @@
+---
+import ServiceLayout from '../layouts/ServiceLayout.astro';
+import ServiceSection from '../components/ServiceSection.astro';
+import GrowthFlow from '../components/GrowthFlow.astro';
+import CapabilityGrid from '../components/CapabilityGrid.astro';
+import ConnectionGap from '../components/ConnectionGap.astro';
+import BuildCases from '../components/BuildCases.astro';
+import CheckList from '../components/CheckList.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import FAQ from '../components/FAQ.astro';
+import { intentLink } from '../data/navigation';
+
+const cadena = [
+  { label: 'CAMPAIGN', note: 'Lo que se compra' },
+  { label: 'LANDING', note: 'Dónde aterriza' },
+  { label: 'CRM', note: 'Dónde queda registrado' },
+  { label: 'AUTOMATION', note: 'Qué se dispara solo' },
+  { label: 'SALES', note: 'Quién lo trabaja y cuándo' },
+  { label: 'DATA', note: 'Qué se puede leer después' },
+];
+
+const huecos = [
+  {
+    from: 'Landing',
+    to: 'CRM',
+    symptom:
+      'El formulario envía y alguien recibe un mail. A partir de ahí el contacto depende de que una persona se acuerde de cargarlo.',
+    build:
+      'La entrada del lead al sistema con su origen, su campaña y su contexto ya asociados.',
+  },
+  {
+    from: 'CRM',
+    to: 'Seguimiento',
+    symptom:
+      'El lead queda registrado, pero nada indica quién lo trabaja, en cuánto tiempo ni qué pasa si nadie lo hace.',
+    build:
+      'Asignación, tiempos de respuesta y recordatorios sobre el recorrido que el equipo ya usa.',
+  },
+  {
+    from: 'Venta',
+    to: 'Atribución',
+    symptom:
+      'La venta se cierra y se registra, pero esa información nunca vuelve. Las campañas siguen optimizando hacia el lead barato.',
+    build:
+      'El camino de retorno de la señal de venta hacia las plataformas y hacia los tableros.',
+  },
+];
+
+const construido = [
+  {
+    kind: 'Prospecting system',
+    problem:
+      'Prospección comercial B2B hecha a mano: listados sueltos, criterios distintos por persona y sin forma de saber a quién conviene contactar primero.',
+    tool:
+      'Un sistema de descubrimiento territorial que releva empresas desde fuentes públicas, las deduplica, las clasifica y las puntúa con reglas explícitas.',
+    use:
+      'Le da estructura al trabajo comercial: el equipo abre una zona y encuentra las oportunidades ya ordenadas por prioridad, con el criterio a la vista.',
+    parts: ['FastAPI', 'Scoring', 'Territorio', 'Pipeline', 'Mapa'],
+  },
+  {
+    kind: 'Quote system',
+    problem:
+      'Cotizaciones técnicas armadas en planillas: cada propuesta se rehacía desde cero y el criterio de precio dependía de quién la preparaba.',
+    tool:
+      'Un cotizador con la lógica técnica y comercial adentro: selección de equipamiento, materiales, mano de obra y resumen económico calculado sobre un catálogo único.',
+    use:
+      'Estandariza el armado de propuestas: la misma configuración da el mismo resultado, sin importar quién la carga.',
+    parts: ['Catálogo', 'Cálculo técnico', 'Resumen económico', 'Tests'],
+  },
+  {
+    kind: 'Sales tool',
+    problem:
+      'La información comercial se cortaba entre etapas: lo relevado en prospección no llegaba al seguimiento y el seguimiento no llegaba a la propuesta.',
+    tool:
+      'Un CRM construido alrededor del recorrido real — prospección, diagnóstico, contacto, seguimiento, propuesta, cierre — y no alrededor de un modelo genérico.',
+    use:
+      'Centraliza la operación comercial en un solo lugar, con el historial del prospecto disponible en la etapa donde hace falta.',
+    parts: ['Postgres + RLS', 'Pipeline', 'Auditoría', 'Dashboard'],
+  },
+];
+
+const capacidades = [
+  {
+    problem: '¿Tenés los datos pero nadie los mira?',
+    title: 'Dashboards',
+    answer:
+      'Un tablero sirve cuando responde una pregunta que alguien se hace todas las semanas. Si no, es un informe que nadie abre.',
+    items: ['Paid media', 'Pipeline', 'Atribución', 'Operación'],
+  },
+  {
+    problem: '¿El lead entra y se queda esperando?',
+    title: 'CRM y lead routing',
+    answer:
+      'Configuración, integración o desarrollo del recorrido del contacto: a quién le llega, en cuánto tiempo y con qué contexto.',
+    items: ['Configuración', 'Integración', 'Routing', 'Recordatorios'],
+  },
+  {
+    problem: '¿Hay una tarea manual que se repite todos los días?',
+    title: 'Automatizaciones y APIs',
+    answer:
+      'Se automatiza cuando el proceso ya está claro. Automatizar un proceso confuso solo lo vuelve un proceso confuso más rápido.',
+    items: ['Integraciones', 'APIs', 'Workflows', 'AI workflows'],
+  },
+  {
+    problem: '¿Falta una herramienta que directamente no existe?',
+    title: 'Internal tools',
+    answer:
+      'Sistemas de cotización, prospección o soporte comercial construidos a medida del proceso real, no del proceso ideal.',
+    items: ['Quote systems', 'Prospecting', 'Sales tools', 'Apps internas'],
+  },
+];
+
+const criterio = [
+  'Se construye cuando el cuello de botella está en que la pieza no existe',
+  'No se construye para reemplazar una herramienta que ya funciona',
+  'Antes de desarrollar se busca si una integración estándar alcanza',
+  'El alcance sale del diagnóstico, no de lo que sea interesante de programar',
+  'Si el proceso todavía no está definido, se define antes de automatizarlo',
+];
+
+const relacionados = [
+  {
+    label: 'Growth Audit',
+    href: '/growth-audit/',
+    reason:
+      'Antes de construir conviene confirmar que el cuello de botella es realmente técnico y no de oferta o de mensaje.',
+  },
+  {
+    label: 'CRO & Landing Pages',
+    href: '/cro-landing-pages/',
+    reason:
+      'Muchas veces lo que parece un problema de sistema es fricción en el formulario o en el flujo de contacto.',
+  },
+  {
+    label: 'Meta Ads',
+    href: '/meta-ads/',
+    reason:
+      'Conectar el CRM con la plataforma cambia hacia qué optimiza la campaña: de lead barato a lead que califica.',
+  },
+];
+
+const faqs = [
+  {
+    question: '¿Son una software house?',
+    answer:
+      'No. Un software house arranca preguntando qué hay que construir; nosotros arrancamos preguntando qué está frenando el crecimiento. A veces la respuesta es construir y a veces es cambiar una configuración, y en ese caso lo decimos aunque signifique menos trabajo para nosotros.',
+  },
+  {
+    question: '¿Trabajan sobre sistemas que ya tenemos?',
+    answer:
+      'Sí, y es lo más frecuente. Reemplazar un sistema que funciona por uno nuevo suele costar más de lo que resuelve.',
+  },
+  {
+    question: '¿Qué pasa con el mantenimiento después?',
+    answer:
+      'Se define antes de empezar: qué queda documentado, quién puede modificarlo y qué depende de nosotros. No entregamos algo que solo nosotros podamos tocar.',
+  },
+  {
+    question: '¿Pueden integrar con nuestro CRM actual?',
+    answer:
+      'Depende de qué exponga el CRM. Si tiene API o webhooks, en general sí. Si no, lo decimos antes en vez de prometer una integración que va a terminar siendo un proceso manual disfrazado.',
+  },
+];
+---
+
+<ServiceLayout
+  title="Growth Engineering | Dashboards, CRM y APIs | digitAI Motor"
+  description="Cuando el cuello de botella está fuera del Ads Manager, construimos lo que falta: dashboards, CRM, routing, integraciones y automatización."
+  eyebrow="Growth Engineering"
+  heading="Cuando el problema está fuera de Ads Manager, construimos lo que falta."
+  intro="La tecnología existe acá para resolver un cuello de botella de crecimiento. No construimos software por construir software: si el problema se resuelve sin desarrollar nada, esa es la recomendación."
+  breadcrumbs={[{ label: 'Growth Engineering' }]}
+  serviceType="Custom software development"
+  cta={{
+    title: 'Tengo algo para construir.',
+    description:
+      'Contanos qué parte del recorrido comercial se está resolviendo a mano, o directamente no se está resolviendo.',
+    primary: { label: 'Tengo algo para construir', href: intentLink('growth_engineering') },
+    secondary: { label: 'Primero quiero diagnosticar el problema', href: '/growth-audit/' },
+  }}
+>
+  <ServiceSection
+    eyebrow="La cadena"
+    title="Cuando una pieza falta, la construimos."
+    lead="El recorrido comercial es una cadena de sistemas. Basta con que uno no exista para que todo lo que viene después se haga a mano."
+    alt
+    id="cadena"
+  >
+    <GrowthFlow nodes={cadena} loop="Lo que se aprende vuelve a la campaña" />
+    <p class="ge-close">
+      Una cadena vale lo que vale su eslabón más débil, y el más débil suele
+      ser el que no existe.
+    </p>
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="El hueco"
+    title="El problema suele estar entre dos capas, no dentro de una."
+    lead="Cada pieza puede funcionar bien por separado y el negocio perder igual. Lo que falta es el enlace, y por eso no aparece en ningún panel."
+    id="hueco"
+  >
+    <ConnectionGap gaps={huecos} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Capacidades"
+    title="Qué construimos, y para resolver qué."
+    alt
+    id="capacidades"
+  >
+    <CapabilityGrid capabilities={capacidades} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Sistemas construidos"
+    title="Qué se construyó y para qué se usa."
+    lead="Cada uno salió de un cuello de botella comercial concreto, no de una oportunidad técnica. Describimos la construcción: no atribuimos resultados de negocio a la herramienta."
+    id="construido"
+  >
+    <BuildCases cases={construido} />
+  </ServiceSection>
+
+  <ServiceSection
+    eyebrow="Criterio"
+    title="Cuándo conviene construir y cuándo no."
+    lead="Lo que se decide no construir cuenta tanto como lo que se construye."
+    alt
+    id="criterio"
+  >
+    <CheckList items={criterio} />
+  </ServiceSection>
+
+  <ServiceSection title="Preguntas frecuentes." narrow id="faq">
+    <FAQ items={faqs} />
+    <div class="ge-related">
+      <RelatedLinks items={relacionados} />
+    </div>
+  </ServiceSection>
+</ServiceLayout>
+
+<style>
+  .ge-close {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--accent);
+  }
+
+  .ge-related {
+    margin-top: var(--space-xl);
+  }
+</style>

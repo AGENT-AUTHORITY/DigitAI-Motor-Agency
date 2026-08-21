@@ -1,0 +1,120 @@
+---
+/**
+ * QuickFixCategories — matriz agrupada de intervenciones puntuales.
+ *
+ * Agrupada y no plana: una lista de 16 items sueltos parece un menu barato.
+ * Agrupada por area se lee como cobertura tecnica, que es exactamente la
+ * diferencia entre "arreglamos cositas" y "cubrimos todo el sistema".
+ *
+ * Sin precios y sin lenguaje de tarifa. Ver docs/BRAND.md.
+ */
+export interface Category {
+  title: string;
+  items: string[];
+}
+
+export interface Props {
+  categories: Category[];
+}
+
+const { categories } = Astro.props;
+
+// El ultimo grupo estira hasta cerrar la fila. Con 5 categorias en 3 columnas
+// quedaba una celda vacia que se leia como un hueco sin terminar, no como
+// espacio. El calculo sale de la cantidad real, no de un valor fijo: si
+// manana son 6 o 4 categorias, sigue cerrando.
+const spanFor = (cols: number) => {
+  const rest = categories.length % cols;
+  return rest === 0 ? 1 : cols - rest + 1;
+};
+const gridVars = `--span-2:${spanFor(2)};--span-3:${spanFor(3)}`;
+---
+
+<div class="qfc" style={gridVars}>
+  {
+    categories.map((cat, i) => (
+      <section class="qfc__group" data-reveal data-reveal-delay={String((i % 3) + 1)}>
+        <h3 class="qfc__title">{cat.title}</h3>
+        <ul class="qfc__items" role="list">
+          {cat.items.map((item) => (
+            <li class="qfc__item">
+              <span class="qfc__mark" aria-hidden="true" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .qfc {
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .qfc__group {
+    padding: var(--space-md);
+    background: var(--bg-secondary);
+  }
+
+  .qfc__title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--space-sm);
+  }
+
+  .qfc__items {
+    display: grid;
+    gap: var(--space-2xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .qfc__item {
+    display: grid;
+    grid-template-columns: 0.75rem 1fr;
+    align-items: baseline;
+    gap: var(--space-2xs);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+  }
+
+  .qfc__mark {
+    inline-size: 0.5rem;
+    block-size: 1px;
+    background: var(--border-active);
+    align-self: center;
+  }
+
+  @media (min-width: 40rem) {
+    .qfc {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .qfc__group:last-child {
+      grid-column: span var(--span-2, 1);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .qfc {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .qfc__group:last-child {
+      grid-column: span var(--span-3, 1);
+    }
+  }
+</style>

@@ -1,0 +1,322 @@
+---
+/**
+ * CreativeFlow — el sistema de Performance Creative.
+ *
+ * Rediseno de FASE 3.1: antes eran seis cajas independientes. Ahora es un
+ * sistema conectado — riel con conectores reales, el TEST como nodo pivote y
+ * una bifurcacion visible hacia las dos salidas.
+ *
+ * La microanimacion es una sola: el pulso que recorre el riel hacia TEST.
+ * CSS puro, sin GSAP, y se apaga con prefers-reduced-motion.
+ *
+ * Ninguna cifra: CTR, CPC, CVR, CPA y Lead Quality son vocabulario de lectura,
+ * nunca valores.
+ */
+const STAGES = ['RESEARCH', 'INSIGHT', 'CONCEPT', 'HOOK', 'CREATIVE'];
+const VARIABLES = ['Hooks', 'Angles', 'Concepts', 'Formats', 'Offer', 'Message'];
+const SIGNALS = ['CTR', 'CPC', 'CVR', 'CPA', 'Lead Quality'];
+---
+
+<div class="cf">
+  <div class="cf__chain">
+    <ol class="cf__stages" role="list">
+      {
+        STAGES.map((stage, i) => (
+          <li class="cf__stage" data-reveal data-reveal-delay={String((i % 3) + 1)}>
+            <span class="cf__stage-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <span class="cf__stage-label">{stage}</span>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="cf__test" data-reveal>
+      <span class="cf__stage-index" aria-hidden="true">06</span>
+      <span class="cf__test-label">TEST</span>
+      <span class="cf__test-note">Cada concepto entra como hipótesis, no como pieza terminada.</span>
+    </div>
+
+    <svg class="cf__split" viewBox="0 0 400 44" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+      <path class="cf__split-line" d="M200 0 V14 a10 10 0 0 1 -10 10 H110 a10 10 0 0 0 -10 10 V44" fill="none" />
+      <path class="cf__split-line cf__split-line--gain" d="M200 0 V14 a10 10 0 0 0 10 10 H290 a10 10 0 0 1 10 10 V44" fill="none" />
+    </svg>
+  </div>
+
+  <div class="cf__branches">
+    <article class="cf__branch cf__branch--learn" data-reveal>
+      <p class="cf__branch-tag">Sin señal</p>
+      <h3 class="cf__branch-title">Learn</h3>
+      <p class="cf__branch-copy">
+        El concepto no funcionó, pero el test sí: descarta una hipótesis y acota
+        dónde buscar la siguiente.
+      </p>
+    </article>
+
+    <article class="cf__branch cf__branch--scale" data-reveal data-reveal-delay="1">
+      <p class="cf__branch-tag">Con señal</p>
+      <h3 class="cf__branch-title">Iterate → Scale</h3>
+      <p class="cf__branch-copy">
+        Un mensaje que ya mostró señal no se reinicia desde cero: se itera en
+        nuevos hooks, formatos y versiones.
+      </p>
+    </article>
+  </div>
+
+  <div class="cf__meta">
+    <div class="cf__meta-group">
+      <p class="cf__meta-title">Qué probamos</p>
+      <ul class="cf__chips" role="list">
+        {VARIABLES.map((v) => <li class="chip">{v}</li>)}
+      </ul>
+    </div>
+    <div class="cf__meta-group">
+      <p class="cf__meta-title">Contra qué lo leemos</p>
+      <ul class="cf__chips" role="list">
+        {SIGNALS.map((s) => <li class="chip chip--accent">{s}</li>)}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cf {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  /* --- Cadena hasta TEST --------------------------------------------------- */
+
+  .cf__chain {
+    display: grid;
+    gap: 0;
+  }
+
+  .cf__stages {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cf__stage {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  .cf__stage-index {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    color: var(--text-muted);
+  }
+
+  .cf__stage-label {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-primary);
+  }
+
+  /* --- Nodo pivote --------------------------------------------------------- */
+
+  .cf__test {
+    position: relative;
+    display: grid;
+    gap: var(--space-3xs);
+    margin-top: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  /* Pulso que recorre el nodo: unica microanimacion de la seccion.
+     Solo transform, no dispara layout. */
+  .cf__test::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: 40%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(35, 136, 255, 0.16),
+      transparent
+    );
+    transform: translateX(-100%);
+    animation: cfPulse 4.5s var(--ease-in-out) infinite;
+    pointer-events: none;
+  }
+
+  @keyframes cfPulse {
+    0%, 55% { transform: translateX(-100%); }
+    100% { transform: translateX(350%); }
+  }
+
+  .cf__test-label {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-primary);
+  }
+
+  .cf__test-note {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+    max-width: 46ch;
+  }
+
+  .cf__test .cf__stage-index {
+    color: var(--accent);
+  }
+
+  /* --- Bifurcacion --------------------------------------------------------- */
+
+  .cf__split {
+    display: block;
+    inline-size: 100%;
+    block-size: 2.25rem;
+  }
+
+  .cf__split-line {
+    stroke: var(--border-active);
+    stroke-width: 1.25;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .cf__split-line--gain {
+    stroke: var(--accent);
+  }
+
+  /* --- Salidas ------------------------------------------------------------- */
+
+  .cf__branches {
+    display: grid;
+    gap: var(--space-sm);
+    margin-top: calc(var(--space-lg) * -1);
+  }
+
+  .cf__branch {
+    position: relative;
+    padding: var(--space-md);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: var(--highlight-top);
+  }
+
+  .cf__branch::before {
+    content: '';
+    position: absolute;
+    inset-block-start: -1px;
+    inset-inline-start: var(--space-md);
+    inline-size: 2.5rem;
+    block-size: 2px;
+  }
+
+  .cf__branch--learn::before { background: var(--warning); }
+  .cf__branch--scale::before { background: var(--positive); }
+
+  .cf__branch-tag {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+  }
+
+  .cf__branch--learn .cf__branch-tag { color: var(--warning); }
+  .cf__branch--scale .cf__branch-tag { color: var(--positive); }
+
+  .cf__branch-title {
+    margin-top: var(--space-2xs);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+  }
+
+  .cf__branch-copy {
+    margin-top: var(--space-2xs);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  /* --- Meta ---------------------------------------------------------------- */
+
+  .cf__meta {
+    display: grid;
+    gap: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+  }
+
+  .cf__meta-title {
+    margin-bottom: var(--space-2xs);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .cf__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cf__test::after { animation: none; opacity: 0; }
+  }
+
+  @media (min-width: 40rem) {
+    .cf__branches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cf__meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 64rem) {
+    .cf__stages {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    /* Conector vertical entre cada etapa y el riel del TEST */
+    .cf__stage::after {
+      content: '';
+      position: absolute;
+      inset-block-start: 100%;
+      inset-inline-start: 50%;
+      inline-size: 1px;
+      block-size: var(--space-sm);
+      background: var(--border-active);
+    }
+
+    .cf__test {
+      grid-template-columns: auto auto minmax(0, 1fr);
+      align-items: center;
+      column-gap: var(--space-sm);
+    }
+
+    .cf__test-note {
+      text-align: end;
+    }
+  }
+</style>

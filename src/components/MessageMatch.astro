@@ -1,0 +1,158 @@
+---
+/**
+ * MessageMatch — donde se rompe la continuidad entre anuncio y landing.
+ *
+ * El clic no empieza de cero: llega con una promesa ya hecha. El componente
+ * muestra esa promesa como un token que viaja por la cadena y deja de
+ * coincidir en el segundo paso.
+ *
+ * El estado de cada paso va en TEXTO ademas de en color: "no coincide" se
+ * tiene que poder leer sin distinguir el rojo del verde (WCAG 1.4.1).
+ */
+export interface MatchStep {
+  /** Capa del recorrido: ANUNCIO, LANDING, INTENCIÓN. */
+  stage: string;
+  /** Lo que esa capa pone sobre la mesa. */
+  carries: string;
+  /** Etiqueta de estado, visible y textual. */
+  state: string;
+  /** Tono del estado: define el color, nunca el significado. */
+  tone: 'ok' | 'break' | 'loss';
+  note: string;
+}
+
+export interface Props {
+  steps: MatchStep[];
+}
+
+const { steps } = Astro.props;
+---
+
+<ol class="mm" role="list">
+  {
+    steps.map((step, i) => (
+      <li class="mm__step" data-tone={step.tone} data-reveal data-reveal-delay={String(i + 1)}>
+        <div class="mm__head">
+          <p class="mm__stage">{step.stage}</p>
+          <p class="mm__state">{step.state}</p>
+        </div>
+        <p class="mm__carries">{step.carries}</p>
+        <p class="mm__note">{step.note}</p>
+        {i < steps.length - 1 && (
+          <span class="mm__link" aria-hidden="true">
+            &#8595;
+          </span>
+        )}
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .mm {
+    display: grid;
+    gap: var(--space-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mm__step {
+    position: relative;
+    padding: var(--space-md);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-inline-start: 2px solid var(--tone-line, var(--border-active));
+    border-radius: var(--radius-md);
+  }
+
+  /* El tono acompaña una etiqueta que ya dice lo mismo en palabras. */
+  .mm__step[data-tone='ok'] {
+    --tone-line: var(--positive);
+    --tone-text: var(--positive);
+  }
+
+  .mm__step[data-tone='break'] {
+    --tone-line: var(--accent);
+    --tone-text: var(--accent);
+  }
+
+  .mm__step[data-tone='loss'] {
+    --tone-line: var(--danger);
+    --tone-text: var(--danger);
+  }
+
+  .mm__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2xs);
+  }
+
+  .mm__stage {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .mm__state {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--tone-text, var(--text-secondary));
+  }
+
+  .mm__carries {
+    margin-top: var(--space-2xs);
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+  }
+
+  .mm__note {
+    margin-top: var(--space-2xs);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+    max-width: 52ch;
+  }
+
+  /* La flecha vive en el hueco del gap, no empuja el layout. */
+  .mm__link {
+    position: absolute;
+    inset-block-end: calc(var(--space-lg) * -1);
+    inset-inline-start: var(--space-md);
+    display: grid;
+    place-items: center;
+    block-size: var(--space-lg);
+    font-size: var(--text-lg);
+    line-height: 1;
+    color: var(--border-active);
+  }
+
+  @media (min-width: 64rem) {
+    .mm {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    .mm__link {
+      inset-block-end: auto;
+      inset-block-start: 50%;
+      inset-inline-start: auto;
+      inset-inline-end: calc(var(--space-md) * -1);
+      inline-size: var(--space-md);
+      block-size: auto;
+      transform: translateY(-50%) rotate(-90deg);
+    }
+  }
+</style>

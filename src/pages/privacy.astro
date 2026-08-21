@@ -1,0 +1,186 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import {
+  SITE,
+  SERVICE_INTENTS,
+  PRIVACY_CONTROLLER,
+  CONTACT_EMAIL,
+  hasPrivacyIdentity,
+  contactEmail,
+} from '../data/navigation';
+import { SITE_IS_PUBLIC } from '../../site.config.mjs';
+
+/**
+ * Politica de privacidad.
+ *
+ * Describe SOLAMENTE lo que el sitio hace hoy, verificado contra el codigo:
+ * un formulario que entrega por WhatsApp, cinco claves UTM en sessionStorage
+ * y ningun tercero cargado. Nada de plantillas genericas con clausulas que no
+ * corresponden a esta arquitectura.
+ *
+ * Si se activa analytics, esta pagina y /cookies/ se actualizan ANTES.
+ */
+const intents = Object.values(SERVICE_INTENTS).join(', ');
+
+// GUARDA DE LANZAMIENTO. Sin identidad del responsable el sitio no puede
+// publicarse, asi que el build publico falla acá en vez de dejar salir una
+// politica de privacidad legalmente incompleta.
+// En estado seguro no rompe nada: se sigue trabajando con normalidad.
+if (SITE_IS_PUBLIC && !hasPrivacyIdentity()) {
+  // El mensaje lista solo lo que falta de verdad. Un texto fijo obliga a
+  // revisar los tres campos aunque falte uno solo.
+  const faltantes = [
+    !PRIVACY_CONTROLLER.responsibleName.trim() &&
+      'PRIVACY_CONTROLLER.responsibleName  — persona humana o razon social',
+    !PRIVACY_CONTROLLER.responsibleAddress.trim() &&
+      'PRIVACY_CONTROLLER.responsibleAddress  — domicilio a publicar',
+    !CONTACT_EMAIL.forwardingVerified &&
+      `EMAIL_FORWARDING_UNVERIFIED — CONTACT_EMAIL.forwardingVerified. Probar que ${CONTACT_EMAIL.public} llega al buzon interno sin rebotar`,
+  ].filter(Boolean);
+
+  throw new Error(
+    [
+      'PRIVACY_CONTROLLER_IDENTITY_MISSING',
+      '',
+      'No se puede publicar sin identificar al responsable del tratamiento de',
+      'datos y sin un canal de contacto que funcione. Falta, en',
+      'src/data/navigation.ts:',
+      '',
+      ...faltantes.map((f) => '  ' + f),
+      '',
+      'Ver docs/PRIVACY.md.',
+    ].join(String.fromCharCode(10))
+  );
+}
+
+
+// Con identidad cargada se muestra completa. Sin ella se dice solo lo
+// verificable — nunca un marcador tipo "[COMPLETAR]" a la vista.
+const identidadCargada = hasPrivacyIdentity();
+const contactoPrivacidad = contactEmail();
+---
+
+<LegalLayout
+  title="Política de privacidad | digitAI Motor"
+  description="Qué datos recibe digitAI Motor cuando usás el formulario, cómo viajan por WhatsApp, qué guarda el navegador y con quién se comparten."
+  heading="Política de privacidad"
+  intro="Esta página describe qué pasa con tus datos en este sitio. Está escrita sobre el comportamiento real del código, no sobre una plantilla."
+  updated="agosto de 2026"
+  breadcrumbs={[{ label: 'Privacidad' }]}
+>
+  <h2>Quién trata tus datos</h2>
+  {
+    identidadCargada ? (
+      <p>
+        <strong>{PRIVACY_CONTROLLER.responsibleName}</strong>, que opera como{' '}
+        {SITE.legalName}, con domicilio en {PRIVACY_CONTROLLER.responsibleAddress}.
+      </p>
+    ) : (
+      <p>
+        <strong>{SITE.legalName}</strong>, con actividad en {SITE.locality},{' '}
+        {SITE.region}, {SITE.country}.
+      </p>
+    )
+  }
+  <p>
+    Para cualquier consulta sobre privacidad, escribinos a{' '}
+    <a href={`mailto:${contactoPrivacidad}`}>{contactoPrivacidad}</a>.
+  </p>
+
+  <h2>Qué datos recibimos</h2>
+  <p>
+    Solamente los que completás vos en el formulario de contacto. No hay
+    registro de usuarios, ni área privada, ni compra de bases de datos.
+  </p>
+  <ul>
+    <li><strong>Nombre</strong> — obligatorio, para poder responderte.</li>
+    <li><strong>Email o WhatsApp</strong> — obligatorio, es el canal de respuesta.</li>
+    <li><strong>Empresa</strong> y <strong>web</strong> — opcionales.</li>
+    <li><strong>Servicio de interés</strong> — una opción entre: {intents}.</li>
+    <li><strong>Contexto</strong> — opcional, el texto libre que quieras agregar.</li>
+  </ul>
+  <p>
+    Junto con eso viajan datos de origen: los parámetros UTM de la URL con la
+    que llegaste, la página desde la que abriste el formulario y el sitio que
+    te derivó, si lo hubo. Sirven para saber qué canal genera conversaciones.
+    No identifican a una persona por sí solos.
+  </p>
+
+  <h2>Cómo se entregan</h2>
+  <p>
+    El formulario <strong>no envía nada a un servidor nuestro</strong>. Al
+    completarlo, el sitio arma un mensaje con los datos que cargaste y abre
+    WhatsApp con ese texto ya escrito. El envío lo hacés vos desde WhatsApp: si
+    no apretás enviar, no recibimos nada.
+  </p>
+  <p>
+    Eso significa que la conversación queda sujeta a las condiciones de
+    WhatsApp, que es un servicio de Meta Platforms y no está bajo nuestro
+    control. Si preferís no usar WhatsApp, escribinos por email a
+    <a href={`mailto:${contactoPrivacidad}`}>{contactoPrivacidad}</a>.
+  </p>
+
+  <h2>Para qué los usamos</h2>
+  <p>
+    Para responderte y evaluar si podemos ayudarte. Nada más. No enviamos
+    newsletters, no armamos listas de difusión y no cedemos ni vendemos datos a
+    terceros.
+  </p>
+
+  <h2>Cuánto tiempo los conservamos</h2>
+  <p>
+    Las conversaciones quedan en la casilla de correo o en el WhatsApp desde el
+    que nos escribiste, mientras la consulta esté vigente o exista una relación
+    comercial. Podés pedirnos que las borremos cuando quieras.
+  </p>
+
+  <h2>Terceros que intervienen</h2>
+  <p>
+    El sitio, tal como está hoy, <strong>no carga ningún servicio de terceros</strong>:
+    no hay analítica, ni píxeles publicitarios, ni mapas embebidos, ni fuentes
+    externas. Las tipografías se sirven desde nuestro propio dominio.
+  </p>
+  <p>Los únicos terceros que pueden intervenir son:</p>
+  <ul>
+    <li>
+      <strong>WhatsApp (Meta Platforms)</strong> — solo si elegís continuar por
+      ese canal.
+    </li>
+    <li>
+      <strong>GitHub Pages</strong> — donde está alojado el sitio. Como
+      cualquier servidor web, procesa la petición para poder responderla.
+    </li>
+    <li>
+      <strong>LinkedIn</strong> — únicamente si hacés clic en el enlace al
+      perfil. No hay ningún widget ni script de LinkedIn cargado.
+    </li>
+  </ul>
+  <p>
+    Si en algún momento activamos analítica, actualizamos esta página y la de
+    <a href="/cookies/">almacenamiento</a> antes de hacerlo.
+  </p>
+
+  <h2>Qué guarda tu navegador</h2>
+  <p>
+    El sitio <strong>no usa cookies</strong>. Guarda cinco parámetros de origen
+    en el almacenamiento de sesión de tu navegador, que se borra al cerrar la
+    pestaña. El detalle está en <a href="/cookies/">almacenamiento del sitio</a>.
+  </p>
+
+  <h2>Tus derechos</h2>
+  <p>
+    Podés pedirnos acceso a los datos que tengamos tuyos, su corrección o su
+    eliminación. Escribinos a <a href={`mailto:${contactoPrivacidad}`}>{contactoPrivacidad}</a> y
+    te respondemos.
+  </p>
+  <p>
+    En Argentina, la Agencia de Acceso a la Información Pública es el organismo
+    de control en materia de protección de datos personales.
+  </p>
+
+  <h2>Cambios</h2>
+  <p>
+    Si cambiamos cómo funciona el formulario, agregamos analítica o incorporamos
+    un tercero, actualizamos esta página y su fecha.
+  </p>
+</LegalLayout>

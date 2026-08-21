@@ -1,0 +1,166 @@
+---
+import { FOOTER_NAV, SITE } from '../data/navigation';
+import BrandLockup from './BrandLockup.astro';
+
+const year = new Date().getFullYear();
+
+// href vacio = red social sin URL real todavia, se descarta.
+// pending = la ruta existe en la arquitectura pero la pagina no: se muestra
+// como texto inerte para no enlazar a un 404.
+const groups = FOOTER_NAV.map((group) => ({
+  ...group,
+  links: group.links.filter((link) => link.href !== ''),
+})).filter((group) => group.links.length > 0);
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <BrandLockup href="/" size={30} class="site-footer__lockup" />
+        <p class="site-footer__tagline">{SITE.descriptor}</p>
+      </div>
+
+      <div class="site-footer__nav">
+        {
+          groups.map((group) => (
+            <nav class="footer-group" aria-label={group.title}>
+              <p class="footer-group__title">{group.title}</p>
+              <ul class="footer-group__list" role="list">
+                {group.links.map((link) =>
+                  link.pending ? (
+                    <li>
+                      <span class="footer-group__link footer-group__link--pending">
+                        {link.label}
+                      </span>
+                    </li>
+                  ) : (
+                    <li>
+                      <a
+                        class="footer-group__link"
+                        href={link.href}
+                        {...(/^https?:\/\//.test(link.href)
+                          ? { target: '_blank', rel: 'noopener noreferrer' }
+                          : {})}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  )
+                )}
+              </ul>
+            </nav>
+          ))
+        }
+      </div>
+    </div>
+
+    <hr class="section-rule" />
+
+    <div class="site-footer__bottom">
+      <p class="site-footer__geo">
+        {SITE.locality} · {SITE.region} · {SITE.country}
+        <span class="site-footer__geo-sep" aria-hidden="true">—</span>
+        {SITE.coverage}
+      </p>
+      <p class="site-footer__legal">&copy; {year} {SITE.legalName}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: var(--space-xl) var(--space-md);
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+  }
+
+  .site-footer__top {
+    display: grid;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+
+
+
+  .site-footer__tagline {
+    margin-top: var(--space-xs);
+    max-width: 30ch;
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .site-footer__nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    gap: var(--space-lg);
+  }
+
+  .footer-group__title {
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .footer-group__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .footer-group__link {
+    display: inline-block;
+    /* Medido a 375px: 43px de alto, 47px de paso. Supera el minimo AA de
+       WCAG 2.5.8 (24px) y llega a la recomendacion de 44px. */
+    padding-block: 0.4375rem;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  /* Ruta prevista sin pagina todavia. Atenuada y sin cursor de enlace:
+     mejor que un href a 404 o a "#". */
+  .footer-group__link--pending {
+    color: var(--text-muted);
+    opacity: 0.75;
+    cursor: default;
+  }
+
+  a.footer-group__link:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    padding-top: var(--space-md);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  .site-footer__geo-sep {
+    margin-inline: var(--space-3xs);
+  }
+
+  @media (min-width: 48rem) {
+    .site-footer__top {
+      grid-template-columns: minmax(12rem, 1fr) 2.6fr;
+      gap: var(--space-xl);
+    }
+  }
+</style>

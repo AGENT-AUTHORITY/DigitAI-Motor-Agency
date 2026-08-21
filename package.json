@@ -1,0 +1,25 @@
+{
+  "name": "digitai-motor",
+  "type": "module",
+  "version": "2.0.0",
+  "private": true,
+  "description": "digitAI Motor — Performance & Growth Partner",
+  "engines": {
+    "node": ">=20.3.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "build:fast": "astro build",
+    "preview": "astro preview --host",
+    "check": "astro check",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/sitemap": "^3.6.0",
+    "astro": "^5.16.0",
+    "typescript": "^5.9.3"
+  }
+}

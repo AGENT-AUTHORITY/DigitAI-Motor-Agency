@@ -1,0 +1,155 @@
+---
+/**
+ * BuildCases — sistemas construidos, en formato problema → herramienta → uso.
+ *
+ * Regla de veracidad: se describe QUE se construyo y PARA QUE sirve. No hay
+ * nombres de clientes, ni adopcion, ni usuarios, ni revenue, ni resultados
+ * atribuidos. Lo unico afirmable es la construccion misma.
+ *
+ * Tres pasos y no una ficha de portfolio: el punto no es la herramienta,
+ * es el cuello de botella comercial que la justifico.
+ */
+export interface BuildCase {
+  /** Categoria tecnica corta. */
+  kind: string;
+  /** El cuello de botella de negocio. */
+  problem: string;
+  /** Lo que se construyo, en terminos concretos. */
+  tool: string;
+  /** Para que se usa comercialmente. */
+  use: string;
+  /** Piezas tecnicas reales del sistema. */
+  parts: string[];
+}
+
+export interface Props {
+  cases: BuildCase[];
+}
+
+const { cases } = Astro.props;
+
+const STEPS = [
+  { key: 'problem', label: 'Problema' },
+  { key: 'tool', label: 'Se construyó' },
+  { key: 'use', label: 'Uso comercial' },
+] as const;
+---
+
+<div class="bc">
+  {
+    cases.map((item, i) => (
+      <article class="bc__case" data-reveal data-reveal-delay={String((i % 3) + 1)}>
+        <p class="bc__kind">{item.kind}</p>
+
+        <ol class="bc__steps" role="list">
+          {STEPS.map((step) => (
+            <li class="bc__step">
+              <p class="bc__step-label">{step.label}</p>
+              <p class="bc__step-text">{item[step.key]}</p>
+            </li>
+          ))}
+        </ol>
+
+        <ul class="bc__parts" role="list">
+          {item.parts.map((part) => (
+            <li class="bc__part">{part}</li>
+          ))}
+        </ul>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .bc {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .bc__case {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-md);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+
+  .bc__kind {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .bc__steps {
+    display: grid;
+    gap: var(--space-sm);
+    margin: var(--space-sm) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* La flecha entre pasos es decorativa: el orden ya lo da el <ol> y cada
+     paso lleva su propio rotulo en texto. */
+  .bc__step + .bc__step {
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border);
+  }
+
+  .bc__step-label {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .bc__step-text {
+    margin-top: var(--space-3xs);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+  }
+
+  .bc__step:first-child .bc__step-text {
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-snug);
+    color: var(--text-primary);
+  }
+
+  .bc__parts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+    /* auto arriba: empuja las piezas al pie aunque las tarjetas tengan
+       alturas distintas. La separacion la da el padding, no el margen. */
+    margin: auto 0 0;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+    list-style: none;
+  }
+
+  .bc__part {
+    padding: 0.1875rem 0.4375rem;
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-muted);
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  @media (min-width: 48rem) {
+    .bc {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

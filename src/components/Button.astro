@@ -1,0 +1,118 @@
+---
+/**
+ * Button — renderiza <a> o <button> segun corresponda.
+ *
+ * Regla de accesibilidad: si navega, es un <a>. Si ejecuta una accion, es un
+ * <button>. Nada de <div onclick>. La eleccion la decide la presencia de href,
+ * no una prop de estilo.
+ *
+ * trackingEvent solo escribe data-track. El wiring a GA4/Meta llega en FASE 7:
+ * aca no se llama gtag ni fbq, y no hay ningun ID en el codigo.
+ */
+export interface Props {
+  label: string;
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  block?: boolean;
+  arrow?: boolean;
+  type?: 'button' | 'submit';
+  trackingEvent?: string;
+  trackingContext?: string;
+  external?: boolean;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  label,
+  href,
+  variant = 'primary',
+  size = 'md',
+  block = false,
+  arrow = false,
+  type = 'button',
+  trackingEvent,
+  trackingContext,
+  external = false,
+  class: className = '',
+  ariaLabel,
+} = Astro.props;
+
+const classes = [
+  'btn',
+  `btn--${variant}`,
+  size !== 'md' ? `btn--${size}` : '',
+  block ? 'btn--block' : '',
+  className,
+]
+  .filter(Boolean)
+  .join(' ');
+
+// Externo detectado por protocolo, no solo por la prop: evita olvidos.
+const isExternal = external || /^https?:\/\//.test(href ?? '');
+---
+
+{
+  href ? (
+    <a
+      class={classes}
+      href={href}
+      aria-label={ariaLabel}
+      data-track={trackingEvent}
+      data-track-context={trackingContext}
+      {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    >
+      {label}
+      {arrow && (
+        <svg
+          class="btn__arrow"
+          width="14"
+          height="14"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M3 8h10M9 4l4 4-4 4"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      )}
+      {isExternal && <span class="visually-hidden">(abre en una pestaña nueva)</span>}
+    </a>
+  ) : (
+    <button
+      class={classes}
+      type={type}
+      aria-label={ariaLabel}
+      data-track={trackingEvent}
+      data-track-context={trackingContext}
+    >
+      {label}
+      {arrow && (
+        <svg
+          class="btn__arrow"
+          width="14"
+          height="14"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M3 8h10M9 4l4 4-4 4"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      )}
+    </button>
+  )
+}
