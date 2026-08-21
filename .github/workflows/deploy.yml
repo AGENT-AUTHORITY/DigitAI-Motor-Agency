@@ -44,12 +44,54 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Las dos variables publicas viven en
+      #   Settings > Secrets and variables > Actions > Variables
+      # NO son secretos: por diseno viajan al HTML publicado.
+      #
+      # Se verifican ANTES de construir porque su ausencia no rompe el build:
+      # lo degrada en silencio. Sin PUBLIC_FORM_ENDPOINT el formulario vuelve a
+      # modo WhatsApp-only y los leads dejan de entregarse; sin PUBLIC_GA4_ID
+      # no hay medicion ni banner. Las dos fallas se publicarian sin un solo
+      # mensaje de error.
+      #
+      # Se pasan por env y no se interpolan dentro del script: un valor con
+      # metacaracteres de shell no puede inyectar comandos.
+      - name: Verify production variables
+        env:
+          FORM_ENDPOINT: ${{ vars.PUBLIC_FORM_ENDPOINT }}
+          GA4_ID: ${{ vars.PUBLIC_GA4_ID }}
+        run: |
+          test -n "$FORM_ENDPOINT" || { echo "::error::Falta la variable PUBLIC_FORM_ENDPOINT. Cargala en Settings > Secrets and variables > Actions > Variables. Sin ella el formulario se publica sin entrega."; exit 1; }
+          test -n "$GA4_ID" || { echo "::error::Falta la variable PUBLIC_GA4_ID. Cargala en Settings > Secrets and variables > Actions > Variables. Sin ella el sitio se publica sin medicion."; exit 1; }
+          echo "variables de produccion presentes"
+
       # `npm run build` corre `astro check && astro build`: el chequeo de tipos
       # es parte del build y frena el deploy si falla.
       - name: Build (produccion publica)
         run: npm run build
         env:
           PUBLIC_SITE_IS_PUBLIC: 'true'
+          PUBLIC_FORM_ENDPOINT: ${{ vars.PUBLIC_FORM_ENDPOINT }}
+          PUBLIC_GA4_ID: ${{ vars.PUBLIC_GA4_ID }}
+
+      # Presentes en el entorno no es lo mismo que presentes en el HTML: si el
+      # componente dejara de leerlas, el build seguiria pasando y el sitio
+      # saldria degradado igual. Se verifica el resultado, no la intencion.
+      - name: Verify variables reached the build
+        env:
+          FORM_ENDPOINT: ${{ vars.PUBLIC_FORM_ENDPOINT }}
+          GA4_ID: ${{ vars.PUBLIC_GA4_ID }}
+        run: |
+          grep -qF "$FORM_ENDPOINT" dist/index.html || { echo "::error::El endpoint del formulario no llego al HTML publicado."; exit 1; }
+          grep -qF "$GA4_ID" dist/index.html || { echo "::error::El ID de GA4 no llego al HTML publicado."; exit 1; }
+          grep -q 'data-consent-banner' dist/index.html || { echo "::error::Falta el banner de consentimiento y hay GA4 configurado."; exit 1; }
+          # `if` y no `&&`: con set -e un grep que no encuentra nada devuelve 1
+          # y abortaria el paso justo en el caso correcto.
+          if grep -q '<script[^>]*googletagmanager' dist/index.html; then
+            echo "::error::gtag.js se carga desde el HTML: eso saltea el consentimiento."
+            exit 1
+          fi
+          echo "endpoint y GA4 en el HTML · banner presente · gtag.js no se carga sin consentimiento"
 
       # Sin CNAME en dist/, GitHub Pages descarta el dominio custom y el sitio
       # pasa a responder en la URL de github.io.
