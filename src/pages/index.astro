@@ -53,6 +53,7 @@ const capabilities = [
     answer:
       'Compramos intención, no tráfico por comprar tráfico. Revisamos términos, segmentación, estructura y presupuesto contra lo que ocurre después del clic.',
     items: ['Google Ads', 'Meta Ads', 'Search', 'Remarketing', 'Auditoría de campañas'],
+    href: '/paid-media/',
   },
   {
     problem: '¿Llega el tráfico pero la página no cierra?',
@@ -60,6 +61,7 @@ const capabilities = [
     answer:
       'Más tráfico no arregla una experiencia que no convierte. Trabajamos oferta, mensaje, formulario, velocidad y flujo de contacto.',
     items: ['Landing pages', 'Oferta', 'Formularios', 'WhatsApp', 'Mobile UX', 'Flujo de leads'],
+    href: '/cro-landing-pages/',
   },
   {
     problem: '¿Entran leads pero no sabés cuáles terminaron vendiendo?',
@@ -67,6 +69,10 @@ const capabilities = [
     answer:
       'Un lead no es revenue. Conectamos la adquisición con el proceso comercial para poder leer qué campaña generó negocio y cuál solo generó contactos.',
     items: ['Tracking', 'Analytics', 'CRM', 'Atribución', 'Seguimiento', 'Automatización'],
+    // Revenue Systems no tiene pagina propia. ROUTES.md registra que
+    // /tracking-analytics/ "se cubre hoy dentro de Growth Audit": es el destino
+    // documentado, no una aproximacion inventada.
+    href: '/growth-audit/',
   },
   {
     problem: '¿El problema está fuera del Ads Manager?',
@@ -74,6 +80,7 @@ const capabilities = [
     answer:
       'Cuando la limitación es de infraestructura y no de campaña, construimos lo que falta en lugar de trabajar alrededor del problema.',
     items: ['Dashboards', 'Herramientas internas', 'APIs', 'CRMs', 'Automatización', 'AI workflows'],
+    href: '/growth-engineering/',
   },
 ];
 

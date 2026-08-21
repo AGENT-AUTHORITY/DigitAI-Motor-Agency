@@ -5,6 +5,8 @@ import CheckList from '../components/CheckList.astro';
 import CreativeFlow from '../components/CreativeFlow.astro';
 import FAQ from '../components/FAQ.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
+import PerformanceCreativeHero from '../components/PerformanceCreativeHero.astro';
+import Button from '../components/Button.astro';
 import { intentLink } from '../data/navigation';
 
 const research = [
@@ -63,8 +65,8 @@ const faqs = [
   title="Performance Creative y creative testing | digitAI Motor"
   description="Research, ángulos, conceptos, hooks y testing. Convertimos creatividad en hipótesis medibles y leemos qué merece iteración."
   eyebrow="Performance Creative"
-  heading="Tu próximo ganador puede estar escondido en los datos que ya tenés."
-  intro="Creative isn't decoration. It's performance. Investigamos clientes, mensajes, conceptos y resultados para convertir creatividad en hipótesis que se puedan leer contra una métrica."
+  heading="Tu próximo ganador puede estar escondido en lo que todavía no probaste."
+  intro="Research, ángulos, hooks y creative testing. Convertimos creatividad en hipótesis que se leen contra una métrica."
   breadcrumbs={[{ label: 'Performance Creative' }]}
   serviceType="Creative strategy"
   cta={{
@@ -75,10 +77,26 @@ const faqs = [
     secondary: { label: 'Ver Growth Audit', href: '/growth-audit/' },
   }}
 >
+  <div slot="hero-aside" class="pc-hero-aside">
+    {/* El micro-proceso (Research · Angles · Hooks · Creative testing) salio de
+        aca: repetia las etapas que CreativeFlow muestra completas un scroll mas
+        abajo. Su altura paga la del intro, que antes no se renderizaba. */}
+    <Button
+      label="Solicitar análisis creativo"
+      href={intentLink('performance_creative')}
+      size="lg"
+      arrow
+    />
+
+    <p class="pc-tagline">Creative isn't decoration. It's performance.</p>
+  </div>
+
+  <PerformanceCreativeHero slot="hero-visual" />
+
   <ServiceSection
     eyebrow="El sistema"
     title="De research a señal, y de señal a escala."
-    lead="Cada concepto entra como hipótesis, no como pieza terminada. El test decide si se aprende o se itera."
+    lead="Cada concepto entra como hipótesis. El test decide si se aprende o se itera."
     alt
     id="sistema"
   >
@@ -88,7 +106,7 @@ const faqs = [
   <ServiceSection
     eyebrow="Research"
     title="El ángulo no se inventa en una reunión."
-    lead="Sale de escuchar cómo el cliente describe su problema, no de cómo la empresa describe su producto."
+    lead="Sale del lenguaje real del cliente."
     id="research"
   >
     <CheckList items={research} />
@@ -97,7 +115,7 @@ const faqs = [
   <ServiceSection
     eyebrow="Testing"
     title="No probamos fondo rojo contra fondo azul."
-    lead="Primero se buscan señales sobre decisiones grandes. La optimización fina viene después, sobre lo que ya funcionó."
+    lead="Primero testeamos decisiones grandes: concepto, hook, mensaje, formato y oferta."
     alt
     id="testing"
   >
@@ -134,7 +152,29 @@ const faqs = [
 </ServiceLayout>
 
 <style>
+  .pc-hero-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: var(--space-lg);
+  }
+
+  .pc-tagline {
+    margin-top: var(--space-md);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-muted);
+  }
+
   .pc-related {
     margin-top: var(--space-xl);
+  }
+
+  @media (min-width: 64rem) {
+    .pc-hero-aside {
+      margin-top: var(--space-xl);
+    }
   }
 </style>

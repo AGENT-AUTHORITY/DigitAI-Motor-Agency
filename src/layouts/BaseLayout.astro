@@ -5,6 +5,7 @@ import '../styles/components.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Analytics from '../components/Analytics.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
 import { SITE_IS_PUBLIC } from '../../site.config.mjs';
 
 export interface Props {
@@ -122,6 +123,10 @@ const ogImageUrl = new URL(ogImage ?? OG_DEFAULT, site).href;
       <slot />
     </main>
     <Footer />
+
+    {/* Al final del DOM: no interrumpe la lectura ni compite por el foco con
+        la navegacion. Solo se renderiza si hay GA4 configurado. */}
+    <ConsentBanner />
 
     <script>
       // Reveal en scroll sin libreria. GSAP + ScrollTrigger de la V1 eran

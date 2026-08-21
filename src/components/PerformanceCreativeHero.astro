@@ -1,0 +1,303 @@
+---
+import { existsSync } from 'node:fs';
+
+/**
+ * PerformanceCreativeHero — la esfera iridiscente del hero.
+ *
+ * Los assets vienen ya recortados alrededor de la composicion util (600x700,
+ * sin barras ni marca de agua) y con el fondo negro integrado, asi que se usan
+ * de forma natural: sin sobredimension, sin recorte y sin mascara.
+ *
+ * Medido sobre el asset definitivo: la esfera y su halo llegan al 97% del
+ * ancho, asi que cualquier mascara radial le comeria el borde brillante. La
+ * integracion con el fondo se resuelve con mix-blend-mode en vez de recortar
+ * (el detalle esta junto a la regla).
+ *
+ * Sin marco, sin borde y sin radio de tarjeta: la esfera tiene que leerse como
+ * un objeto flotando sobre el fondo, no como una foto dentro de una caja.
+ */
+const POSTER = '/assets/performance-creative/hero-bubble-poster.webp';
+const VIDEO_WEBM = '/assets/performance-creative/hero-bubble.webm';
+const VIDEO_MP4 = '/assets/performance-creative/hero-bubble.mp4';
+
+const existe = (ruta: string) =>
+  existsSync(new URL('../../public' + ruta, import.meta.url));
+
+const hayPoster = existe(POSTER);
+const fuentes = [
+  { src: VIDEO_WEBM, type: 'video/webm' },
+  { src: VIDEO_MP4, type: 'video/mp4' },
+].filter((f) => existe(f.src));
+
+// Dimensiones reales del asset. Explicitas para reservar la caja antes de que
+// el archivo cargue: sin esto el layout salta y el CLS deja de ser 0.
+const MEDIO = { w: 600, h: 700 };
+---
+
+{
+  hayPoster && (
+    <figure class="pch">
+      {/* El espacio de prueba. Es lo unico que la pagina afirma y no muestra en
+          ningun lado: CreativeFlow da la cadena, Testing da los pares A/B e
+          Iteracion da el cross-format. Ninguno explica por que "lo que todavia
+          no probaste" es un territorio grande — que es literalmente el H1.
+
+          No hay cifras ni ganadores: son los ejes de variacion, que ya son
+          vocabulario aprobado. Lo que se lee es la multiplicacion. */}
+      <figcaption class="pch__space">
+        <p class="pch__space-label">El espacio de prueba</p>
+        <ul class="pch__axes" role="list">
+          <li><span class="pch__axis">Concepto</span><span class="pch__mult" aria-hidden="true">×</span></li>
+          <li><span class="pch__axis">Hook</span><span class="pch__mult" aria-hidden="true">×</span></li>
+          <li><span class="pch__axis">Formato</span><span class="pch__mult" aria-hidden="true">×</span></li>
+          <li><span class="pch__axis">Oferta</span></li>
+        </ul>
+        <p class="pch__space-note">
+          Cada eje multiplica lo que queda por probar. Por eso el ganador rara
+          vez es la variante que ya se probó.
+        </p>
+      </figcaption>
+
+      <div class="pch__stage">
+        {fuentes.length > 0 ? (
+          <video
+            class="pch__media"
+            data-pc-video
+            poster={POSTER}
+            width={MEDIO.w}
+            height={MEDIO.h}
+            muted
+            loop
+            playsinline
+            preload="none"
+            aria-hidden="true"
+          >
+            {fuentes.map((f) => (
+              <source data-src={f.src} type={f.type} />
+            ))}
+          </video>
+        ) : (
+          <img
+            class="pch__media"
+            src={POSTER}
+            width={MEDIO.w}
+            height={MEDIO.h}
+            alt="Superficie iridiscente abstracta con patrones fluidos"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+        )}
+      </div>
+    </figure>
+  )
+}
+
+<style>
+  .pch {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    /* El espacio de prueba se superpone sobre la esfera en vez de apilarse
+       debajo: la composicion gana contenido sin ganar un pixel de alto. */
+    position: relative;
+  }
+
+  .pch__space {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 1;
+    padding: var(--space-3xl) var(--space-sm) var(--space-sm);
+    /* Scrim hasta el fondo real de la pagina. Opaco donde efectivamente cae el
+       texto y recien despues se desvanece: asi el contraste no depende del
+       frame del video que toque estar en pantalla. */
+    background: linear-gradient(
+      to top,
+      var(--bg-primary) 0%,
+      var(--bg-primary) 42%,
+      color-mix(in srgb, var(--bg-primary) 80%, transparent) 68%,
+      transparent 100%
+    );
+  }
+
+  .pch__space-label {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .pch__axes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2xs);
+    margin: var(--space-2xs) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pch__axes li {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2xs);
+  }
+
+  .pch__axis {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+  }
+
+  /* El signo es el argumento: no son cuatro cosas, es su producto. */
+  .pch__mult {
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    font-weight: var(--weight-bold);
+    color: var(--accent);
+  }
+
+  .pch__space-note {
+    margin-top: var(--space-2xs);
+    max-width: 44ch;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+  }
+
+  .pch__stage {
+    /* La relacion sale del asset (600x700), no de un valor inventado: asi
+       `contain` no tiene que letterboxear nada y la esfera ocupa todo el
+       espacio reservado. */
+    aspect-ratio: 600 / 700;
+    inline-size: 100%;
+    max-inline-size: 26rem;
+  }
+
+  .pch__media {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    /* contain y no cover: la esfera nunca se deforma ni se recorta. */
+    object-fit: contain;
+
+    /* El asset tiene el fondo en negro puro y la pagina en #05070B. Son solo
+       siete niveles de luminancia, pero en la zona casi-negra el ojo los
+       distingue y se ve el rectangulo del archivo.
+
+       screen lo resuelve por matematica y no por recorte: screen(fondo, 0)
+       devuelve el fondo, asi que cada pixel negro del asset queda exactamente
+       del color de la pagina y el borde desaparece. Los pixeles brillantes de
+       la esfera se aclaran de forma inapreciable — screen(5, 200) da 201.
+
+       Es preferible a una mascara: la esfera llega al 97% del ancho y
+       cualquier desvanecido radial le comeria el borde brillante. */
+    mix-blend-mode: screen;
+  }
+
+  /* La esfera pasa a ser textura: el contenido del hero es el espacio de
+     prueba, no el objeto. Sigue aportando atmosfera y deja de competir.
+
+     El atenuado va sobre .pch__media y NO sobre .pch__stage: opacity en el
+     padre crea un grupo aislado y el mix-blend-mode del hijo deja de mezclarse
+     con el fondo de la pagina, con lo que reaparece el rectangulo negro del
+     archivo. Sobre el propio elemento mezclado eso no pasa. */
+  .pch__media {
+    opacity: 0.78;
+  }
+
+  /* Mobile: la esfera se desborda a proposito para sentirse grande. El
+     recorte que impide el scroll horizontal vive en .service-page. */
+  @media (max-width: 47.99rem) {
+    .pch {
+      inline-size: 112vw;
+      margin-inline: calc((112vw - 100%) / -2);
+    }
+
+    .pch__stage {
+      max-inline-size: none;
+    }
+
+    /* La caja se estira a los 112vw de la esfera, asi que el texto se saldria
+       del area visible. Se lo devuelve adentro con el desborde + el gutter. */
+    .pch__space {
+      padding-inline: calc(6vw + var(--gutter));
+    }
+  }
+
+  /* El asset deja aire propio arriba y abajo (17% y 14%); sin esta correccion
+     se lee como un hueco entre el copy y la esfera. */
+  @media (max-width: 63.99rem) {
+    .pch {
+      margin-block: calc(var(--space-lg) * -1);
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .pch__stage {
+      max-inline-size: 30rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .pch {
+      justify-content: flex-end;
+    }
+
+    .pch__stage {
+      /* Protagonista, no una miniatura al costado. */
+      inline-size: clamp(380px, 40vw, 620px);
+      max-inline-size: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Carga condicional del video.
+   *
+   * Las <source> vienen con data-src, no con src, y el <video> con
+   * preload="none": el navegador no pide un solo byte hasta que este script
+   * decide que corresponde. En mobile el video nunca se descarga, y sin JS
+   * queda el poster, que es atributo del propio <video>.
+   *
+   * No se carga si:
+   *  - el viewport es de mobile (<= 768px, el poster alcanza)
+   *  - el usuario pidio menos movimiento
+   *  - la conexion declara ahorro de datos o 2g
+   */
+  const video = document.querySelector<HTMLVideoElement>('[data-pc-video]');
+
+  if (video) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const desktop = window.matchMedia('(min-width: 769px)').matches;
+    const conn = (navigator as any).connection;
+    const stingy = Boolean(conn?.saveData) || /2g/.test(conn?.effectiveType ?? '');
+
+    if (desktop && !reduced && !stingy) {
+      // Se promueve UNA sola fuente. Dejar las dos y confiar en el navegador
+      // alcanza casi siempre, pero si el primer formato falla al decodificar
+      // se descarga el segundo encima. Eligiendo nosotros, nunca hay dos
+      // descargas.
+      const sources = [...video.querySelectorAll<HTMLSourceElement>('source[data-src]')];
+      const chosen =
+        sources.find((el) => video.canPlayType(el.getAttribute('type') ?? '') !== '') ??
+        sources[sources.length - 1];
+
+      sources.forEach((el) => {
+        if (el !== chosen) el.remove();
+      });
+      if (chosen) chosen.src = chosen.dataset.src ?? '';
+
+      video.load();
+      // play() puede rechazar si el navegador bloquea autoplay. Se ignora a
+      // proposito: el poster ya esta en pantalla y no hay nada que reparar.
+      video.play().catch(() => {});
+    }
+  }
+</script>

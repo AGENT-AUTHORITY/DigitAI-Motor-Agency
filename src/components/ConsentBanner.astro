@@ -1,0 +1,136 @@
+---
+import { CONSENT_FN, CONSENT_KEY } from '../lib/analytics';
+
+/**
+ * ConsentBanner — decision de analitica.
+ *
+ * NO SE RENDERIZA sin `PUBLIC_GA4_ID`. Un banner que pide permiso para algo
+ * que no existe es decorado, y `/cookies/` argumenta exactamente eso.
+ *
+ * No es un modal: no bloquea la pagina ni atrapa el foco. Nada del sitio
+ * depende de la decision, asi que interrumpir seria desproporcionado. Aparece
+ * al final del DOM, se anuncia como region y se puede ignorar.
+ *
+ * Sale del HTML con `hidden` puesto y solo se muestra si no hay decision
+ * previa: quien ya eligio no lo vuelve a ver, y quien tiene JS desactivado
+ * nunca lo ve — tampoco carga GA4, asi que no hay nada que consentir.
+ */
+const GA4_ID = import.meta.env.PUBLIC_GA4_ID?.trim() || '';
+const analyticsEnabled = Boolean(GA4_ID);
+---
+
+{
+  analyticsEnabled && (
+    <div
+      class="consent"
+      id="consent-banner"
+      role="region"
+      aria-label="Analítica del sitio"
+      hidden
+      data-consent-banner
+    >
+      <div class="consent__inner">
+        <p class="consent__copy">
+          Usamos Google Analytics para entender qué contenido sirve. Sin tu
+          permiso no se carga nada ni se guarda ninguna cookie.{' '}
+          <a href="/cookies/">Qué guardamos</a>.
+        </p>
+
+        <div class="consent__actions">
+          <button class="btn btn--secondary" type="button" data-consent="denied">
+            Rechazar
+          </button>
+          <button class="btn btn--primary" type="button" data-consent="granted">
+            Aceptar
+          </button>
+        </div>
+      </div>
+
+      {/* Dentro del condicional a proposito: sin GA4 no hay banner, y tampoco
+          tiene que viajar el script que lo maneja. Afuera se enviaba a las 12
+          paginas para no hacer nada. */}
+      <script is:inline define:vars={{ CONSENT_FN, CONSENT_KEY }}>
+        (function () {
+          var banner = document.querySelector('[data-consent-banner]');
+          if (!banner) return;
+
+          var decision = null;
+          try {
+            decision = window.localStorage.getItem(CONSENT_KEY);
+          } catch (e) {
+            decision = null;
+          }
+
+          // Solo se muestra sin decision previa. Un valor invalido cuenta como
+          // "sin decidir": se vuelve a preguntar antes que asumir permiso.
+          if (decision === 'granted' || decision === 'denied') return;
+          banner.hidden = false;
+
+          banner.addEventListener('click', function (ev) {
+            var b = ev.target.closest('[data-consent]');
+            if (!b) return;
+            var valor = b.getAttribute('data-consent');
+            if (typeof window[CONSENT_FN] === 'function') window[CONSENT_FN](valor);
+            banner.hidden = true;
+          });
+        })();
+      </script>
+    </div>
+  )
+}
+
+<style>
+  .consent {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: var(--z-header);
+    padding: var(--space-2xs) var(--gutter) calc(var(--space-2xs) + env(safe-area-inset-bottom));
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .consent[hidden] {
+    display: none;
+  }
+
+  .consent__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    max-inline-size: var(--container-max);
+    margin-inline: auto;
+  }
+
+  .consent__copy {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+  }
+
+  .consent__actions {
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .consent__actions .btn {
+    flex: 1 1 auto;
+  }
+
+  @media (min-width: 48rem) {
+    .consent {
+      padding-block: var(--space-xs);
+    }
+
+    .consent__inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    .consent__actions .btn {
+      flex: none;
+    }
+  }
+</style>

@@ -16,6 +16,16 @@ import { contactEmail } from '../data/navigation';
 // distintos para lo mismo.
 const contactoPrivacidad = contactEmail();
 
+/**
+ * Esta pagina describe el estado REAL del sitio, no una intencion.
+ *
+ * Con `PUBLIC_GA4_ID` cargado hay analitica, banner y cookies de Google tras
+ * la aceptacion; sin el no hay nada de eso. Derivarlo de la misma variable que
+ * usan Analytics.astro y ConsentBanner.astro hace imposible que la pagina
+ * afirme una cosa y el sitio haga otra.
+ */
+const analyticsEnabled = Boolean(import.meta.env.PUBLIC_GA4_ID?.trim());
+
 const STORAGE = [
   { key: 'utm_source', purpose: 'De qué canal llegó la visita (por ejemplo google, meta)' },
   { key: 'utm_medium', purpose: 'Qué tipo de tráfico fue (por ejemplo cpc, organic)' },
@@ -27,18 +37,48 @@ const STORAGE = [
 
 <LegalLayout
   title="Almacenamiento del sitio | digitAI Motor"
-  description="Este sitio no usa cookies. Guarda cinco parámetros de origen en el almacenamiento de sesión del navegador, que se borra al cerrar la pestaña."
+  description={
+    analyticsEnabled
+      ? 'Qué guarda este sitio en tu navegador: parámetros de origen en el almacenamiento de sesión y, solo si lo aceptás, la cookie de Google Analytics.'
+      : 'Este sitio no usa cookies. Guarda cinco parámetros de origen en el almacenamiento de sesión del navegador, que se borra al cerrar la pestaña.'
+  }
   heading="Almacenamiento del sitio"
   intro="Qué guarda este sitio en tu navegador, dónde lo guarda y por cuánto tiempo. Con los nombres técnicos correctos."
   updated="agosto de 2026"
   breadcrumbs={[{ label: 'Almacenamiento' }]}
 >
-  <h2>Este sitio no usa cookies</h2>
-  <p>
-    Ni propias ni de terceros. No hay cookies de sesión, ni de publicidad, ni de
-    analítica. Por eso <strong>no vas a ver un banner de cookies</strong>: un
-    aviso para aceptar algo que no existe sería puro decorado.
-  </p>
+  {
+    analyticsEnabled ? (
+      <>
+        <h2>Cookies: solo si las aceptás</h2>
+        <p>
+          El sitio no escribe ninguna cookie por su cuenta. La única que puede
+          aparecer es la de <strong>Google Analytics</strong>, y solo después de
+          que aprietes <strong>Aceptar</strong> en el aviso de abajo.
+        </p>
+        <p>
+          Mientras no aceptes —o si rechazás— <strong>no se carga el script de
+          Google, no sale ninguna petición hacia sus servidores y no se escribe
+          ninguna cookie</strong>. No es una preferencia que se respeta después
+          de cargar: directamente no se carga.
+        </p>
+        <p>
+          Tu decisión se guarda en el almacenamiento local del navegador, con la
+          clave <code>dm_consent</code>. Para volver a elegir, borrá los datos
+          del sitio desde la configuración del navegador.
+        </p>
+      </>
+    ) : (
+      <>
+        <h2>Este sitio no usa cookies</h2>
+        <p>
+          Ni propias ni de terceros. No hay cookies de sesión, ni de publicidad,
+          ni de analítica. Por eso <strong>no vas a ver un banner de cookies</strong>:
+          un aviso para aceptar algo que no existe sería puro decorado.
+        </p>
+      </>
+    )
+  }
 
   <h2>Lo que sí guarda: almacenamiento de sesión</h2>
   <p>
@@ -100,17 +140,43 @@ const STORAGE = [
   </p>
 
   <h2>Analítica</h2>
-  <p>
-    Hoy el sitio <strong>no tiene analítica activa</strong>. No carga Google
-    Analytics, ni Tag Manager, ni el píxel de Meta, ni ninguna herramienta de
-    medición. Podés comprobarlo mirando las peticiones de red: no hay ninguna
-    hacia un dominio de terceros.
-  </p>
-  <p>
-    Si más adelante activamos analítica, actualizamos esta página, la
-    <a href="/privacy/">política de privacidad</a> y resolvemos el
-    consentimiento que corresponda <em>antes</em> de que cargue nada.
-  </p>
+  {
+    analyticsEnabled ? (
+      <>
+        <p>
+          Usamos <strong>Google Analytics 4</strong> para entender qué páginas
+          se leen y qué contenido sirve. No usamos Tag Manager, ni el píxel de
+          Meta, ni ninguna otra herramienta de medición.
+        </p>
+        <p>
+          Qué registramos: páginas vistas, el origen de la visita (los mismos
+          parámetros UTM de la tabla de arriba) y un puñado de acciones
+          concretas — enviar el formulario, que la consulta se entregue
+          correctamente y los clics hacia WhatsApp. <strong>No enviamos a Google
+          lo que escribís en el formulario</strong>: ni tu nombre, ni tu email,
+          ni tu teléfono, ni el texto de tu consulta. Eso viaja únicamente al
+          servicio que entrega el mensaje.
+        </p>
+        <p>
+          Nada de esto ocurre sin tu aceptación previa.
+        </p>
+      </>
+    ) : (
+      <>
+        <p>
+          Hoy el sitio <strong>no tiene analítica activa</strong>. No carga
+          Google Analytics, ni Tag Manager, ni el píxel de Meta, ni ninguna
+          herramienta de medición. Podés comprobarlo mirando las peticiones de
+          red: no hay ninguna hacia un dominio de terceros.
+        </p>
+        <p>
+          Si más adelante activamos analítica, actualizamos esta página, la
+          <a href="/privacy/">política de privacidad</a> y resolvemos el
+          consentimiento que corresponda <em>antes</em> de que cargue nada.
+        </p>
+      </>
+    )
+  }
 
   <h2>Consultas</h2>
   <p>

@@ -47,6 +47,10 @@ const {
   cta,
 } = Astro.props;
 
+// Astro.slots.has() se resuelve en build: sin slot, no se emite ni la clase
+// ni el contenedor del visual.
+const tieneVisual = Astro.slots.has('hero-visual');
+
 const site = Astro.site ?? new URL('https://www.digitaimotor.lat');
 const canonical = new URL(canonicalPath ?? Astro.url.pathname, site).href;
 
@@ -80,12 +84,37 @@ const serviceSchema = {
   schema={[serviceSchema]}
 >
   <div class="service-page">
-    <div class="container service-page__head">
+    <div
+      class:list={['container', 'service-page__head', { 'service-page__head--visual': tieneVisual }]}
+    >
       <Breadcrumbs items={breadcrumbs} />
 
-      <p class="eyebrow eyebrow--dot service-page__eyebrow">{eyebrow}</p>
-      <h1 class="service-page__title">{heading}</h1>
-      <p class="service-page__intro">{intro}</p>
+      {
+        tieneVisual ? (
+          <>
+            <div class="service-page__hero-copy">
+              <p class="eyebrow eyebrow--dot service-page__eyebrow">{eyebrow}</p>
+              <h1 class="service-page__title">{heading}</h1>
+              {/* `intro` se renderizaba SOLO en la rama sin visual, asi que una
+                  pagina con hero-visual pasaba la prop y perdia la frase que
+                  explica el servicio. Era una regresion silenciosa frente a las
+                  otras siete service pages, y le habria pasado a cualquier
+                  pagina futura con visual. */}
+              <p class="service-page__intro service-page__intro--visual">{intro}</p>
+              <slot name="hero-aside" />
+            </div>
+            <div class="service-page__hero-visual">
+              <slot name="hero-visual" />
+            </div>
+          </>
+        ) : (
+          <>
+            <p class="eyebrow eyebrow--dot service-page__eyebrow">{eyebrow}</p>
+            <h1 class="service-page__title">{heading}</h1>
+            <p class="service-page__intro">{intro}</p>
+          </>
+        )
+      }
     </div>
 
     <slot />
@@ -104,6 +133,16 @@ const serviceSchema = {
 </BaseLayout>
 
 <style>
+  /* El hero con visual deja que la imagen se desborde a proposito en mobile
+     para sentirse grande. El desborde se recorta aca, que es el unico ancestro
+     con el ancho completo de la pagina.
+     clip y no hidden: hidden crearia un contenedor de scroll y romperia
+     cualquier position:sticky descendiente. Donde nada se desborda, esto no
+     hace nada. */
+  .service-page {
+    overflow-x: clip;
+  }
+
   .service-page__head {
     display: flex;
     flex-direction: column;
@@ -128,4 +167,65 @@ const serviceSchema = {
     line-height: var(--leading-relaxed);
     color: var(--text-secondary);
   }
+
+  /* Variante editorial: copy a la izquierda, visual a la derecha. Se activa
+     solo cuando la pagina pasa el slot hero-visual. Sin altura fija: el hero
+     respira pero no ocupa la pantalla entera. */
+  .service-page__head--visual {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-lg);
+    align-items: center;
+    padding-block: var(--space-lg) var(--space-section);
+  }
+
+  .service-page__head--visual .service-page__eyebrow {
+    margin-top: var(--space-md);
+  }
+
+  .service-page__head--visual .service-page__title {
+    /* Mas chico que la variante textual: a 60px el titular ocupaba cinco
+       lineas y no dejaba aire para el visual. */
+    font-size: clamp(2.25rem, 1.5rem + 2.2vw, 3.125rem);
+    max-width: 15ch;
+    margin-bottom: 0;
+  }
+
+  .service-page__hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* En mobile el visual va al final, despues del CTA. */
+    order: 1;
+  }
+
+  /* Mas corta que en la variante textual: comparte ancho con el visual. */
+  .service-page__intro--visual {
+    margin-top: var(--space-sm);
+    max-width: 42ch;
+    font-size: var(--text-base);
+  }
+
+  .service-page__hero-visual {
+    order: 2;
+    min-width: 0;
+  }
+
+  /* El breadcrumb ocupa el ancho completo, no una de las dos columnas. */
+  .service-page__head--visual > :global(nav) {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 64rem) {
+    .service-page__head--visual {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: var(--space-xl);
+      padding-block: var(--space-xl) var(--space-section);
+    }
+
+    .service-page__head--visual .service-page__title {
+      max-width: 13ch;
+    }
+  }
+
 </style>

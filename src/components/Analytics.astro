@@ -1,46 +1,120 @@
 ---
-import { TRACK_FN } from '../lib/analytics';
+import { TRACK_FN, CONSENT_FN, CONSENT_KEY, EVENTS } from '../lib/analytics';
 
 /**
  * Analytics — punto unico de inyeccion.
  *
- * Sin ID configurado no se emite NINGUN script y no sale ningun request a
- * terceros. La pagina queda exactamente igual que si el componente no
- * existiera.
+ * DOS COMPUERTAS, ambas obligatorias:
  *
- * `window.dmTrack(evento, params)` se define siempre, incluso deshabilitado:
- * asi los llamadores no necesitan saber si hay tracking activo ni envolver
- * cada llamada en un condicional.
+ *   1. Sin `PUBLIC_GA4_ID` no se emite NADA. La pagina queda exactamente igual
+ *      que si el componente no existiera. Es el fail-safe original.
+ *   2. Con ID pero sin consentimiento explicito tampoco se carga nada: ni el
+ *      script de Google, ni una cookie, ni un request a un tercero.
+ *
+ * `/cookies/` prometio por escrito resolver el consentimiento "antes de que
+ * cargue nada". Esto es esa promesa implementada: gtag.js se inyecta recien
+ * dentro de `cargarGA4()`, que solo corre con la decision ya tomada.
+ *
+ * COLA: los eventos disparados antes de la decision no se pierden ni se envian.
+ * Quedan en memoria y se vuelcan si la persona acepta; se descartan si rechaza.
+ * Sin esto, un lead entregado mientras el banner sigue en pantalla no se
+ * mediria nunca — que es justo el evento que mas importa.
  */
 const GA4_ID = import.meta.env.PUBLIC_GA4_ID?.trim() || '';
-
-// Sin consentimiento no se carga nada de GA4. Hoy no hay banner porque no hay
-// analytics activo — y un banner sin nada que consentir es decorado. Cuando
-// exista un ID real hay que decidir e implementar el consentimiento ANTES de
-// desplegarlo. Ver docs/PRIVACY.md.
 const analyticsEnabled = Boolean(GA4_ID);
+
+const EV_WHATSAPP_CLICK = EVENTS.WHATSAPP_CLICK;
 ---
 
-<script is:inline define:vars={{ TRACK_FN, analyticsEnabled }}>
-  // Se define siempre. Deshabilitado, es un no-op: cero costo, cero requests.
-  window[TRACK_FN] = function (event, params) {
-    if (!analyticsEnabled) return;
-    if (typeof window.gtag !== 'function') return;
-    window.gtag('event', event, params || {});
-  };
-</script>
+<script
+  is:inline
+  define:vars={{ TRACK_FN, CONSENT_FN, CONSENT_KEY, GA4_ID, analyticsEnabled, EV_WHATSAPP_CLICK }}
+>
+  (function () {
+    var cola = [];
+    var cargado = false;
+    var decision = null;
 
-{
-  analyticsEnabled && (
-    <>
-      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`} />
-      <script is:inline define:vars={{ GA4_ID }}>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { window.dataLayer.push(arguments); }
-        window.gtag = gtag;
-        gtag('js', new Date());
-        gtag('config', GA4_ID);
-      </script>
-    </>
-  )
-}
+    // localStorage puede lanzar (modo privado, cookies de sitio bloqueadas).
+    // Si no se puede leer, se trata como "sin decision" y el banner vuelve a
+    // preguntar: nunca se asume consentimiento.
+    try {
+      decision = window.localStorage.getItem(CONSENT_KEY);
+    } catch (e) {
+      decision = null;
+    }
+
+    function cargarGA4() {
+      if (cargado || !analyticsEnabled) return;
+      cargado = true;
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () {
+        window.dataLayer.push(arguments);
+      };
+      window.gtag('js', new Date());
+      // Los UTM de la URL los lee GA4 solo en el page_view; no hay que
+      // pasarlos a mano. Los del formulario viajan ademas como parametros del
+      // evento de conversion, para que el lead quede atribuido aunque la
+      // persona haya navegado entre medio.
+      window.gtag('config', GA4_ID);
+
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID;
+      document.head.appendChild(s);
+
+      // Vuelca lo acumulado antes de la aceptacion.
+      var pendientes = cola.splice(0, cola.length);
+      for (var i = 0; i < pendientes.length; i++) {
+        window.gtag('event', pendientes[i][0], pendientes[i][1]);
+      }
+    }
+
+    // Se define SIEMPRE, incluso deshabilitado: los llamadores no tienen que
+    // saber si hay tracking activo ni envolver cada llamada en un condicional.
+    window[TRACK_FN] = function (evento, params) {
+      if (!analyticsEnabled) return;
+      if (decision !== 'granted') {
+        cola.push([evento, params || {}]);
+        return;
+      }
+      if (!cargado) cargarGA4();
+      window.gtag('event', evento, params || {});
+    };
+
+    // La invoca el banner. Es la unica via por la que se puede pasar a
+    // 'granted': no hay ningun camino que cargue GA4 sin decision explicita.
+    window[CONSENT_FN] = function (valor) {
+      decision = valor;
+      try {
+        window.localStorage.setItem(CONSENT_KEY, valor);
+      } catch (e) {
+        /* sin persistencia se vuelve a preguntar en la proxima visita */
+      }
+      if (valor === 'granted') cargarGA4();
+      else cola.length = 0;
+      document.dispatchEvent(new CustomEvent('dm:consent', { detail: valor }));
+    };
+
+    if (decision === 'granted') cargarGA4();
+
+    // Clics a WhatsApp, por delegacion: cubre footer, nav movil y los enlaces
+    // de recuperacion del formulario sin que ninguno de esos componentes tenga
+    // que saber que existe analitica. Los que se agreguen despues entran solos.
+    document.addEventListener('click', function (ev) {
+      var t = ev.target;
+      if (!t || !t.closest) return;
+      var a = t.closest('a[href*="wa.me"]');
+      if (!a) return;
+      var lugar = a.closest('footer')
+        ? 'footer'
+        : a.closest('header')
+          ? 'nav'
+          : a.closest('form')
+            ? 'formulario'
+            : 'pagina';
+      window[TRACK_FN](EV_WHATSAPP_CLICK, { link_location: lugar });
+    });
+  })();
+</script>

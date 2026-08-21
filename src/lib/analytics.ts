@@ -19,21 +19,43 @@ export const EVENTS = {
   CONTACT_FORM_COMPLETED: 'contact_form_completed',
   /** El sitio abrio o preparo la conversacion de WhatsApp. NO es un lead. */
   WHATSAPP_HANDOFF_STARTED: 'whatsapp_handoff_started',
+  /** Clic en un enlace directo a WhatsApp (footer, nav movil, recuperacion). */
+  WHATSAPP_CLICK: 'whatsapp_click',
+  /**
+   * CONVERSION. El endpoint confirmo recepcion con 2xx.
+   *
+   * Este es el unico evento que significa "hay un lead". Se dispara despues de
+   * la respuesta del POST, nunca en el submit ni en el handoff de WhatsApp.
+   */
+  LEAD_DELIVERED: 'generate_lead',
+  /** El POST fallo. Sirve para enterarse de que la entrega se rompio. */
+  LEAD_DELIVERY_FAILED: 'lead_delivery_failed',
 } as const;
 
 export type AnalyticsEvent = (typeof EVENTS)[keyof typeof EVENTS];
 
 /**
- * RESERVADO — no usar todavia.
+ * `generate_lead` ya no esta reservado.
  *
- * `generate_lead` queda disponible para cuando exista evidencia real de
- * recepcion: backend propio, webhook, alta en CRM o confirmacion equivalente.
- * Mientras la unica entrega sea el handoff de WhatsApp, no hay nada que
- * confirme que el mensaje llego.
+ * La condicion que pedia este archivo —evidencia real de recepcion— existe
+ * desde que el formulario entrega por `PUBLIC_FORM_ENDPOINT` y el evento se
+ * dispara unicamente cuando la respuesta es 2xx. Sigue estando PROHIBIDO
+ * dispararlo en el submit o en el handoff de WhatsApp: ninguno de los dos
+ * confirma que el mensaje llego a ningun lado.
  *
  * Ver docs/ANALYTICS.md, seccion "Lead confirmado".
  */
-export const RESERVED_LEAD_EVENT = 'generate_lead' as const;
 
 /** Nombre de la funcion global que exponen los inline scripts. */
 export const TRACK_FN = 'dmTrack';
+
+/** Nombre de la funcion global que registra la decision de consentimiento. */
+export const CONSENT_FN = 'dmConsent';
+
+/**
+ * Clave de localStorage con la decision. Valores: 'granted' | 'denied'.
+ *
+ * localStorage y no cookie: la decision es del navegador y no necesita viajar
+ * al servidor. Un sitio estatico no tiene servidor que la lea.
+ */
+export const CONSENT_KEY = 'dm_consent';

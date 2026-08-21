@@ -90,31 +90,27 @@ const headingId = id ? `${id}-title` : 'cta-title';
     gap: var(--space-sm);
   }
 
+  /* Cierre a linea, no a tarjeta.
+     Antes: superficie + borde de 1px + sombra ancha + halo radial azul. Cuatro
+     declaraciones de elevacion sobre el mismo objeto, en el bloque que cierra
+     las nueve paginas del sitio — y la firma visual mas generica que tenia.
+     Ahora la elevacion se declara una sola vez, con la misma hairline y el
+     mismo segmento de acento que ordenan las capacidades y los rieles.
+     Ademas ahorra ~4rem de alto por pagina. */
   .cta-section--panel .cta-section__inner {
     position: relative;
-    padding: var(--space-xl) var(--space-md);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--highlight-top);
-    overflow: hidden;
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border);
   }
 
-  /* Halo azul en la esquina superior derecha. Da direccion al bloque sin
-     recurrir a un blob centrado. */
   .cta-section--panel .cta-section__inner::before {
     content: '';
     position: absolute;
-    inset-block-start: -60%;
-    inset-inline-end: -20%;
-    inline-size: 34rem;
-    block-size: 34rem;
-    background: radial-gradient(
-      circle,
-      rgba(35, 136, 255, 0.14),
-      transparent 62%
-    );
-    pointer-events: none;
+    inset-block-start: -1px;
+    inset-inline-start: 0;
+    inline-size: 4.5rem;
+    block-size: 2px;
+    background: var(--accent);
   }
 
   .cta-section__inner > * {
@@ -155,7 +151,7 @@ const headingId = id ? `${id}-title` : 'cta-title';
 
   @media (min-width: 48rem) {
     .cta-section--panel .cta-section__inner {
-      padding: var(--space-2xl) var(--space-2xl);
+      padding-top: var(--space-xl);
     }
   }
 </style>

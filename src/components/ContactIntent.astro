@@ -12,19 +12,36 @@ const CONTACT_MAIL = SITE.email;
 const EV_INTENT = EVENTS.SERVICE_INTENT_SELECTED;
 const EV_FORM = EVENTS.CONTACT_FORM_COMPLETED;
 const EV_HANDOFF = EVENTS.WHATSAPP_HANDOFF_STARTED;
+const EV_LEAD = EVENTS.LEAD_DELIVERED;
+const EV_LEAD_FAIL = EVENTS.LEAD_DELIVERY_FAILED;
+
+/**
+ * Endpoint de entrega. Vacio = el formulario sigue funcionando exactamente
+ * como antes (solo handoff a WhatsApp) y no sale ningun request: mismo
+ * fail-safe que usa Analytics.astro con el ID de GA4.
+ *
+ * Con endpoint configurado, la entrega deja de depender de que la persona
+ * apriete enviar en WhatsApp. Los datos llegan igual.
+ */
+const FORM_ENDPOINT = import.meta.env.PUBLIC_FORM_ENDPOINT?.trim() || '';
 
 /**
  * ContactIntent — bloque de conversion final.
  *
- * FORM DELIVERY PENDING. No hay backend.
+ * ENTREGA: depende de `PUBLIC_FORM_ENDPOINT`.
  *
- * Decision: en vez de fingir un "enviado" que no existe, el submit valida y
- * entrega los datos por un canal REAL (WhatsApp prellenado, con mailto de
- * respaldo). El mensaje de estado dice literalmente lo que pasó. No se muestra
- * ninguna confirmacion de envio que no corresponda a un envio.
+ *   Con endpoint  -> los datos se envian por POST y quedan registrados aunque
+ *                    la persona nunca mande el mensaje de WhatsApp. WhatsApp
+ *                    pasa a ser la continuacion de la conversacion.
+ *   Sin endpoint  -> comportamiento anterior: unicamente handoff a WhatsApp.
  *
- * Cuando exista endpoint: reemplazar handoff() por el POST y conservar la
- * validacion, los hidden de UTM y los estados de error.
+ * REGLA QUE NO CAMBIA: el estado dice literalmente lo que paso. Nunca se
+ * muestra "recibimos tus datos" si el POST no confirmo, ni "enviado" si no se
+ * envio a ningun lado.
+ *
+ * El POST se dispara ANTES de `window.open` pero no se espera: abrir la
+ * ventana tiene que ocurrir dentro del mismo gesto del usuario o el navegador
+ * la bloquea.
  */
 const OPTIONS = [
   ...Object.entries(SERVICE_INTENTS).map(([value, label]) => ({ value, label })),
@@ -381,6 +398,14 @@ const OPTIONS = [
     border-radius: var(--radius-sm);
   }
 
+  /* Un fallo de entrega no puede leerse igual que una confirmacion: el estado
+     cambia de superficie, no solo de texto. Va DESPUES de .contact__status:
+     misma especificidad, asi que el orden es lo unico que decide cual gana. */
+  .contact__status--error {
+    background: rgba(239, 100, 97, 0.12);
+    border-color: rgba(239, 100, 97, 0.34);
+  }
+
   @media (min-width: 34rem) {
     .contact__form {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -400,7 +425,7 @@ const OPTIONS = [
   }
 </style>
 
-<script is:inline define:vars={{ WHATSAPP_NUMBER, TRACK_FN, EV_INTENT, EV_FORM, EV_HANDOFF, CONTACT_MAIL }}>
+<script is:inline define:vars={{ WHATSAPP_NUMBER, TRACK_FN, EV_INTENT, EV_FORM, EV_HANDOFF, EV_LEAD, EV_LEAD_FAIL, CONTACT_MAIL, FORM_ENDPOINT }}>
   const form = document.querySelector('#growth-audit-form');
   if (form) {
     const status = form.querySelector('[data-form-status]');
@@ -512,12 +537,50 @@ const OPTIONS = [
       return firstInvalid;
     };
 
-    form.addEventListener('submit', (event) => {
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const labelOriginal = submitBtn ? submitBtn.textContent : '';
+    let enviando = false;
+
+    const setEnviando = (activo) => {
+      enviando = activo;
+      if (!submitBtn) return;
+      submitBtn.disabled = activo;
+      submitBtn.textContent = activo ? 'Enviando…' : labelOriginal;
+      form.setAttribute('aria-busy', activo ? 'true' : 'false');
+    };
+
+    /**
+     * POST al endpoint. Devuelve true/false; nunca lanza, porque el llamador
+     * necesita distinguir "fallo" de "no habia endpoint" y no puede quedarse
+     * sin renderizar estado por una excepcion de red.
+     *
+     * Se manda todo lo que el formulario ya tiene —incluidos los hidden de UTM
+     * y cualquier campo que agregue el servicio elegido, como el access_key de
+     * Web3Forms— mas el mensaje ya armado y legible.
+     */
+    const entregar = async (data, message) => {
+      try {
+        const payload = Object.fromEntries(data.entries());
+        payload.message = message;
+        const res = await fetch(FORM_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        return res.ok;
+      } catch (e) {
+        return false;
+      }
+    };
+
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
+      if (enviando) return;
+
       const invalid = validate();
       if (invalid) {
         invalid.focus();
-        status.textContent = '';
+        status.replaceChildren();
         return;
       }
 
@@ -551,6 +614,14 @@ const OPTIONS = [
         .join('\n');
 
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+      setEnviando(true);
+
+      // La entrega arranca ANTES de abrir la ventana, pero no se espera todavia:
+      // window.open tiene que ejecutarse dentro del mismo gesto del usuario o el
+      // navegador lo bloquea. fetch() no cede el hilo, asi que las dos lineas
+      // siguen siendo el mismo turno sincronico.
+      const entrega = FORM_ENDPOINT ? entregar(data, message) : null;
       const opened = window.open(url, '_blank', 'noopener,noreferrer');
 
       // Significa "el sitio preparo la conversacion", nunca "lead confirmado":
@@ -560,62 +631,136 @@ const OPTIONS = [
         opened: Boolean(opened),
       });
 
-      status.replaceChildren();
+      // null = no habia endpoint configurado. Es distinto de false, que es un
+      // intento de entrega que fallo, y se comunica distinto.
+      const entregado = entrega ? await entrega : null;
 
-      if (opened) {
-        status.textContent =
-          'Abrimos WhatsApp con tus datos cargados. Todavía falta que envíes el mensaje desde ahí.';
+      // CONVERSION. Se dispara aca y en ningun otro lado: es el unico punto del
+      // codigo donde consta que el endpoint respondio 2xx. Ni el submit ni el
+      // handoff de WhatsApp prueban que el mensaje haya llegado.
+      if (entregado === true) {
+        track(EV_LEAD, {
+          intent: data.get('interest'),
+          // Los UTM viajan con la conversion para que el lead quede atribuido
+          // aunque la persona haya navegado entre la landing y el envio.
+          utm_source: data.get('utm_source') || '',
+          utm_medium: data.get('utm_medium') || '',
+          utm_campaign: data.get('utm_campaign') || '',
+          utm_content: data.get('utm_content') || '',
+          utm_term: data.get('utm_term') || '',
+          landing_page: data.get('landing_page') || '',
+        });
+      } else if (entregado === false) {
+        // No es una conversion: es una alarma. Si la entrega se rompe, tiene
+        // que verse en GA4 y no descubrirse por leads que nunca llegaron.
+        track(EV_LEAD_FAIL, { intent: data.get('interest') });
+      }
+
+      setEnviando(false);
+
+      // --- Acciones de recuperacion ---------------------------------------
+      // Se arman a demanda segun lo que haga falta ofrecer. Con los datos ya
+      // registrados no tiene sentido empujar un mailto: la entrega ocurrio.
+      const accionWhatsApp = () => {
+        const a = document.createElement('a');
+        a.className = 'btn btn--primary btn--sm';
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = 'Abrir WhatsApp';
+        return a;
+      };
+
+      const accionEmail = () => {
+        const a = document.createElement('a');
+        a.className = 'btn btn--secondary btn--sm';
+        a.href = `mailto:${CONTACT_MAIL}?subject=${encodeURIComponent(
+          'Solicitud de diagnóstico de crecimiento'
+        )}&body=${encodeURIComponent(message)}`;
+        a.textContent = 'Enviar por email';
+        return a;
+      };
+
+      const accionCopiar = () => {
+        const b = document.createElement('button');
+        b.className = 'btn btn--ghost btn--sm';
+        b.type = 'button';
+        b.textContent = 'Copiar mensaje';
+        b.addEventListener('click', () => {
+          // navigator.clipboard no existe fuera de contexto seguro. Sin esta
+          // guarda, `?.writeText()` devuelve undefined y el .then() rompe.
+          const copied = navigator.clipboard && navigator.clipboard.writeText(message);
+          if (!copied) {
+            b.textContent = 'No se pudo copiar';
+            return;
+          }
+          copied.then(
+            () => {
+              b.textContent = 'Copiado';
+            },
+            () => {
+              b.textContent = 'No se pudo copiar';
+            }
+          );
+        });
+        return b;
+      };
+
+      const mostrar = (texto, acciones, esError) => {
+        status.replaceChildren();
+        status.classList.toggle('contact__status--error', Boolean(esError));
+        status.append(texto);
+        if (!acciones.length) return;
+        const box = document.createElement('div');
+        box.className = 'contact__recovery';
+        box.append(...acciones);
+        status.append(box);
+      };
+
+      // --- Matriz de estados ----------------------------------------------
+      // Dos ejes independientes: si la entrega quedo registrada y si WhatsApp
+      // llego a abrirse. Nunca se afirma recepcion sin confirmacion del POST.
+      if (entregado === true) {
+        if (opened) {
+          mostrar(
+            'Recibimos tus datos. Abrimos WhatsApp para que sigas la conversación ahí.',
+            [],
+            false
+          );
+        } else {
+          mostrar(
+            'Recibimos tus datos. El navegador bloqueó la ventana de WhatsApp, pero tu mensaje ya está registrado.',
+            [accionWhatsApp()],
+            false
+          );
+        }
         return;
       }
 
-      // Popup bloqueado. Antes esto terminaba en un texto con una direccion no
-      // clickeable: los datos escritos y ninguna forma de mandarlos. Ahora se
-      // ofrecen las tres salidas reales, con el mensaje ya armado.
-      status.append(
-        'El navegador bloqueó la ventana de WhatsApp. Tenés tu mensaje listo acá:'
-      );
-
-      const recovery = document.createElement('div');
-      recovery.className = 'contact__recovery';
-
-      const waLink = document.createElement('a');
-      waLink.className = 'btn btn--primary btn--sm';
-      waLink.href = url;
-      waLink.target = '_blank';
-      waLink.rel = 'noopener noreferrer';
-      waLink.textContent = 'Abrir WhatsApp';
-
-      const mailLink = document.createElement('a');
-      mailLink.className = 'btn btn--secondary btn--sm';
-      mailLink.href = `mailto:${CONTACT_MAIL}?subject=${encodeURIComponent(
-        'Solicitud de diagnóstico de crecimiento'
-      )}&body=${encodeURIComponent(message)}`;
-      mailLink.textContent = 'Enviar por email';
-
-      const copyBtn = document.createElement('button');
-      copyBtn.className = 'btn btn--ghost btn--sm';
-      copyBtn.type = 'button';
-      copyBtn.textContent = 'Copiar mensaje';
-      copyBtn.addEventListener('click', () => {
-        // navigator.clipboard no existe fuera de contexto seguro. Sin esta
-        // guarda, `?.writeText()` devuelve undefined y el .then() rompe.
-        const copied = navigator.clipboard && navigator.clipboard.writeText(message);
-        if (!copied) {
-          copyBtn.textContent = 'No se pudo copiar';
-          return;
-        }
-        copied.then(
-          () => {
-            copyBtn.textContent = 'Copiado';
-          },
-          () => {
-            copyBtn.textContent = 'No se pudo copiar';
-          }
+      if (entregado === false) {
+        mostrar(
+          'No pudimos registrar el envío. Tu mensaje está listo: mandalo por WhatsApp o por email y te respondemos igual.',
+          [accionWhatsApp(), accionEmail(), accionCopiar()],
+          true
         );
-      });
+        return;
+      }
 
-      recovery.append(waLink, mailLink, copyBtn);
-      status.append(recovery);
+      // Sin endpoint configurado: comportamiento original, sin cambios.
+      if (opened) {
+        mostrar(
+          'Abrimos WhatsApp con tus datos cargados. Todavía falta que envíes el mensaje desde ahí.',
+          [],
+          false
+        );
+        return;
+      }
+
+      mostrar(
+        'El navegador bloqueó la ventana de WhatsApp. Tenés tu mensaje listo acá:',
+        [accionWhatsApp(), accionEmail(), accionCopiar()],
+        false
+      );
     });
 
     // Limpia el error del campo apenas el usuario corrige.

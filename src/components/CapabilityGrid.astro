@@ -15,6 +15,16 @@ export interface Capability {
   title: string;
   answer: string;
   items: string[];
+  /**
+   * Destino de la disciplina. Opcional a proposito: una fila sin pagina propia
+   * queda como texto y no inventa un destino aproximado.
+   *
+   * El titulo era el unico elemento con afordancia de la fila —el guion que se
+   * extiende en hover— y no llevaba a ningun lado. Convertirlo en enlace le da
+   * salida al bloque sin agregar una linea: el momento de maxima intencion de
+   * la home era tambien el unico sin paso siguiente.
+   */
+  href?: string;
 }
 
 export interface Props {
@@ -31,7 +41,15 @@ const { capabilities } = Astro.props;
         <p class="cap__problem">{cap.problem}</p>
 
         <div class="cap__answer">
-          <h3 class="cap__title">{cap.title}</h3>
+          <h3 class="cap__heading">
+            {cap.href ? (
+              <a class="cap__title cap__title--link" href={cap.href}>
+                {cap.title}
+              </a>
+            ) : (
+              <span class="cap__title">{cap.title}</span>
+            )}
+          </h3>
           <p class="cap__copy">{cap.answer}</p>
           <ul class="cap__items" role="list">
             {cap.items.map((item) => (
@@ -75,6 +93,17 @@ const { capabilities } = Astro.props;
     gap: var(--space-2xs);
   }
 
+  /* El h3 conserva la semantica; el enlace vive adentro para no convertir un
+     encabezado entero en area clickeable. */
+  .cap__heading {
+    margin: 0;
+    /* Hereda del hijo, no del contexto: sin esto el h3 arma una caja de linea
+       de 1rem alrededor de un titulo de 12px y la fila crece sin motivo. */
+    font-size: var(--text-xs);
+    font-weight: inherit;
+    line-height: 1;
+  }
+
   .cap__title {
     display: inline-flex;
     align-items: center;
@@ -85,6 +114,27 @@ const { capabilities } = Astro.props;
     letter-spacing: var(--tracking-eyebrow);
     text-transform: uppercase;
     color: var(--accent);
+  }
+
+  /* El subrayado se dibuja con box-shadow y no con border ni text-decoration:
+     border sumaria 1px de alto a cada fila y text-decoration queda pegada a las
+     mayusculas con este tracking. box-shadow no ocupa layout. */
+  .cap__title--link {
+    text-decoration: none;
+    box-shadow: 0 1px 0 transparent;
+    transition: box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  .cap:hover .cap__title--link,
+  .cap__title--link:hover,
+  .cap__title--link:focus-visible {
+    box-shadow: 0 1px 0 var(--accent);
+  }
+
+  .cap__title--link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: var(--radius-xs);
   }
 
   /* Guion que ancla la capacidad a la pregunta. Reemplaza al icono generico.
