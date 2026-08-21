@@ -45,9 +45,26 @@ const OPTIONS = [
         adquisición, creatividad, conversión, medición o proceso comercial,
         empezamos por ahí.
       </p>
-      <p class="contact__aside">
+      <p class="contact__promise">
         Primero diagnosticamos. Después cotizamos.
       </p>
+
+      {/* Responde la pregunta que bloquea el envio y que el bloque no
+          contestaba en ninguna parte: que pasa despues de apretar el boton.
+          Sin plazo de respuesta: no se promete un tiempo que no este
+          comprometido. */}
+      <div class="contact__next">
+        <p class="contact__next-label">Qué pasa después</p>
+        <ol class="contact__steps">
+          <li>Nos contás qué está fallando. La conversación sigue por WhatsApp.</li>
+          <li>Lo lee y responde Oscar Chinchilla.</li>
+          <li>Si tiene sentido avanzar, coordinamos el diagnóstico.</li>
+        </ol>
+        <p class="contact__readonly">
+          El diagnóstico es lectura sobre cuentas, analytics y CRM.
+          <strong>Sin tocar nada.</strong>
+        </p>
+      </div>
     </div>
 
     <form class="contact__form surface surface--lg" id="growth-audit-form" novalidate>
@@ -58,7 +75,9 @@ const OPTIONS = [
       </div>
 
       <div class="field">
-        <label class="field__label" for="cf-company">Empresa</label>
+        <label class="field__label" for="cf-company">
+          Empresa <span class="field__optional">(opcional)</span>
+        </label>
         <input class="field__input" id="cf-company" name="company" type="text" autocomplete="organization" />
       </div>
 
@@ -69,7 +88,9 @@ const OPTIONS = [
       </div>
 
       <div class="field">
-        <label class="field__label" for="cf-site">Web</label>
+        <label class="field__label" for="cf-site">
+          Web <span class="field__optional">(opcional)</span>
+        </label>
         <input class="field__input" id="cf-site" name="website" type="text" inputmode="url" placeholder="tuempresa.com" />
       </div>
 
@@ -96,9 +117,17 @@ const OPTIONS = [
       <input type="hidden" name="landing_page" />
 
       <div class="contact__actions">
+        {/* El submit abre WhatsApp. Anunciarlo ANTES del click y no despues:
+            un salto a otra aplicacion sin aviso se lee como redireccion no
+            pedida, justo en el momento de mayor desconfianza. */}
+        <p class="contact__handoff" id="cf-handoff">
+          Al enviar se abre WhatsApp con tus datos ya cargados. El mensaje lo
+          mandás vos.
+        </p>
         <button
           class="btn btn--primary btn--lg btn--block"
           type="submit"
+          aria-describedby="cf-handoff"
           data-track="form_submit"
           data-track-context="growth_audit"
         >
@@ -152,14 +181,83 @@ const OPTIONS = [
     color: var(--text-secondary);
   }
 
-  .contact__aside {
-    margin-top: var(--space-md);
+  /* Inversion de peso deliberada. Esta frase es el argumento comercial que
+     separa a digitAI Motor de una agencia que cotiza antes de mirar, y estaba
+     tipografiada como nota al pie: 14px en --text-muted. Ahora es el elemento
+     fuerte de la columna, por debajo del H2 y por encima de todo lo demas. */
+  .contact__promise {
+    margin-top: var(--space-lg);
     padding-top: var(--space-md);
     border-top: 1px solid var(--border);
+    max-width: 22ch;
     font-family: var(--font-heading);
-    font-size: var(--text-sm);
+    font-size: var(--text-xl);
     font-weight: var(--weight-bold);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+  }
+
+  .contact__next {
+    margin-top: var(--space-md);
+  }
+
+  .contact__next-label {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
     color: var(--text-muted);
+  }
+
+  /* Los numeros los pone el contador y no un ::marker nativo: asi el digito
+     toma la tipografia de titulos y el color de acento sin depender de como
+     cada navegador estilice la lista. */
+  .contact__steps {
+    counter-reset: step;
+    display: grid;
+    gap: var(--space-2xs);
+    margin: var(--space-2xs) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .contact__steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 1.25rem 1fr;
+    gap: var(--space-2xs);
+    max-width: 44ch;
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+  }
+
+  .contact__steps li::before {
+    content: counter(step);
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.6;
+    color: var(--accent);
+  }
+
+  .contact__readonly {
+    margin-top: var(--space-sm);
+    padding: var(--space-2xs) var(--space-xs);
+    max-width: 44ch;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+    background: var(--accent-soft);
+    border-radius: var(--radius-sm);
+  }
+
+  .contact__readonly strong {
+    color: var(--text-primary);
+    font-weight: var(--weight-bold);
   }
 
   .contact__form {
@@ -247,8 +345,30 @@ const OPTIONS = [
     margin-top: var(--space-2xs);
   }
 
+  /* --text-secondary y no --text-muted: es una advertencia sobre lo que va a
+     pasar al hacer click, no una nota al margen. */
+  .contact__handoff {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+  }
+
   .contact__status:empty {
     display: none;
+  }
+
+  /* Salida real cuando el navegador bloquea el popup. Antes el mensaje era
+     texto plano con una direccion no clickeable: la persona quedaba con los
+     datos escritos y sin ninguna via de envio. */
+  .contact__recovery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    margin-top: var(--space-2xs);
+  }
+
+  .contact__recovery .btn {
+    flex: 1 1 auto;
   }
 
   .contact__status {
@@ -369,7 +489,12 @@ const OPTIONS = [
       const contact = form.querySelector('#cf-contact');
       const value = contact.value.trim();
       const looksEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
-      const looksPhone = /^[+()\d\s-]{7,}$/.test(value);
+      // Contar DIGITOS, no caracteres: el patron anterior media largo total,
+      // asi que "1234567" pasaba y entraba un lead irrecuperable. 8 a 15 es el
+      // rango de E.164 descontando el minimo nacional mas corto.
+      const digits = value.replace(/\D/g, '');
+      const looksPhone =
+        /^[+()\d\s-]+$/.test(value) && digits.length >= 8 && digits.length <= 15;
       if (!value) {
         setError(contact, 'Dejanos un email o un WhatsApp.');
         firstInvalid = firstInvalid || contact;
@@ -435,9 +560,62 @@ const OPTIONS = [
         opened: Boolean(opened),
       });
 
-      status.textContent = opened
-        ? 'Abrimos WhatsApp con tus datos cargados. Todavía falta que envíes el mensaje desde ahí.'
-        : `No pudimos abrir WhatsApp. Escribinos a ${CONTACT_MAIL} y te respondemos.`;
+      status.replaceChildren();
+
+      if (opened) {
+        status.textContent =
+          'Abrimos WhatsApp con tus datos cargados. Todavía falta que envíes el mensaje desde ahí.';
+        return;
+      }
+
+      // Popup bloqueado. Antes esto terminaba en un texto con una direccion no
+      // clickeable: los datos escritos y ninguna forma de mandarlos. Ahora se
+      // ofrecen las tres salidas reales, con el mensaje ya armado.
+      status.append(
+        'El navegador bloqueó la ventana de WhatsApp. Tenés tu mensaje listo acá:'
+      );
+
+      const recovery = document.createElement('div');
+      recovery.className = 'contact__recovery';
+
+      const waLink = document.createElement('a');
+      waLink.className = 'btn btn--primary btn--sm';
+      waLink.href = url;
+      waLink.target = '_blank';
+      waLink.rel = 'noopener noreferrer';
+      waLink.textContent = 'Abrir WhatsApp';
+
+      const mailLink = document.createElement('a');
+      mailLink.className = 'btn btn--secondary btn--sm';
+      mailLink.href = `mailto:${CONTACT_MAIL}?subject=${encodeURIComponent(
+        'Solicitud de diagnóstico de crecimiento'
+      )}&body=${encodeURIComponent(message)}`;
+      mailLink.textContent = 'Enviar por email';
+
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'btn btn--ghost btn--sm';
+      copyBtn.type = 'button';
+      copyBtn.textContent = 'Copiar mensaje';
+      copyBtn.addEventListener('click', () => {
+        // navigator.clipboard no existe fuera de contexto seguro. Sin esta
+        // guarda, `?.writeText()` devuelve undefined y el .then() rompe.
+        const copied = navigator.clipboard && navigator.clipboard.writeText(message);
+        if (!copied) {
+          copyBtn.textContent = 'No se pudo copiar';
+          return;
+        }
+        copied.then(
+          () => {
+            copyBtn.textContent = 'Copiado';
+          },
+          () => {
+            copyBtn.textContent = 'No se pudo copiar';
+          }
+        );
+      });
+
+      recovery.append(waLink, mailLink, copyBtn);
+      status.append(recovery);
     });
 
     // Limpia el error del campo apenas el usuario corrige.

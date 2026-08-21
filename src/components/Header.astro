@@ -1,5 +1,12 @@
 ---
-import { MAIN_NAV, NAV_CTA, SERVICES_MENU, isActivePath } from '../data/navigation';
+import {
+  MAIN_NAV,
+  NAV_CTA,
+  SERVICES_MENU,
+  WHATSAPP_DEFAULT_MESSAGE,
+  isActivePath,
+  whatsappLink,
+} from '../data/navigation';
 import Button from './Button.astro';
 import BrandLockup from './BrandLockup.astro';
 import NavMenu from './NavMenu.astro';
@@ -100,7 +107,23 @@ const pathname = Astro.url.pathname;
         </div>
       ))
     }
-    <Button label={NAV_CTA.label} href={NAV_CTA.href} block arrow />
+    {/* Las dos acciones van juntas y con su propio ritmo: son un par, no dos
+        bloques mas del panel. El gap del panel las separaria igual que a los
+        grupos de navegacion. */}
+    <div class="mobile-nav__actions">
+      <Button label={NAV_CTA.label} href={NAV_CTA.href} block arrow />
+
+      {/* En mobile el CTA del header esta oculto y la unica accion persistente
+          era la hamburguesa. WhatsApp es el canal que hoy funciona de verdad:
+          aca queda alcanzable sin recorrer la pagina entera hasta el footer. */}
+      <Button
+        label="Escribir por WhatsApp"
+        href={whatsappLink(WHATSAPP_DEFAULT_MESSAGE)}
+        variant="secondary"
+        block
+        external
+      />
+    </div>
   </div>
 </header>
 
@@ -274,6 +297,11 @@ const pathname = Astro.url.pathname;
   .mobile-nav__link--sub {
     font-size: var(--text-base);
     font-weight: var(--weight-semibold);
+  }
+
+  .mobile-nav__actions {
+    display: grid;
+    gap: var(--space-2xs);
   }
 
   @media (min-width: 60rem) {

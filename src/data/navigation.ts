@@ -26,6 +26,17 @@ export const WHATSAPP_NUMBER = '5492226638044';
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/oechinbott/';
 
 /**
+ * Mensaje con el que abre WhatsApp cuando la persona entra por un enlace
+ * directo (footer, nav movil) y no por el formulario.
+ *
+ * Deliberadamente neutro: abre la conversacion sin ponerle palabras en la boca
+ * ni declarar un problema que la persona todavia no describio. El formulario
+ * arma su propio mensaje, con los datos ya cargados.
+ */
+export const WHATSAPP_DEFAULT_MESSAGE =
+  'Hola, quiero consultar por un diagnóstico de crecimiento.';
+
+/**
  * Canal de contacto publico.
  *
  * Arquitectura elegida:
@@ -215,6 +226,11 @@ export const FOOTER_NAV: NavGroup[] = [
     title: 'Contacto',
     links: [
       { label: 'Solicitar diagnóstico', href: ANCHORS.growthAudit },
+      // Canal real de contacto de hoy. Estaba solo como consecuencia del
+      // submit del formulario: quien queria escribir directamente no tenia
+      // por donde. `whatsappLink` es una declaracion de funcion, asi que
+      // esta hoisteada y se puede usar aca aunque se defina mas abajo.
+      { label: 'WhatsApp', href: whatsappLink(WHATSAPP_DEFAULT_MESSAGE) },
       { label: 'LinkedIn', href: LINKEDIN_URL },
     ],
   },
