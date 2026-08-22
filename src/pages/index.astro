@@ -306,9 +306,13 @@ const serviceSchema = {
             context: 'analizadas en una semana',
           },
           {
-            value: '23%',
-            label: 'Del presupuesto semanal',
-            context: 'detectado en búsquedas sin conversión',
+            // 23,1% y no 23%: es el mismo dato con un decimal mas, derivado de
+            // los montos auditados (45.918 / 198.622 = 0,2312). Los importes ya
+            // no se publican, asi que el porcentaje es ahora la unica forma en
+            // que ese hallazgo llega al lector.
+            value: '23,1%',
+            label: 'Del presupuesto analizado',
+            context: 'detectado en términos de búsqueda sin conversión',
             status: 'attention',
           },
           {
@@ -341,7 +345,7 @@ const serviceSchema = {
           'Corrección del modelo de atribución',
         ]}
         closing="Performance también consiste en saber qué dejar de pagar."
-        traceability="Datos de trazabilidad · Google Ads 16–22 jul 2026 · ARS 198.622 de inversión analizada · ARS 45.918 identificados en términos sin conversión."
+        traceability="Caso real · Google Ads · 16–22 jul 2026 · Datos anonimizados."
       />   </div>
   </section>
 
