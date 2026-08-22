@@ -76,8 +76,17 @@ const faqs = [
         context="y sin conversiones registradas"
         status="attention"
       />
-      <MetricCard value="ARS 45.918" label="Inversión semanal" context="concentrada en esos términos" />
-      <MetricCard value="23%" label="Del presupuesto semanal" context="analizado en el período" status="attention" />
+      {/* Eran dos tarjetas: el importe absoluto (ARS 45.918) y su proporcion
+          (23%). El importe sale de la presentacion publica, y como la
+          proporcion ya estaba, conservar ambas habria dejado 23% y 23,1% en
+          pantalla al mismo tiempo: dos cifras distintas para el mismo dato.
+          Queda una sola, con la precision real (45.918 / 198.622 = 0,2312). */}
+      <MetricCard
+        value="23,1%"
+        label="Del presupuesto analizado"
+        context="detectado en términos de búsqueda sin conversión"
+        status="attention"
+      />
     </div>
     <p class="source-note ga-note">
       Período 16 al 22 de julio de 2026. Datos provenientes de una cuenta
@@ -139,8 +148,10 @@ const faqs = [
   }
 
   @media (min-width: 48rem) {
+    /* Dos columnas y no tres: quedaron dos tarjetas al retirar el importe
+       absoluto. Con repeat(3) la tercera columna quedaba vacia. */
     .ga-metrics {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: var(--space-md);
     }
   }
