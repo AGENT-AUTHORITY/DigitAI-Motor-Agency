@@ -1,6 +1,7 @@
 ---
 import ServiceLayout from '../layouts/ServiceLayout.astro';
 import ServiceSection from '../components/ServiceSection.astro';
+import ServiceHeroVideo from '../components/ServiceHeroVideo.astro';
 import GrowthFlow from '../components/GrowthFlow.astro';
 import CheckList from '../components/CheckList.astro';
 import FAQ from '../components/FAQ.astro';
@@ -60,16 +61,29 @@ const faqs = [
   title="Gestión de Meta Ads y Facebook Ads | digitAI Motor"
   description="Meta Ads conectado con oportunidades reales: creativos, públicos, eventos de conversión, Pixel y calidad de lead leída contra el CRM."
   eyebrow="Meta Ads"
-  heading="Meta Ads conectado con oportunidades reales."
-  intro="En Meta la demanda no busca: hay que crearla. Eso vuelve al creativo la variable principal y a la calidad de lead el número que importa. Trabajamos ambas cosas contra lo que registra el CRM, no contra el panel de la plataforma."
+  heading="Meta aprende de las señales que le devolvés."
+  intro="Conectamos audiencia, creatividad, eventos y conversión para mejorar la calidad de la señal."
   breadcrumbs={[{ label: 'Paid Media', href: '/paid-media/' }, { label: 'Meta Ads' }]}
   serviceType="Meta Ads management"
   cta={{
-    title: 'Veamos qué está entrando por Meta y cuánto de eso califica.',
-    primary: { label: 'Solicitar diagnóstico de crecimiento', href: intentLink('meta_ads') },
+    title: 'Encontramos dónde se rompe. Después lo arreglamos.',
+    micro: "Diagnose. Test. Improve. Scale.",
+    primary: { label: 'Revisar Meta Ads', href: intentLink('meta_ads') },
     secondary: { label: 'Ver Performance Creative', href: '/performance-creative/' },
   }}
 >
+  <p slot="hero-micro" class="hero-micro">Creative → signal → learning → conversion.</p>
+
+  <ServiceHeroVideo
+    slot="hero-visual"
+    videoSrc="/assets/service-heroes/Meta-ads.mp4"
+    posterSrc="/assets/service-heroes/meta-ads.webp"
+    objectPosition="center 48%"
+    brightness={0.86}
+    saturation={0.85}
+    contrast={1.08}
+  />
+
   <ServiceSection eyebrow="Alcance" title="Sobre qué trabajamos." alt id="alcance">
     <CheckList items={alcance} />
   </ServiceSection>

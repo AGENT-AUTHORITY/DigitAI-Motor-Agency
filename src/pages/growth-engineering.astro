@@ -1,6 +1,7 @@
 ---
 import ServiceLayout from '../layouts/ServiceLayout.astro';
 import ServiceSection from '../components/ServiceSection.astro';
+import ServiceHeroVideo from '../components/ServiceHeroVideo.astro';
 import GrowthFlow from '../components/GrowthFlow.astro';
 import CapabilityGrid from '../components/CapabilityGrid.astro';
 import ConnectionGap from '../components/ConnectionGap.astro';
@@ -167,18 +168,29 @@ const faqs = [
   title="Growth Engineering | Dashboards, CRM y APIs | digitAI Motor"
   description="Cuando el cuello de botella está fuera del Ads Manager, construimos lo que falta: dashboards, CRM, routing, integraciones y automatización."
   eyebrow="Growth Engineering"
-  heading="Cuando el problema está fuera de Ads Manager, construimos lo que falta."
-  intro="La tecnología existe acá para resolver un cuello de botella de crecimiento. No construimos software por construir software: si el problema se resuelve sin desarrollar nada, esa es la recomendación."
+  heading="Si falta una conexión, la construimos."
+  intro="Conectamos adquisición, web, CRM, automatización y ventas cuando el cuello de botella ya no está dentro de Ads Manager."
   breadcrumbs={[{ label: 'Growth Engineering' }]}
   serviceType="Custom software development"
   cta={{
-    title: 'Tengo algo para construir.',
-    description:
-      'Contanos qué parte del recorrido comercial se está resolviendo a mano, o directamente no se está resolviendo.',
-    primary: { label: 'Tengo algo para construir', href: intentLink('growth_engineering') },
+    title: 'Encontramos dónde se rompe. Después lo arreglamos.',
+    micro: "Diagnose. Test. Improve. Scale.",
+    primary: { label: 'Revisar sistema', href: intentLink('growth_engineering') },
     secondary: { label: 'Primero quiero diagnosticar el problema', href: '/growth-audit/' },
   }}
 >
+  <p slot="hero-micro" class="hero-micro">Build the missing link.</p>
+
+  <ServiceHeroVideo
+    slot="hero-visual"
+    videoSrc="/assets/service-heroes/Growth-Engiering-hero.mp4"
+    posterSrc="/assets/service-heroes/growth-engineering.webp"
+    objectPosition="center 50%"
+    brightness={0.88}
+    saturation={0.85}
+    contrast={1.06}
+  />
+
   <ServiceSection
     eyebrow="La cadena"
     title="Cuando una pieza falta, la construimos."

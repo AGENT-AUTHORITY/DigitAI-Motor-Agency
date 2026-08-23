@@ -1,6 +1,7 @@
 ---
 import ServiceLayout from '../layouts/ServiceLayout.astro';
 import ServiceSection from '../components/ServiceSection.astro';
+import ServiceHeroVideo from '../components/ServiceHeroVideo.astro';
 import CheckList from '../components/CheckList.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import FAQ from '../components/FAQ.astro';
@@ -67,16 +68,29 @@ const faqs = [
   title="Performance Marketing y Paid Media | digitAI Motor"
   description="Google Ads, Meta Ads y adquisición pagada conectados con landing, medición y proceso comercial. Compramos intención, no volumen."
   eyebrow="Paid Media"
-  heading="Compramos intención, no tráfico por comprar tráfico."
-  intro="La adquisición pagada solo rinde cuando se lee junto con lo que pasa después del clic. Trabajamos campañas, presupuesto y creativos con la landing, la medición y el seguimiento comercial en la misma mesa."
+  heading="No se trata de gastar más. Se trata de saber dónde dejar de gastar."
+  intro="Leemos presupuesto contra señales reales de conversión."
   breadcrumbs={[{ label: 'Paid Media' }]}
   serviceType="Paid media management"
   cta={{
-    title: 'Antes de mover presupuesto, veamos qué está midiendo la cuenta.',
-    primary: { label: 'Revisar mi adquisición', href: intentLink('paid_media') },
+    title: 'Encontramos dónde se rompe. Después lo arreglamos.',
+    micro: "Diagnose. Test. Improve. Scale.",
+    primary: { label: 'Revisar Paid Media', href: intentLink('paid_media') },
     secondary: { label: 'Tengo un problema puntual', href: '/quick-fix/' },
   }}
 >
+  <p slot="hero-micro" class="hero-micro">Follow the signal. Cut the waste.</p>
+
+  <ServiceHeroVideo
+    slot="hero-visual"
+    videoSrc="/assets/service-heroes/paid-media.mp4"
+    posterSrc="/assets/service-heroes/paid-media.webp"
+    objectPosition="center 55%"
+    brightness={0.88}
+    saturation={0.85}
+    contrast={1.08}
+  />
+
   <ServiceSection
     eyebrow="Canales"
     title="Dos lógicas distintas de demanda."
