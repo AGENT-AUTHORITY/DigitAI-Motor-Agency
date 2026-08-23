@@ -1,5 +1,6 @@
 ---
 import ServiceLayout from '../layouts/ServiceLayout.astro';
+import ServiceHeroImage from '../components/ServiceHeroImage.astro';
 import ServiceSection from '../components/ServiceSection.astro';
 import QuickFixCategories from '../components/QuickFixCategories.astro';
 import ProcessFlow from '../components/ProcessFlow.astro';
@@ -94,18 +95,22 @@ const faqs = [
   title="Quick Fix | Intervenciones puntuales | digitAI Motor"
   description="Un problema concreto frenando campañas, tracking, conversión o sistemas comerciales. Entramos, diagnosticamos y lo resolvemos sin abrir un proyecto de tres meses."
   eyebrow="Quick Fix"
-  heading="No todo necesita un proyecto completo."
-  intro="Si hay un problema puntual frenando campañas, tracking, conversión o sistemas comerciales, podemos entrar directamente ahí. Alcance acotado, con el mismo criterio que aplicamos en un proyecto largo."
+  heading="Sabés qué está fallando. Entremos ahí."
+  intro="Intervenciones puntuales sobre campañas, tracking, conversión o sistemas cuando el problema ya está identificado."
   breadcrumbs={[{ label: 'Quick Fix' }]}
   serviceType="Technical consulting"
   cta={{
     title: 'Contame qué está fallando.',
     description:
-      'Si sabés qué está roto, podemos entrar directamente ahí. Si todavía no sabés dónde está el problema, empezamos con un Growth Audit.',
+      'Si todavía no sabés dónde está el problema, empezamos con un Growth Audit: el síntoma que se ve casi nunca está donde está la causa.',
     primary: { label: 'Contame qué está fallando', href: intentLink('quick_fix') },
     secondary: { label: 'No sé dónde está el problema', href: '/growth-audit/' },
   }}
 >
+  <p slot="hero-micro" class="hero-micro">Fix the breakpoint.</p>
+
+  <ServiceHeroImage slot="hero-visual" src="/assets/service-heroes/quick-fix.webp" />
+
   <ServiceSection
     eyebrow="Cobertura"
     title="Dónde podemos entrar."
@@ -117,12 +122,11 @@ const faqs = [
 
     <div class="qf-fork">
       <p class="qf-fork__lead">
-        Si sabés qué está roto, podemos entrar directamente ahí.
+        ¿Todavía no sabés dónde está el problema?
       </p>
       <p class="qf-fork__alt">
-        Si todavía no sabés dónde está el problema, empezamos con un
-        <a href="/growth-audit/">Growth Audit</a>: el síntoma que se ve casi
-        nunca está donde está la causa.
+        Empezamos con un <a href="/growth-audit/">Growth Audit</a>: el síntoma
+        que se ve casi nunca está donde está la causa.
       </p>
     </div>
   </ServiceSection>
