@@ -177,6 +177,25 @@ const MEDIO = { w: 600, h: 700 };
     aspect-ratio: 600 / 700;
     inline-size: 100%;
     max-inline-size: 26rem;
+
+    /* HARDENING DEL BLEND — sin cambio de apariencia.
+       El asset trae el fondo en negro puro y `screen` lo funde con lo que haya
+       detras: screen(fondo, 0) = fondo. Eso funcionaba, pero dependia de que
+       "lo que haya detras" fuera siempre el fondo del sitio.
+
+       Dos garantias:
+       - `background` propio: el negro del asset se funde contra un color
+         conocido y declarado en este mismo wrapper, no contra lo que toque
+         haber debajo.
+       - `isolation: isolate`: contexto de apilamiento local, asi el video no
+         puede mezclarse con el texto del hero (.pch__space se apoya encima)
+         ni con ninguna otra superficie de la pagina.
+
+       Se usa el token y no el hex literal a proposito: el dia que
+       --bg-primary deje de ser #05070B, un valor fijo desincronizaria el
+       blend y haria reaparecer el rectangulo negro del archivo. */
+    background: var(--bg-primary);
+    isolation: isolate;
   }
 
   .pch__media {

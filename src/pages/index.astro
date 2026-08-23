@@ -18,56 +18,50 @@ import { ANCHORS, LINKEDIN_URL, SITE } from '../data/navigation';
 const site = Astro.site ?? new URL('https://www.digitaimotor.lat');
 
 const growthNodes = [
-  { label: 'TRAFFIC', note: 'Tráfico que no debería llegar' },
-  { label: 'CREATIVE', note: 'Mensaje que no conecta' },
-  { label: 'LANDING', note: 'La intención se pierde en la página' },
-  { label: 'LEAD', note: 'Contactos que no califican' },
-  { label: 'SALES', note: 'Seguimiento lento o inexistente' },
-  { label: 'REVENUE', note: 'No se sabe qué terminó vendiendo' },
+  { label: 'TRAFFIC', note: 'Tráfico incorrecto' },
+  { label: 'CREATIVE', note: 'Mensaje débil' },
+  { label: 'LANDING', note: 'Se pierde intención' },
+  { label: 'LEAD', note: 'Baja calidad' },
+  { label: 'SALES', note: 'Seguimiento lento' },
+  { label: 'REVENUE', note: 'Venta desconocida' },
   { label: 'DATA', note: 'Atribución rota' },
 ];
 
 const processSteps = [
   {
     number: '01',
-    title: 'Research',
-    description:
-      'Antes de tocar una campaña miramos el negocio completo y cómo se conecta con lo que se está comprando.',
+    title: 'Diagnose',
+    description: 'El cuello de botella real, no el más visible.',
     detail: [
       'Negocio', 'Mercado', 'Oferta', 'Cliente', 'Competencia',
       'Ads', 'Creative', 'Landing', 'Funnel', 'Proceso comercial',
     ],
   },
-  { number: '02', title: 'Diagnose', description: 'El cuello de botella real, no el más visible.' },
-  { number: '03', title: 'Prioritize', description: 'Impacto potencial por encima de trabajo cosmético.' },
-  { number: '04', title: 'Test', description: 'Hipótesis convertidas en experimentos legibles.' },
-  { number: '05', title: 'Learn', description: 'Leer las señales, también las negativas.' },
-  { number: '06', title: 'Improve', description: 'Iterar sobre datos, no sobre intuición.' },
-  { number: '07', title: 'Scale', description: 'Escalar solo lo que ya demostró valor.' },
+  { number: '02', title: 'Prioritize', description: 'Impacto potencial por encima de trabajo cosmético.' },
+  { number: '03', title: 'Test', description: 'Hipótesis convertidas en experimentos legibles.' },
+  { number: '04', title: 'Learn', description: 'Leer las señales, también las negativas.' },
+  { number: '05', title: 'Scale', description: 'Escalar solo lo que ya demostró valor.' },
 ];
 
 const capabilities = [
   {
     problem: '¿Estás pagando por tráfico que no debería llegar?',
     title: 'Paid Media',
-    answer:
-      'Compramos intención, no tráfico por comprar tráfico. Revisamos términos, segmentación, estructura y presupuesto contra lo que ocurre después del clic.',
+    answer: 'Encontramos dónde se está desperdiciando adquisición.',
     items: ['Google Ads', 'Meta Ads', 'Search', 'Remarketing', 'Auditoría de campañas'],
     href: '/paid-media/',
   },
   {
     problem: '¿Llega el tráfico pero la página no cierra?',
     title: 'CRO & Conversion',
-    answer:
-      'Más tráfico no arregla una experiencia que no convierte. Trabajamos oferta, mensaje, formulario, velocidad y flujo de contacto.',
+    answer: 'Encontramos dónde se pierde la intención.',
     items: ['Landing pages', 'Oferta', 'Formularios', 'WhatsApp', 'Mobile UX', 'Flujo de leads'],
     href: '/cro-landing-pages/',
   },
   {
     problem: '¿Entran leads pero no sabés cuáles terminaron vendiendo?',
     title: 'Revenue Systems',
-    answer:
-      'Un lead no es revenue. Conectamos la adquisición con el proceso comercial para poder leer qué campaña generó negocio y cuál solo generó contactos.',
+    answer: 'Conectamos adquisición con ventas.',
     items: ['Tracking', 'Analytics', 'CRM', 'Atribución', 'Seguimiento', 'Automatización'],
     // Revenue Systems no tiene pagina propia. ROUTES.md registra que
     // /tracking-analytics/ "se cubre hoy dentro de Growth Audit": es el destino
@@ -77,8 +71,7 @@ const capabilities = [
   {
     problem: '¿El problema está fuera del Ads Manager?',
     title: 'Growth Engineering',
-    answer:
-      'Cuando la limitación es de infraestructura y no de campaña, construimos lo que falta en lugar de trabajar alrededor del problema.',
+    answer: 'Construimos la conexión que falta.',
     items: ['Dashboards', 'Herramientas internas', 'APIs', 'CRMs', 'Automatización', 'AI workflows'],
     href: '/growth-engineering/',
   },
@@ -199,8 +192,7 @@ const serviceSchema = {
         <p class="eyebrow eyebrow--dot">Where growth breaks</p>
         <h2 id="breaks-title">Tu problema de crecimiento no siempre es un problema de Ads.</h2>
         <p class="section-head__lead">
-          El rendimiento puede perderse en el tráfico, el mensaje, la landing,
-          el seguimiento comercial o la medición.
+          El rendimiento puede perderse en cualquier punto entre el tráfico y la venta.
         </p>
       </div>
 
@@ -240,8 +232,7 @@ const serviceSchema = {
           Tu próximo ganador puede estar escondido en los datos que ya tenés.
         </h2>
         <p class="section-head__lead">
-          Investigamos clientes, mensajes, conceptos, hooks y resultados para
-          convertir creatividad en hipótesis medibles.
+          Convertimos insights, hooks y conceptos en hipótesis que se pueden testear.
         </p>
       </div>
 
@@ -270,8 +261,7 @@ const serviceSchema = {
         <p class="eyebrow eyebrow--dot">Capabilities</p>
         <h2 id="caps-title">Dónde podemos intervenir.</h2>
         <p class="section-head__lead">
-          No hace falta contratar todo. Hace falta saber cuál de estos frentes
-          está frenando el resultado.
+          No hace falta contratar todo. Hace falta saber cuál frente está frenando el resultado.
         </p>
       </div>
 
@@ -324,9 +314,8 @@ const serviceSchema = {
         ]}
         sourceNote="Datos provenientes de una cuenta y una propiedad auditadas. No son resultados producidos por digitAI Motor."
         findingLead="El problema no estaba en una sola campaña."
-        findingDetail="Había señales de fuga en adquisición, visibilidad orgánica, infraestructura técnica y atribución."
+        findingDetail="Detectamos señales de fuga en adquisición, orgánico, infraestructura y atribución."
         narrative={[
-          'El análisis cruzó aproximadamente 2 millones de impresiones orgánicas con adquisición paga, estado técnico de las landings y señales de atribución.',
           'Solo cuatro páginas comerciales acumulaban más de 263.000 impresiones, mientras sus CTR orgánicos se movían entre 0,14% y 0,77%. Alta visibilidad, pero muy baja captura de clic.',
         ]}
         secondaryTitle="Señales detectadas"
@@ -356,8 +345,7 @@ const serviceSchema = {
         <p class="eyebrow eyebrow--dot">Quick Fix</p>
         <h2 id="qf-title">No todo necesita un proyecto de tres meses.</h2>
         <p class="section-head__lead">
-          Si existe un problema puntual frenando campañas, tracking, conversión
-          o sistemas comerciales, podemos entrar directamente ahí.
+          Si existe un problema puntual, entramos directamente ahí.
         </p>
       </div>
 
@@ -385,10 +373,10 @@ const serviceSchema = {
         eyebrow="Business perspective"
         title="Performance con criterio comercial."
         paragraphs={[
-          'digitAI Motor fue creada por Oscar Chinchilla, con más de una década de experiencia en ventas B2B, negociación, pipeline y gestión comercial.',
-          'Esa experiencia define cómo analizamos Growth: el trabajo no termina cuando entra un lead.',
+          '+10 años en ventas B2B, negociación y gestión comercial.',
+          'Por eso una campaña no termina cuando genera un lead: queremos saber qué ocurrió después.',
         ]}
-        quote="Una campaña no se juzga solamente por CTR o CPL. Queremos entender qué ocurrió después."
+        quote="Una campaña no se juzga solamente por CTR o CPL."
         statsTitle="Organic B2B Distribution"
         stats={[
           { label: 'Seguidores', value: '1.749' },

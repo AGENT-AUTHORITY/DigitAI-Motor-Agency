@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import CTASection from '../components/CTASection.astro';
+import Button from '../components/Button.astro';
 import type { Crumb } from '../components/Breadcrumbs.astro';
 
 /**
@@ -27,6 +28,8 @@ export interface Props {
   cta?: {
     title: string;
     description?: string;
+    /** Microcopy en ingles del cierre. */
+    micro?: string;
     primary: { label: string; href: string };
     secondary?: { label: string; href: string };
   };
@@ -101,6 +104,12 @@ const serviceSchema = {
                   otras siete service pages, y le habria pasado a cualquier
                   pagina futura con visual. */}
               <p class="service-page__intro service-page__intro--visual">{intro}</p>
+              <slot name="hero-micro" />
+              {cta && (
+                <div class="service-page__hero-cta">
+                  <Button label={cta.primary.label} href={cta.primary.href} arrow />
+                </div>
+              )}
               <slot name="hero-aside" />
             </div>
             <div class="service-page__hero-visual">
@@ -124,8 +133,10 @@ const serviceSchema = {
         <CTASection
           title={cta.title}
           description={cta.description}
+          micro={cta.micro}
           primaryCta={cta.primary}
           secondaryCta={cta.secondary}
+          visual
         />
       )
     }
@@ -141,6 +152,26 @@ const serviceSchema = {
      hace nada. */
   .service-page {
     overflow-x: clip;
+  }
+
+  .service-page__hero-cta {
+    margin-top: var(--space-lg);
+  }
+
+  /* Microcopy en ingles: firma conceptual, no traduccion. Secundario por
+     tamano y color, nunca compitiendo con el H1. */
+  .service-page__head--visual :global(.hero-micro) {
+    margin-top: var(--space-md);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .service-page__head--visual .service-page__intro--visual {
+    max-width: 42ch;
   }
 
   .service-page__head {
@@ -218,13 +249,16 @@ const serviceSchema = {
 
   @media (min-width: 64rem) {
     .service-page__head--visual {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      /* 40 / 60: el copy orienta, la visual explica el mecanismo. */
+      grid-template-columns: minmax(0, 0.68fr) minmax(0, 1fr);
       column-gap: var(--space-xl);
       padding-block: var(--space-xl) var(--space-section);
     }
 
     .service-page__head--visual .service-page__title {
-      max-width: 13ch;
+      /* 16ch dejaba el titular de Paid Media en cinco lineas. Con 20ch los
+         cinco H1 caen en dos o tres, que es el maximo que se lee de un vistazo. */
+      max-width: 20ch;
     }
   }
 

@@ -1,0 +1,249 @@
+---
+import { existsSync } from 'node:fs';
+
+/**
+ * ServiceHeroVideo — visual animada del hero de una service page.
+ *
+ * GEOMETRIA (medida, no supuesta):
+ * los videos son lienzos 1080x1920 verticales, pero la escena util ocupa una
+ * banda horizontal en el medio, con negro arriba y abajo y una marca de agua
+ * en el pie. Es la MISMA escena que el poster: el video es un encuadre mas
+ * cerrado del mismo render.
+ *
+ * Por eso el contenedor conserva la relacion de los posters (1672x941) y el
+ * video entra con `cover`: asi se recorta solo el relleno vertical del lienzo
+ * — la marca de agua queda fuera — y poster y video comparten caja, sin salto
+ * de layout cuando arranca la animacion.
+ *
+ * `contain` mostraria las barras negras completas y la marca de agua, que es
+ * exactamente lo que hay que evitar. El recorte es el minimo necesario.
+ *
+ * `objectPosition` no se estima: sale del centro de masa del brillo de cada
+ * video, calculado sobre un frame real. Ver docs/QA.md.
+ */
+export interface Props {
+  /** Ruta del mp4, con su nombre de archivo exacto. */
+  videoSrc: string;
+  /** Poster e imagen de respaldo. Es lo unico que carga mobile. */
+  posterSrc: string;
+  /**
+   * Vacio por defecto: estas visuales son metaforas del mismo mensaje que ya
+   * dice el copy. Se pasa texto solo si aportan informacion que no esta escrita.
+   */
+  alt?: string;
+  /** Encuadre vertical del recorte. Calculado por video, no a ojo. */
+  objectPosition?: string;
+  brightness?: number;
+  saturation?: number;
+  contrast?: number;
+  maxWidth?: string;
+}
+
+const {
+  videoSrc,
+  posterSrc,
+  alt = '',
+  objectPosition = 'center 55%',
+  brightness = 1,
+  saturation = 1,
+  contrast = 1,
+  maxWidth = '46rem',
+} = Astro.props;
+
+const existe = (ruta: string) =>
+  existsSync(new URL('../../public' + decodeURIComponent(ruta), import.meta.url));
+
+const hayPoster = existe(posterSrc);
+
+// Se deriva el .webm del nombre del mp4 en vez de pedirlo como prop: son el
+// mismo asset en dos contenedores, y una prop extra solo invita a que se
+// desincronicen.
+const webmSrc = videoSrc.replace(/[.]mp4$/, '.webm');
+const fuentes = [
+  { src: webmSrc, type: 'video/webm' },
+  { src: videoSrc, type: 'video/mp4' },
+].filter((f) => existe(f.src));
+const hayVideo = fuentes.length > 0;
+
+// Relacion de los posters existentes. Explicita para reservar la caja antes de
+// que cargue nada: sin esto el hero salta y el CLS deja de ser 0.
+const MEDIO = { w: 1672, h: 941 };
+
+const filtro = [
+  brightness !== 1 ? `brightness(${brightness})` : '',
+  saturation !== 1 ? `saturate(${saturation})` : '',
+  contrast !== 1 ? `contrast(${contrast})` : '',
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+{
+  hayPoster && (
+    <figure
+      class="shv"
+      style={`--shv-max:${maxWidth}; --shv-filter:${filtro || 'none'}; --shv-pos:${objectPosition}`}
+    >
+      <div class="shv__stage">
+        <img
+          class="shv__media"
+          src={posterSrc}
+          width={MEDIO.w}
+          height={MEDIO.h}
+          alt={alt}
+          aria-hidden={alt === '' ? 'true' : undefined}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+
+        {hayVideo && (
+          <video
+            class="shv__media shv__media--video"
+            data-shv-video
+            width={MEDIO.w}
+            height={MEDIO.h}
+            muted
+            loop
+            playsinline
+            preload="none"
+            aria-hidden="true"
+          >
+            {fuentes.map((f) => (
+              <source data-src={f.src} type={f.type} />
+            ))}
+          </video>
+        )}
+      </div>
+    </figure>
+  )
+}
+
+<style>
+  .shv {
+    margin: 0;
+    inline-size: 100%;
+    max-inline-size: var(--shv-max);
+
+    /* El asset trae el fondo casi negro y `screen` lo funde con lo que haya
+       detras: screen(fondo, 0) = fondo.
+
+       Dos garantias para que no dependa del contexto:
+       - `background` propio, para fundir contra un color declarado aca.
+       - `isolation: isolate`, contexto de apilamiento local, asi el medio no
+         se mezcla con el texto del hero ni con otra superficie.
+
+       Token y no hex literal: el dia que --bg-primary cambie, un valor fijo
+       desincronizaria el blend y haria reaparecer el rectangulo. */
+    background: var(--bg-primary);
+    isolation: isolate;
+  }
+
+  .shv__stage {
+    position: relative;
+    aspect-ratio: 1672 / 941;
+    inline-size: 100%;
+  }
+
+  .shv__media {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: var(--shv-pos);
+    filter: var(--shv-filter);
+    mix-blend-mode: screen;
+
+    /* Solo dos bordes necesitan desvanecerse: el derecho sangra fuera del
+       viewport y el superior ya es casi negro. Los que cortan contra contenido
+       son el izquierdo (contra el copy) y el inferior.
+
+       Lineales y no una elipse: en un radial-gradient los radios porcentuales
+       se miden contra el ancho y el alto COMPLETOS, no contra la mitad, y los
+       porcentajes terminan enganando. */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 24%),
+      linear-gradient(to top, transparent 0%, #000 20%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 24%),
+      linear-gradient(to top, transparent 0%, #000 20%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
+  /* El poster va debajo: si el video no llega a cargar, lo que queda en
+     pantalla es la imagen, no un hueco. */
+  .shv__media--video {
+    z-index: 1;
+  }
+
+  /* El poster es la unica imagen que se usa en mobile: la relacion del
+     contenedor ya coincide con la suya, asi que `cover` no recorta nada. */
+  .shv__stage > img {
+    object-position: center;
+  }
+
+  /* Desktop: la visual sangra hasta el borde derecho de la pantalla. Dentro de
+     la columna quedaba chica y con aire muerto a la derecha. */
+  @media (min-width: 64rem) {
+    .shv {
+      max-inline-size: none;
+      inline-size: calc(100% + max(0px, (100vw - var(--container-max, 76rem)) / 2) + var(--gutter));
+    }
+  }
+
+  /* Mobile: ancho completo de viewport. El recorte que impide el scroll
+     horizontal vive en .service-page. */
+  @media (max-width: 63.99rem) {
+    .shv {
+      inline-size: 100vw;
+      max-inline-size: none;
+      margin-inline: calc((100vw - 100%) / -2);
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Carga condicional del video.
+   *
+   * El <video> sale sin src y con preload="none": el navegador no pide un solo
+   * byte hasta que este script decide que corresponde. En mobile no se
+   * descarga nunca, y sin JS queda el poster, que es una <img> real debajo.
+   *
+   * No se carga si:
+   *  - el viewport es de mobile (<= 768px)
+   *  - el usuario pidio menos movimiento
+   *  - la conexion declara ahorro de datos o 2g
+   *
+   * `muted` va en el atributo y ademas por propiedad: sin esto Safari puede
+   * bloquear el autoplay aunque el archivo traiga pista de audio silenciada.
+   */
+  const videos = document.querySelectorAll<HTMLVideoElement>('[data-shv-video]');
+
+  if (videos.length) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const desktop = window.matchMedia('(min-width: 769px)').matches;
+    const conn = (navigator as any).connection;
+    const stingy = Boolean(conn?.saveData) || /2g/.test(conn?.effectiveType ?? '');
+
+    if (desktop && !reduced && !stingy) {
+      videos.forEach((video) => {
+        // Se promueve UNA sola fuente. Dejar las dos y confiar en el navegador
+        // alcanza casi siempre, pero si el primer formato falla al decodificar
+        // se descarga el segundo encima.
+        const fuentes = [...video.querySelectorAll<HTMLSourceElement>('source[data-src]')];
+        if (!fuentes.length) return;
+        const elegida =
+          fuentes.find((el) => video.canPlayType(el.getAttribute('type') ?? '') !== '') ??
+          fuentes[fuentes.length - 1];
+        fuentes.forEach((el) => { if (el !== elegida) el.remove(); });
+        elegida.src = elegida.dataset.src ?? '';
+        video.muted = true;
+        video.load();
+        // play() puede rechazar si el navegador bloquea autoplay. Se ignora a
+        // proposito: el poster ya esta en pantalla y no hay nada que reparar.
+        video.play().catch(() => {});
+      });
+    }
+  }
+</script>

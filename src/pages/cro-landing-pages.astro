@@ -1,6 +1,7 @@
 ---
 import ServiceLayout from '../layouts/ServiceLayout.astro';
 import ServiceSection from '../components/ServiceSection.astro';
+import ServiceHeroVideo from '../components/ServiceHeroVideo.astro';
 import GrowthFlow from '../components/GrowthFlow.astro';
 import MessageMatch from '../components/MessageMatch.astro';
 import CheckList from '../components/CheckList.astro';
@@ -129,18 +130,29 @@ const faqs = [
   title="Landing Pages y CRO orientados a conversión | digitAI Motor"
   description="CRO no es hacer una landing linda. Trabajamos oferta, message match, fricción, mobile UX, velocidad y calidad de lead sobre hipótesis medibles."
   eyebrow="CRO & Landing Pages"
-  heading="Más tráfico no arregla una experiencia que no convierte."
-  intro="Una landing no falla por fea. Falla porque promete algo distinto de lo que prometió el anuncio, porque pide más de lo que la persona está dispuesta a dar, o porque el contacto que genera no le sirve a nadie."
+  heading="El tráfico llegó. ¿Dónde se perdió la intención?"
+  intro="Analizamos mensaje, prueba, CTA, formulario y fricción hasta encontrar el punto de caída."
   breadcrumbs={[{ label: 'CRO & Landing Pages' }]}
   serviceType="Conversion rate optimization"
   cta={{
-    title: 'Revisemos dónde se está perdiendo la intención.',
-    description:
-      'Si el tráfico llega y no cierra, el problema tiene una causa concreta. Empezamos por encontrarla.',
-    primary: { label: 'Revisar mi conversión', href: intentLink('cro') },
+    title: 'Encontramos dónde se rompe. Después lo arreglamos.',
+    micro: "Diagnose. Test. Improve. Scale.",
+    primary: { label: 'Analizar conversión', href: intentLink('cro') },
     secondary: { label: 'Ver Growth Audit', href: '/growth-audit/' },
   }}
 >
+  <p slot="hero-micro" class="hero-micro">Turn intent into action.</p>
+
+  <ServiceHeroVideo
+    slot="hero-visual"
+    videoSrc="/assets/service-heroes/cro-landing.mp4"
+    posterSrc="/assets/service-heroes/cro-landing.webp"
+    objectPosition="center 48%"
+    brightness={0.8}
+    saturation={0.78}
+    contrast={1.08}
+  />
+
   <ServiceSection
     eyebrow="El recorrido"
     title="Si el anuncio promete una cosa y la landing responde otra, perdemos intención."

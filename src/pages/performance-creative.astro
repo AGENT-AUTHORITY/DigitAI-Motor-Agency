@@ -5,8 +5,7 @@ import CheckList from '../components/CheckList.astro';
 import CreativeFlow from '../components/CreativeFlow.astro';
 import FAQ from '../components/FAQ.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
-import PerformanceCreativeHero from '../components/PerformanceCreativeHero.astro';
-import Button from '../components/Button.astro';
+import ServiceHeroVideo from '../components/ServiceHeroVideo.astro';
 import { intentLink } from '../data/navigation';
 
 const research = [
@@ -70,28 +69,23 @@ const faqs = [
   breadcrumbs={[{ label: 'Performance Creative' }]}
   serviceType="Creative strategy"
   cta={{
-    title: 'Empecemos por entender qué mensaje ya mostró señal.',
-    description:
-      'Si hay histórico de creativos, ahí suele estar la respuesta. Si no lo hay, empezamos por el research.',
+    title: 'Encontramos dónde se rompe. Después lo arreglamos.',
+    micro: "Diagnose. Test. Improve. Scale.",
     primary: { label: 'Solicitar análisis creativo', href: intentLink('performance_creative') },
     secondary: { label: 'Ver Growth Audit', href: '/growth-audit/' },
   }}
 >
-  <div slot="hero-aside" class="pc-hero-aside">
-    {/* El micro-proceso (Research · Angles · Hooks · Creative testing) salio de
-        aca: repetia las etapas que CreativeFlow muestra completas un scroll mas
-        abajo. Su altura paga la del intro, que antes no se renderizaba. */}
-    <Button
-      label="Solicitar análisis creativo"
-      href={intentLink('performance_creative')}
-      size="lg"
-      arrow
-    />
+  <p slot="hero-micro" class="hero-micro">Creative isn't decoration. It's performance.</p>
 
-    <p class="pc-tagline">Creative isn't decoration. It's performance.</p>
-  </div>
-
-  <PerformanceCreativeHero slot="hero-visual" />
+  <ServiceHeroVideo
+    slot="hero-visual"
+    videoSrc="/assets/service-heroes/performance-creative.mp4"
+    posterSrc="/assets/service-heroes/performance-creative.webp"
+    objectPosition="center 48%"
+    brightness={0.9}
+    saturation={0.88}
+    contrast={1.06}
+  />
 
   <ServiceSection
     eyebrow="El sistema"
@@ -100,6 +94,20 @@ const faqs = [
     alt
     id="sistema"
   >
+    <div class="pc-space">
+      <p class="pc-space__label">El espacio de prueba</p>
+      <ul class="pc-axes" role="list">
+        <li><span class="pc-axis">Concepto</span><span class="pc-mult" aria-hidden="true">×</span></li>
+        <li><span class="pc-axis">Hook</span><span class="pc-mult" aria-hidden="true">×</span></li>
+        <li><span class="pc-axis">Formato</span><span class="pc-mult" aria-hidden="true">×</span></li>
+        <li><span class="pc-axis">Oferta</span></li>
+      </ul>
+      <p class="pc-space__note">
+        Cada eje multiplica lo que queda por probar. Por eso el ganador rara
+        vez es la variante que ya se probó.
+      </p>
+    </div>
+
     <CreativeFlow />
   </ServiceSection>
 
@@ -152,20 +160,59 @@ const faqs = [
 </ServiceLayout>
 
 <style>
-  .pc-hero-aside {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: var(--space-lg);
+  .pc-space {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--border);
   }
 
-  .pc-tagline {
-    margin-top: var(--space-md);
+  .pc-space__label {
     font-family: var(--font-heading);
-    font-size: var(--text-sm);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .pc-axes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2xs);
+    margin: var(--space-2xs) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pc-axes li {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2xs);
+  }
+
+  .pc-axis {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
     font-weight: var(--weight-bold);
     letter-spacing: var(--tracking-tight);
-    color: var(--text-muted);
+    color: var(--text-primary);
+  }
+
+  /* El signo es el argumento: no son cuatro cosas, es su producto. */
+  .pc-mult {
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    font-weight: var(--weight-bold);
+    color: var(--accent);
+  }
+
+  .pc-space__note {
+    margin-top: var(--space-2xs);
+    max-width: 48ch;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
   }
 
   .pc-related {

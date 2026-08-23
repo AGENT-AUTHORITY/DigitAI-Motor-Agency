@@ -1,5 +1,26 @@
 ---
+import { existsSync } from 'node:fs';
 import Button from './Button.astro';
+
+/**
+ * Visual del cierre. Una sola constante: cambiarla por otro archivo es la
+ * unica edicion necesaria, y si el archivo no existe la seccion se renderiza
+ * exactamente como antes. La visual esta bajo revision, asi que no puede ser
+ * una dependencia dificil de reemplazar.
+ */
+const CTA_POSTER = '/assets/service-heroes/cta.webp';
+const CTA_VIDEO_WEBM = '/assets/service-heroes/cta.webm';
+const CTA_VIDEO_MP4 = '/assets/service-heroes/cta.mp4';
+// Encuadre vertical del recorte, medido sobre un frame real del video.
+const CTA_POS = 'center 48%';
+
+const existe = (r: string) => existsSync(new URL('../../public' + r, import.meta.url));
+const hayVisual = existe(CTA_POSTER);
+const fuentesCta = [
+  { src: CTA_VIDEO_WEBM, type: 'video/webm' },
+  { src: CTA_VIDEO_MP4, type: 'video/mp4' },
+].filter((f) => existe(f.src));
+const hayVideo = fuentesCta.length > 0;
 
 /**
  * CTASection — bloque de cierre reutilizable.
@@ -14,6 +35,10 @@ export interface Props {
   primaryCta: { label: string; href: string };
   secondaryCta?: { label: string; href: string };
   note?: string;
+  /** Microcopy en ingles: firma conceptual, no traduccion. */
+  micro?: string;
+  /** Fondo visual. Solo el cierre global lo usa; los de service page no. */
+  visual?: boolean;
   variant?: 'panel' | 'flush';
   id?: string;
 }
@@ -25,18 +50,35 @@ const {
   primaryCta,
   secondaryCta,
   note,
+  micro,
+  visual = false,
   variant = 'panel',
   id,
 } = Astro.props;
+
+const conVisual = visual && hayVisual;
 
 const headingId = id ? `${id}-title` : 'cta-title';
 ---
 
 <section
-  class:list={['cta-section', `cta-section--${variant}`]}
+  class:list={['cta-section', `cta-section--${variant}`, { 'cta-section--visual': conVisual }]}
   aria-labelledby={headingId}
   id={id}
 >
+  {conVisual && (
+    <div class="cta-section__bg" aria-hidden="true" style={`--cta-pos:${CTA_POS}`}>
+      <img src={CTA_POSTER} alt="" width="1672" height="941" loading="lazy" decoding="async" />
+      {hayVideo && (
+        <video class="cta-section__video" data-cta-video width="1672" height="941" muted loop playsinline preload="none">
+          {fuentesCta.map((f) => (
+            <source data-src={f.src} type={f.type} />
+          ))}
+        </video>
+      )}
+    </div>
+  )}
+
   <div class="container">
     <div class="cta-section__inner" data-reveal>
       {eyebrow && <p class="eyebrow eyebrow--dot">{eyebrow}</p>}
@@ -68,6 +110,8 @@ const headingId = id ? `${id}-title` : 'cta-title';
         }
       </div>
 
+      {micro && <p class="cta-section__micro">{micro}</p>}
+
       {note && <p class="source-note cta-section__note">{note}</p>}
     </div>
   </div>
@@ -76,6 +120,65 @@ const headingId = id ? `${id}-title` : 'cta-title';
 <style>
   .cta-section {
     padding-block: var(--space-section);
+  }
+
+  .cta-section--visual {
+    position: relative;
+    /* La imagen sangra a todo el ancho; el recorte impide scroll horizontal. */
+    overflow: clip;
+    isolation: isolate;
+  }
+
+  .cta-section__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .cta-section__bg img,
+  .cta-section__bg video {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: var(--cta-pos, center 48%);
+    /* Es la mas brillante de las siete (brillo medio 30 contra 11-15 del
+       resto). Sin esta atenuacion el titular pierde contra el portal. */
+    filter: brightness(0.46) saturate(0.72) contrast(1.06);
+  }
+
+  /* Scrim propio ademas del filtro: el brillo del portal esta justo detras del
+     bloque de texto, y un filtro uniforme no alcanza para garantizar contraste
+     ahi. Con el degradado el centro queda oscuro y los bordes conservan la
+     atmosfera. */
+  .cta-section__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: radial-gradient(
+      ellipse 70% 90% at 50% 50%,
+      color-mix(in srgb, var(--bg-primary) 88%, transparent) 0%,
+      color-mix(in srgb, var(--bg-primary) 62%, transparent) 55%,
+      color-mix(in srgb, var(--bg-primary) 30%, transparent) 100%
+    );
+  }
+
+  /* El video va encima del poster: si no carga, abajo sigue estando la
+     imagen y el bloque nunca queda vacio. */
+  .cta-section__video {
+    z-index: 1;
+  }
+
+  .cta-section__micro {
+    margin-top: var(--space-md);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
   }
 
   .cta-section--flush {
@@ -155,3 +258,63 @@ const headingId = id ? `${id}-title` : 'cta-title';
     }
   }
 </style>
+
+<script>
+  /**
+   * Carga del video del cierre POR PROXIMIDAD.
+   *
+   * El bloque esta debajo del fold: descargarlo con la pagina hacia que cada
+   * service page arrastrara varios MB que la mayoria de las visitas no llega
+   * a ver. Ahora se pide recien cuando el cierre se acerca al viewport.
+   *
+   * rootMargin de 300px: alcanza para que el video este listo cuando el
+   * bloque entra en pantalla, sin adelantarlo a toda la pagina.
+   *
+   * Se promueve UNA sola fuente. Dejar las dos y confiar en el navegador
+   * alcanza casi siempre, pero si el primer formato falla al decodificar se
+   * descarga el segundo encima.
+   */
+  const ctaVideo = document.querySelector<HTMLVideoElement>('[data-cta-video]');
+
+  if (ctaVideo) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const desktop = window.matchMedia('(min-width: 769px)').matches;
+    const conn = (navigator as any).connection;
+    const stingy = Boolean(conn?.saveData) || /2g/.test(conn?.effectiveType ?? '');
+
+    if (desktop && !reduced && !stingy) {
+      const activar = () => {
+        const fuentes = [...ctaVideo.querySelectorAll<HTMLSourceElement>('source[data-src]')];
+        if (!fuentes.length) return;
+        const elegida =
+          fuentes.find((el) => ctaVideo.canPlayType(el.getAttribute('type') ?? '') !== '') ??
+          fuentes[fuentes.length - 1];
+        fuentes.forEach((el) => { if (el !== elegida) el.remove(); });
+        elegida.src = elegida.dataset.src ?? '';
+        ctaVideo.muted = true;
+        ctaVideo.load();
+        // play() puede rechazar si el navegador bloquea autoplay. Se ignora:
+        // el poster ya esta en pantalla y no hay nada que reparar.
+        ctaVideo.play().catch(() => {});
+      };
+
+      const seccion = ctaVideo.closest('.cta-section') ?? ctaVideo;
+
+      if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver(
+          (entradas) => {
+            if (!entradas.some((e) => e.isIntersecting)) return;
+            obs.disconnect(); // una sola vez: no se vuelve a pedir
+            activar();
+          },
+          { rootMargin: '300px 0px' }
+        );
+        obs.observe(seccion);
+      } else {
+        // Sin IntersectionObserver se carga directo: es preferible el video
+        // de mas a un bloque que nunca se anima.
+        activar();
+      }
+    }
+  }
+</script>

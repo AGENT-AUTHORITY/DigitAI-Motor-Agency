@@ -1,6 +1,7 @@
 ---
 import ServiceLayout from '../layouts/ServiceLayout.astro';
 import ServiceSection from '../components/ServiceSection.astro';
+import ServiceHeroVideo from '../components/ServiceHeroVideo.astro';
 import CheckList from '../components/CheckList.astro';
 import MetricCard from '../components/MetricCard.astro';
 import FAQ from '../components/FAQ.astro';
@@ -49,16 +50,29 @@ const faqs = [
   title="Gestión y Auditoría de Google Ads | digitAI Motor"
   description="Gestión y auditoría de Google Ads: estructura, términos de búsqueda, negativas, tracking y calidad de lead. Optimizado para negocio, no para métricas bonitas."
   eyebrow="Google Ads"
-  heading="Google Ads optimizado para negocio, no para métricas bonitas."
-  intro="Un CTR alto y un CPC bajo pueden convivir con cero ventas. Trabajamos la cuenta contra lo que ocurre después del clic: qué términos generan oportunidades reales y cuáles solo consumen presupuesto."
+  heading="No todo clic merece tu presupuesto."
+  intro="Filtramos intención, estructura y términos para encontrar dónde se está pagando por tráfico que no acerca una conversión."
   breadcrumbs={[{ label: 'Paid Media', href: '/paid-media/' }, { label: 'Google Ads' }]}
   serviceType="Google Ads management"
   cta={{
-    title: 'Revisemos qué está comprando tu cuenta hoy.',
-    primary: { label: 'Solicitar auditoría de Google Ads', href: intentLink('google_ads') },
+    title: 'Encontramos dónde se rompe. Después lo arreglamos.',
+    micro: "Diagnose. Test. Improve. Scale.",
+    primary: { label: 'Auditar Google Ads', href: intentLink('google_ads') },
     secondary: { label: 'Ver Growth Audit', href: '/growth-audit/' },
   }}
 >
+  <p slot="hero-micro" class="hero-micro">Turn search intent into conversion signal.</p>
+
+  <ServiceHeroVideo
+    slot="hero-visual"
+    videoSrc="/assets/service-heroes/google-ads.mp4"
+    posterSrc="/assets/service-heroes/google-ads.webp"
+    objectPosition="center 52%"
+    brightness={0.94}
+    saturation={0.9}
+    contrast={1.06}
+  />
+
   <ServiceSection eyebrow="Alcance" title="Sobre qué trabajamos." alt id="alcance">
     <CheckList items={alcance} />
   </ServiceSection>

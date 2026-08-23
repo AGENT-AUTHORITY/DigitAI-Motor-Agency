@@ -32,5 +32,19 @@ assets-source/*
 !assets-source/*.svg
 !assets-source/*.html
 
+# Los PNG fuente de los heroes de service page SI se versionan, aunque pesen:
+# son el origen de los derivados WebP que sirve el sitio y sin ellos un clon
+# nuevo no puede regenerarlos. Vivian en public/assets/service-heroes/, donde
+# Astro los copiaba al build — 9,6 MB publicados que ningun documento pedia.
+!assets-source/service-heroes/
+
 # Capturas de QA: artefactos de revision, no fuente
 qa-screens/
+
+# Estado de ejecucion de impeccable live mode: journal de sesiones, raices
+# resueltas y registro de inyeccion. La configuracion (.impeccable/config.json
+# y .impeccable/live/config.json) SI se versiona: define como se levanta el
+# modo live en este proyecto.
+.impeccable/live/sessions/
+.impeccable/live/roots.json
+.impeccable/live/inject-journal.json
