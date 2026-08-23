@@ -1,0 +1,136 @@
+---
+import { existsSync } from 'node:fs';
+
+/**
+ * ServiceHeroImage — visual fija del hero de una service page.
+ *
+ * Es la variante estatica de ServiceHeroVideo: mismo encuadre, mismo blend,
+ * misma sangria. Growth Audit y Quick Fix no tienen animacion, y montar el
+ * componente de video con una ruta inexistente para que caiga al poster seria
+ * un rodeo que despues nadie entiende.
+ *
+ * Mas simple que el de video en un punto concreto: ahi hacen falta dos capas
+ * apiladas en absoluto (poster debajo, video encima) y por eso `cover`. Aca hay
+ * una sola imagen, y su relacion es exactamente la de la caja, asi que alcanza
+ * con un <img> normal — sin recorte, sin `object-fit` y sin nada que encuadrar.
+ *
+ * Si el archivo no existe no se emite nada: cero requests 404.
+ */
+export interface Props {
+  /** Ruta publica del derivado WebP. */
+  src: string;
+  /**
+   * Vacio por defecto: estas visuales son metaforas del mismo mensaje que ya
+   * dice el copy. Se pasa texto solo si aportan informacion que no esta escrita.
+   */
+  alt?: string;
+  /** Ajustes de tratamiento. Se calibran por pagina, no hay defaults globales. */
+  brightness?: number;
+  saturation?: number;
+  contrast?: number;
+  maxWidth?: string;
+}
+
+const {
+  src,
+  alt = '',
+  brightness = 1,
+  saturation = 1,
+  contrast = 1,
+  maxWidth = '46rem',
+} = Astro.props;
+
+const existe = existsSync(new URL('../../public' + decodeURIComponent(src), import.meta.url));
+
+// Relacion de los assets de service hero. Explicita para reservar la caja antes
+// de que la imagen cargue: sin esto el hero salta y el CLS deja de ser 0.
+const MEDIO = { w: 1672, h: 941 };
+
+const filtro = [
+  brightness !== 1 ? `brightness(${brightness})` : '',
+  saturation !== 1 ? `saturate(${saturation})` : '',
+  contrast !== 1 ? `contrast(${contrast})` : '',
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+{
+  existe && (
+    <figure class="shi" style={`--shi-max:${maxWidth}; --shi-filter:${filtro || 'none'}`}>
+      <img
+        class="shi__img"
+        src={src}
+        width={MEDIO.w}
+        height={MEDIO.h}
+        alt={alt}
+        aria-hidden={alt === '' ? 'true' : undefined}
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </figure>
+  )
+}
+
+<style>
+  .shi {
+    margin: 0;
+    inline-size: 100%;
+    max-inline-size: var(--shi-max);
+
+    /* El asset trae el fondo casi negro y `screen` lo funde con lo que haya
+       detras: screen(fondo, 0) = fondo.
+
+       Dos garantias para que no dependa del contexto:
+       - `background` propio, para fundir contra un color declarado aca.
+       - `isolation: isolate`, contexto de apilamiento local, asi el medio no
+         se mezcla con el texto del hero ni con otra superficie.
+
+       Token y no hex literal: el dia que --bg-primary cambie, un valor fijo
+       desincronizaria el blend y haria reaparecer el rectangulo. */
+    background: var(--bg-primary);
+    isolation: isolate;
+  }
+
+  .shi__img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    filter: var(--shi-filter);
+    mix-blend-mode: screen;
+
+    /* Solo dos bordes necesitan desvanecerse: el derecho sangra fuera del
+       viewport y el superior ya es casi negro. Los que cortan contra contenido
+       son el izquierdo (contra el copy) y el inferior.
+
+       Lineales y no una elipse: en un radial-gradient los radios porcentuales
+       se miden contra el ancho y el alto COMPLETOS, no contra la mitad, y los
+       porcentajes terminan enganando. */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 24%),
+      linear-gradient(to top, transparent 0%, #000 20%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 24%),
+      linear-gradient(to top, transparent 0%, #000 20%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
+  /* Desktop: la visual sangra hasta el borde derecho de la pantalla. Dentro de
+     la columna quedaba chica y con aire muerto a la derecha. */
+  @media (min-width: 64rem) {
+    .shi {
+      max-inline-size: none;
+      inline-size: calc(100% + max(0px, (100vw - var(--container-max, 76rem)) / 2) + var(--gutter));
+    }
+  }
+
+  /* Mobile: ancho completo de viewport. El recorte que impide el scroll
+     horizontal vive en .service-page. */
+  @media (max-width: 63.99rem) {
+    .shi {
+      inline-size: 100vw;
+      max-inline-size: none;
+      margin-inline: calc((100vw - 100%) / -2);
+    }
+  }
+</style>

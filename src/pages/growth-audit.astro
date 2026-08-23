@@ -1,5 +1,6 @@
 ---
 import ServiceLayout from '../layouts/ServiceLayout.astro';
+import ServiceHeroImage from '../components/ServiceHeroImage.astro';
 import ServiceSection from '../components/ServiceSection.astro';
 import CheckList from '../components/CheckList.astro';
 import ProcessFlow from '../components/ProcessFlow.astro';
@@ -72,22 +73,25 @@ const faqs = [
   title="Auditoría de Growth y adquisición digital | digitAI Motor"
   description="Auditamos campañas, creativos, landing, medición y proceso comercial para encontrar dónde se pierde rendimiento antes de invertir más."
   eyebrow="Growth Audit"
-  heading="Encontrá dónde se está perdiendo tu presupuesto antes de invertir más."
-  intro="Revisamos el recorrido completo — tráfico, mensaje, conversión, medición y seguimiento comercial — y te decimos qué está frenando el crecimiento, por qué importa y en qué orden conviene resolverlo."
+  heading="El problema rara vez está en un solo lugar."
+  intro="Revisamos adquisición, mensaje, landing, seguimiento, revenue y datos como un único sistema."
   breadcrumbs={[{ label: 'Growth Audit' }]}
   serviceType="Marketing audit"
   cta={{
     title: 'Antes de gastar más, encontremos qué está frenando el crecimiento.',
     description:
       'Contanos qué estás intentando mejorar y sobre qué cuentas trabajás. Si el cuello de botella está en otro lado, también lo vas a saber.',
-    primary: { label: 'Solicitar diagnóstico de crecimiento', href: intentLink('growth_audit') },
+    primary: { label: 'Solicitar Growth Audit', href: intentLink('growth_audit') },
     secondary: { label: 'Tengo un problema puntual', href: '/quick-fix/' },
   }}
 >
+  <p slot="hero-micro" class="hero-micro">Find where growth breaks.</p>
+
+  <ServiceHeroImage slot="hero-visual" src="/assets/service-heroes/growth-audit.webp" />
+
   <ServiceSection
     eyebrow="Alcance"
     title="Qué miramos."
-    lead="No auditamos solo el Ads Manager. El rendimiento se pierde en cualquier punto entre el anuncio y la venta, así que se revisa la cadena entera."
     alt
     id="alcance"
   >
