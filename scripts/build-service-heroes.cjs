@@ -45,8 +45,12 @@ const MAPA = [
   // ES el hero. Los nombres de origen llegaron con un espacio y un punto de
   // mas ("growth- audit.hero.png"), que en una URL obligan a percent-encoding
   // y se rompen facil; el derivado usa el nombre de la ruta que sirve.
-  ['growth- audit.hero.png', 'growth-audit.webp'],
+  ['growth-audit-hero.png', 'growth-audit.webp'],
   ['quick-fix-hero.png', 'quick-fix.webp'],
+  // Evidence no es una service page: es el bloque de evidencia de la home. Usa
+  // el mismo pipeline porque el problema es el mismo — un PNG de 1,4 MB que
+  // ningun documento deberia pedir.
+  ['evidence-hero.png', 'evidence.webp'],
 ];
 
 (async () => {
