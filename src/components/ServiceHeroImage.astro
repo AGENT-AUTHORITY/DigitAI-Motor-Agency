@@ -29,6 +29,18 @@ export interface Props {
   saturation?: number;
   contrast?: number;
   maxWidth?: string;
+  /**
+   * True cuando la imagen es el LCP del viewport. En un hero de service page
+   * lo es; en un bloque que vive debajo del fold, pedirla con prioridad le
+   * roba ancho de banda a lo que si esta en pantalla.
+   */
+  priority?: boolean;
+  /**
+   * Sangria hasta el borde del viewport. Correcto en el hero de una service
+   * page, donde .service-page recorta el desborde. Fuera de ese contenedor no
+   * hay quien lo recorte y el 100vw provoca scroll horizontal.
+   */
+  bleed?: boolean;
 }
 
 const {
@@ -38,6 +50,8 @@ const {
   saturation = 1,
   contrast = 1,
   maxWidth = '46rem',
+  priority = true,
+  bleed = true,
 } = Astro.props;
 
 const existe = existsSync(new URL('../../public' + decodeURIComponent(src), import.meta.url));
@@ -57,7 +71,10 @@ const filtro = [
 
 {
   existe && (
-    <figure class="shi" style={`--shi-max:${maxWidth}; --shi-filter:${filtro || 'none'}`}>
+    <figure
+      class:list={['shi', { 'shi--bleed': bleed }]}
+      style={`--shi-max:${maxWidth}; --shi-filter:${filtro || 'none'}`}
+    >
       <img
         class="shi__img"
         src={src}
@@ -65,8 +82,8 @@ const filtro = [
         height={MEDIO.h}
         alt={alt}
         aria-hidden={alt === '' ? 'true' : undefined}
-        loading="eager"
-        fetchpriority="high"
+        loading={priority ? 'eager' : 'lazy'}
+        fetchpriority={priority ? 'high' : undefined}
         decoding="async"
       />
     </figure>
@@ -88,8 +105,12 @@ const filtro = [
          se mezcla con el texto del hero ni con otra superficie.
 
        Token y no hex literal: el dia que --bg-primary cambie, un valor fijo
-       desincronizaria el blend y haria reaparecer el rectangulo. */
-    background: var(--bg-primary);
+       desincronizaria el blend y haria reaparecer el rectangulo.
+
+       --shi-bg permite fundir contra otra superficie sin tocar el componente:
+       el bloque de evidencia vive sobre --bg-secondary, y fundir ahi contra
+       --bg-primary dibujaria el rectangulo del archivo. */
+    background: var(--shi-bg, var(--bg-primary));
     isolation: isolate;
   }
 
@@ -118,7 +139,7 @@ const filtro = [
   /* Desktop: la visual sangra hasta el borde derecho de la pantalla. Dentro de
      la columna quedaba chica y con aire muerto a la derecha. */
   @media (min-width: 64rem) {
-    .shi {
+    .shi--bleed {
       max-inline-size: none;
       inline-size: calc(100% + max(0px, (100vw - var(--container-max, 76rem)) / 2) + var(--gutter));
     }
@@ -127,10 +148,15 @@ const filtro = [
   /* Mobile: ancho completo de viewport. El recorte que impide el scroll
      horizontal vive en .service-page. */
   @media (max-width: 63.99rem) {
-    .shi {
+    .shi--bleed {
       inline-size: 100vw;
       max-inline-size: none;
       margin-inline: calc((100vw - 100%) / -2);
+    }
+
+    /* Sin sangria la imagen ocupa su columna y nada mas. */
+    .shi:not(.shi--bleed) {
+      max-inline-size: none;
     }
   }
 </style>

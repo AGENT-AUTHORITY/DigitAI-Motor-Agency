@@ -10,14 +10,23 @@ import MetricCard from './MetricCard.astro';
  * - Verbos de hallazgo unicamente: analyzed / identified / detected /
  *   recommended. Nunca generated / saved / increased / improved.
  * - Toda cifra lleva su origen: son datos de una cuenta AUDITADA.
+ *
+ * JERARQUIA (el orden es el argumento):
+ * el bloque abre con la conclusion, no con el metodo. Primero se afirma que el
+ * problema era el sistema, despues las cifras que lo sostienen, y recien
+ * entonces el hallazgo. Antes la narrativa larga iba antes que las senales, y
+ * el lector llegaba a los numeros ya cansado.
+ *
+ * El hallazgo es el unico elemento a escala de display: es lo que hay que
+ * recordar si se lee una sola linea de toda la seccion.
  */
 export interface Props {
+  /** Identidad del caso. Nunca el nombre del cliente. */
   title: string;
-  context: string;
-  /** Importes del caso. Trazabilidad, nunca titular. */
-  traceability?: string;
-  /** Alcance del trabajo. Antes era un periodo, pero ya no cubre todo. */
+  /** Alcance del trabajo. */
   scope: string;
+  /** La conclusion. Encabeza el hallazgo, despues de las cifras que lo sostienen. */
+  findingTitle: string;
   metrics: {
     value: string;
     label: string;
@@ -28,40 +37,37 @@ export interface Props {
     /** Apagar en valores aproximados. */
     countUp?: boolean;
   }[];
-  findingLead: string;
-  findingDetail: string;
-  secondary: { label: string; value: string }[];
-  secondaryTitle: string;
-  /** Uno o varios parrafos. */
-  narrative: string | string[];
+  sourceNote: string;
+  /** Detalle del hallazgo. Unico elemento a escala de display del bloque. */
+  finding: string;
+  signalsTitle: string;
+  signals: { label: string; value: string }[];
+  recommendedTitle: string;
   recommended: string[];
   closing: string;
-  sourceNote: string;
+  /** Importes del caso. Trazabilidad, nunca titular. */
+  traceability?: string;
 }
 
 const {
   title,
-  context,
-  traceability,
   scope,
+  findingTitle,
   metrics,
-  findingLead,
-  findingDetail,
-  secondary,
-  secondaryTitle,
-  narrative,
+  sourceNote,
+  finding,
+  signalsTitle,
+  signals,
+  recommendedTitle,
   recommended,
   closing,
-  sourceNote,
+  traceability,
 } = Astro.props;
 ---
 
 <div class="evidence">
   <div class="evidence__head" data-reveal>
-    <div>
-      <h3 class="evidence__title">{title}</h3>
-      <p class="evidence__context">{context}</p>
-    </div>
+    <p class="evidence__case">{title}</p>
     <p class="chip evidence__scope">{scope}</p>
   </div>
 
@@ -81,37 +87,35 @@ const {
 
   <p class="source-note evidence__source">{sourceNote}</p>
 
-  <div class="evidence__body">
-    <div class="evidence__finding" data-reveal>
-      <p class="evidence__finding-lead">{findingLead}</p>
-      <p class="evidence__finding-detail">{findingDetail}</p>
-      {(Array.isArray(narrative) ? narrative : [narrative]).map((p) => (
-        <p class="evidence__narrative">{p}</p>
-      ))}
+  {/* El hallazgo va solo, a ancho de lectura y sin superficie. Meterlo en una
+      tarjeta lo habria igualado a las senales y a las recomendaciones, que son
+      soporte. Esto es la conclusion, y llega despues de las cifras que la
+      sostienen: primero la evidencia, despues la lectura. */}
+  <div class="evidence__finding" data-reveal>
+    <h3 class="evidence__finding-title">{findingTitle}</h3>
+    <p class="evidence__finding-detail">{finding}</p>
+  </div>
+
+  <div class="evidence__panels">
+    <div class="evidence__panel evidence__panel--signals" data-reveal>
+      <p class="evidence__panel-title">{signalsTitle}</p>
+      <dl class="evidence__signals">
+        {
+          signals.map((s) => (
+            <div class="evidence__signal">
+              <dt data-numeric>{s.value}</dt>
+              <dd>{s.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
     </div>
 
-    <div class="evidence__side" data-reveal data-reveal-delay="1">
-      <div class="evidence__secondary">
-        <p class="evidence__side-title">{secondaryTitle}</p>
-        <dl class="evidence__stats">
-          {
-            secondary.map((s) => (
-              <div class="evidence__stat">
-                <dt>{s.label}</dt>
-                <dd data-numeric>{s.value}</dd>
-              </div>
-            ))
-          }
-        </dl>
-      </div>
-
-      <div class="evidence__recommended">
-        <p class="evidence__side-title">Recomendado</p>
-        <ul class="evidence__list" role="list">
-          {recommended.map((r) => <li>{r}</li>)}
-        </ul>
-      </div>
-
+    <div class="evidence__panel" data-reveal data-reveal-delay="1">
+      <p class="evidence__panel-title">{recommendedTitle}</p>
+      <ul class="evidence__list" role="list">
+        {recommended.map((r) => <li>{r}</li>)}
+      </ul>
     </div>
   </div>
 
@@ -129,26 +133,20 @@ const {
   .evidence__head {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: var(--space-sm);
-    padding-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
     border-bottom: 1px solid var(--border);
   }
 
-  .evidence__title {
+  .evidence__case {
     font-family: var(--font-heading);
     font-size: var(--text-2xs);
     font-weight: var(--weight-extrabold);
     letter-spacing: var(--tracking-eyebrow);
     text-transform: uppercase;
     color: var(--accent);
-  }
-
-  .evidence__context {
-    margin-top: var(--space-3xs);
-    font-size: var(--text-base);
-    color: var(--text-secondary);
   }
 
   .evidence__scope {
@@ -165,50 +163,38 @@ const {
     margin-top: calc(var(--space-md) * -1);
   }
 
-  .evidence__body {
-    display: grid;
-    gap: var(--space-lg);
+  /* Escala de display y una linea de acento a la izquierda: es el unico
+     elemento del bloque que se lee desde lejos. Sin superficie a proposito
+     — una tarjeta lo habria bajado al nivel de los paneles de soporte. */
+  .evidence__finding {
+    padding-left: var(--space-md);
+    border-left: 2px solid var(--accent);
+    max-width: 52ch;
   }
 
-  /* El hallazgo es el titular real de la seccion, no las metricas de volumen.
-     Por eso va a escala de heading y las cifras de contexto quedan al lado. */
-  .evidence__finding-lead {
+  .evidence__finding-title {
     font-family: var(--font-heading);
     font-size: var(--text-2xl);
     font-weight: var(--weight-extrabold);
     line-height: var(--leading-snug);
     letter-spacing: var(--tracking-tight);
     color: var(--text-primary);
-    max-width: 26ch;
+    max-width: 20ch;
   }
 
   .evidence__finding-detail {
     margin-top: var(--space-sm);
     font-size: var(--text-lg);
     line-height: var(--leading-relaxed);
-    color: var(--warning);
-  }
-
-  .evidence__narrative + .evidence__narrative {
-    margin-top: var(--space-sm);
-  }
-
-  .evidence__narrative {
-    margin-top: var(--space-md);
-    font-size: var(--text-base);
-    line-height: var(--leading-relaxed);
     color: var(--text-secondary);
-    max-width: 52ch;
   }
 
-  .evidence__side {
+  .evidence__panels {
     display: grid;
     gap: var(--space-md);
-    align-content: start;
   }
 
-  .evidence__secondary,
-  .evidence__recommended {
+  .evidence__panel {
     padding: var(--space-md);
     background: var(--surface);
     border: 1px solid var(--border);
@@ -216,8 +202,8 @@ const {
     box-shadow: var(--highlight-top);
   }
 
-  .evidence__side-title {
-    margin-bottom: var(--space-2xs);
+  .evidence__panel-title {
+    margin-bottom: var(--space-sm);
     font-family: var(--font-heading);
     font-size: var(--text-2xs);
     font-weight: var(--weight-bold);
@@ -226,44 +212,41 @@ const {
     color: var(--text-muted);
   }
 
-  .evidence__stats {
+  /* Las senales pasan de filas de texto con la cifra al final a una grilla con
+     la cifra adelante y grande. El numero es el hallazgo; la etiqueta lo
+     explica. Al reves habia que leer la frase entera para llegar al dato. */
+  .evidence__signals {
     display: grid;
-    gap: var(--space-3xs);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-md) var(--space-sm);
     margin: 0;
   }
 
-  .evidence__stat {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    padding-block: 0.3125rem;
-    border-bottom: 1px solid var(--border);
-    font-size: var(--text-sm);
-  }
-
-  .evidence__stat:last-child {
-    border-bottom: 0;
-  }
-
-  .evidence__stat dt {
-    color: var(--text-muted);
-  }
-
-  .evidence__stat dd {
-    margin: 0;
+  .evidence__signal dt {
     font-family: var(--font-heading);
-    font-weight: var(--weight-bold);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-extrabold);
+    line-height: 1.1;
+    letter-spacing: var(--tracking-tight);
     color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .evidence__signal dd {
+    margin: var(--space-3xs) 0 0;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-muted);
   }
 
   .evidence__list {
     display: grid;
-    gap: var(--space-3xs);
+    gap: var(--space-2xs);
     list-style: none;
     margin: 0;
     padding: 0;
     font-size: var(--text-sm);
+    line-height: var(--leading-normal);
     color: var(--text-secondary);
   }
 
@@ -282,13 +265,6 @@ const {
     background: var(--accent);
   }
 
-  /* Pie de todo el bloque. Es letra chica de respaldo, no un dato de la
-     lectura principal: por eso va despues del cierre y sin superficie. */
-  .evidence__trace {
-    margin-top: var(--space-xs);
-    max-width: 78ch;
-  }
-
   .evidence__closing {
     padding-top: var(--space-md);
     border-top: 1px solid var(--border);
@@ -299,6 +275,13 @@ const {
     letter-spacing: var(--tracking-display);
     color: var(--text-primary);
     max-width: 24ch;
+  }
+
+  /* Pie de todo el bloque. Es letra chica de respaldo, no un dato de la
+     lectura principal: por eso va despues del cierre y sin superficie. */
+  .evidence__trace {
+    margin-top: var(--space-xs);
+    max-width: 78ch;
   }
 
   @media (min-width: 40rem) {
@@ -314,12 +297,23 @@ const {
     .evidence__metrics {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
-  }
 
-  @media (min-width: 64rem) {
-    .evidence__body {
+    /* El hallazgo escala y el titulo del caso no. Con los dos en --text-3xl
+       el H2 de la seccion, el titulo del caso y el hallazgo median lo mismo:
+       tres pesos iguales no son jerarquia, son una lista. El hallazgo es lo
+       unico que hay que recordar si se lee una sola linea. */
+    .evidence__finding {
+      padding-left: var(--space-lg);
+    }
+
+    .evidence__finding-title {
+      font-size: var(--text-3xl);
+    }
+
+    /* Senales pesa mas que recomendaciones: son la evidencia, no el plan. */
+    .evidence__panels {
       grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-      column-gap: var(--space-2xl);
+      column-gap: var(--space-xl);
     }
   }
 </style>

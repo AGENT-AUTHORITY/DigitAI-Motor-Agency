@@ -7,6 +7,7 @@ import ProcessFlow from '../components/ProcessFlow.astro';
 import CreativeFlow from '../components/CreativeFlow.astro';
 import CapabilityGrid from '../components/CapabilityGrid.astro';
 import EvidenceCase from '../components/EvidenceCase.astro';
+import ServiceHeroImage from '../components/ServiceHeroImage.astro';
 import QuickFixMatrix from '../components/QuickFixMatrix.astro';
 import FounderNote from '../components/FounderNote.astro';
 import FAQ from '../components/FAQ.astro';
@@ -272,14 +273,32 @@ const serviceSchema = {
   <!-- 06 · EVIDENCE -->
   <section class="section section--alt" id="evidence" aria-labelledby="evidence-title">
     <div class="container">
-      <div class="section-head">
-        <p class="eyebrow eyebrow--dot">Evidence, not claims</p>
-        <h2 id="evidence-title">Un análisis vale más cuando termina en una decisión.</h2>
+      <div class="evidence-hero">
+        <div class="evidence-hero__copy">
+          <p class="eyebrow eyebrow--dot">Evidence, not claims</p>
+          <h2 id="evidence-title">Los números muestran qué pasó. Nosotros buscamos por qué.</h2>
+          <p class="section-head__lead">
+            Cruzamos adquisición, orgánico, experiencia y atribución hasta
+            encontrar las señales que explican dónde pierde fuerza el sistema.
+          </p>
+          <p class="evidence-micro">See what others miss.</p>
+        </div>
+
+        {/* priority={false}: el bloque vive debajo del fold, asi que pedir la
+            imagen con prioridad le robaria ancho de banda al hero real.
+            bleed={false}: fuera de .service-page nadie recorta el desborde y
+            el 100vw daria scroll horizontal. */}
+        <div class="evidence-hero__visual">
+          <ServiceHeroImage
+            src="/assets/service-heroes/evidence.webp"
+            priority={false}
+            bleed={false}
+          />
+        </div>
       </div>
 
       <EvidenceCase
         title="Performance Audit · Energy B2C/B2B"
-        context="Auditoría de adquisición y performance digital que combinó Google Ads, Search Console, SEO técnico, landings y atribución."
         scope="Ads · Search Console · SEO · CRO"
         metrics={[
           {
@@ -297,9 +316,10 @@ const serviceSchema = {
           },
           {
             // 23,1% y no 23%: es el mismo dato con un decimal mas, derivado de
-            // los montos auditados (45.918 / 198.622 = 0,2312). Los importes ya
-            // no se publican, asi que el porcentaje es ahora la unica forma en
-            // que ese hallazgo llega al lector.
+            // los montos auditados (45.918 / 198.622 = 0,2312). /google-ads/
+            // publica esta misma tarjeta con la misma redaccion; redondear solo
+            // aca dejaria dos cifras distintas para el mismo dato en dos
+            // paginas del mismo sitio.
             value: '23,1%',
             label: 'Del presupuesto analizado',
             context: 'detectado en términos de búsqueda sin conversión',
@@ -313,25 +333,21 @@ const serviceSchema = {
           },
         ]}
         sourceNote="Datos provenientes de una cuenta y una propiedad auditadas. No son resultados producidos por digitAI Motor."
-        findingLead="El problema no estaba en una sola campaña."
-        findingDetail="Detectamos señales de fuga en adquisición, orgánico, infraestructura y atribución."
-        narrative={[
-          'Solo cuatro páginas comerciales acumulaban más de 263.000 impresiones, mientras sus CTR orgánicos se movían entre 0,14% y 0,77%. Alta visibilidad, pero muy baja captura de clic.',
+        findingTitle="El problema no era una campaña. Era el sistema."
+        finding="Las señales convergían en varios puntos a la vez: adquisición, visibilidad orgánica, experiencia móvil y atribución."
+        signalsTitle="Señales detectadas"
+        signals={[
+          { value: '129', label: 'términos con inversión y cero conversión' },
+          { value: '9.465', label: 'clics fragmentados entre variantes de la home' },
+          { value: '87%', label: 'del tráfico concentrado en mobile' },
+          { value: '58,97', label: 'conversiones registradas en la semana auditada' },
         ]}
-        secondaryTitle="Señales detectadas"
-        secondary={[
-          { label: 'Términos con inversión y cero conversiones', value: '129' },
-          { label: 'Clics fragmentados entre 4 variantes de la home', value: '9.465' },
-          { label: 'Del tráfico era móvil, aprox.', value: '87%' },
-          { label: 'Conversiones registradas en la semana analizada', value: '58,97' },
-        ]}
+        recommendedTitle="Recomendado"
         recommended={[
-          'Revisión de términos y palabras negativas',
-          'Canonicalización de las variantes de la home',
-          'Corrección de Core Web Vitals en móvil',
-          'Revisión de estructura de campañas y presupuesto',
-          'Revisión de landing y conversión',
-          'Corrección del modelo de atribución',
+          'Consolidar variantes y corregir canónicos',
+          'Reparar fricción móvil y Core Web Vitals',
+          'Eliminar términos con gasto sin intención real',
+          'Corregir tracking y modelo de atribución',
         ]}
         closing="Performance también consiste en saber qué dejar de pagar."
         traceability="Caso real · Google Ads · 16–22 jul 2026 · Datos anonimizados."
@@ -407,6 +423,44 @@ const serviceSchema = {
 </BaseLayout>
 
 <style>
+  /* Apertura del bloque de evidencia: funciona como un hero interno de la
+     home. El reparto es el mismo que el de las service pages visual-first
+     — el copy pide poco ancho y la visual pide presencia. */
+  .evidence-hero {
+    display: grid;
+    gap: var(--space-lg);
+    align-items: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  /* La visual se funde contra --bg-secondary y no contra --bg-primary: esta
+     seccion es .section--alt. Sin esto el blend calcularia contra el fondo
+     equivocado y reaparaceria el rectangulo del archivo. */
+  .evidence-hero__visual {
+    --shi-bg: var(--bg-secondary);
+  }
+
+  @media (min-width: 64rem) {
+    .evidence-hero {
+      grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr);
+      column-gap: var(--space-2xl);
+    }
+  }
+
+  /* Firma en ingles del bloque de evidencia. Es el mismo rol que .hero-micro
+     cumple en las service pages, pero aquella regla vive dentro de
+     .service-page__head--visual y no alcanza a la home: se declara aca en vez
+     de globalizarla, porque hoy es el unico uso fuera de una service page. */
+  .evidence-micro {
+    margin-top: var(--space-sm);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-extrabold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
   /* Cierre de seccion: frase que resume, en escala de heading pero sin ser
      un heading. No entra en la jerarquia de encabezados. */
   .closing-line {
