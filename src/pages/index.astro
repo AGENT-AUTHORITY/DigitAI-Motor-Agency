@@ -1,524 +1,223 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
-import HeroSystem from '../components/HeroSystem.astro';
-import GrowthFlow from '../components/GrowthFlow.astro';
-import ProcessFlow from '../components/ProcessFlow.astro';
-import CreativeFlow from '../components/CreativeFlow.astro';
-import CapabilityGrid from '../components/CapabilityGrid.astro';
-import EvidenceCase from '../components/EvidenceCase.astro';
-import ServiceHeroImage from '../components/ServiceHeroImage.astro';
-import QuickFixMatrix from '../components/QuickFixMatrix.astro';
-import FounderNote from '../components/FounderNote.astro';
-import FAQ from '../components/FAQ.astro';
-import ContactIntent from '../components/ContactIntent.astro';
-import Button from '../components/Button.astro';
-import { ANCHORS, LINKEDIN_URL, SITE } from '../data/navigation';
+import { whatsappLink, WHATSAPP_NUMBER, LINKEDIN_URL } from '../data/navigation';
 
-// Todo el copy sale de docs/COPY.md. Ninguna cifra fuera de docs/COPY.md.
-const site = Astro.site ?? new URL('https://www.digitaimotor.lat');
-
-const growthNodes = [
-  { label: 'TRAFFIC', note: 'Tráfico incorrecto' },
-  { label: 'CREATIVE', note: 'Mensaje débil' },
-  { label: 'LANDING', note: 'Se pierde intención' },
-  { label: 'LEAD', note: 'Baja calidad' },
-  { label: 'SALES', note: 'Seguimiento lento' },
-  { label: 'REVENUE', note: 'Venta desconocida' },
-  { label: 'DATA', note: 'Atribución rota' },
+// Se conserva el canal comercial ya configurado en la V2.
+// WhatsApp NO envía el mensaje automáticamente: la persona debe enviarlo.
+const conversation = 'Hola, quiero que evalúen si Digital Motor puede trabajar con mi empresa. Empresa: [nombre]. El principal obstáculo comercial que tenemos es: ';
+const whatsappHref = whatsappLink(conversation);
+const phoneHref = `tel:+${WHATSAPP_NUMBER}`;
+const criteria = [
+  { number: '01', text: 'Ya tenés ventas y un negocio en marcha.' },
+  { number: '02', text: 'Podés invertir para resolver un problema real.' },
+  { number: '03', text: 'Estás dispuesto a medir y ejecutar cambios.' },
 ];
-
-const processSteps = [
-  {
-    number: '01',
-    title: 'Diagnose',
-    description: 'El cuello de botella real, no el más visible.',
-    detail: [
-      'Negocio', 'Mercado', 'Oferta', 'Cliente', 'Competencia',
-      'Ads', 'Creative', 'Landing', 'Funnel', 'Proceso comercial',
-    ],
-  },
-  { number: '02', title: 'Prioritize', description: 'Impacto potencial por encima de trabajo cosmético.' },
-  { number: '03', title: 'Test', description: 'Hipótesis convertidas en experimentos legibles.' },
-  { number: '04', title: 'Learn', description: 'Leer las señales, también las negativas.' },
-  { number: '05', title: 'Scale', description: 'Escalar solo lo que ya demostró valor.' },
-];
-
-const capabilities = [
-  {
-    problem: '¿Estás pagando por tráfico que no debería llegar?',
-    title: 'Paid Media',
-    answer: 'Encontramos dónde se está desperdiciando adquisición.',
-    items: ['Google Ads', 'Meta Ads', 'Search', 'Remarketing', 'Auditoría de campañas'],
-    href: '/paid-media/',
-  },
-  {
-    problem: '¿Llega el tráfico pero la página no cierra?',
-    title: 'CRO & Conversion',
-    answer: 'Encontramos dónde se pierde la intención.',
-    items: ['Landing pages', 'Oferta', 'Formularios', 'WhatsApp', 'Mobile UX', 'Flujo de leads'],
-    href: '/cro-landing-pages/',
-  },
-  {
-    problem: '¿Entran leads pero no sabés cuáles terminaron vendiendo?',
-    title: 'Revenue Systems',
-    answer: 'Conectamos adquisición con ventas.',
-    items: ['Tracking', 'Analytics', 'CRM', 'Atribución', 'Seguimiento', 'Automatización'],
-    // Revenue Systems no tiene pagina propia. ROUTES.md registra que
-    // /tracking-analytics/ "se cubre hoy dentro de Growth Audit": es el destino
-    // documentado, no una aproximacion inventada.
-    href: '/growth-audit/',
-  },
-  {
-    problem: '¿El problema está fuera del Ads Manager?',
-    title: 'Growth Engineering',
-    answer: 'Construimos la conexión que falta.',
-    items: ['Dashboards', 'Herramientas internas', 'APIs', 'CRMs', 'Automatización', 'AI workflows'],
-    href: '/growth-engineering/',
-  },
-];
-
-const quickFixItems = [
-  'Google Ads', 'Meta Ads', 'Meta Business', 'GA4', 'GTM', 'Pixel',
-  'Conversion Tracking', 'Landing', 'Forms', 'WhatsApp', 'CRM',
-  'Search Console', 'Technical SEO', 'Automation', 'API', 'Dashboard',
-];
-
-const faqs = [
-  {
-    question: '¿Trabajan solamente con empresas grandes?',
-    answer:
-      'No. Se puede empezar por un problema puntual, una auditoría, una implementación acotada o una relación continua como Growth Partner. El alcance lo define el cuello de botella, no el tamaño de la empresa.',
-  },
-  {
-    question: '¿Pueden revisar campañas que ya están activas?',
-    answer:
-      'Sí. Primero diagnóstico, después cambios. Tocar una cuenta activa sin entender qué está midiendo suele empeorar el resultado antes de mejorarlo.',
-  },
-  {
-    question: '¿Trabajan solamente con Google Ads y Meta Ads?',
-    answer:
-      'No. Paid Media es solo una parte del sistema. El rendimiento también se pierde en el mensaje, la landing, el seguimiento comercial y la medición.',
-  },
-  {
-    question: '¿También desarrollan landing pages, CRM o automatizaciones?',
-    answer:
-      'Sí, cuando el cuello de botella lo requiere. El desarrollo existe al servicio del crecimiento: no construimos software por construir software.',
-  },
-  {
-    question: '¿Trabajan fuera de Argentina?',
-    answer:
-      'Sí. El trabajo es remoto con toda LATAM y hay posibilidad de proyectos internacionales.',
-  },
-];
-
-const organizationSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'digitAI Motor',
-  alternateName: 'digitAI motor',
-  url: site.href,
-  logo: new URL('/assets/logo-mark.svg', site).href,
-  description:
-    'Growth Partner. Paid Media, Performance Creative, CRO, tracking y sistemas comerciales conectados desde el tráfico hasta la venta.',
-  founder: { '@type': 'Person', name: 'Oscar Chinchilla', sameAs: LINKEDIN_URL },
-  sameAs: [LINKEDIN_URL],
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: SITE.locality,
-    addressRegion: SITE.region,
-    addressCountry: 'AR',
-  },
-};
-
-const serviceSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'ProfessionalService',
-  name: 'digitAI Motor',
-  url: site.href,
-  description:
-    'Diagnóstico y ejecución de crecimiento: Paid Media, Performance Creative, CRO, tracking, CRM y automatización.',
-  areaServed: [
-    { '@type': 'Country', name: 'Argentina' },
-    { '@type': 'Place', name: 'LATAM' },
-  ],
-  knowsAbout: [
-    'Performance Marketing', 'Google Ads', 'Meta Ads', 'Performance Creative',
-    'Conversion Rate Optimization', 'Web Analytics', 'Marketing Attribution',
-    'CRM', 'Marketing Automation',
-  ],
-};
 ---
 
 <BaseLayout
-  title="Growth Partner | Performance, Creative & CRO | digitAI Motor"
-  description="Paid Media, Performance Creative, CRO, tracking y automatización conectados desde el tráfico hasta la venta. Primero encontramos qué frena el crecimiento."
-  schema={[organizationSchema, serviceSchema]}
+  title="Digital Motor | Growth Partner para empresas que ya venden"
+  description="Digital Motor selecciona proyectos de crecimiento comercial: estrategia, adquisición, conversión y ventas. Evaluamos si podemos aportar valor antes de trabajar juntos."
+  bodyClass="dm-v4-page"
 >
-  <!-- 01 · HERO -->
-  <Hero
-    eyebrow="Growth Partner · Performance · Creative"
-    title={[
-      'Encontramos qué está frenando tu crecimiento.',
-      'Después lo arreglamos.',
-    ]}
-    subtitle="Paid Media, Performance Creative, CRO, tracking y sistemas comerciales conectados desde el tráfico hasta la venta."
-    supporting="Ads are only one part of growth."
-    primaryCta={{
-      label: 'Solicitar diagnóstico de crecimiento',
-      href: ANCHORS.growthAudit,
-      trackingEvent: 'growth_audit_click',
-    }}
-    secondaryCta={{
-      label: 'Tengo un problema puntual',
-      href: ANCHORS.quickFix,
-      trackingEvent: 'quick_fix_click',
-    }}
-    capabilities={[
-      'Paid Media',
-      'Performance Creative',
-      'CRO',
-      'Tracking',
-      'CRM',
-      'Growth Engineering',
-    ]}
-  >
-    <HeroSystem slot="media" />
-  </Hero>
-
-  <!-- 02 · WHERE GROWTH BREAKS -->
-  <section class="section section--alt section--tight-top" aria-labelledby="breaks-title">
-    <div class="container">
-      <div class="section-head">
-        <p class="eyebrow eyebrow--dot">Where growth breaks</p>
-        <h2 id="breaks-title">Tu problema de crecimiento no siempre es un problema de Ads.</h2>
-        <p class="section-head__lead">
-          El rendimiento puede perderse en cualquier punto entre el tráfico y la venta.
-        </p>
-      </div>
-
-      <GrowthFlow nodes={growthNodes} />
-
-      <p class="closing-line">
-        Primero encontramos dónde se rompe. Después decidimos qué tocar.
-      </p>
+  <div class="dmv4" id="dmv4-start">
+    <!-- Navegación principal de la landing: sin catálogo de servicios. -->
+    <div class="dmv4-topbar">
+      <a class="dmv4-brand" href="/" aria-label="digitAI Motor, inicio">
+        <span class="dmv4-brand-mark" aria-hidden="true"><i></i><i></i></span>
+        <span class="dmv4-brand-name">digit<span>AI</span> Motor</span>
+      </a>
+      <span class="dmv4-category">GROWTH PARTNER <b aria-hidden="true">/</b> ARGENTINA · LATAM</span>
+      <a class="dmv4-top-action" href={whatsappHref} target="_blank" rel="noopener noreferrer" data-track="v4_whatsapp_header">
+        HABLEMOS <span aria-hidden="true">↗</span>
+      </a>
     </div>
-  </section>
 
-  <!-- 03 · OUR GROWTH SYSTEM -->
-  <section class="section" aria-labelledby="system-title">
-    <div class="container">
-      <div class="section-head">
-        <p class="eyebrow eyebrow--dot">How we work</p>
-        <h2 id="system-title">
-          No empezamos optimizando.<br />Empezamos entendiendo.
-        </h2>
-      </div>
-
-      <ProcessFlow steps={processSteps} />
-    </div>
-  </section>
-
-  <!-- 04 · PERFORMANCE CREATIVE -->
-  <section
-    class="section section--alt creative-section"
-    id="performance-creative"
-    aria-labelledby="creative-title"
-  >
-    <div class="container">
-      <div class="section-head creative-section__head">
-        <p class="eyebrow eyebrow--dot">Performance Creative</p>
-        <p class="creative-section__kicker">Creative isn't decoration. It's performance.</p>
-        <h2 id="creative-title">
-          Tu próximo ganador puede estar escondido en los datos que ya tenés.
-        </h2>
-        <p class="section-head__lead">
-          Convertimos insights, hooks y conceptos en hipótesis que se pueden testear.
-        </p>
-      </div>
-
-      <CreativeFlow />
-
-      <div class="creative-section__cta">
-        {/* Mientras /performance-creative/ no exista, el CTA describe la
-            accion real (pedir un analisis) y no una navegacion que no ocurre.
-            Vuelve a "Explorar Performance Creative" en FASE 4/5. Ver ROUTES.md */}
-        <Button
-          label="Solicitar análisis creativo"
-          href={ANCHORS.growthAudit}
-          variant="secondary"
-          arrow
-          trackingEvent="performance_creative_view"
-          trackingContext="creative_section"
-        />
-      </div>
-    </div>
-  </section>
-
-  <!-- 05 · CAPABILITIES -->
-  <section class="section" id="capabilities" aria-labelledby="caps-title">
-    <div class="container">
-      <div class="section-head">
-        <p class="eyebrow eyebrow--dot">Capabilities</p>
-        <h2 id="caps-title">Dónde podemos intervenir.</h2>
-        <p class="section-head__lead">
-          No hace falta contratar todo. Hace falta saber cuál frente está frenando el resultado.
-        </p>
-      </div>
-
-      <CapabilityGrid capabilities={capabilities} />
-    </div>
-  </section>
-
-  <!-- 06 · EVIDENCE -->
-  <section class="section section--alt" id="evidence" aria-labelledby="evidence-title">
-    <div class="container">
-      <div class="evidence-hero">
-        <div class="evidence-hero__copy">
-          <p class="eyebrow eyebrow--dot">Evidence, not claims</p>
-          <h2 id="evidence-title">Los números muestran qué pasó. Nosotros buscamos por qué.</h2>
-          <p class="section-head__lead">
-            Cruzamos adquisición, orgánico, experiencia y atribución hasta
-            encontrar las señales que explican dónde pierde fuerza el sistema.
-          </p>
-          <p class="evidence-micro">See what others miss.</p>
+    <!-- UN SOLO HERO, UNA SOLA IDEA, CONTACTO EN EL PRIMER PANTALLAZO. -->
+    <section class="dmv4-hero" aria-labelledby="dmv4-title">
+      <div class="dmv4-main">
+        <p class="dmv4-label"><span class="dmv4-dot" aria-hidden="true"></span> 01 / SELECCIÓN DE PROYECTOS</p>
+        <h1 id="dmv4-title">
+          <span>NO</span>
+          <span>ACEPTAMOS</span>
+          <span class="dmv4-accent">CUALQUIER</span>
+          <span>PROYECTO<span class="dmv4-stop">.</span></span>
+        </h1>
+        <div class="dmv4-pitch">
+          <p>Trabajamos con empresas que <strong>ya venden</strong> y tienen un problema de crecimiento que podemos diagnosticar, medir y resolver.</p>
+          <p class="dmv4-note">Antes de empezar, evaluamos si realmente podemos aportar valor.</p>
         </div>
+        <div class="dmv4-actions">
+          <a class="dmv4-cta" href={whatsappHref} target="_blank" rel="noopener noreferrer" data-track="v4_whatsapp_primary">
+            <span>QUIERO QUE EVALÚEN MI EMPRESA</span>
+            <span class="dmv4-cta-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="dmv4-secondary" href={phoneHref} data-track="v4_phone_click">O llamanos directamente <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="dmv4-smallprint">Hablás directamente con nosotros. Sin formularios interminables.</p>
+      </div>
+      <aside class="dmv4-side" aria-label="Criterios de evaluación comercial">
+        <div class="dmv4-side-top"><span>DM / GROWTH</span><span>CRITERIOS DE ENTRADA ↗</span></div>
+        <div class="dmv4-diagram" aria-hidden="true">
+          <span class="dmv4-axis"></span><span class="dmv4-orbit a"></span><span class="dmv4-orbit b"></span>
+          <span class="dmv4-center">DM</span><span class="dmv4-coordinates">MARKETING × SALES × SYSTEMS</span>
+        </div>
+        <h2>ENTRAMOS<br />CUANDO<span class="dmv4-colon">:</span></h2>
+        <ol class="dmv4-criteria">
+          {criteria.map((item) => <li><span>{item.number}</span><p>{item.text}</p></li>)}
+        </ol>
+        <p class="dmv4-side-foot">SI NO VEMOS UNA OPORTUNIDAD CONCRETA, TE LO DECIMOS.</p>
+      </aside>
+    </section>
 
-        {/* priority={false}: el bloque vive debajo del fold, asi que pedir la
-            imagen con prioridad le robaria ancho de banda al hero real.
-            bleed={false}: fuera de .service-page nadie recorta el desborde y
-            el 100vw daria scroll horizontal. */}
-        <div class="evidence-hero__visual">
-          <ServiceHeroImage
-            src="/assets/service-heroes/evidence.webp"
-            priority={false}
-            bleed={false}
-          />
+    <div class="dmv4-ticker" aria-label="Capacidades comerciales">
+      <span>VENTAS B2B</span><b aria-hidden="true">✳</b><span>PAID MEDIA</span><b aria-hidden="true">✳</b><span>CONVERSIÓN</span><b aria-hidden="true">✳</b><span>DATOS</span><b aria-hidden="true">✳</b><span>TECNOLOGÍA</span>
+    </div>
+
+    <section class="dmv4-close" aria-labelledby="dmv4-close-title">
+      <div class="dmv4-close-grid">
+        <div class="dmv4-close-head">
+          <span>02 / NUESTRA REGLA</span>
+          <h2 id="dmv4-close-title">PRIMERO<br />EL NEGOCIO<span>.</span><br />DESPUÉS<br />LOS ADS.</h2>
+        </div>
+        <div class="dmv4-close-body">
+          <p>No vendemos campañas porque sí. Encontramos dónde se pierde valor entre la consulta y la venta. Si existe una oportunidad real, proponemos una intervención. Si no, preferimos no tomar el proyecto.</p>
+          <a class="dmv4-close-link" href={whatsappHref} target="_blank" rel="noopener noreferrer" data-track="v4_whatsapp_footer">
+            EMPEZAR UNA CONVERSACIÓN <span aria-hidden="true">↗</span>
+          </a>
         </div>
       </div>
-
-      <EvidenceCase
-        title="Performance Audit · Energy B2C/B2B"
-        scope="Ads · Search Console · SEO · CRO"
-        metrics={[
-          {
-            value: '~2M',
-            label: 'Impresiones orgánicas analizadas',
-            context: 'Search Console · 12 meses',
-            // Sin count-up: la tilde dice que el número es aproximado, y
-            // animarlo de 0 a 2 le pondría una precisión que no tiene.
-            countUp: false,
-          },
-          {
-            value: '46,4K',
-            label: 'Impresiones de Google Ads',
-            context: 'analizadas en una semana',
-          },
-          {
-            // 23,1% y no 23%: es el mismo dato con un decimal mas, derivado de
-            // los montos auditados (45.918 / 198.622 = 0,2312). /google-ads/
-            // publica esta misma tarjeta con la misma redaccion; redondear solo
-            // aca dejaria dos cifras distintas para el mismo dato en dos
-            // paginas del mismo sitio.
-            value: '23,1%',
-            label: 'Del presupuesto analizado',
-            context: 'detectado en términos de búsqueda sin conversión',
-            status: 'attention',
-          },
-          {
-            value: '15/15',
-            label: 'Páginas monitorizadas',
-            context: 'con Core Web Vitals móvil en estado malo',
-            status: 'attention',
-          },
-        ]}
-        sourceNote="Datos provenientes de una cuenta y una propiedad auditadas. No son resultados producidos por digitAI Motor."
-        findingTitle="El problema no era una campaña. Era el sistema."
-        finding="Las señales convergían en varios puntos a la vez: adquisición, visibilidad orgánica, experiencia móvil y atribución."
-        signalsTitle="Señales detectadas"
-        signals={[
-          { value: '129', label: 'términos con inversión y cero conversión' },
-          { value: '9.465', label: 'clics fragmentados entre variantes de la home' },
-          { value: '87%', label: 'del tráfico concentrado en mobile' },
-          { value: '58,97', label: 'conversiones registradas en la semana auditada' },
-        ]}
-        recommendedTitle="Recomendado"
-        recommended={[
-          'Consolidar variantes y corregir canónicos',
-          'Reparar fricción móvil y Core Web Vitals',
-          'Eliminar términos con gasto sin intención real',
-          'Corregir tracking y modelo de atribución',
-        ]}
-        closing="Performance también consiste en saber qué dejar de pagar."
-        traceability="Caso real · Google Ads · 16–22 jul 2026 · Datos anonimizados."
-      />   </div>
-  </section>
-
-  <!-- 07 · QUICK FIX -->
-  <section class="section" id="quick-fix" aria-labelledby="qf-title">
-    <div class="container">
-      <div class="section-head">
-        <p class="eyebrow eyebrow--dot">Quick Fix</p>
-        <h2 id="qf-title">No todo necesita un proyecto de tres meses.</h2>
-        <p class="section-head__lead">
-          Si existe un problema puntual, entramos directamente ahí.
-        </p>
-      </div>
-
-      <QuickFixMatrix items={quickFixItems} />
-
-      <div class="qf-footer">
-        <Button
-          label="Contame qué está fallando"
-          href={ANCHORS.growthAudit}
-          arrow
-          trackingEvent="quick_fix_click"
-          trackingContext="quick_fix_section"
-        />
-        <p class="source-note">
-          También trabajamos sobre problemas puntuales y proyectos acotados.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 08 · BUSINESS PERSPECTIVE -->
-  <section class="section section--alt" aria-labelledby="founder-title">
-    <div class="container">
-      <FounderNote
-        eyebrow="Business perspective"
-        title="Performance con criterio comercial."
-        paragraphs={[
-          '+10 años en ventas B2B, negociación y gestión comercial.',
-          'Por eso una campaña no termina cuando genera un lead: queremos saber qué ocurrió después.',
-        ]}
-        quote="Una campaña no se juzga solamente por CTR o CPL."
-        statsTitle="Organic B2B Distribution"
-        stats={[
-          { label: 'Seguidores', value: '1.749' },
-          { label: 'Crecimiento vs. los 365 días previos', value: '+281%' },
-          { label: 'Alcance fuera de la red existente', value: '71%' },
-        ]}
-        statsNote="Datos de perfil personal de LinkedIn."
-        ctaLabel="Ver perfil en LinkedIn"
-        ctaHref={LINKEDIN_URL}
-      />
-    </div>
-  </section>
-
-  <!-- 09 · FAQ -->
-  <section class="section" aria-labelledby="faq-title">
-    <div class="container container--narrow">
-      <div class="section-head">
-        <p class="eyebrow eyebrow--dot">FAQ</p>
-        <h2 id="faq-title">Preguntas antes de empezar.</h2>
-      </div>
-
-      <FAQ items={faqs} />
-    </div>
-  </section>
-
-  <!-- 10 · FINAL CTA -->
-  <ContactIntent />
+      <footer class="dmv4-footer">
+        <span>© {new Date().getFullYear()} DIGITAI MOTOR · GROWTH PARTNER</span>
+        <div><a href="/privacy/">PRIVACIDAD</a><a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">LINKEDIN ↗</a></div>
+      </footer>
+    </section>
+  </div>
 </BaseLayout>
 
 <style>
-  /* Apertura del bloque de evidencia: funciona como un hero interno de la
-     home. El reparto es el mismo que el de las service pages visual-first
-     — el copy pide poco ancho y la visual pide presencia. */
-  .evidence-hero {
-    display: grid;
-    gap: var(--space-lg);
-    align-items: center;
-    margin-bottom: var(--space-xl);
-  }
+  /* Home V4: oculta el header y footer de la plantilla anterior solo en esta página. */
+  :global(body.dm-v4-page .site-header),
+  :global(body.dm-v4-page .site-footer) { display: none; }
+  :global(body.dm-v4-page) { background: #f5f2e9; }
+  :global(body.dm-v4-page #main) { width: 100%; }
+  :global(body.dm-v4-page .skip-link) { z-index: 9999; }
 
-  /* La visual se funde contra --bg-secondary y no contra --bg-primary: esta
-     seccion es .section--alt. Sin esto el blend calcularia contra el fondo
-     equivocado y reaparaceria el rectangulo del archivo. */
-  .evidence-hero__visual {
-    --shi-bg: var(--bg-secondary);
+  .dmv4 { --ink: #131416; --paper: #f5f2e9; --blue: #294ce5; --lemon: #f2eca4; --border: rgba(19,20,22,.18); background: var(--paper); color: var(--ink); font-family: 'Inter', Arial, sans-serif; overflow: clip; }
+  .dmv4 * { box-sizing: border-box; }
+  .dmv4 a { text-decoration: none; }
+  .dmv4 :is(h1,h2,h3,p) { margin: 0; }
+  .dmv4-topbar { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; min-height: 79px; padding: 0 clamp(22px,3.2vw,58px); border-bottom: 1px solid var(--border); position: relative; z-index: 3; background: var(--paper); }
+  .dmv4-brand { display: inline-flex; align-items: center; gap: 12px; width: max-content; color: var(--ink); }
+  .dmv4-brand:hover { color: var(--ink); }
+  .dmv4-brand-name { font-size: 21px; font-weight: 800; letter-spacing: -.065em; white-space: nowrap; }
+  .dmv4-brand-name span { color: var(--blue); }
+  .dmv4-brand-mark { position: relative; display: inline-grid; place-items: center; width: 29px; height: 29px; transform: rotate(45deg); border: 2px solid var(--ink); }
+  .dmv4-brand-mark i { display: block; position: absolute; border: 2px solid var(--blue); width: 15px; height: 15px; }
+  .dmv4-brand-mark i:last-child { width: 6px; height: 6px; background: var(--blue); border: 0; }
+  .dmv4-category { justify-self: center; color: #525458; font-weight: 800; font-size: 10px; letter-spacing: .15em; white-space: nowrap; }
+  .dmv4-category b { margin: 0 9px; color: var(--blue); }
+  .dmv4-top-action { justify-self: end; color: var(--ink); font-size: 12px; font-weight: 900; letter-spacing: .08em; border-bottom: 2px solid var(--ink); padding: 9px 0; display:flex; align-items:center; gap:16px; }
+  .dmv4-top-action:hover { color: var(--blue); border-bottom-color: var(--blue); }
+  .dmv4-top-action span { font-size: 20px; }
+  .dmv4-hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(320px, .75fr); min-height: min(900px, calc(100svh - 79px)); }
+  .dmv4-main { position: relative; padding: clamp(32px,3.7vw,62px) clamp(24px,4.1vw,75px) clamp(36px,4vw,62px) clamp(24px,5.4vw,100px); display:flex; flex-direction:column; align-items:flex-start; justify-content:center; }
+  .dmv4-label { font-size: 10px; font-weight: 900; letter-spacing: .17em; margin-bottom: clamp(24px,2.7vw,42px)!important; }
+  .dmv4-dot { display:inline-block; width:9px; height:9px; background:var(--blue); transform:rotate(45deg); margin-right:12px; }
+  .dmv4 h1 { font-family: Impact, 'Arial Narrow', 'Arial Black', sans-serif; font-size: clamp(65px, 7.0vw, 124px); font-weight: 900; letter-spacing: -.044em; line-height: .87; text-transform:uppercase; color:var(--ink); max-width:100%; margin: 0 0 clamp(27px,2.9vw,48px); text-wrap:nowrap; }
+  .dmv4 h1 > span { display: block; }
+  .dmv4 h1 .dmv4-accent { color:var(--blue); }
+  .dmv4-stop { color:var(--blue); }
+  .dmv4-pitch { display:grid; grid-template-columns: minmax(0, 1fr) minmax(0,.72fr); gap:30px; width:100%; max-width:880px; align-items:start; }
+  .dmv4-pitch p { font-size: clamp(16px,1.45vw,20px); line-height: 1.38; color:var(--ink); letter-spacing:-.02em; }
+  .dmv4-pitch strong { color:var(--ink); font-weight:900; }
+  .dmv4-pitch .dmv4-note { color:#5c5b59; font-size: clamp(12px,1vw,14px); line-height:1.5; border-left:2px solid var(--blue); padding-left:14px; }
+  .dmv4-actions { display:flex; align-items:center; flex-wrap:wrap; gap:22px; margin-top: clamp(26px,2.7vw,42px); width:100%; }
+  .dmv4-cta { display:flex; gap: clamp(28px,3vw,65px); justify-content:space-between; align-items:center; background:var(--ink); padding:18px 19px 18px 23px; color:var(--paper); font-size: clamp(11px,.9vw,13px); font-weight:900; letter-spacing:.065em; min-height:65px; transition: background .2s ease, transform .2s ease; }
+  .dmv4-cta:hover { background:var(--blue); color:white; transform: translateY(-2px); }
+  .dmv4-cta-arrow { font-size:25px; color:var(--lemon); line-height:1; }
+  .dmv4-secondary { font-weight:800; font-size:13px; color:var(--ink); white-space:nowrap; border-bottom:1px solid var(--ink); padding:7px 0; }
+  .dmv4-secondary:hover { color:var(--blue); border-color:var(--blue); }
+  .dmv4-smallprint { font-size:11px; color:#77746d; margin-top:19px!important; }
+  .dmv4-side { position:relative; color:var(--paper); background:var(--blue); padding: clamp(27px,2.7vw,46px); display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; isolation:isolate; }
+  .dmv4-side-top { display:flex; justify-content:space-between; gap:15px; position:absolute; top:34px; left:clamp(27px,2.7vw,46px); right:clamp(27px,2.7vw,46px); z-index:3; font-size:10px; font-weight:900; letter-spacing:.12em; white-space:nowrap; }
+  .dmv4-diagram { position:relative; display:grid; place-items:center; min-height:clamp(150px,18vw,270px); isolation:isolate; }
+  .dmv4-axis { position:absolute; border-top:1px solid rgba(255,255,255,.48); top:50%; left:-40%; right:-40%; transform:rotate(-27deg); }
+  .dmv4-orbit { position:absolute; width:clamp(155px,16vw,230px); aspect-ratio:1; border:1px solid rgba(255,255,255,.65); border-radius:50%; }
+  .dmv4-orbit.a { transform:scale(1.35); border-color:rgba(255,255,255,.24); }
+  .dmv4-orbit.b { transform:scale(.53); border-width:2px; background:var(--lemon); border-color:var(--lemon); }
+  .dmv4-center { font-family:Impact,'Arial Narrow',sans-serif; color:var(--ink); font-size:clamp(48px,5.5vw,75px); z-index:1; letter-spacing:-.06em; transform:translateY(4px); }
+  .dmv4-coordinates { position:absolute; bottom:0; right:0; font-size:9px; font-weight:800; letter-spacing:.12em; writing-mode:vertical-rl; }
+  .dmv4-side h2 { font-family:Impact,'Arial Narrow',sans-serif; color:#fff; font-size: clamp(50px,5vw,77px); letter-spacing:-.025em; line-height:.88; margin-top:clamp(22px,2.5vw,40px); }
+  .dmv4-colon { color:var(--lemon); }
+  .dmv4-criteria { list-style:none; margin:22px 0 24px; padding:0; }
+  .dmv4-criteria li { display:grid; grid-template-columns:32px 1fr; padding:12px 0; border-top:1px solid rgba(255,255,255,.44); gap:8px; font-size:clamp(12px,1vw,14px); line-height:1.35; }
+  .dmv4-criteria li span { font-size:10px; color:var(--lemon); font-weight:900; padding-top:3px; }
+  .dmv4-criteria li p { font-weight:600; color:white; }
+  .dmv4-side-foot { font-size:10px; line-height:1.5; font-weight:900; letter-spacing:.1em; color:var(--lemon); max-width:27ch; }
+  .dmv4-ticker { min-height:62px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-around; padding:14px 26px; gap:15px; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); color:var(--ink); background:var(--lemon); }
+  .dmv4-ticker span { font-size:clamp(10px,.95vw,13px); font-weight:900; letter-spacing:.1em; }
+  .dmv4-ticker b { color:var(--blue); font-size:17px; }
+  .dmv4-close { background:var(--ink); color:var(--paper); padding: clamp(55px,7vw,118px) clamp(24px,5.4vw,100px) 25px; }
+  .dmv4-close-grid { display:grid; grid-template-columns: 1.07fr .93fr; gap:12%; align-items:end; padding-bottom: clamp(60px,7vw,110px); }
+  .dmv4-close-head > span { font-size:11px; color:var(--lemon); font-weight:900; letter-spacing:.14em; }
+  .dmv4-close h2 { color:var(--paper); font-family:Impact,'Arial Narrow',sans-serif; font-size:clamp(58px,7vw,120px); letter-spacing:-.03em; line-height:.88; margin-top:22px; }
+  .dmv4-close h2 span { color:var(--lemon); }
+  .dmv4-close-body { padding-bottom:10px; }
+  .dmv4-close-body p { font-size:clamp(19px,1.9vw,29px); max-width:570px; line-height:1.35; font-weight:600; letter-spacing:-.035em; margin-bottom:40px; color:var(--paper); }
+  .dmv4-close-link { display:inline-flex; width:100%; justify-content:space-between; align-items:center; gap:15px; border-top:1px solid #777; padding-top:19px; font-size:clamp(12px,1.2vw,17px); font-weight:900; letter-spacing:.06em; color:var(--lemon); }
+  .dmv4-close-link:hover { color:white; }
+  .dmv4-close-link span { font-size:30px; }
+  .dmv4-footer { display:flex; justify-content:space-between; gap:25px; border-top:1px solid #626267; padding-top:20px; align-items:center; font-size:10px; font-weight:800; letter-spacing:.08em; }
+  .dmv4-footer div { display:flex; gap:26px; }
+  .dmv4-footer a { color:#d1d0d0; }
+  .dmv4-footer a:hover { color:var(--lemon); }
+  @media(max-width:1250px) {
+    .dmv4-hero { grid-template-columns: minmax(0,1.12fr) minmax(290px,.88fr); }
+    .dmv4 h1 { font-size: clamp(60px,7vw,99px); }
+    .dmv4-pitch { grid-template-columns:1fr; gap:12px; }
+    .dmv4-actions { gap:12px; }
   }
-
-  @media (min-width: 64rem) {
-    .evidence-hero {
-      grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr);
-      column-gap: var(--space-2xl);
-    }
+  @media(max-width:820px) {
+    .dmv4-topbar { grid-template-columns:1fr auto; min-height:72px; }
+    .dmv4-category { display:none; }
+    .dmv4-hero { grid-template-columns:1fr; min-height:0; }
+    .dmv4-main { padding:50px 28px 55px; }
+    .dmv4 h1 { font-size:clamp(65px,11vw,105px); }
+    .dmv4-pitch { grid-template-columns: minmax(0,1fr) minmax(0,.8fr); }
+    .dmv4-side { padding:35px; display:grid; grid-template-columns: .75fr 1.25fr; gap:20px; align-items:center; }
+    .dmv4-side-top { display:none; }
+    .dmv4-side h2 { grid-column:1; grid-row:1; }
+    .dmv4-diagram { grid-column:1; grid-row:2; min-height:170px; }
+    .dmv4-criteria { grid-column:2; grid-row:1 / span 2; }
+    .dmv4-side-foot { grid-column:1 / -1; }
+    .dmv4-close-grid { gap:8%; }
   }
-
-  /* Firma en ingles del bloque de evidencia. Es el mismo rol que .hero-micro
-     cumple en las service pages, pero aquella regla vive dentro de
-     .service-page__head--visual y no alcanza a la home: se declara aca en vez
-     de globalizarla, porque hoy es el unico uso fuera de una service page. */
-  .evidence-micro {
-    margin-top: var(--space-sm);
-    font-family: var(--font-heading);
-    font-size: var(--text-2xs);
-    font-weight: var(--weight-extrabold);
-    letter-spacing: var(--tracking-eyebrow);
-    text-transform: uppercase;
-    color: var(--text-muted);
+  @media(max-width:580px) {
+    .dmv4-topbar { min-height:64px; padding:0 18px; }
+    .dmv4-brand-name { font-size:19px; }
+    .dmv4-brand-mark { width:24px; height:24px; }
+    .dmv4-top-action { font-size:10px; gap:7px; }
+    .dmv4-main { padding:38px 18px 41px; }
+    .dmv4-label { margin-bottom:28px!important; }
+    .dmv4 h1 { font-size:clamp(53px,14.6vw,83px); line-height:.91; letter-spacing:-.045em; margin-bottom:26px; }
+    .dmv4-pitch { grid-template-columns:1fr; gap:8px; }
+    .dmv4-pitch p { font-size:17px; max-width:37ch; line-height:1.4; }
+    .dmv4-pitch .dmv4-note { font-size:12px; margin-top:8px; }
+    .dmv4-actions { flex-direction:column; align-items:stretch; gap:10px; margin-top:27px; }
+    .dmv4-cta { width:100%; min-height:61px; padding:14px 14px 14px 18px; gap:12px; font-size:11px; }
+    .dmv4-secondary { align-self:flex-start; font-size:12px; }
+    .dmv4-smallprint { margin-top:14px!important; }
+    .dmv4-side { display:block; padding:32px 22px; }
+    .dmv4-side h2 { font-size:53px; margin-top:0; }
+    .dmv4-diagram { display:none; }
+    .dmv4-criteria { margin:22px 0 20px; }
+    .dmv4-ticker { gap:10px; padding:15px; justify-content:center; }
+    .dmv4-ticker span { font-size:9px; }
+    .dmv4-close { padding:60px 20px 25px; }
+    .dmv4-close-grid { grid-template-columns:1fr; gap:45px; }
+    .dmv4-close h2 { font-size:clamp(62px,14vw,88px); }
+    .dmv4-close-body p { font-size:21px; }
+    .dmv4-footer { flex-direction:column; align-items:flex-start; gap:16px; font-size:9px; }
   }
-
-  /* Cierre de seccion: frase que resume, en escala de heading pero sin ser
-     un heading. No entra en la jerarquia de encabezados. */
-  .closing-line {
-    margin-top: var(--space-xl);
-    padding-top: var(--space-md);
-    border-top: 1px solid var(--border);
-    font-family: var(--font-heading);
-    font-size: var(--text-xl);
-    font-weight: var(--weight-bold);
-    line-height: var(--leading-snug);
-    letter-spacing: var(--tracking-tight);
-    color: var(--text-primary);
-    max-width: 34ch;
-  }
-
-  /* Performance Creative tiene lenguaje visual propio dentro del mismo
-     design system: fondo con halo lateral y un kicker en ingles que no
-     aparece en ninguna otra seccion. */
-  .creative-section {
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
-  }
-
-  .creative-section::before {
-    content: '';
-    position: absolute;
-    inset-block-start: -10%;
-    inset-inline-start: -12%;
-    inline-size: 38rem;
-    block-size: 38rem;
-    z-index: -1;
-    background: radial-gradient(circle, rgba(35, 136, 255, 0.1), transparent 62%);
-    pointer-events: none;
-  }
-
-  .creative-section__head {
-    max-width: 52rem;
-  }
-
-  .creative-section__kicker {
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
-    font-weight: var(--weight-bold);
-    letter-spacing: var(--tracking-tight);
-    color: var(--accent);
-  }
-
-  .creative-section__cta {
-    margin-top: var(--space-lg);
-  }
-
-  .qf-footer {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-sm);
-    margin-top: var(--space-lg);
-  }
-
+  @media (prefers-reduced-motion: reduce) { .dmv4-cta { transition:none; } }
 </style>
