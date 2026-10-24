@@ -23,7 +23,7 @@ const criteria = [
     <!-- Navegación principal de la landing: sin catálogo de servicios. -->
     <div class="dmv4-topbar">
       <a class="dmv4-brand" href="/" aria-label="digitAI Motor, inicio">
-        <span class="dmv4-brand-mark" aria-hidden="true"><i></i><i></i></span>
+        <img class="dmv4-brand-symbol" src="/assets/dm-sacred-mark.webp" alt="" width="42" height="54" decoding="async" />
         <span class="dmv4-brand-name">digit<span>AI</span> Motor</span>
       </a>
       <span class="dmv4-category">GROWTH PARTNER <b aria-hidden="true">/</b> ARGENTINA · LATAM</span>
@@ -59,7 +59,7 @@ const criteria = [
         <div class="dmv4-side-top"><span>DM / GROWTH</span><span>CRITERIOS DE ENTRADA ↗</span></div>
         <div class="dmv4-diagram" aria-hidden="true">
           <span class="dmv4-axis"></span><span class="dmv4-orbit a"></span><span class="dmv4-orbit b"></span>
-          <span class="dmv4-center">DM</span><span class="dmv4-coordinates">MARKETING × SALES × SYSTEMS</span>
+          <div class="dmv4-emblem-disc"><img class="dmv4-sacred-logo" src="/assets/dm-sacred-mark.webp" alt="Isotipo geométrico DM de digitAI Motor" width="720" height="897" decoding="async" /></div><span class="dmv4-coordinates">MARKETING × SALES × SYSTEMS</span>
         </div>
         <h2>ENTRAMOS<br />CUANDO<span class="dmv4-colon">:</span></h2>
         <ol class="dmv4-criteria">
@@ -69,8 +69,12 @@ const criteria = [
       </aside>
     </section>
 
-    <div class="dmv4-ticker" aria-label="Capacidades comerciales">
-      <span>VENTAS B2B</span><b aria-hidden="true">✳</b><span>PAID MEDIA</span><b aria-hidden="true">✳</b><span>CONVERSIÓN</span><b aria-hidden="true">✳</b><span>DATOS</span><b aria-hidden="true">✳</b><span>TECNOLOGÍA</span>
+    <!-- Cinta editorial continua. El duplicado está oculto a lectores de pantalla. -->
+    <div class="dmv4-ticker" aria-label="Capacidades comerciales: ventas B2B, paid media, conversión, datos y tecnología">
+      <div class="dmv4-ticker-track">
+        <div class="dmv4-ticker-set"><span>VENTAS B2B</span><b aria-hidden="true">✳</b><span>PAID MEDIA</span><b aria-hidden="true">✳</b><span>CONVERSIÓN</span><b aria-hidden="true">✳</b><span>DATOS</span><b aria-hidden="true">✳</b><span>TECNOLOGÍA</span><b aria-hidden="true">✳</b></div>
+        <div class="dmv4-ticker-set" aria-hidden="true"><span>VENTAS B2B</span><b aria-hidden="true">✳</b><span>PAID MEDIA</span><b aria-hidden="true">✳</b><span>CONVERSIÓN</span><b aria-hidden="true">✳</b><span>DATOS</span><b aria-hidden="true">✳</b><span>TECNOLOGÍA</span><b aria-hidden="true">✳</b></div>
+      </div>
     </div>
 
     <section class="dmv4-close" aria-labelledby="dmv4-close-title">
@@ -111,9 +115,7 @@ const criteria = [
   .dmv4-brand:hover { color: var(--ink); }
   .dmv4-brand-name { font-size: 21px; font-weight: 800; letter-spacing: -.065em; white-space: nowrap; }
   .dmv4-brand-name span { color: var(--blue); }
-  .dmv4-brand-mark { position: relative; display: inline-grid; place-items: center; width: 29px; height: 29px; transform: rotate(45deg); border: 2px solid var(--ink); }
-  .dmv4-brand-mark i { display: block; position: absolute; border: 2px solid var(--blue); width: 15px; height: 15px; }
-  .dmv4-brand-mark i:last-child { width: 6px; height: 6px; background: var(--blue); border: 0; }
+  .dmv4-brand-symbol { width:32px; height:43px; object-fit:contain; flex:none; filter:drop-shadow(0 1px 2px rgba(14,31,73,.08)); }
   .dmv4-category { justify-self: center; color: #525458; font-weight: 800; font-size: 10px; letter-spacing: .15em; white-space: nowrap; }
   .dmv4-category b { margin: 0 9px; color: var(--blue); }
   .dmv4-top-action { justify-self: end; color: var(--ink); font-size: 12px; font-weight: 900; letter-spacing: .08em; border-bottom: 2px solid var(--ink); padding: 9px 0; display:flex; align-items:center; gap:16px; }
@@ -144,8 +146,9 @@ const criteria = [
   .dmv4-axis { position:absolute; border-top:1px solid rgba(255,255,255,.48); top:50%; left:-40%; right:-40%; transform:rotate(-27deg); }
   .dmv4-orbit { position:absolute; width:clamp(155px,16vw,230px); aspect-ratio:1; border:1px solid rgba(255,255,255,.65); border-radius:50%; }
   .dmv4-orbit.a { transform:scale(1.35); border-color:rgba(255,255,255,.24); }
-  .dmv4-orbit.b { transform:scale(.53); border-width:2px; background:var(--lemon); border-color:var(--lemon); }
-  .dmv4-center { font-family:Impact,'Arial Narrow',sans-serif; color:var(--ink); font-size:clamp(48px,5.5vw,75px); z-index:1; letter-spacing:-.06em; transform:translateY(4px); }
+  .dmv4-orbit.b { transform:scale(1.16); border-width:1px; background:transparent; border-color:rgba(247,232,167,.48); }
+  .dmv4-emblem-disc { position:relative; z-index:2; width:clamp(188px,17vw,242px); aspect-ratio:1; display:grid; place-items:center; border-radius:50%; background:radial-gradient(circle at 44% 38%,#fff 0%,#F6F2E8 60%,#E9E0CA 100%); border:1px solid rgba(255,255,255,.72); box-shadow:0 14px 42px rgba(8,14,58,.23), inset 0 0 22px rgba(255,255,255,.92); }
+  .dmv4-sacred-logo { display:block; width:84%; height:112%; max-width:100%; object-fit:contain; filter:drop-shadow(0 3px 3px rgba(20,30,69,.12)); }
   .dmv4-coordinates { position:absolute; bottom:0; right:0; font-size:9px; font-weight:800; letter-spacing:.12em; writing-mode:vertical-rl; }
   .dmv4-side h2 { font-family:Impact,'Arial Narrow',sans-serif; color:#fff; font-size: clamp(50px,5vw,77px); letter-spacing:-.025em; line-height:.88; margin-top:clamp(22px,2.5vw,40px); }
   .dmv4-colon { color:var(--lemon); }
@@ -154,9 +157,12 @@ const criteria = [
   .dmv4-criteria li span { font-size:10px; color:var(--lemon); font-weight:900; padding-top:3px; }
   .dmv4-criteria li p { font-weight:600; color:white; }
   .dmv4-side-foot { font-size:10px; line-height:1.5; font-weight:900; letter-spacing:.1em; color:var(--lemon); max-width:27ch; }
-  .dmv4-ticker { min-height:62px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-around; padding:14px 26px; gap:15px; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); color:var(--ink); background:var(--lemon); }
+  .dmv4-ticker { min-height:62px; display:flex; align-items:center; overflow:hidden; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); color:var(--ink); background:var(--lemon); }
+  .dmv4-ticker-track { display:flex; align-items:center; width:max-content; flex:none; animation:dmv4-marquee 26s linear infinite; }
+  .dmv4-ticker-set { display:flex; gap:clamp(22px,3vw,48px); align-items:center; padding:14px clamp(22px,3vw,48px) 14px 0; flex:none; white-space:nowrap; }
   .dmv4-ticker span { font-size:clamp(10px,.95vw,13px); font-weight:900; letter-spacing:.1em; }
   .dmv4-ticker b { color:var(--blue); font-size:17px; }
+  .dmv4-ticker:hover .dmv4-ticker-track { animation-play-state:paused; }
   .dmv4-close { background:var(--ink); color:var(--paper); padding: clamp(55px,7vw,118px) clamp(24px,5.4vw,100px) 25px; }
   .dmv4-close-grid { display:grid; grid-template-columns: 1.07fr .93fr; gap:12%; align-items:end; padding-bottom: clamp(60px,7vw,110px); }
   .dmv4-close-head > span { font-size:11px; color:var(--lemon); font-weight:900; letter-spacing:.14em; }
@@ -195,7 +201,7 @@ const criteria = [
   @media(max-width:580px) {
     .dmv4-topbar { min-height:64px; padding:0 18px; }
     .dmv4-brand-name { font-size:19px; }
-    .dmv4-brand-mark { width:24px; height:24px; }
+    .dmv4-brand-symbol { width:29px; height:38px; }
     .dmv4-top-action { font-size:10px; gap:7px; }
     .dmv4-main { padding:38px 18px 41px; }
     .dmv4-label { margin-bottom:28px!important; }
@@ -209,15 +215,103 @@ const criteria = [
     .dmv4-smallprint { margin-top:14px!important; }
     .dmv4-side { display:block; padding:32px 22px; }
     .dmv4-side h2 { font-size:53px; margin-top:0; }
-    .dmv4-diagram { display:none; }
+    .dmv4-diagram { display:grid; min-height:186px; margin:10px auto 3px; }
+    .dmv4-emblem-disc { width:165px; }
+    .dmv4-orbit { width:150px; }
+    .dmv4-coordinates { display:none; }
     .dmv4-criteria { margin:22px 0 20px; }
-    .dmv4-ticker { gap:10px; padding:15px; justify-content:center; }
-    .dmv4-ticker span { font-size:9px; }
+    .dmv4-ticker { min-height:53px; }
+    .dmv4-ticker span { font-size:10px; }
     .dmv4-close { padding:60px 20px 25px; }
     .dmv4-close-grid { grid-template-columns:1fr; gap:45px; }
     .dmv4-close h2 { font-size:clamp(62px,14vw,88px); }
     .dmv4-close-body p { font-size:21px; }
     .dmv4-footer { flex-direction:column; align-items:flex-start; gap:16px; font-size:9px; }
   }
-  @media (prefers-reduced-motion: reduce) { .dmv4-cta { transition:none; } }
+
+  /* V4 Motion: dinamismo editorial con CSS puro. No se incorporan librerías ni videos. */
+  @keyframes dmv4-rise {
+    from { opacity:0; transform:translate3d(0,22px,0); }
+    to { opacity:1; transform:translate3d(0,0,0); }
+  }
+  @keyframes dmv4-unmask {
+    from { opacity:0; transform:translate3d(0,56px,0); }
+    to { opacity:1; transform:translate3d(0,0,0); }
+  }
+  @keyframes dmv4-marquee { to { transform:translate3d(-50%,0,0); } }
+  @keyframes dmv4-orbit-spin { to { transform:rotate(360deg) scale(1.35); } }
+  @keyframes dmv4-center-float {
+    0%,100% { transform:translate3d(0,4px,0); }
+    50% { transform:translate3d(0,-5px,0); }
+  }
+  @keyframes dmv4-signal {
+    0%,100% { box-shadow:0 0 0 0 rgba(41,76,229,.15); }
+    50% { box-shadow:0 0 0 9px rgba(41,76,229,0); }
+  }
+  @keyframes dmv4-arrow-arrive {
+    0%,100% { transform:translate3d(0,0,0); }
+    50% { transform:translate3d(3px,-3px,0); }
+  }
+  @keyframes dmv4-panel-enter {
+    from { opacity:.8; transform:translate3d(34px,0,0); }
+    to { opacity:1; transform:translate3d(0,0,0); }
+  }
+  @keyframes dmv4-axis-scan {
+    0%,100% { transform:rotate(-27deg) translateX(0); }
+    50% { transform:rotate(-27deg) translateX(16px); }
+  }
+  .dmv4-topbar { animation:dmv4-rise .55s both cubic-bezier(.22,1,.36,1); }
+  .dmv4-label { animation:dmv4-rise .7s .12s both cubic-bezier(.22,1,.36,1); }
+  .dmv4 h1 > span { animation:dmv4-unmask .8s both cubic-bezier(.16,1,.3,1); }
+  .dmv4 h1 > span:nth-child(1) { animation-delay:.08s; }
+  .dmv4 h1 > span:nth-child(2) { animation-delay:.17s; }
+  .dmv4 h1 > span:nth-child(3) { animation-delay:.26s; }
+  .dmv4 h1 > span:nth-child(4) { animation-delay:.35s; }
+  .dmv4-pitch { animation:dmv4-rise .7s .35s both cubic-bezier(.22,1,.36,1); }
+  .dmv4-actions { animation:dmv4-rise .7s .45s both cubic-bezier(.22,1,.36,1); }
+  .dmv4-smallprint { animation:dmv4-rise .7s .53s both cubic-bezier(.22,1,.36,1); }
+  .dmv4-side { animation:dmv4-panel-enter 1.05s .14s both cubic-bezier(.16,1,.3,1); }
+  .dmv4-orbit.a { border-style:dashed; animation:dmv4-orbit-spin 28s linear infinite; }
+  .dmv4-emblem-disc { animation:dmv4-center-float 5s ease-in-out infinite; }
+  .dmv4-sacred-logo { transition:transform .7s cubic-bezier(.16,1,.3,1); }
+  .dmv4-emblem-disc:hover .dmv4-sacred-logo { transform:scale(1.055); }
+  .dmv4-axis { animation:dmv4-axis-scan 8s ease-in-out infinite; }
+  .dmv4-dot { animation:dmv4-signal 2.5s ease-in-out infinite; }
+  .dmv4-cta { position:relative; overflow:hidden; isolation:isolate; }
+  .dmv4-cta-arrow { animation:dmv4-arrow-arrive 2.6s ease-in-out infinite; transition:transform .25s cubic-bezier(.16,1,.3,1); }
+  .dmv4-cta:hover .dmv4-cta-arrow { animation:none; transform:translate3d(5px,-5px,0); }
+  .dmv4-criteria li { transition:padding-left .28s ease,background-color .28s ease; }
+  .dmv4-criteria li:hover { padding-left:9px; background:rgba(255,255,255,.065); }
+  .dmv4-close-link span,.dmv4-top-action span { transition:transform .25s cubic-bezier(.16,1,.3,1); }
+  .dmv4-close-link:hover span,.dmv4-top-action:hover span { transform:translate3d(4px,-4px,0); }
+  /* Respeto por el ajuste del dispositivo, sin esconder contenido ni frenar CTA. */
+  @media (prefers-reduced-motion:reduce) {
+    .dmv4 *, .dmv4 *::before, .dmv4 *::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+    .dmv4-ticker-track { animation:none!important; }
+    .dmv4-ticker { overflow-x:auto; }
+  }
 </style>
+
+<script>
+  // Progressive enhancement: fuera del viewport el contenido SIEMPRE es legible.
+  // Cuando entra, una sola aparición sobria. Sin dependencias.
+  const respectsReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!respectsReducedMotion && 'IntersectionObserver' in window) {
+    const watcher = new IntersectionObserver((entries, observer) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        if (entry.target instanceof HTMLElement) {
+          entry.target.animate(
+            [
+              { opacity: 0.45, transform: 'translateY(24px)' },
+              { opacity: 1, transform: 'translateY(0)' },
+            ],
+            { duration: 700, easing: 'cubic-bezier(.16,1,.3,1)' },
+          );
+        }
+        observer.unobserve(entry.target);
+      }
+    }, { threshold: 0.16 });
+    document.querySelectorAll('.dmv4-close-head, .dmv4-close-body').forEach(el => watcher.observe(el));
+  }
+</script>
