@@ -1,18 +1,6 @@
-# digitAI Motor — deploy a GitHub Pages
-#
-# EJECUCION MANUAL UNICAMENTE (workflow_dispatch). No hay trigger en push:
-# un merge a main no publica nada por si solo.
-#
-# Requisito previo, una sola vez:
-#   Settings > Pages > Build and deployment > Source: "GitHub Actions"
-# Sin ese paso este workflow no publica.
-#
-# EL ESTADO PUBLICO VIVE ACA, NO EN EL CODIGO.
-# site.config.mjs mantiene DEFAULT_IS_PUBLIC = false de forma permanente, asi
-# que cualquier build local o de otro entorno sale en estado seguro (noindex,
-# sin sitemap, robots bloqueado). El unico lugar que produce un build publico
-# es este workflow, con la variable de abajo. Publicar por accidente desde una
-# maquina deja de ser posible.
+# digitAI Motor — GitHub Pages deployment
+# V4: la home convierte por WhatsApp/llamada, sin formulario HTML.
+# El workflow no se ejecuta al guardar codigo: publicacion manual.
 
 name: Deploy to GitHub Pages
 
@@ -44,65 +32,48 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Las dos variables publicas viven en
-      #   Settings > Secrets and variables > Actions > Variables
-      # NO son secretos: por diseno viajan al HTML publicado.
-      #
-      # Se verifican ANTES de construir porque su ausencia no rompe el build:
-      # lo degrada en silencio. Sin PUBLIC_FORM_ENDPOINT el formulario vuelve a
-      # modo WhatsApp-only y los leads dejan de entregarse; sin PUBLIC_GA4_ID
-      # no hay medicion ni banner. Las dos fallas se publicarian sin un solo
-      # mensaje de error.
-      #
-      # Se pasan por env y no se interpolan dentro del script: un valor con
-      # metacaracteres de shell no puede inyectar comandos.
+      # La home V4 ya no contiene un formulario: el endpoint no puede
+      # aparecer en dist/index.html y NO debe exigirse para publicarla.
+      # Seguimos requiriendo Analytics porque el despliegue de produccion
+      # esta configurado para medir con consentimiento previo.
       - name: Verify production variables
         env:
-          FORM_ENDPOINT: ${{ vars.PUBLIC_FORM_ENDPOINT }}
           GA4_ID: ${{ vars.PUBLIC_GA4_ID }}
         run: |
-          test -n "$FORM_ENDPOINT" || { echo "::error::Falta la variable PUBLIC_FORM_ENDPOINT. Cargala en Settings > Secrets and variables > Actions > Variables. Sin ella el formulario se publica sin entrega."; exit 1; }
-          test -n "$GA4_ID" || { echo "::error::Falta la variable PUBLIC_GA4_ID. Cargala en Settings > Secrets and variables > Actions > Variables. Sin ella el sitio se publica sin medicion."; exit 1; }
-          echo "variables de produccion presentes"
+          test -n "$GA4_ID" || { echo "::error::Falta PUBLIC_GA4_ID. Configurala en Settings > Secrets and variables > Actions > Variables."; exit 1; }
+          echo "ID de analitica configurado"
 
-      # `npm run build` corre `astro check && astro build`: el chequeo de tipos
-      # es parte del build y frena el deploy si falla.
       - name: Build (produccion publica)
         run: npm run build
         env:
           PUBLIC_SITE_IS_PUBLIC: 'true'
+          # Se conserva para compatibilidad con componentes y rutas futuras.
           PUBLIC_FORM_ENDPOINT: ${{ vars.PUBLIC_FORM_ENDPOINT }}
           PUBLIC_GA4_ID: ${{ vars.PUBLIC_GA4_ID }}
 
-      # Presentes en el entorno no es lo mismo que presentes en el HTML: si el
-      # componente dejara de leerlas, el build seguiria pasando y el sitio
-      # saldria degradado igual. Se verifica el resultado, no la intencion.
-      - name: Verify variables reached the build
+      # Verificamos los mecanismos de contacto que V4 usa REALMENTE.
+      # No se coloca un formulario invisible para superar una comprobacion.
+      - name: Verify contacts and analytics in the generated home
         env:
-          FORM_ENDPOINT: ${{ vars.PUBLIC_FORM_ENDPOINT }}
           GA4_ID: ${{ vars.PUBLIC_GA4_ID }}
         run: |
-          grep -qF "$FORM_ENDPOINT" dist/index.html || { echo "::error::El endpoint del formulario no llego al HTML publicado."; exit 1; }
+          test -f dist/index.html || { echo "::error::No se genero dist/index.html"; exit 1; }
+          grep -q 'href="https://wa.me/' dist/index.html || { echo "::error::V4 no contiene un enlace funcional a WhatsApp."; exit 1; }
+          grep -q 'href="tel:' dist/index.html || { echo "::error::V4 no contiene un enlace de llamada."; exit 1; }
           grep -qF "$GA4_ID" dist/index.html || { echo "::error::El ID de GA4 no llego al HTML publicado."; exit 1; }
           grep -q 'data-consent-banner' dist/index.html || { echo "::error::Falta el banner de consentimiento y hay GA4 configurado."; exit 1; }
-          # `if` y no `&&`: con set -e un grep que no encuentra nada devuelve 1
-          # y abortaria el paso justo en el caso correcto.
           if grep -q '<script[^>]*googletagmanager' dist/index.html; then
             echo "::error::gtag.js se carga desde el HTML: eso saltea el consentimiento."
             exit 1
           fi
-          echo "endpoint y GA4 en el HTML · banner presente · gtag.js no se carga sin consentimiento"
+          echo "CTA WhatsApp y llamada presentes; GA4 y consentimiento verificados"
 
-      # Sin CNAME en dist/, GitHub Pages descarta el dominio custom y el sitio
-      # pasa a responder en la URL de github.io.
       - name: Verify CNAME survived the build
         run: |
           test -f dist/CNAME || { echo "::error::dist/CNAME no existe. El dominio custom se perderia."; exit 1; }
           grep -q "www.digitaimotor.lat" dist/CNAME || { echo "::error::dist/CNAME tiene contenido inesperado."; exit 1; }
           echo "CNAME ok: $(cat dist/CNAME)"
 
-      # Si el build salio en estado seguro por error, el sitemap no existe.
-      # Este paso es la red que impide publicar un sitio entero con noindex.
       - name: Verify public build (sitemap + indexabilidad)
         run: |
           test -f dist/sitemap-index.xml || { echo "::error::sitemap-index.xml no generado: el build salio en estado seguro."; exit 1; }
@@ -112,14 +83,11 @@ jobs:
           test "$NOINDEX" -eq 0 || { echo "::error::$NOINDEX paginas publicas salieron con noindex."; exit 1; }
           grep -q 'content="noindex' dist/404.html || { echo "::error::/404.html perdio su noindex."; exit 1; }
           grep -q '^Allow: /' dist/robots.txt || { echo "::error::robots.txt no permite crawling."; exit 1; }
-          echo "sitemap: $URLS URLs · paginas publicas indexables · 404 noindex · robots abierto"
+          echo "sitemap: $URLS URLs; paginas indexables; 404 noindex; robots abierto"
 
-      # El buzon interno de correo nunca puede llegar al HTML publicado.
       - name: Verify private mailbox never leaked
         run: node scripts/check-no-private-mailbox.cjs
 
-      # Sin los stubs, las URLs de la V1 pasan a 404 el dia que Pages deja de
-      # servir la raiz de la rama.
       - name: Verify legacy stubs
         run: |
           for f in crm-zoho automatizacion paginas-web funnel posicionamiento-geo; do
@@ -127,8 +95,8 @@ jobs:
             grep -q 'http-equiv="refresh" content="0; url=/' "dist/$f.html" || { echo "::error::$f.html sin meta refresh"; exit 1; }
             grep -q 'rel="canonical" href="https://www.digitaimotor.lat/' "dist/$f.html" || { echo "::error::$f.html sin canonical correcto"; exit 1; }
           done
-          grep -q "Growth Partner" dist/index.html || { echo "::error::dist/index.html no es la home."; exit 1; }
-          echo "5 stubs legacy ok · /index.html sigue siendo la home"
+          grep -q 'Growth Partner' dist/index.html || { echo "::error::dist/index.html no es la home."; exit 1; }
+          echo "5 stubs legacy ok; la home V4 esta presente"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
