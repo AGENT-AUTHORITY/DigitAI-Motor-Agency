@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { ANCHORS } from '../data/navigation';
+
+const stages = [
+  { n: '01', title: 'Demanda', question: '¿Llegan las personas correctas?', detail: 'La campaña puede funcionar y aun así atraer consultas que nunca comprarán.' },
+  { n: '02', title: 'Conversión', question: '¿La oferta se entiende?', detail: 'Una visita no es una oportunidad hasta que encuentra un motivo para avanzar.' },
+  { n: '03', title: 'Ventas', question: '¿Qué ocurre después del lead?', detail: 'Velocidad de respuesta, seguimiento y propuesta también forman parte del crecimiento.' },
+  { n: '04', title: 'Rentabilidad', question: '¿Crecer deja más margen?', detail: 'Más facturación no siempre significa un mejor negocio.' },
+];
+const approach = [
+  { n:'I', title:'Diagnosticar', text:'Entender el negocio, su oferta, su margen y dónde se interrumpe el recorrido comercial.' },
+  { n:'II', title:'Priorizar', text:'Elegir el obstáculo con mayor impacto potencial, en lugar de multiplicar tareas.' },
+  { n:'III', title:'Intervenir', text:'Diseñar y ejecutar acciones en captación, conversión, seguimiento o medición.' },
+  { n:'IV', title:'Aprender', text:'Medir señales, reconocer límites de atribución y decidir qué mantener, cambiar o detener.' },
+];
+---
+<BaseLayout
+  title="Growth Partner | Digital Motor — Propuesta V3"
+  description="Digital Motor analiza dónde se pierde el crecimiento entre la demanda y la venta. Diagnóstico comercial, intervención y medición."
+>
+  <main class="v3">
+    <section class="v3-hero" aria-labelledby="v3-title">
+      <div class="v3-shell">
+        <div class="v3-meta"><span>DIGITAL MOTOR / GROWTH PARTNER</span><span>ESTRATEGIA ANTES QUE CAMPAÑAS · 001</span></div>
+        <div class="v3-hero-grid">
+          <div>
+            <p class="v3-kicker">Una posición diferente frente al crecimiento.</p>
+            <h1 id="v3-title">MÁS PUBLICIDAD <em>NO ARREGLA</em> UN NEGOCIO QUE NO CONVIERTE.</h1>
+            <p class="v3-lead">Encontramos dónde se pierde el crecimiento entre la primera consulta y la venta. Después diseñamos una intervención medible sobre lo que realmente importa.</p>
+            <div class="v3-actions">
+              <a class="v3-button" href={ANCHORS.growthAudit}>Solicitar evaluación comercial <span aria-hidden="true">↗</span></a>
+              <a class="v3-textlink" href="#metodo">Cómo pensamos <span aria-hidden="true">↓</span></a>
+            </div>
+          </div>
+          <div class="v3-graphic" aria-label="Diagrama conceptual de crecimiento: demanda, conversión, ventas y margen">
+            <div class="v3-graphic-top"><span>FIELD / 001</span><span>REVENUE INTELLIGENCE</span></div>
+            <div class="v3-signal"><span>TRÁFICO</span><span class="v3-arrow">↘</span></div>
+            <div class="v3-signal"><span>CONSULTAS</span><span class="v3-arrow">↘</span></div>
+            <div class="v3-signal v3-signal-alert"><span>VENTAS</span><span>¿DÓNDE SE PIERDE?</span></div>
+            <div class="v3-signal"><span>MARGEN</span><span class="v3-arrow">→</span></div>
+            <p>EL PROBLEMA NO SIEMPRE ESTÁ DONDE APARECE EL SÍNTOMA.</p>
+          </div>
+        </div>
+        <div class="v3-bottomline"><span>DIAGNÓSTICO / DECISIÓN / EJECUCIÓN</span><span>ARGENTINA · LATAM</span></div>
+      </div>
+    </section>
+
+    <section class="v3-section v3-cream" aria-labelledby="v3-problem">
+      <div class="v3-shell">
+        <div class="v3-section-label"><span>01 / EL PROBLEMA</span><span>UNA PREGUNTA ANTES DE INVERTIR</span></div>
+        <h2 id="v3-problem">TU EMPRESA PUEDE <i>VENDER MÁS</i> Y GANAR MENOS.</h2>
+        <div class="v3-two">
+          <p class="v3-large">Cuando una empresa busca crecer, la respuesta automática suele ser aumentar la inversión publicitaria.</p>
+          <div><p>Pero si la oferta no convierte, las consultas no se atienden o el costo de adquisición supera el margen disponible, comprar más tráfico puede amplificar el problema.</p><p>Por eso no empezamos proponiendo una campaña. Empezamos preguntando dónde se detiene el negocio.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="v3-section v3-white" aria-labelledby="v3-map">
+      <div class="v3-shell">
+        <div class="v3-section-label"><span>02 / MAPA DE PÉRDIDAS</span><span>DE LA DEMANDA AL RESULTADO</span></div>
+        <h2 id="v3-map">EL CRECIMIENTO ES UNA CADENA. <i>NO UN ANUNCIO.</i></h2>
+        <div class="v3-stages">
+          {stages.map((s) => <article class="v3-stage"><span class="v3-number">{s.n}</span><h3>{s.title}</h3><strong>{s.question}</strong><p>{s.detail}</p></article>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="v3-section v3-dark" id="metodo" aria-labelledby="v3-method">
+      <div class="v3-shell">
+        <div class="v3-section-label"><span>03 / CÓMO TRABAJAMOS</span><span>CRITERIO COMERCIAL + EJECUCIÓN</span></div>
+        <h2 id="v3-method">PRIMERO LA DECISIÓN. <i>DESPUÉS LA HERRAMIENTA.</i></h2>
+        <div class="v3-method">{approach.map((a)=><article><span>{a.n}</span><div><h3>{a.title}</h3><p>{a.text}</p></div></article>)}</div>
+        <p class="v3-manifesto">GOOGLE ADS, META ADS, CRO, CRM Y AUTOMATIZACIÓN NO SON NUESTRA PROPUESTA DE VALOR. SON HERRAMIENTAS QUE USAMOS CUANDO EL DIAGNÓSTICO LAS JUSTIFICA.</p>
+      </div>
+    </section>
+
+    <section class="v3-section v3-cream" aria-labelledby="v3-fit">
+      <div class="v3-shell">
+        <div class="v3-section-label"><span>04 / CRITERIOS DE COLABORACIÓN</span><span>NO TODO PROYECTO NECESITA LO MISMO</span></div>
+        <h2 id="v3-fit">NO BUSCAMOS MÁS CUENTAS. <i>BUSCAMOS PROBLEMAS QUE PODAMOS RESOLVER.</i></h2>
+        <div class="v3-two v3-fit">
+          <div><h3>TIENE SENTIDO CONVERSAR SI...</h3><p>Ya vendés y querés entender qué limita el siguiente tramo de crecimiento.</p><p>Podés compartir información básica del negocio y evaluar cambios en tu proceso comercial.</p><p>Tenés capacidad para responder a más demanda si encontramos una oportunidad real.</p></div>
+          <div><h3>QUIZÁS TODAVÍA NO...</h3><p>Buscás una garantía de ventas sin revisar la oferta, los márgenes o el seguimiento.</p><p>Necesitás solamente publicaciones sin una hipótesis comercial detrás.</p><p>No existe capacidad operativa para atender oportunidades nuevas.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="v3-section v3-white" aria-labelledby="v3-evidence">
+      <div class="v3-shell">
+        <div class="v3-section-label"><span>05 / EVIDENCIA</span><span>MOSTRAR EL CRITERIO, NO INVENTAR RESULTADOS</span></div>
+        <h2 id="v3-evidence">LAS CIFRAS IMPORTAN. <i>SU INTERPRETACIÓN, MÁS.</i></h2>
+        <div class="v3-two"><p class="v3-large">Una auditoría puede revelar gasto sin conversión, fricción móvil y problemas de atribución al mismo tiempo.</p><div><p>En nuestro trabajo de análisis del sector energético estudiamos señales de adquisición, búsqueda orgánica y experiencia web para identificar oportunidades de corrección.</p><p><strong>Aclaración:</strong> los datos pertenecen a cuentas auditadas; no se presentan como ventas ni mejoras generadas por Digital Motor.</p><a class="v3-textlink" href="/#evidence">Ver análisis y alcance ↗</a></div></div>
+      </div>
+    </section>
+
+    <section class="v3-section v3-end" aria-labelledby="v3-contact">
+      <div class="v3-shell">
+        <div class="v3-section-label"><span>06 / PRÓXIMO PASO</span><span>CONVERSACIÓN COMERCIAL</span></div>
+        <h2 id="v3-contact">ANTES DE GASTAR MÁS, <i>DESCUBRAMOS QUÉ FALTA.</i></h2>
+        <p>Contanos qué vendés, cómo llegan tus consultas y dónde sentís que se detiene el crecimiento. Si vemos una oportunidad concreta, definimos juntos el alcance del diagnóstico.</p>
+        <a class="v3-button v3-button-light" href={ANCHORS.growthAudit}>Solicitar evaluación comercial <span aria-hidden="true">↗</span></a>
+        <p class="v3-disclaimer">Esta es una propuesta editorial de prueba. El formulario y el procesamiento de consultas siguen en la página principal existente.</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .v3{--ink:#15141b;--violet:#d1c0ff;--cream:#f1eee5;--line:rgba(20,20,27,.18);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+  .v3 *{box-sizing:border-box}.v3-shell{width:min(1280px,calc(100% - 48px));margin-inline:auto}
+  .v3-hero{background:#17151e;color:#faf8f4;padding:32px 0 24px}
+  .v3-meta,.v3-bottomline,.v3-section-label,.v3-graphic-top{display:flex;justify-content:space-between;gap:20px;font-size:11px;font-weight:800;letter-spacing:.12em}
+  .v3-meta{padding-bottom:20px;border-bottom:1px solid #55505e}.v3-bottomline{padding-top:22px;border-top:1px solid #55505e;color:#a9a2b2}
+  .v3-hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:6%;padding:95px 0 100px;align-items:center}
+  .v3-kicker{font-size:13px;text-transform:uppercase;letter-spacing:.15em;color:var(--violet);margin-bottom:26px}
+  .v3 h1,.v3 h2{font-family:Impact,'Arial Narrow',Arial,sans-serif;letter-spacing:-.035em;font-stretch:condensed;font-weight:900;line-height:.99;margin:0;text-transform:uppercase}
+  .v3 h1{font-size:clamp(58px,7.1vw,112px);max-width:850px}.v3 h1 em{color:var(--violet);font-style:normal}
+  .v3-lead{font-size:clamp(17px,1.55vw,23px);line-height:1.48;max-width:630px;margin-top:36px;color:#d6d0df}
+  .v3-actions{display:flex;align-items:center;flex-wrap:wrap;gap:25px;margin-top:34px}
+  .v3-button{display:inline-flex;align-items:center;justify-content:space-between;gap:38px;background:var(--violet);color:#17151e;text-decoration:none;padding:19px 22px;font-weight:800;font-size:14px}
+  .v3-button:hover{background:#fff}.v3-textlink{font-size:14px;font-weight:800;text-decoration:none;color:inherit;border-bottom:1px solid currentColor;padding-bottom:5px}
+  .v3-graphic{min-height:470px;border:1px solid #797180;background:#262230;padding:24px;display:flex;flex-direction:column;justify-content:space-between;transform:rotate(2deg);box-shadow:20px 20px 0 #0e0c13}
+  .v3-graphic-top{color:var(--violet);font-size:10px}.v3-signal{display:flex;justify-content:space-between;align-items:center;padding:16px 4px;border-bottom:1px solid #77707d;font-size:clamp(24px,3vw,44px);font-weight:900;letter-spacing:-.06em}.v3-arrow{color:var(--violet)}
+  .v3-signal-alert{background:var(--violet);color:#17151e;padding:18px 12px;margin-inline:-10px}.v3-signal-alert span:last-child{font-size:10px;letter-spacing:.06em;max-width:100px;text-align:right}
+  .v3-graphic>p{font-size:11px;letter-spacing:.09em;line-height:1.5;max-width:230px}
+  .v3-section{padding:105px 0 115px}.v3-cream{background:var(--cream)}.v3-white{background:#fff}.v3-dark{background:#19171f;color:#f8f5f0}
+  .v3-section-label{padding-bottom:18px;border-bottom:1px solid currentColor;opacity:.7;margin-bottom:65px}
+  .v3 h2{font-size:clamp(46px,6.1vw,92px);max-width:1060px;margin-bottom:60px}.v3 h2 i{font-style:normal;color:#6950b2}.v3-dark h2 i,.v3-end h2 i{color:var(--violet)}
+  .v3-two{display:grid;grid-template-columns:1fr 1fr;gap:10%;align-items:start}.v3-two p{font-size:18px;line-height:1.65;margin:0 0 20px}.v3-two .v3-large{font-size:clamp(23px,2.6vw,38px);line-height:1.25;font-weight:700;letter-spacing:-.03em}
+  .v3-stages{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--ink)}.v3-stage{padding:22px 22px 35px;border-right:1px solid var(--line)}.v3-stage:last-child{border-right:0}.v3-number{font-size:12px;font-weight:800;color:#6950b2}.v3-stage h3{font-size:32px;letter-spacing:-.05em;margin:48px 0 16px}.v3-stage strong{font-size:16px;display:block;line-height:1.4}.v3-stage p{font-size:14px;line-height:1.65;margin-top:15px}
+  .v3-method{border-top:1px solid #77707d}.v3-method article{display:grid;grid-template-columns:80px 1fr;gap:20px;padding:26px 0;border-bottom:1px solid #77707d}.v3-method article>span{color:var(--violet);font-size:13px;font-weight:900}.v3-method h3{font-size:clamp(28px,3vw,46px);margin:0 0 8px;letter-spacing:-.05em}.v3-method p{max-width:630px;color:#c6c0cd;line-height:1.6;margin:0}.v3-manifesto{margin-top:65px;max-width:850px;font-weight:900;font-size:clamp(19px,2.2vw,31px);line-height:1.35;color:var(--violet)}
+  .v3-fit h3{font-size:15px;letter-spacing:.08em;padding-bottom:16px;border-bottom:2px solid #15141b;margin-bottom:30px}.v3-end{background:#4c2bc0;color:white}.v3-end>div>p:not(.v3-disclaimer){max-width:700px;font-size:21px;line-height:1.55;margin-bottom:32px}.v3-button-light{background:#f3edda}.v3-disclaimer{font-size:12px;opacity:.8;margin-top:32px}
+  @media(max-width:850px){.v3-hero-grid,.v3-two{grid-template-columns:1fr}.v3-hero-grid{padding:65px 0;gap:55px}.v3-graphic{transform:none;min-height:390px;box-shadow:10px 10px 0 #0e0c13}.v3-stages{grid-template-columns:repeat(2,1fr)}.v3-stage:nth-child(2){border-right:0}.v3-section{padding:75px 0}.v3-section-label{margin-bottom:42px}}
+  @media(max-width:520px){.v3-shell{width:calc(100% - 32px)}.v3-meta span:last-child,.v3-bottomline span:last-child,.v3-section-label span:last-child{display:none}.v3 h1{font-size:clamp(50px,12vw,72px)}.v3 h2{font-size:clamp(42px,10vw,62px)}.v3-stages{grid-template-columns:1fr}.v3-stage{border-right:0;border-bottom:1px solid var(--line)}.v3-graphic{min-height:350px}.v3-actions{align-items:stretch;flex-direction:column}.v3-button{width:100%}.v3-method article{grid-template-columns:40px 1fr}}
+</style>
