@@ -80,7 +80,7 @@ jobs:
           URLS=$(grep -o '<loc>' dist/sitemap-0.xml | wc -l)
           test "$URLS" -eq 11 || { echo "::error::El sitemap tiene $URLS URLs, se esperaban 11."; exit 1; }
          
-          NOINDEX=$(grep -l 'content="noindex' dist/index.html dist/*/index.html 2>/dev/null | grep -v '^dist/postular/index.html$' | wc -l)
+                  NOINDEX=$(grep -l 'content="noindex' dist/index.html dist/*/index.html 2>/dev/null | grep -v '^dist/postular/index.html$' | wc -l || true)
           test -f dist/postular/index.html || { echo "::error::Falta el formulario."; exit 1; }
           test -f dist/postular/recibida/index.html || { echo "::error::Falta la confirmación."; exit 1; }
           grep -q 'content="noindex' dist/postular/index.html || { echo "::error::El formulario debe tener noindex."; exit 1; }
