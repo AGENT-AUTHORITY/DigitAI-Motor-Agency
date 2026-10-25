@@ -1,0 +1,256 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+// Destino confirmado por el propietario de digitAI Motor.
+// El formulario usa este Gmail de forma independiente de la configuración de la home.
+const destinoPostulaciones = 'digitai.motor.agency@gmail.com';
+---
+
+<BaseLayout
+  title="Postulá tu negocio | Growth Partner — digitAI Motor"
+  description="No trabajamos con todo el mundo. Contanos sobre tu negocio y evaluemos si tiene sentido construir juntos."
+  canonicalPath="/postular/"
+  noindex={true}
+  bodyClass="dm-postular-page"
+>
+  <div class="dm-application">
+    <header class="app-top">
+      <a class="app-brand" href="/" aria-label="digitAI Motor — Volver al inicio">
+        <img src="/assets/dm-sacred-mark.webp" alt="" width="32" height="42" />
+        <span>digit<span>AI</span> Motor</span>
+      </a>
+      <div class="app-top-right"><span class="app-type">GROWTH PARTNER / SELECCIÓN DE PROYECTOS</span><a href="/">VOLVER AL INICIO ↗</a></div>
+    </header>
+
+    <div class="app-layout">
+      <section class="app-story" aria-labelledby="app-title">
+        <div class="story-top"><span class="small-overline"><i></i> APLICACIONES ABIERTAS</span><span class="story-index">DM / GP · 001</span></div>
+        <div class="story-main">
+          <p class="story-eyebrow">EL ARTE DE ELEGIR</p>
+          <h1 id="app-title">NO TODOS<br />VAN HACIA<br /><em>EL MISMO</em><br />LUGAR<span>.</span></h1>
+          <div class="story-rule"></div>
+          <p class="story-intro">Y no todos los negocios necesitan el mismo compañero de camino.</p>
+          <p class="story-copy">Nos involucramos donde hay un negocio real, visión de futuro y voluntad de construir. Antes de hablar de campañas, queremos entender qué estás intentando lograr.</p>
+        </div>
+        <div class="story-footer"><span>NO BUSCAMOS 100 CLIENTES. BUSCAMOS LOS CORRECTOS.</span><span>↘</span></div>
+      </section>
+
+      <section class="app-form-area" aria-labelledby="form-title" id="formulario">
+        <div class="form-head">
+          <p class="form-kicker">01 / PRIMERA CONVERSACIÓN</p>
+          <h2 id="form-title">Las buenas alianzas empiezan con <em>una pregunta.</em></h2>
+          <p>¿Tiene sentido construir juntos? Contanos lo suficiente para evaluarlo. No es una solicitud de presupuesto automática.</p>
+        </div>
+
+        <form id="growth-application" action={`https://formsubmit.co/${destinoPostulaciones}`} method="POST" novalidate>
+          <!-- GitHub Pages es estático: FormSubmit envía los datos por email. -->
+          <input type="hidden" name="_subject" id="asunto-correo" value="Nueva postulación Growth Partner — digitAI Motor" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_next" value="https://www.digitaimotor.lat/postular/recibida/" />
+          <input type="hidden" name="_url" value="https://www.digitaimotor.lat/postular/" />
+          <input type="hidden" name="utm_source" id="utm-source" value="" />
+          <input type="hidden" name="utm_medium" id="utm-medium" value="" />
+          <input type="hidden" name="utm_campaign" id="utm-campaign" value="" />
+          <div class="spam-trap" aria-hidden="true"><label for="telefono-control">Dejar vacío</label><input id="telefono-control" type="text" name="_honey" tabindex="-1" autocomplete="off" /></div>
+          <div class="wizard-progress" aria-label="Progreso de la postulación">
+            <div class="wizard-line" aria-hidden="true"><span id="wizard-fill"></span></div>
+            <div class="wizard-progress-label"><span id="wizard-number">PASO 01 DE 03</span><span id="wizard-label">TU NEGOCIO</span></div>
+          </div>
+
+          <fieldset class="form-step" data-step="0">
+            <legend class="step-title">Primero, hablemos de tu negocio.</legend>
+            <p class="step-help">Queremos entender qué construiste hasta hoy.</p>
+            <div class="form-grid">
+              <div class="field field-wide"><label for="empresa">¿Cómo se llama tu empresa? <b>*</b></label><input id="empresa" name="empresa" type="text" autocomplete="organization" placeholder="Nombre del negocio" maxlength="100" required /></div>
+              <div class="field"><label for="rubro">¿A qué se dedica? <b>*</b></label><select id="rubro" name="rubro" required><option value="">Elegí el rubro</option><option>Servicios profesionales</option><option>Industria / B2B</option><option>Comercio / eCommerce</option><option>Educación / infoproductos</option><option>Salud y bienestar</option><option>Construcción / inmobiliario</option><option>Tecnología / software</option><option>Gastronomía / hotelería</option><option>Otro sector</option></select></div>
+              <div class="field"><label for="trayectoria">¿En qué etapa está? <b>*</b></label><select id="trayectoria" name="trayectoria" required><option value="">Seleccioná una etapa</option><option>Ya vendo de forma constante</option><option>Vendo, pero de manera irregular</option><option>Estoy validando mi oferta</option><option>Estoy por lanzar</option></select></div>
+              <div class="field field-wide"><label for="web">Sitio web o Instagram <span>(opcional)</span></label><input id="web" name="web" type="text" placeholder="tusitio.com o @tuempresa" maxlength="150" /></div>
+            </div>
+            <div class="step-controls"><span class="required-note">* Campos obligatorios</span><button type="button" class="button-next" data-next>CONTINUAR <span aria-hidden="true">↗</span></button></div>
+          </fieldset>
+
+          <fieldset class="form-step" data-step="1" hidden>
+            <legend class="step-title">¿Qué te está frenando?</legend>
+            <p class="step-help">No hay respuestas perfectas. Preferimos entender el problema real.</p>
+            <div class="form-grid">
+              <div class="field field-wide"><label for="desafio">¿Cuál es tu mayor desafío comercial? <b>*</b></label><select id="desafio" name="desafio" required><option value="">Seleccioná el desafío principal</option><option>Necesito generar más oportunidades de venta</option><option>Recibo consultas, pero cierro pocas ventas</option><option>Quiero crecer sin perder rentabilidad</option><option>No tengo una estrategia ni medición clara</option><option>Necesito ordenar mi proceso comercial</option><option>Otro desafío</option></select></div>
+              <div class="field field-wide"><label for="objetivo">Si trabajáramos juntos, ¿qué te gustaría cambiar? <b>*</b></label><textarea id="objetivo" name="objetivo" placeholder="Contanos brevemente qué buscás lograr y qué ya intentaste..." rows="4" minlength="15" maxlength="500" required></textarea><p class="field-footnote">Una o dos frases concretas alcanzan.</p></div>
+              <div class="field"><label for="inversion">Inversión actual mensual en marketing <b>*</b></label><select id="inversion" name="inversion" required><option value="">Elegí una opción</option><option>Todavía no invierto</option><option>Hasta USD 500</option><option>USD 500 a 1.500</option><option>USD 1.500 a 5.000</option><option>Más de USD 5.000</option><option>Prefiero conversarlo</option></select></div>
+              <div class="field"><label for="plazo">¿Cuándo te gustaría empezar? <b>*</b></label><select id="plazo" name="plazo" required><option value="">Seleccioná un plazo</option><option>En los próximos 30 días</option><option>En 1 a 3 meses</option><option>En 3 a 6 meses</option><option>Estoy explorando opciones</option></select></div>
+            </div>
+            <div class="step-controls"><button type="button" class="button-back" data-back>← VOLVER</button><button type="button" class="button-next" data-next>CONTINUAR <span aria-hidden="true">↗</span></button></div>
+          </fieldset>
+
+          <fieldset class="form-step" data-step="2" hidden>
+            <legend class="step-title">Por último, ¿con quién hablamos?</legend>
+            <p class="step-help">Si vemos una oportunidad de aportar valor, seguimos la conversación.</p>
+            <div class="form-grid">
+              <div class="field"><label for="nombre">Tu nombre <b>*</b></label><input id="nombre" name="nombre" type="text" autocomplete="name" placeholder="Nombre y apellido" minlength="2" maxlength="100" required /></div>
+              <div class="field"><label for="rol">Tu rol <span>(opcional)</span></label><input id="rol" name="rol" type="text" autocomplete="organization-title" placeholder="Ej.: fundador/a" maxlength="100" /></div>
+              <div class="field"><label for="whatsapp">Tu WhatsApp <span>(opcional)</span></label><input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" placeholder="+54 9 11 1234 5678" maxlength="25" /></div>
+              <div class="field"><label for="email">Tu correo <b>*</b></label><input id="email" name="email" type="email" autocomplete="email" placeholder="nombre@empresa.com" maxlength="150" required /></div>
+            </div>
+            <label class="consent"><input type="checkbox" name="consentimiento" required /><span>Leí la <a href="/privacy/" target="_blank" rel="noopener noreferrer">política de privacidad</a>. Autorizo que digitAI Motor reciba y evalúe mi postulación por correo electrónico, mediante el procesador FormSubmit. Esto no garantiza que mi empresa sea seleccionada. <b>*</b></span></label>
+            <div class="step-controls"><button type="button" class="button-back" data-back>← VOLVER</button><button type="submit" class="button-next button-submit">ENVIAR MI POSTULACIÓN <span aria-hidden="true">↗</span></button></div>
+          </fieldset>
+          <p id="form-feedback" class="form-feedback" role="status" aria-live="polite"></p>
+        </form>
+        <div class="form-after"><span>UNA RELACIÓN COMERCIAL EMPIEZA CON CRITERIO, NO CON PROMESAS.</span><span>digitAI Motor · Growth Partner</span></div>
+      </section>
+    </div>
+    <footer class="app-bottom"><a href="/">digitAI Motor</a><span>© {new Date().getFullYear()} · ELEGIMOS CON QUIÉN CONSTRUIR.</span><a href="/privacy/">PRIVACIDAD ↗</a></footer>
+  </div>
+</BaseLayout>
+
+<style>
+  :global(body.dm-postular-page .site-header), :global(body.dm-postular-page .site-footer){display:none}
+  :global(body.dm-postular-page){background:#f5f2e9}
+  :global(body.dm-postular-page #main){width:100%}
+  .dm-application{--paper:#f5f2e9;--ink:#131416;--blue:#294ce5;--cream:#f2eca4;--line:rgba(19,20,22,.15);font-family:Inter,Arial,sans-serif;background:var(--paper);color:var(--ink);min-height:100svh}
+  .dm-application *{box-sizing:border-box}
+  .dm-application :is(h1,h2,p){margin:0}
+  .dm-application a{text-decoration:none}
+  .app-top{background:var(--paper);display:flex;justify-content:space-between;align-items:center;gap:20px;padding:16px clamp(20px,3.3vw,56px);border-bottom:1px solid var(--line);min-height:78px}
+  .app-brand{display:flex;align-items:center;gap:11px;color:var(--ink);font-size:21px;letter-spacing:-.065em;font-weight:900;white-space:nowrap}
+  .app-brand img{width:30px;height:40px;object-fit:contain}
+  .app-brand span span{color:var(--blue)}
+  .app-top-right{display:flex;align-items:center;gap:32px}
+  .app-top-right>a{font-size:11px;color:var(--ink);font-weight:900;letter-spacing:.035em;white-space:nowrap;border-bottom:1px solid var(--ink);padding-bottom:5px}
+  .app-type{font-size:10px;letter-spacing:.12em;font-weight:900;color:#77746d}
+  .app-layout{display:grid;grid-template-columns:minmax(0,46fr) minmax(0,54fr);min-height:calc(100svh - 145px)}
+  .app-story{background:#131416;color:var(--paper);min-width:0;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(25px,3.6vw,62px);isolation:isolate}
+  .app-story::before{content:"";position:absolute;width:min(52vw,650px);height:min(52vw,650px);border-radius:50%;border:1px solid rgba(242,236,164,.13);top:9%;right:-37%;box-shadow:0 0 0 75px rgba(242,236,164,.018),0 0 0 155px rgba(242,236,164,.014);pointer-events:none;z-index:-1}
+  .app-story::after{content:"";position:absolute;inset:0;background:linear-gradient(140deg,transparent 48%,rgba(41,76,229,.14));z-index:-1;pointer-events:none}
+  .story-top,.story-footer{display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .small-overline,.story-index,.story-footer,.story-eyebrow{font-size:10px;letter-spacing:.13em;font-weight:900}
+  .small-overline{display:flex;align-items:center;gap:12px;color:var(--cream)}
+  .small-overline i{width:8px;height:8px;background:var(--cream);display:inline-block;transform:rotate(45deg)}
+  .story-index{color:#8c8d90}
+  .story-main{margin:65px 0 80px}
+  .story-eyebrow{color:#a7a8ae;margin-bottom:35px!important}
+  .story-main h1{font-family:Impact,'Arial Narrow','Arial Black',sans-serif;font-size:clamp(60px,6.4vw,115px);font-weight:900;line-height:.96;letter-spacing:-.03em;text-transform:uppercase;color:var(--paper);max-width:100%;overflow-wrap:normal}
+  .story-main h1 em{font-style:normal;color:var(--cream)}
+  .story-main h1>span{color:var(--blue)}
+  .story-rule{width:55px;height:4px;background:var(--blue);margin:39px 0 24px}
+  .story-intro{font-size:clamp(19px,1.85vw,28px);line-height:1.24;max-width:440px;letter-spacing:-.04em;font-weight:750;margin-bottom:20px!important}
+  .story-copy{font-size:14px;line-height:1.7;color:#b7b7ba;max-width:430px}
+  .story-footer{padding-top:22px;border-top:1px solid rgba(245,242,233,.25);color:var(--cream)}
+  .story-footer>span:last-child{font-size:28px}
+  .app-form-area{padding:clamp(35px,4vw,78px) clamp(22px,5vw,85px) 26px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+  .form-kicker{font-weight:900;letter-spacing:.15em;font-size:10px;margin-bottom:24px!important;color:var(--blue)}
+  .form-head h2{font-family:Manrope,Inter,sans-serif;font-size:clamp(30px,3.2vw,57px);letter-spacing:-.07em;line-height:1.1;font-weight:800;max-width:700px}
+  .form-head h2 em{font-style:normal;color:var(--blue)}
+  .form-head>p:last-child{color:#5f6065;font-size:15px;line-height:1.6;max-width:550px;margin-top:18px!important}
+  #growth-application{margin-top:clamp(34px,3.5vw,55px)}
+  .wizard-line{width:100%;height:3px;background:#dedcd5;position:relative}
+  .wizard-line span{display:block;background:var(--blue);height:100%;width:33.333%;transition:width .25s ease}
+  .wizard-progress-label{display:flex;justify-content:space-between;gap:16px;padding:14px 0 33px;color:#77746d;font-size:10px;font-weight:900;letter-spacing:.1em}
+  .wizard-progress-label>span:first-child{color:var(--blue)}
+  .form-step{border:0;padding:0;margin:0;min-width:0}
+  .form-step[hidden]{display:none!important}
+  .step-title{padding:0;width:100%;font-family:Manrope,Inter,sans-serif;font-size:24px;line-height:1.2;font-weight:800;letter-spacing:-.045em}
+  .step-help{font-size:13px;color:#696968;margin:9px 0 27px!important;line-height:1.5}
+  .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:21px 16px}
+  .field{min-width:0;display:flex;flex-direction:column;gap:8px}
+  .field-wide{grid-column:1/-1}
+  .field label{font-size:12px;line-height:1.3;font-weight:800;letter-spacing:-.01em}
+  .field label b,.consent b{color:var(--blue)}
+  .field label span{font-weight:500;color:#77746d}
+  .field input,.field select,.field textarea{appearance:none;background:#fff;border:1px solid #d4d1c9;border-radius:0;width:100%;min-height:52px;padding:14px 15px;color:var(--ink);font-size:14px;line-height:1.4;outline:none;transition:border .18s ease,box-shadow .18s ease}
+  .field textarea{resize:vertical;min-height:126px}
+  .field input::placeholder,.field textarea::placeholder{color:#949393}
+  .field :is(input,select,textarea):focus-visible{border-color:var(--blue);box-shadow:0 0 0 2px rgba(41,76,229,.15)}
+  .field select{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%23131416' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 15px center;padding-right:36px;cursor:pointer}
+  .field select:invalid{color:#77746d}
+  .field-footnote{font-size:11px;color:#77746d}
+  .step-controls{border-top:1px solid var(--line);margin-top:32px;padding-top:20px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+  .required-note{font-size:11px;color:#797770}
+  .button-next{padding:15px 18px 15px 21px;display:inline-flex;gap:25px;justify-content:space-between;align-items:center;color:#fff;background:var(--ink);font-size:12px;font-weight:900;letter-spacing:.035em;min-height:54px;transition:background .2s,transform .2s}
+  .button-next:hover,.button-next:focus-visible{background:var(--blue);transform:translateY(-1px)}
+  .button-next span{font-size:22px;line-height:1;color:var(--cream)}
+  .button-back{font-size:12px;letter-spacing:.06em;font-weight:900;padding:15px 0;border-bottom:1px solid var(--ink)}
+  .button-back:hover{color:var(--blue);border-color:var(--blue)}
+  .consent{display:flex;gap:13px;margin-top:25px;font-size:12px;line-height:1.6;cursor:pointer;color:#5d5d5d;align-items:flex-start}
+  .consent input{accent-color:var(--blue);width:17px;height:17px;flex:0 0 17px;margin-top:2px;cursor:pointer}
+  .consent a{color:var(--blue);font-weight:800;text-decoration:underline}
+  .spam-trap{display:none!important}
+  .form-feedback{color:#a32121;font-size:12px;min-height:19px;margin-top:13px!important}
+  .form-after{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;border-top:1px solid var(--line);margin-top:auto;padding-top:28px;color:#77746d;font-size:9px;letter-spacing:.05em;font-weight:800}
+  .app-bottom{padding:20px clamp(20px,3.3vw,56px);min-height:66px;background:var(--paper);border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:20px;color:#77746d;font-size:10px;letter-spacing:.08em;font-weight:800}
+  .app-bottom a{color:var(--ink)}
+  @media(max-width:1100px){.app-story{padding:35px}.story-main h1{font-size:clamp(53px,6.7vw,90px)}.app-form-area{padding:42px 36px 28px}}
+  @media(max-width:850px){.app-type{display:none}.app-layout{grid-template-columns:1fr}.app-story{padding:42px 30px 34px;min-height:470px}.story-main{margin:55px 0 60px}.story-main h1{font-size:clamp(57px,9vw,96px)}.app-form-area{padding:44px 30px 30px}.form-after{margin-top:40px}}
+  @media(max-width:560px){.app-top{padding:12px 19px;min-height:67px}.app-brand{font-size:18px}.app-brand img{width:28px;height:37px}.app-top-right>a{font-size:9px}.app-story{padding:29px 20px 27px;min-height:440px}.story-index{font-size:9px}.story-main{margin:53px 0 50px}.story-eyebrow{margin-bottom:22px!important}.story-main h1{font-size:clamp(49px,12vw,72px)}.story-rule{margin:27px 0 22px}.story-intro{font-size:21px}.story-copy{font-size:13px}.story-footer{font-size:9px}.app-form-area{padding:37px 20px 28px}.form-head h2{font-size:34px}.form-head>p:last-child{font-size:14px}.form-grid{grid-template-columns:1fr}.field-wide{grid-column:auto}.step-controls{align-items:stretch}.step-controls .button-next{flex:1}.form-after{align-items:flex-start;flex-direction:column;gap:10px}.app-bottom{padding:21px 20px;flex-wrap:wrap;font-size:9px;gap:13px}.app-bottom>span{order:3;width:100%}}
+  @media(prefers-reduced-motion:reduce){.wizard-line span,.button-next{transition:none}}
+</style>
+
+<script>
+  // Valida los 3 pasos, registra UTMs permitidas y envía mediante POST nativo.
+  // No se usa mailto: ni WhatsApp. El proveedor de recepción es FormSubmit.co.
+  const form = document.querySelector<HTMLFormElement>('#growth-application');
+  if (form) {
+    const steps = Array.from(form.querySelectorAll<HTMLFieldSetElement>('[data-step]'));
+    const fill = document.querySelector<HTMLElement>('#wizard-fill');
+    const number = document.querySelector<HTMLElement>('#wizard-number');
+    const label = document.querySelector<HTMLElement>('#wizard-label');
+    const feedback = document.querySelector<HTMLElement>('#form-feedback');
+    const names = ['TU NEGOCIO', 'TU DESAFÍO', 'TUS DATOS'];
+    let active = 0;
+    let sending = false;
+
+    const changeStep = (next: number) => {
+      if (next < 0 || next >= steps.length) return;
+      active = next;
+      steps.forEach((step, index) => { step.hidden = index !== active; });
+      if (fill) fill.style.width = `${(active + 1) / steps.length * 100}%`;
+      if (number) number.textContent = `PASO 0${active + 1} DE 0${steps.length}`;
+      if (label) label.textContent = names[active] || '';
+      if (feedback) feedback.textContent = '';
+      document.querySelector('#formulario')?.scrollIntoView({ block: 'start', behavior: 'instant' });
+      const first = steps[active]?.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input:not([type="checkbox"]),select,textarea');
+      first?.focus({ preventScroll: true });
+    };
+    const validStep = (index: number) => {
+      const fields = steps[index]?.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('input,textarea,select') || [];
+      for (const field of fields) {
+        if (!field.checkValidity()) {
+          if (feedback) feedback.textContent = 'Revisá el campo señalado para poder continuar.';
+          field.reportValidity();
+          return false;
+        }
+      }
+      return true;
+    };
+    form.querySelectorAll<HTMLButtonElement>('[data-next]').forEach((button) => {
+      button.addEventListener('click', () => { if (validStep(active)) changeStep(active + 1); });
+    });
+    form.querySelectorAll<HTMLButtonElement>('[data-back]').forEach((button) => {
+      button.addEventListener('click', () => changeStep(active - 1));
+    });
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (sending) return;
+      for (let i = 0; i < steps.length; i++) {
+        if (!validStep(i)) { changeStep(i); validStep(i); return; }
+      }
+      const empresa = String(new FormData(form).get('empresa') || '').trim().slice(0, 100);
+      const subjectInput = form.querySelector<HTMLInputElement>('#asunto-correo');
+      if (subjectInput) subjectInput.value = `Nueva postulación Growth Partner | ${empresa}`;
+      const params = new URLSearchParams(window.location.search);
+      const attrIds: Record<string, string> = { utm_source: 'utm-source', utm_medium: 'utm-medium', utm_campaign: 'utm-campaign' };
+      for (const [key, id] of Object.entries(attrIds)) {
+        const control = form.querySelector<HTMLInputElement>('#' + id);
+        if (control) control.value = (params.get(key) || '').slice(0, 100);
+      }
+      sending = true;
+      const send = form.querySelector<HTMLButtonElement>('.button-submit');
+      if (send) { send.disabled = true; send.textContent = 'ENVIANDO POSTULACIÓN…'; }
+      if (feedback) { feedback.textContent = 'Conectando con el servicio de envío seguro…'; feedback.style.color = '#4d4d50'; }
+      HTMLFormElement.prototype.submit.call(form);
+    });
+    window.addEventListener('pageshow', () => {
+      sending = false;
+      const send = form.querySelector<HTMLButtonElement>('.button-submit');
+      if (send) { send.disabled = false; send.innerHTML = 'ENVIAR MI POSTULACIÓN <span aria-hidden="true">↗</span>'; }
+    });
+  }
+</script>

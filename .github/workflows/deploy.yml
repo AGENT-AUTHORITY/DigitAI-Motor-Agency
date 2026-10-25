@@ -5,8 +5,10 @@
 name: Deploy to GitHub Pages
 
 on:
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
@@ -79,7 +81,12 @@ jobs:
           test -f dist/sitemap-index.xml || { echo "::error::sitemap-index.xml no generado: el build salio en estado seguro."; exit 1; }
           URLS=$(grep -o '<loc>' dist/sitemap-0.xml | wc -l)
           test "$URLS" -eq 11 || { echo "::error::El sitemap tiene $URLS URLs, se esperaban 11."; exit 1; }
-          NOINDEX=$(grep -l 'content="noindex' dist/index.html dist/*/index.html 2>/dev/null | wc -l)
+         
+                  NOINDEX=$(grep -l 'content="noindex' dist/index.html dist/*/index.html 2>/dev/null | grep -v '^dist/postular/index.html$' | wc -l || true)
+          test -f dist/postular/index.html || { echo "::error::Falta el formulario."; exit 1; }
+          test -f dist/postular/recibida/index.html || { echo "::error::Falta la confirmación."; exit 1; }
+          grep -q 'content="noindex' dist/postular/index.html || { echo "::error::El formulario debe tener noindex."; exit 1; }
+          grep -q 'content="noindex' dist/postular/recibida/index.html || { echo "::error::La confirmación debe tener noindex."; exit 1; }
           test "$NOINDEX" -eq 0 || { echo "::error::$NOINDEX paginas publicas salieron con noindex."; exit 1; }
           grep -q 'content="noindex' dist/404.html || { echo "::error::/404.html perdio su noindex."; exit 1; }
           grep -q '^Allow: /' dist/robots.txt || { echo "::error::robots.txt no permite crawling."; exit 1; }
@@ -104,6 +111,7 @@ jobs:
           path: dist
 
   deploy:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:

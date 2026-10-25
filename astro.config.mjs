@@ -55,6 +55,7 @@ export default defineConfig({
         !page.includes('/automatizacion') &&
         !page.includes('/posicionamiento-geo') &&
         !page.includes('/funnel') &&
+        !page.includes('/postular') &&
         !page.includes('/404'),
       changefreq: 'monthly',
       lastmod: new Date(),

@@ -55,12 +55,9 @@ export const WHATSAPP_DEFAULT_MESSAGE =
  * Mientras sea false, el build publico falla.
  */
 export const CONTACT_EMAIL = {
-  /** Direccion publica. Es la unica que puede aparecer en el sitio. */
-  public: 'consultas@digitaimotor.lat',
-  /** true SOLO tras la prueba real de recepcion. Ver docs/DEPLOYMENT.md. */
+  public: 'digitai.motor.agency@gmail.com',
   forwardingVerified: true,
-  /** Direccion ya publicada hoy. Se muestra mientras el reenvio no este probado. */
-  interim: 'hola@digitaimotor.lat',
+  interim: 'digitai.motor.agency@gmail.com',
 } as const;
 
 /** La direccion que se puede mostrar hoy sin publicar un buzon que no recibe. */

@@ -2,7 +2,6 @@
 import LegalLayout from '../layouts/LegalLayout.astro';
 import {
   SITE,
-  SERVICE_INTENTS,
   PRIVACY_CONTROLLER,
   CONTACT_EMAIL,
   hasPrivacyIdentity,
@@ -20,7 +19,6 @@ import { SITE_IS_PUBLIC } from '../../site.config.mjs';
  *
  * Si se activa analytics, esta pagina y /cookies/ se actualizan ANTES.
  */
-const intents = Object.values(SERVICE_INTENTS).join(', ');
 
 // GUARDA DE LANZAMIENTO. Sin identidad del responsable el sitio no puede
 // publicarse, asi que el build publico falla acá en vez de dejar salir una
@@ -62,10 +60,10 @@ const contactoPrivacidad = contactEmail();
 
 <LegalLayout
   title="Política de privacidad | digitAI Motor"
-  description="Qué datos recibe digitAI Motor cuando usás el formulario, cómo viajan por WhatsApp, qué guarda el navegador y con quién se comparten."
-  heading="Política de privacidad"
+ description="Cómo recibimos y protegemos los datos de contacto y las postulaciones comerciales de digitAI Motor."
+heading="Política de privacidad"
   intro="Esta página describe qué pasa con tus datos en este sitio. Está escrita sobre el comportamiento real del código, no sobre una plantilla."
-  updated="agosto de 2026"
+  updated="octubre de 2026"
   breadcrumbs={[{ label: 'Privacidad' }]}
 >
   <h2>Quién trata tus datos</h2>
@@ -87,39 +85,68 @@ const contactoPrivacidad = contactEmail();
     <a href={`mailto:${contactoPrivacidad}`}>{contactoPrivacidad}</a>.
   </p>
 
-  <h2>Qué datos recibimos</h2>
-  <p>
-    Solamente los que completás vos en el formulario de contacto. No hay
-    registro de usuarios, ni área privada, ni compra de bases de datos.
-  </p>
-  <ul>
-    <li><strong>Nombre</strong> — obligatorio, para poder responderte.</li>
-    <li><strong>Email o WhatsApp</strong> — obligatorio, es el canal de respuesta.</li>
-    <li><strong>Empresa</strong> y <strong>web</strong> — opcionales.</li>
-    <li><strong>Servicio de interés</strong> — una opción entre: {intents}.</li>
-    <li><strong>Contexto</strong> — opcional, el texto libre que quieras agregar.</li>
-  </ul>
-  <p>
-    Junto con eso viajan datos de origen: los parámetros UTM de la URL con la
-    que llegaste, la página desde la que abriste el formulario y el sitio que
-    te derivó, si lo hubo. Sirven para saber qué canal genera conversaciones.
-    No identifican a una persona por sí solos.
-  </p>
+ 
+<h2>Qué datos recibimos</h2>
+
+<p>
+  En nuestro formulario de postulación solicitamos
+  información para evaluar si podemos establecer
+  una relación comercial con tu empresa.
+</p>
+
+<ul>
+  <li>Nombre de la empresa y actividad comercial.</li>
+  <li>Etapa actual del negocio.</li>
+  <li>Sitio web o Instagram, si lo proporcionás.</li>
+  <li>Principal desafío y objetivos comerciales.</li>
+  <li>Rango de inversión mensual en marketing.</li>
+  <li>Plazo estimado para comenzar.</li>
+  <li>Nombre y correo electrónico de contacto.</li>
+  <li>Rol y WhatsApp, si los proporcionás.</li>
+  <li>Consentimiento para tratar la postulación.</li>
+</ul>
+
+<p>
+  También podemos recibir parámetros UTM de origen,
+  medio y campaña incluidos en el enlace utilizado
+  para acceder al formulario.
+</p>
+
+<p>
+  No solicitamos contraseñas, información bancaria
+  ni datos de tarjetas de crédito.
+</p>
+  
 
   <h2>Cómo se entregan</h2>
-  <p>
-    El formulario <strong>no envía nada a un servidor nuestro</strong>. Al
-    completarlo, el sitio arma un mensaje con los datos que cargaste y abre
-    WhatsApp con ese texto ya escrito. El envío lo hacés vos desde WhatsApp: si
-    no apretás enviar, no recibimos nada.
-  </p>
-  <p>
-    Eso significa que la conversación queda sujeta a las condiciones de
-    WhatsApp, que es un servicio de Meta Platforms y no está bajo nuestro
-    control. Si preferís no usar WhatsApp, escribinos por email a
-    <a href={`mailto:${contactoPrivacidad}`}>{contactoPrivacidad}</a>.
-  </p>
 
+<p>
+  Nuestro sitio ofrece dos canales de contacto.
+  Las consultas comerciales directas pueden
+  realizarse mediante WhatsApp.
+</p>
+
+<p>
+  Las postulaciones para trabajar con digitAI Motor
+  como Growth Partner se envían mediante FormSubmit,
+  un servicio externo que procesa los datos y los
+  remite a nuestro correo electrónico:
+  <strong>digitai.motor.agency@gmail.com</strong>.
+</p>
+
+<p>
+  Utilizamos esta información únicamente para
+  evaluar las postulaciones, contactar a los
+  interesados y determinar si existe una
+  oportunidad de colaboración comercial.
+</p>
+
+<p>
+  Al enviar una postulación, los datos se
+  transmiten al proveedor FormSubmit.
+  No solicitamos contraseñas ni información
+  bancaria mediante este formulario.
+</p>
   <h2>Para qué los usamos</h2>
   <p>
     Para responderte y evaluar si podemos ayudarte. Nada más. No enviamos
@@ -134,38 +161,60 @@ const contactoPrivacidad = contactEmail();
     comercial. Podés pedirnos que las borremos cuando quieras.
   </p>
 
-  <h2>Terceros que intervienen</h2>
-  <p>
-    El sitio, tal como está hoy, <strong>no carga ningún servicio de terceros</strong>:
-    no hay analítica, ni píxeles publicitarios, ni mapas embebidos, ni fuentes
-    externas. Las tipografías se sirven desde nuestro propio dominio.
-  </p>
-  <p>Los únicos terceros que pueden intervenir son:</p>
-  <ul>
-    <li>
-      <strong>WhatsApp (Meta Platforms)</strong> — solo si elegís continuar por
-      ese canal.
-    </li>
-    <li>
-      <strong>GitHub Pages</strong> — donde está alojado el sitio. Como
-      cualquier servidor web, procesa la petición para poder responderla.
-    </li>
-    <li>
-      <strong>LinkedIn</strong> — únicamente si hacés clic en el enlace al
-      perfil. No hay ningún widget ni script de LinkedIn cargado.
-    </li>
-  </ul>
-  <p>
-    Si en algún momento activamos analítica, actualizamos esta página y la de
-    <a href="/cookies/">almacenamiento</a> antes de hacerlo.
-  </p>
+ <h2>Terceros que intervienen</h2>
+
+<p>
+  Para operar nuestro sitio y gestionar las
+  consultas comerciales utilizamos algunos
+  servicios externos.
+</p>
+
+<ul>
+  <li>
+    <strong>FormSubmit:</strong> procesa las
+    postulaciones y las remite a nuestro correo
+    digitai.motor.agency@gmail.com.
+  </li>
+  <li>
+    <strong>GitHub Pages:</strong> aloja nuestro
+    sitio web y procesa las solicitudes técnicas
+    necesarias para mostrarlo.
+  </li>
+  <li>
+    <strong>WhatsApp (Meta):</strong> interviene
+    únicamente cuando elegís contactarnos
+    mediante ese canal.
+  </li>
+  <li>
+    <strong>LinkedIn:</strong> interviene
+    cuando accedés a nuestro perfil mediante
+    los enlaces del sitio.
+  </li>
+  <li>
+    <strong>Google Analytics 4:</strong> permite
+    analizar el uso del sitio cuando aceptás
+    las cookies de analítica.
+  </li>
+</ul>
+
+<p>
+  Los datos enviados mediante FormSubmit
+  pasan por sus servidores y están sujetos
+  a las condiciones de privacidad del proveedor.
+</p>
 
   <h2>Qué guarda tu navegador</h2>
-  <p>
-    El sitio <strong>no usa cookies</strong>. Guarda cinco parámetros de origen
-    en el almacenamiento de sesión de tu navegador, que se borra al cerrar la
-    pestaña. El detalle está en <a href="/cookies/">almacenamiento del sitio</a>.
-  </p>
+<p>
+  El sitio utiliza almacenamiento de sesión para
+  conservar parámetros de origen de las visitas.
+
+  Google Analytics 4 puede utilizar cookies
+  únicamente si aceptás su uso mediante nuestro
+  aviso de consentimiento.
+
+  Podés consultar más información en
+  <a href="/cookies/">almacenamiento del sitio</a>.
+</p>
 
   <h2>Tus derechos</h2>
   <p>
