@@ -2,7 +2,6 @@
 import LegalLayout from '../layouts/LegalLayout.astro';
 import {
   SITE,
-  SERVICE_INTENTS,
   PRIVACY_CONTROLLER,
   CONTACT_EMAIL,
   hasPrivacyIdentity,
@@ -20,7 +19,6 @@ import { SITE_IS_PUBLIC } from '../../site.config.mjs';
  *
  * Si se activa analytics, esta pagina y /cookies/ se actualizan ANTES.
  */
-const intents = Object.values(SERVICE_INTENTS).join(', ');
 
 // GUARDA DE LANZAMIENTO. Sin identidad del responsable el sitio no puede
 // publicarse, asi que el build publico falla acá en vez de dejar salir una
@@ -62,10 +60,9 @@ const contactoPrivacidad = contactEmail();
 
 <LegalLayout
   title="Política de privacidad | digitAI Motor"
-  description="Qué datos recibe digitAI Motor cuando usás el formulario, cómo viajan por WhatsApp, qué guarda el navegador y con quién se comparten."
-  heading="Política de privacidad"
+ description="Cómo recibimos y protegemos los datos de contacto y las postulaciones comerciales de digitAI Motor."
   intro="Esta página describe qué pasa con tus datos en este sitio. Está escrita sobre el comportamiento real del código, no sobre una plantilla."
-  updated="agosto de 2026"
+  updated="octubre de 2026"
   breadcrumbs={[{ label: 'Privacidad' }]}
 >
   <h2>Quién trata tus datos</h2>
@@ -206,11 +203,17 @@ const contactoPrivacidad = contactEmail();
 </p>
 
   <h2>Qué guarda tu navegador</h2>
-  <p>
-    El sitio <strong>no usa cookies</strong>. Guarda cinco parámetros de origen
-    en el almacenamiento de sesión de tu navegador, que se borra al cerrar la
-    pestaña. El detalle está en <a href="/cookies/">almacenamiento del sitio</a>.
-  </p>
+<p>
+  El sitio utiliza almacenamiento de sesión para
+  conservar parámetros de origen de las visitas.
+
+  Google Analytics 4 puede utilizar cookies
+  únicamente si aceptás su uso mediante nuestro
+  aviso de consentimiento.
+
+  Podés consultar más información en
+  <a href="/cookies/">almacenamiento del sitio</a>.
+</p>
 
   <h2>Tus derechos</h2>
   <p>
