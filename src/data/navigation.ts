@@ -22,7 +22,7 @@ export interface NavGroup {
   links: NavLink[];
 }
 
-export const WHATSAPP_NUMBER = '5492226638044';
+export const WHATSAPP_NUMBER = '5492226638043';
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/oechinbott/';
 
 /**
