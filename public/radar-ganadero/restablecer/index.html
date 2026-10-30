@@ -1,0 +1,156 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Recuperar acceso | digitAI Motor</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b0c0e;color:#f1efeb;font:16px system-ui,sans-serif}
+main{max-width:500px;margin:8vh auto;padding:28px}
+h1{font-size:44px;letter-spacing:-2px}
+p{color:#c3c3c3;line-height:1.5}
+.box{background:#17191d;border:1px solid #37383a;border-radius:12px;padding:23px;margin-top:24px}
+label{display:block;margin:14px 0 6px;font-size:14px}
+input{width:100%;padding:13px;background:#25272c;color:white;border:1px solid #5b5d61;border-radius:7px;font:inherit}
+button{width:100%;padding:13px;margin-top:16px;background:#e8ddcb;color:#111;border:0;border-radius:7px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6}
+a{color:#e8ddcb}
+.msg{margin-top:16px;white-space:pre-wrap;line-height:1.5}
+</style>
+</head>
+<body>
+<main>
+<p>DM / DIGITAI MOTOR · GROWTH PARTNER</p>
+<h1>Recuperar acceso.</h1>
+<p>Restablecé la contraseña de tu Radar Ganadero. Tus prospectos no se modifican.</p>
+
+<section class="box" id="solicitud">
+<h2>Solicitar un enlace</h2>
+<form id="pedir">
+<label for="email">Correo de tu usuario</label>
+<input id="email" type="email" autocomplete="email" required>
+<button>Enviar enlace de recuperación</button>
+</form>
+<div class="msg" id="mensaje1" aria-live="polite"></div>
+</section>
+
+<section class="box" id="cambio" hidden>
+<h2>Elegir nueva contraseña</h2>
+<form id="guardar">
+<label for="pass">Nueva contraseña (12 caracteres mínimo)</label>
+<input id="pass" type="password" minlength="12" autocomplete="new-password" required>
+<label for="confirmar">Repetir contraseña</label>
+<input id="confirmar" type="password" minlength="12" autocomplete="new-password" required>
+<button>Guardar nueva contraseña</button>
+</form>
+<div class="msg" id="mensaje2" aria-live="polite"></div>
+</section>
+
+<p><a href="/radar-ganadero/">Volver al Radar Ganadero</a></p>
+</main>
+<script>
+const BASE='https://jumfkvnjpnowbfdtotux.supabase.co/auth/v1';
+const KEY='sb_publishable_BL7pRoz5R__OUusUqMc6fg_XcDEijmQ';
+const DESTINO='https://www.digitaimotor.lat/radar-ganadero/restablecer/';
+const el=id=>document.getElementById(id);
+let token='';
+
+async function api(ruta,metodo,datos,bearer){
+  const headers={'apikey':KEY,'Content-Type':'application/json'};
+  if(bearer)headers.Authorization='Bearer '+bearer;
+  const res=await fetch(BASE+ruta,{
+    method:metodo,headers,body:JSON.stringify(datos)
+  });
+  const json=await res.json().catch(()=>({}));
+  if(!res.ok)throw Error(
+    json.msg||json.error_description||json.message||
+    json.error||'Error '+res.status
+  );
+  return json;
+}
+
+function aviso(id,s){el(id).textContent=s}
+
+function habilitar(t){
+  token=t;
+  el('solicitud').hidden=true;
+  el('cambio').hidden=false;
+  history.replaceState(null,'',location.pathname);
+}
+
+async function revisarEnlace(){
+  const h=new URLSearchParams(location.hash.substring(1));
+  const q=new URLSearchParams(location.search);
+
+  if(h.has('error')||q.has('error')){
+    aviso('mensaje1','El enlace venció o es inválido. Solicitá uno nuevo cuando se libere el límite de correos.');
+    return;
+  }
+
+  if(h.has('access_token')&&h.get('type')==='recovery'){
+    habilitar(h.get('access_token'));
+    return;
+  }
+
+  if(q.has('token_hash')&&q.get('type')==='recovery'){
+    try{
+      const r=await api('/verify','POST',{
+        type:'recovery',
+        token_hash:q.get('token_hash')
+      });
+      if(!r.access_token)throw Error('Falta token de sesión');
+      habilitar(r.access_token);
+    }catch(e){
+      aviso('mensaje1','Enlace inválido: '+e.message);
+    }
+  }
+}
+
+el('pedir').onsubmit=async(e)=>{
+  e.preventDefault();
+  const b=e.submitter;
+  b.disabled=true;
+  try{
+    await api(
+      '/recover?redirect_to='+encodeURIComponent(DESTINO),
+      'POST',
+      {email:el('email').value.trim()}
+    );
+    aviso('mensaje1','Si el usuario existe, recibirás un correo. Usá solamente el enlace más reciente.');
+  }catch(err){
+    aviso('mensaje1','No se pudo enviar: '+err.message+'. Si aparece email rate limit exceeded, no sigas intentando hasta que se libere el límite.');
+  }finally{
+    b.disabled=false;
+  }
+};
+
+el('guardar').onsubmit=async(e)=>{
+  e.preventDefault();
+
+  if(el('pass').value!==el('confirmar').value){
+    aviso('mensaje2','Las contraseñas no coinciden.');
+    return;
+  }
+
+  const b=e.submitter;
+  b.disabled=true;
+  try{
+    await api('/user','PUT',{password:el('pass').value},token);
+    token='';
+    el('guardar').hidden=true;
+    aviso('mensaje2','¡Clave actualizada! Volvé al Radar e iniciá sesión con tu correo y nueva contraseña.');
+  }catch(err){
+    aviso('mensaje2','Error: '+err.message);
+  }finally{
+    b.disabled=false;
+  }
+};
+
+revisarEnlace().catch(err=>aviso('mensaje1',err.message));
+</script>
+</body>
+</html>
